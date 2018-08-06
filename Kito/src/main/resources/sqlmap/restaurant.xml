@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="sys_restaurant">
+	<typeAlias  alias="RestaurantVO"	type="com.kito.madina.test.vo.RestaurantVO"/>
+	<select id="getRestaurantVoByID" resultClass="RestaurantVO">
+	    SELECT RESTAR_ID 
+			, RESTAR_CODE 
+			, RESTAR_NM 
+			, ADDR 
+			, PHONE
+			, ADDR2
+			, EMAIL
+			, RESTAR_TYPE
+			, COIN_EXCHANGE
+			, IS_PRINT_BIG
+			, USER_EDIT_BILL
+			, PACKAGE
+	    FROM sys_restaurant
+	    WHERE RESTAR_ID = #RESTAR_ID#
+	</select>
+	<select id="getRestaurantLastUseByID" resultClass="RestaurantVO">
+	    SELECT RESTAR_ID, CHANGE_DATE 
+		FROM(
+			select restar_id, change_date, @row := @row + 1 AS rn1  
+			from room_turn ,(SELECT @row := 0) K 
+			where RESTAR_ID = #RESTAR_ID# 
+			ORDER BY change_date DESC) M
+		WHERE M.rn1 = 1
+	</select>
+	<insert id="CreateRestaurantVO">
+	    INSERT INTO sys_restaurant 
+	    	(
+	    	RESTAR_ID 
+			, RESTAR_CODE 
+			, RESTAR_NM 
+			, ADDR 
+			, PHONE
+			, ADDR2
+			, EMAIL
+			, CONTACT_NM
+			, CONTACT_PHONE
+			, IS_LOCK
+			, CREATE_TIME
+			, USE_TYPE
+			, RESTAR_TYPE
+			, COIN_EXCHANGE
+			, IS_PRINT_BIG
+			, USER_EDIT_BILL
+			, PACKAGE
+	    	) 
+	    VALUES (
+	    	#RESTAR_ID# 
+			, #RESTAR_CODE# 
+			, #RESTAR_NM# 
+			, #ADDR# 
+			, #PHONE#
+			, #ADDR2#
+			, #EMAIL#
+			, #CONTACT_NM#
+			, #CONTACT_PHONE#
+			, #IS_LOCK#
+			, #CREATE_TIME#
+			, #USE_TYPE#
+			, #RESTAR_TYPE#
+			, #COIN_EXCHANGE#
+			, #IS_PRINT_BIG#
+			, #USER_EDIT_BILL#
+			, #PACKAGE#
+			)
+  </insert>
+  <insert id="UpdateRestaurantVo">
+	    UPDATE sys_restaurant 
+	    <dynamic prepend="SET">
+		   	<isNotEmpty property="RESTAR_CODE" prepend=",">
+		   		RESTAR_CODE = #RESTAR_CODE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RESTAR_NM" prepend=",">
+				RESTAR_NM = #RESTAR_NM#
+			</isNotEmpty>
+			<isNotEmpty property="ADDR" prepend=",">
+				ADDR = #ADDR#
+			</isNotEmpty>
+			<isNotEmpty property="ADDR2" prepend=",">
+				ADDR2 = #ADDR2#
+			</isNotEmpty>
+			<isNotEmpty property="PHONE" prepend=",">
+				PHONE = #PHONE#
+			</isNotEmpty>
+			<isNotEmpty property="EMAIL" prepend=",">
+				EMAIL 		= #EMAIL#
+			</isNotEmpty>
+			<isNotEmpty property="CONTACT_PHONE" prepend=",">
+				CONTACT_PHONE = #CONTACT_PHONE#
+			</isNotEmpty>
+			<isNotEmpty property="CONTACT_NM" prepend=",">
+				CONTACT_NM 	= #CONTACT_NM#
+			</isNotEmpty>
+			<isNotEmpty property="IS_LOCK" prepend=",">
+				IS_LOCK = #IS_LOCK#
+			</isNotEmpty>
+			<isNotEmpty property="USE_TYPE" prepend=",">
+				USE_TYPE = #USE_TYPE#
+			</isNotEmpty>
+			<isGreaterThan property="COIN_EXCHANGE" compareValue="0.0" prepend=",">
+				COIN_EXCHANGE = #COIN_EXCHANGE#
+			</isGreaterThan>
+			<isNotEmpty property="IS_PRINT_BIG" prepend=",">
+				IS_PRINT_BIG = #IS_PRINT_BIG#
+			</isNotEmpty>
+			<isNotEmpty property="RESTAR_TYPE" prepend=",">
+				RESTAR_TYPE = #RESTAR_TYPE#
+			</isNotEmpty>
+			<isNotEmpty property="USER_EDIT_BILL" prepend=",">
+				USER_EDIT_BILL = #USER_EDIT_BILL#
+			</isNotEmpty>
+			<isNotEmpty property="PACKAGE" prepend=",">
+				PACKAGE = #PACKAGE#
+			</isNotEmpty>
+		</dynamic>
+	    WHERE RESTAR_ID 	= #RESTAR_ID#
+  </insert>
+  <sql id="sqlGetAllListPagingRestaurant">
+  		SELECT R.*
+  			,@row := @row + 1 AS rn1
+	    FROM sys_restaurant R
+	    ,(SELECT @row := 0) K
+	    ORDER BY CREATE_TIME DESC
+  </sql>
+  <select id="getListPagingRestaurantVO" resultClass="RestaurantVO">
+	    SELECT *
+  		FROM (
+  			<include refid="sqlGetAllListPagingRestaurant"/>) h
+  		<![CDATA[       
+          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
+                ]]>
+	</select>
+	<select id="getRestaurantVo.getListCount" resultClass="java.util.HashMap" parameterClass="RestaurantVO">	
+		SELECT 
+			count(t.RESTAR_ID) as COUNT
+	    FROM (<include refid="sqlGetAllListPagingRestaurant"/>) t
+	</select>
+</sqlMap>

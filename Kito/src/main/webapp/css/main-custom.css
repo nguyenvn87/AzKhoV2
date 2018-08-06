@@ -1,0 +1,94 @@
+.advantage-content p {
+    text-align: justify;
+    margin-bottom: 0;
+    font-size: 15px;
+    color: #636363;
+}
+.advantage-item .advantage-content {
+    padding-bottom: 15px;
+    margin: 0 0 25px 70px;
+    border-bottom: 1px solid #ebebeb;
+}
+.advantage-item .advantage-icon {
+    float: left;
+    width: 40px;
+}
+.feature-image {
+    position: relative;
+}
+.advantage-item .iconsimple {
+    background: url(../images/icon-advantage-simple-new.png) no-repeat center center;
+    width: 52px;
+}
+.advantage-icon i {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+}
+.introduction-content ul {
+    list-style: none;
+    padding: 0 0;
+    margin: 35px 0 0;
+}
+img {
+    vertical-align: middle;
+    max-width: 100%;
+    height: auto;
+}
+#visualize .box {
+    background: #f3f3f3;
+}
+#introduce2 .box {
+    background: #f3f3f3;
+}
+#services .box {
+    background: #f3f3f3;
+}
+.lead1 {
+    margin-bottom: 20px;
+    font-size: 16.099999999999998px;
+    font-weight: 200;
+    line-height: 1.4;
+}
+.sec_bussiness {
+    background: #395796;
+    padding: 30px 0 0;
+    color: #fff;
+}
+.sec_bussiness .sec_buss_col:nth-child(1) {
+    text-align: right;
+}
+.buss_line.l1 {
+    margin: 20px 0 20px auto;
+}
+.buss_line {
+    border-top: 1px solid #fff;
+    width: 100px;
+    margin: 20px 0;
+}
+.title-custom{
+	color: #fff;
+	font-weight: 700;
+}
+li.login {
+    padding: 0;
+    margin-top: 12px;
+}
+li.login a {
+    /* line-height: 18px;
+    background: #4c9d2f;
+    color: #fff;
+    font-size: 14px;
+    padding: 10px 15px;
+    letter-spacing: 1px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    border-radius: 3px; */
+    color: #fff !important;
+    border-radius: 3px !important;
+    display: block !important;
+    padding: 15px 25px !important;
+    margin-top: 2px !important;
+    background-color: #52b6ec;
+}

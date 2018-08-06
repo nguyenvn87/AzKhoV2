@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="menu">
+	<typeAlias  alias="MenuVO"	type="com.kito.madina.test.vo.MenuVO"/>
+	<typeAlias  alias="SrvcVO"	type="com.kito.madina.test.vo.SrvcVO"/>
+	<select id="getMenuAll" resultClass="MenuVO">
+	    SELECT MENU_ID 
+				,SRVC_ID 
+				,PROD_NM 
+				,PRICE 
+				,UNIT
+				,IS_DEFAULT
+	    FROM menu
+	</select>
+	<select id="selectMenuVoByMenuVo" resultClass="MenuVO" parameterClass="MenuVO">
+	    SELECT MENU_ID 
+			, SRVC_ID 
+			, PROD_NM 
+			, PRICE 
+			, RESTAR_ID
+			, UNIT
+			, ACTIVE
+			, IS_DEFAULT
+	    FROM menu
+	    <dynamic prepend="WHERE">
+	    	<isNotEmpty prepend="AND">
+	    		MENU_ID = #MENU_ID#
+	    	</isNotEmpty>
+	    	<isNotEmpty prepend="AND">
+	    		RESTAR_ID = #RESTAR_ID#
+	    	</isNotEmpty>
+	    	<isNotEmpty prepend="AND">
+	    		SRVC_ID = #SRVC_ID#
+	    	</isNotEmpty>
+	    </dynamic>
+	</select>
+	<insert id="CreateMenuVO">
+	    INSERT INTO menu 
+	    	(
+	    		 MENU_ID 
+				, SRVC_ID 
+				, PROD_NM 
+				, PRICE 
+				, RESTAR_ID
+				, UNIT
+				, ACTIVE
+				, IS_DEFAULT
+	    	) 
+	    VALUES (
+	    		#MENU_ID# 
+				,#SRVC_ID# 
+				,#PROD_NM# 
+				,#PRICE# 
+				,#RESTAR_ID# 
+				,#UNIT#
+				,#ACTIVE#
+				,#IS_DEFAULT#
+			)
+  </insert>
+  <insert id="UpdateMenuVo">
+	    UPDATE menu 
+	     <dynamic prepend="SET">
+	     	<isNotEmpty prepend=",">
+	    		MENU_ID = #MENU_ID#
+	    	</isNotEmpty>
+	    	<!-- <isNotEmpty prepend=",">
+	    		SRVC_ID = #SRVC_ID#
+	    	</isNotEmpty> -->
+	    	<isNotEmpty prepend=",">
+	    		PROD_NM = #PROD_NM#
+	    	</isNotEmpty>
+			<isNotEmpty prepend=",">
+	    		PRICE = #PRICE#
+	    	</isNotEmpty>
+			<isNotEmpty prepend=",">
+	    		UNIT = #UNIT#
+	    	</isNotEmpty>
+	    	<isNotEmpty prepend=",">
+	    		ACTIVE = #ACTIVE#
+	    	</isNotEmpty>
+	    	<isNotEmpty prepend=",">
+	    		IS_DEFAULT = #IS_DEFAULT#
+	    	</isNotEmpty>
+		</dynamic>
+	    WHERE MENU_ID = #MENU_ID#
+  </insert>
+  <sql id="sqlGetListAllMenu">	
+		SELECT M.MENU_ID 
+			, M.SRVC_ID 
+			, M.PRICE 
+			, M.RESTAR_ID 
+			, M.UNIT
+			, M.ACTIVE
+			, M.IS_DEFAULT
+			, S.srvc_nm as PROD_NM
+			, R.CD_NM as UNIT_NM
+			, S.type
+	    from menu M
+			LEFT JOIN srvc S 
+			ON M.srvc_id = S.srvc_id
+			LEFT JOIN cmm_cd  R
+			ON R.CD = M.UNIT and R.GROUP_CD = 'DONVI'
+	    where M.RESTAR_ID = #RESTAR_ID#
+		order by PROD_NM
+	</sql>
+  <select id="getListMenuVoByMenuVO" resultClass="MenuVO">
+	    SELECT M.MENU_ID 
+			, M.SRVC_ID 
+			, M.PRICE 
+			, M.RESTAR_ID 
+			, M.UNIT
+			, M.ACTIVE
+			, M.IS_DEFAULT
+			, S.srvc_nm as PROD_NM
+			, R.CD_NM as UNIT_NM
+			, S.type
+	    from menu M
+			LEFT JOIN srvc S 
+			ON M.srvc_id = S.srvc_id
+			LEFT JOIN cmm_cd  R
+			ON R.CD = M.UNIT and R.GROUP_CD = 'DONVI'
+	   <dynamic prepend="WHERE">
+		   	<isNotEmpty property="MENU_ID" prepend="AND">
+		   		M.MENU_ID = #MENU_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="SRVC_ID" prepend="AND">
+		   		M.SRVC_ID = #SRVC_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RESTAR_ID" prepend="AND">
+		   		M.RESTAR_ID = #RESTAR_ID#
+		   	</isNotEmpty>
+		   	<isEqual compareValue="1" property="IS_DEFAULT" prepend="AND">
+				<![CDATA[ M.IS_DEFAULT = 1 ]]>
+			</isEqual>
+	   </dynamic>
+	    order by M.IS_DEFAULT desc
+	</select>
+	<select id="getListMenuVoByGroupType" resultClass="MenuVO">
+	    SELECT M.MENU_ID 
+			, M.SRVC_ID 
+			, M.PRICE 
+			, M.RESTAR_ID 
+			, M.UNIT
+			, M.ACTIVE
+			, S.srvc_nm as PROD_NM
+			, R.CD_NM as UNIT_NM
+			, S.type
+	    from menu M
+			LEFT JOIN srvc S 
+			ON M.srvc_id = S.srvc_id
+			LEFT JOIN cmm_cd  R
+			ON R.CD = M.UNIT and R.GROUP_CD = 'DONVI'
+	   <dynamic prepend="WHERE">
+		   	<isNotEmpty property="MENU_ID" prepend="AND">
+		   		M.MENU_ID = #MENU_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="SRVC_ID" prepend="AND">
+		   		M.SRVC_ID = #SRVC_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RESTAR_ID" prepend="AND">
+		   		M.RESTAR_ID = #RESTAR_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="TYPE" prepend="AND">
+		   		S.type = #TYPE#
+		   	</isNotEmpty>
+	   </dynamic>
+	</select>
+	<select id="getMenu.getListCount" resultClass="java.util.HashMap" parameterClass="MenuVO">	
+		SELECT 
+			count(t.MENU_ID) as COUNT
+	    FROM (<include refid="sqlGetListAllMenu"/>) t
+	</select>
+	<select id="getMenu.list.paging" resultClass="MenuVO" parameterClass="MenuVO">
+  		SELECT * 
+  		FROM (
+  			select h.*
+  				, @row := @row + 1 AS rn1 
+  			from (<include refid="sqlGetListAllMenu"/>) h
+  			,(SELECT @row := 0) K
+  			) t
+  		<![CDATA[       
+          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
+                ]]>
+  </select>
+  <sql id="sqlSearchListAllMenu">	
+		select srvc_id, srvc_nm,UNIT, UNIT_NM, srvc_cd, price, is_used, SORT_NO, DSCRT,ACCUMULT, AMOUNT_STORE
+		from(
+			select S1.*,R.CD_NM as UNIT_NM from srvc S1
+				LEFT JOIN cmm_cd  R
+				ON R.CD = S1.UNIT and R.GROUP_CD = 'DONVI'
+			<dynamic prepend="WHERE">
+			   	<isNotEmpty property="SRVC_NM" prepend="AND">
+			   		S1.srvc_nm like  #SRVC_NM#
+			   	</isNotEmpty>
+			   	<isNotEmpty property="RESTAR_ID" prepend="AND">
+			   		S1.RESTAR_ID =  #RESTAR_ID#
+			   	</isNotEmpty>
+			   	and S1.IS_USED = 1
+		   	</dynamic> 
+			<!-- UNION
+			select * from srvc S2 
+				<dynamic prepend="WHERE">
+			   	<isNotEmpty property="SRVC_NM" prepend="AND">
+			   		S2.srvc_cd like  #SRVC_NM#
+			   	</isNotEmpty>
+			   	<isNotEmpty property="RESTAR_ID" prepend="AND">
+			   		S2.RESTAR_ID =  #RESTAR_ID#
+			   	</isNotEmpty>
+			   	and S2.IS_USED = 1
+		   	</dynamic>  -->
+		) B
+		order by B.SORT_NO
+ </sql>
+<select id="selectSearchMenuList" resultClass="SrvcVO" parameterClass="SrvcVO">	
+	SELECT * 
+  		FROM (
+  			select h.*
+  				, @row := @row + 1 AS rn1 
+  			from (<include refid="sqlSearchListAllMenu"/>) h
+  			,(SELECT @row := 0) K
+  			) t
+  		<![CDATA[       
+          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
+                ]]>
+</select>
+<select id="getListCountSearchMenu" resultClass="java.util.HashMap" parameterClass="SrvcVO">	
+		SELECT 
+			count(t.SRVC_ID) as COUNT
+	    FROM (<include refid="sqlSearchListAllMenu"/>) t
+</select>
+</sqlMap>

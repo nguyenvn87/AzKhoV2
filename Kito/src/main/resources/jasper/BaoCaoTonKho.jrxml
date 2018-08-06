@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DailyBill" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d4a1d5eb-82dd-412f-a620-202e4bdf9dba">
+	<property name="template.engine" value="tabular_template"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TH" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Transparent" forecolor="#B89F7D" backcolor="#70A9C6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="ParamSubtile" class="java.lang.String"/>
+	<field name="ItemDateToDate" class="java.lang.String"/>
+	<field name="SRVC_CD" class="java.lang.String"/>
+	<field name="SRVC_NM" class="java.lang.String"/>
+	<field name="UNIT_NM" class="java.lang.String"/>
+	<field name="DSCRT" class="java.lang.String"/>
+	<field name="ItemType" class="java.lang.String"/>
+	<field name="ItemNo" class="java.lang.String"/>
+	<field name="ItemTotal" class="java.lang.Double"/>
+	<field name="AMOUNT_STORE" class="java.lang.Float"/>
+	<variable name="Variable_1" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{ItemTotal}]]></variableExpression>
+	</variable>
+	<variable name="Variable_2" class="java.lang.String" calculation="Count"/>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{ItemType}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="-1" width="554" height="21" isRemoveLineWhenBlank="true" forecolor="#453939" uuid="10184e0b-4e66-4691-840b-442638940bbf">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5">
+						<leftPen lineWidth="0.0" lineStyle="Double" lineColor="rgba(120, 108, 108, 0.25882354)"/>
+						<bottomPen lineWidth="1.0" lineColor="rgba(133, 122, 122, 0.28627452)"/>
+						<rightPen lineWidth="0.0" lineStyle="Double" lineColor="rgba(120, 108, 108, 0.25882354)"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="font-extension" size="13" isBold="true" pdfFontName="C:/Windows/Fonts/timesbd.TTF" pdfEncoding="" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ItemType}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<title>
+		<band height="89">
+			<frame>
+				<reportElement x="0" y="0" width="554" height="89" uuid="c48d2fc9-eb81-476a-9160-1da30bb9258b">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="80" y="8" width="400" height="30" forecolor="#1A1414" uuid="1f24cf8c-4a8c-47c0-9715-403c5806de6f">
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="font-extension" size="20" isBold="false" isItalic="false" pdfFontName="C:/Windows/Fonts/timesbd.TTF" pdfEncoding="" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[TỒN KHO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="337" y="66" width="80" height="23" uuid="d37f3533-7f84-459b-a078-b6f41b53dc1c"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="font-extension" size="14" isBold="true" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Người lập]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="417" y="66" width="130" height="23" forecolor="#2E2727" uuid="b2e1f2d1-09d7-4e16-b648-d3a163115f26"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="font-extension" size="12" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{ParamSubtile}]]></textFieldExpression>
+				</textField>
+				<textField pattern=" hh:mm a dd/MM/yyyy">
+					<reportElement x="192" y="38" width="170" height="20" uuid="ea168e99-4b04-481e-9572-81eb5ca1eeae"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="25">
+			<frame>
+				<reportElement x="0" y="0" width="554" height="23" uuid="10f94168-8532-4555-8395-4be213f49310">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#1F0B0B"/>
+				</box>
+				<staticText>
+					<reportElement x="0" y="0" width="30" height="23" uuid="8307074a-7e4b-4bd5-b166-df9d2bf02711">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.1"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="13"/>
+					</textElement>
+					<text><![CDATA[STT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="258" y="0" width="68" height="23" uuid="a4370fba-2496-4b4f-8c9b-6f5b77af327d"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Số lượng]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="326" y="0" width="60" height="23" uuid="5c6963c8-5442-4120-9c05-6c040f995d19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Đơn vị]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="90" y="0" width="168" height="23" uuid="1427b0ea-0cab-4eb7-bd5a-83e068b5fa60"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Tên hàng]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="30" y="0" width="60" height="23" uuid="08c2b1a3-f700-4538-8cd5-7334ad0af030"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Mã]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="386" y="0" width="168" height="23" uuid="f5d5ce95-f585-4054-8b2a-aa6ca02df5e5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Mô tả]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="22">
+			<frame>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="554" height="22" isRemoveLineWhenBlank="true" uuid="301a89f4-e9e7-4146-84d3-b38068d0f763">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineColor="rgba(0, 0, 0, 0.5019608)"/>
+					<leftPen lineColor="rgba(0, 0, 0, 0.5019608)"/>
+					<bottomPen lineWidth="0.1" lineColor="rgba(82, 75, 75, 0.5019608)"/>
+					<rightPen lineColor="rgba(0, 0, 0, 0.5019608)"/>
+				</box>
+				<textField isBlankWhenNull="true">
+					<reportElement x="258" y="0" width="68" height="22" uuid="a22bdd13-43ff-47d9-86d3-f9c6186f9b46">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="6">
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="rgba(138, 131, 131, 0.1254902)"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="font-extension" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{AMOUNT_STORE}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="90" y="0" width="168" height="22" uuid="353243f9-5b57-4dc2-b57c-c012b03d5b3d"/>
+					<box leftPadding="5">
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="rgba(138, 131, 131, 0.1254902)"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="font-extension" size="12" isBold="false" pdfFontName="" pdfEncoding="Cp1258" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SRVC_NM}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="326" y="0" width="60" height="22" uuid="a1850b7d-f2af-4368-bb5a-de2d12da0980"/>
+					<box leftPadding="7">
+						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="#8A8383"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="font-extension" size="12" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{UNIT_NM}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="386" y="1" width="168" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="23e9370f-6f07-440c-b395-8b1fefb66ee6"/>
+					<box leftPadding="3"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="font-extension" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="" pdfEncoding="Cp1258" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DSCRT}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="0" y="0" width="30" height="22" forecolor="#000000" backcolor="#FFFFFF" uuid="bc2fcbd8-f3b2-49af-a549-7ef49284cc83"/>
+					<box>
+						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="#8A8383"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="font-extension" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="" pdfEncoding="Cp1258" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Group1_COUNT}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="30" y="1" width="60" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5dea6186-7269-4b7b-9912-61b86e8ba851"/>
+					<box>
+						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="#8A8383"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="font-extension" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="" pdfEncoding="Cp1258" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SRVC_CD}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="28"/>
+	</pageFooter>
+	<summary>
+		<band height="32" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+		</band>
+	</summary>
+</jasperReport>

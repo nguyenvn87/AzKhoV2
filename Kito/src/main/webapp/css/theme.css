@@ -1,0 +1,18 @@
+/*!
+ * Sign Up/Login Box v0.0.1 (http://codepen.io/koheishingai/FLvgs)
+ * Copyright 2014 Kohei Shingai.
+ * Licensed under MIT 
+ */
+
+.nav {
+    background-image: url(../images/fam/folder_go.png);
+}
+.settings {
+    background-image: url(../images/fam/folder_wrench.png);
+}
+.user {
+    background-image: url(../images/fam/user.png);
+}
+.products {
+    background-image: url(../images/fam/book.png);
+}

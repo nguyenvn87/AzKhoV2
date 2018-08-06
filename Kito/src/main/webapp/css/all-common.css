@@ -1,0 +1,159 @@
+.btn-app{
+    background: #f97779;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f97779), to(#ce2424));
+    background: -moz-linear-gradient(#f97779, #ce2424);
+    background: linear-gradient(#f97779, #ce2424);
+    border: solid 1px #be2424;
+    border-bottom: solid 3px #bd2524;
+    box-shadow: inset 0 0 0 1px #e67e7b;
+    color: #fff;
+    text-shadow: 0 1px 0 #bd2524; }
+}
+.btn-app:hover{
+    background: #ce2424;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#ce2424), to(#f97779));
+    background: -moz-linear-gradient(#ce2424, #f97779);
+    background: linear-gradient(#ce2424, #f97779);
+    border: solid 1px #be2424;
+    border-bottom: solid 3px #bd2524;
+    box-shadow: inset 0 0 0 1px #e67e7b; 
+}
+.btn-app:active {
+    background: #ce2424;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#ce2424), to(#f97779));
+    background: -moz-linear-gradient(#ce2424, #f97779);
+    background: linear-gradient(#ce2424, #f97779);
+    border: solid 1px #be2424;
+    box-shadow: inset 0 10px 15px 0 #bd2524; }
+.btn-app-selected {
+	color: #FFFFFF;
+	background-color : #304D7C;	
+}
+.icon-search {
+    background-image: url(../images/icon/icofind.png) !important;
+}
+.icon-look {
+    background-image: url(../images/icon/btn-search.png) !important;
+}
+.icon-save {
+    background-image: url(../images/icon/icodisk.png) !important;
+}
+.icon-print {
+  background-image:url('../images/icon/icoPrint.gif') !important;
+}
+.icon-payment {
+  background-image:url('../images/icon/money-icon.png') !important;
+}
+.icon-menu {
+  background-image:url('../images/icon/details.png') !important;
+}
+.icon-stson {
+  background-image:url('../images/icon/sts_on.png') !important;
+}
+.icon-stsoff {
+  background-image:url('../images/icon/bulb_off.png') !important;
+}
+.icon-print {
+  background-image:url('../images/icon/icoPrint.gif') !important;
+}
+.icon-change{
+  background-image:url('../images/icon/icon-change.png') !important;
+}
+.icon-add{
+  background-image:url('../images/icon/icoadd.png') !important;
+}
+.icon-user{
+	background-position: center center;
+  	background-image:url('../images/icon/user.png') !important;
+}
+.icon-delete{
+  	background-image:url('../images/icon/btn-cancel.png') !important;
+}
+.icon-remove{
+  	background-image:url('../images/icon/remove.png') !important;
+}
+.icon-del{
+  	background-image:url('../images/icon/icon_delete.png') !important;
+}
+.icon-addnew{
+  	background-image:url('../images/icon/addnew.png') !important;
+}
+.icon-true{
+  	background-image:url('../images/icon/true.png') !important;
+}
+.icon-lock{
+  	background-image:url('../images/icon/icon-lock.png') !important;
+}
+.icon-admin{
+  	background-image:url('../images/icon/icon-admin.png') !important;
+}
+.icon-timer{
+  	background-image:url('../images/icon/timer24.png') !important;
+}
+.icon-manager{
+  	background-image:url('../images/icon/icon-manager.png') !important;
+}
+.icon-staff{
+  	background-image:url('../images/icon/icon-staff.png') !important;
+}
+.icon-pdf{
+  	background-image:url('../images/icon/icon-pdf.png') !important;
+}
+.icon-excel{
+  	background-image:url('../images/icon/icoexcel.gif') !important;
+}
+.icon-edit{
+  	background-image:url('../images/icon/edit.png') !important;
+}
+.x-grid-row-summary .x-grid-cell-inner {
+  font-weight: bold;
+  color: red;
+  font-size: medium;
+}
+.fn-link{
+	font-weight:bold;
+    color:#304D7C;
+    font-size:12px;
+    width:120px !important;
+	text-align: end;
+	position: relative !important;
+}
+.loader {
+	position: fixed;
+	display:none;
+    top: 50%;
+    left: 50%;
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+}
+.rowClass1 .x-grid-cell {
+    background-color: #FFB0C4;
+}
+/* inline button style */
+.inline-button{
+	margin:0 0 0 10px;
+	/* height:25px; */
+}
+.inline-button .x-btn-inner{
+	/* line-height:20px; */
+}
+.inline-button .x-btn-button{
+	/* height:20px; */
+}
+.addbtn .x-btn-default-small{
+	background-color: #f1f4f7;
+	background-image:url('../images/icon/user.png') !important;
+	border-style: hidden;
+}
+.payment .card-btn .x-btn-default-small{
+	background-color: #f1f4f7;
+	background-image:url('../images/icon/card.png') !important;
+	border-style: hidden;
+}
+.icon-card{
+  	background-image:url('../images/icon/card.png') !important;
+}

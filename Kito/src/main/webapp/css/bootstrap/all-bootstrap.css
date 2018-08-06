@@ -1,0 +1,70 @@
+ .box-introduces .list-introduces {
+    padding-right: 40px;
+    padding-left: 40px;
+}
+.box-introduces {
+    text-align: center;
+}
+.box-introduces .row {
+    margin-right: -40px;
+    margin-left: -40px;
+}
+.box-introduces .list-introduces {
+    padding-right: 40px;
+    padding-left: 40px;
+}
+ .box-industry {
+    text-align: center;
+}
+.box-industry .box-list-industry .list-industry {
+    margin-bottom: 20px;
+    width: 20%;
+}
+.box-industry .box-list-industry .list-industry .list i {
+    height: 55px;
+} 
+.icon.thoi-trang{
+	width: 78px;
+    height: 49px;
+    display: block;
+    background-image:url('../../resources/images/icon1.png') !important;
+}
+.icon {
+     position: relative;
+    /* display: inline-block; */
+    display: block;
+    -webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    -ms-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out; 
+}
+.register {
+    white-space: nowrap;
+    position: relative;
+    background-color: #4c9d2f;
+    font-size: 24px;
+    font-family: font-helveticaNeueBold;
+    line-height: 65px;
+    padding: 0 25px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    border-radius: 3px;
+}
+.main-page .box-register h3 {
+    padding-bottom: 25px;
+    line-height: 36px;
+}
+.main-page h2.title, .main-page h3.title {
+    font-size: 31px;
+    font-family: font-helveticaNeueRegular;
+    text-align: center;
+    line-height: 36px;
+}

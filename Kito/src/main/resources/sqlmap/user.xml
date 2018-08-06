@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="users">
+	<typeAlias  alias="UserVO"	type="com.kito.madina.test.vo.UserVO"/>
+	<select id="getUserAll" resultClass="UserVO" parameterClass="UserVO">
+	    SELECT  
+			 USERNAME,
+			 FULLNAME, 
+			 PASSWORD,
+			 CMND,
+			 PHONE,
+			 ADDRESS,
+			 RESTAR_ID, 
+			 ENABLED,
+			 EMAIL
+	    FROM users
+	    WHERE RESTAR_ID = #RESTAR_ID#
+	</select>
+	<select id="selectUserByUserNM" resultClass="UserVO" parameterClass="UserVO">
+	    SELECT USERNAME, 
+			 PASSWORD,
+			 CMND,
+			 PHONE,
+			 ADDRESS,
+			 RESTAR_ID, 
+			 ENABLED,
+			 EMAIL
+	    FROM users
+	    <dynamic prepend="WHERE">
+	    	<isNotEmpty property="USERNAME" prepend="AND">
+				USERNAME = #USERNAME#
+			</isNotEmpty>
+	    	<isNotEmpty property="PASSWORD" prepend="AND">
+				PASSWORD = #PASSWORD#
+			</isNotEmpty>
+	    </dynamic>
+	</select>
+	<select id="getUserVoByUserName" resultClass="UserVO" parameterClass="UserVO">
+	    SELECT U.USERNAME, 
+	    	 U.FULLNAME,
+			 U.PASSWORD,
+			 U.CMND,
+			 U.PHONE,
+			 U.ADDRESS,
+			 U.RESTAR_ID, 
+			 U.ENABLED,
+			 U.EMAIL ,
+			 A.authority
+	    FROM users U
+	    left join authorities A
+		on U.USERNAME = A.username
+	    WHERE U.USERNAME = #USERNAME#
+	</select>
+	<insert id="insert1">
+	    INSERT INTO person (name, address, postcode) values (#name#, #address#, #postcode#)
+	    <selectKey resultClass="Long" keyProperty="id">
+	    	SELECT LAST_INSERT_ID() as id
+	    </selectKey>
+	</insert>
+	<insert id="CreateUserVO">
+	    INSERT INTO users 
+	    	(
+	    		USERNAME, 
+	    		 FULLNAME,
+				 PASSWORD,
+				 CMND,
+				 PHONE,
+				 ADDRESS,
+				 RESTAR_ID, 
+				 ENABLED,
+				 EMAIL
+	    	) 
+	    VALUES (
+	    	#USERNAME#, 
+	    	#FULLNAME#,
+			 #PASSWORD#,
+			 #CMND#,
+			 #PHONE#,
+			 #ADDRESS#,
+			 #RESTAR_ID#, 
+			 #ENABLED#,
+			 #EMAIL#
+			)
+  </insert>
+  <insert id="UpdateUserVo">
+	    UPDATE users 
+	    <dynamic prepend="SET">
+	    	<isNotEmpty property="USERNAME" prepend=",">
+		   		 USERNAME = #USERNAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="FULLNAME" prepend=",">
+		   		FULLNAME = #FULLNAME#
+		   	</isNotEmpty>
+		   <isNotEmpty property="PASSWORD" prepend=",">
+		   		PASSWORD = #PASSWORD#
+		   	</isNotEmpty>
+		    <isNotEmpty property="CMND" prepend=",">
+		   		CMND = #CMND#
+		   	</isNotEmpty>
+			<isNotEmpty property="PHONE" prepend=",">
+		   		PHONE = #PHONE#
+		   	</isNotEmpty>
+			<isNotEmpty property="ADDRESS" prepend=",">
+		   		ADDRESS = #ADDRESS#
+		   	</isNotEmpty>
+			<isNotEmpty property="RESTAR_ID" prepend=",">
+		   		RESTAR_ID = #RESTAR_ID#
+		   	</isNotEmpty>
+			<isNotEmpty property="ENABLED" prepend=",">
+		   		ENABLED = #ENABLED#
+		   	</isNotEmpty>
+			<isNotEmpty property="EMAIL" prepend=",">
+		   		EMAIL = #EMAIL#
+		   	</isNotEmpty>
+		</dynamic>
+	    WHERE USERNAME = #USERNAME#
+  </insert>
+  <sql id="sqlGetListAllUser">	
+		SELECT M.*
+			   ,A.authority
+	    from users M
+		left join authorities A
+		on M.USERNAME = A.username
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="RESTAR_ID" prepend="AND">
+				M.RESTAR_ID = #RESTAR_ID#
+			</isNotEmpty>
+			<isNotEmpty property="ENABLED" prepend="AND">
+				M.ENABLED = #ENABLED#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY A.authority asc
+  </sql>
+  <select id="getUsers.list.paging" resultClass="UserVO" parameterClass="UserVO">
+  		SELECT 
+			USERNAME
+			, PASSWORD
+			, FULLNAME
+			, ADDRESS
+			, PHONE
+			, EMAIL
+			, ENABLED
+			, RESTAR_ID
+			, CMND
+			, authority 
+			, rn1
+  		FROM (
+  			select h.*
+  				, @row := @row + 1 AS rn1 
+  			from (<include refid="sqlGetListAllUser"/>) h
+  			,(SELECT @row := 0) K
+  			) t
+  		<![CDATA[       
+          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
+                ]]>
+  </select>
+  <select id="getUsers.getListCount" resultClass="java.util.HashMap" parameterClass="UserVO">	
+		SELECT 
+			count(t.USERNAME) as COUNT
+	    FROM (<include refid="sqlGetListAllUser"/>) t
+	</select>
+	<update id="updateUserRight">
+	    UPDATE authorities 
+	    <dynamic prepend="SET">
+	    	<isNotEmpty property="USERNAME" prepend=",">
+		   		 username = #USERNAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="authority" prepend=",">
+		   		authority = #authority#
+		   	</isNotEmpty>
+		</dynamic>
+	    WHERE username = #USERNAME#
+  </update>
+  <insert id="createUserRight">
+	    INSERT INTO authorities 
+	    	(
+	    		username, 
+	    		authority
+	    	) 
+	    VALUES (
+	    	#USERNAME#, 
+	    	#authority#
+			)
+  </insert>
+  <delete id="deleteUserVo" parameterClass="UserVO">
+  	DELETE FROM users WHERE USERNAME = #USERNAME#
+  </delete>
+  <select id="getListAllUser" resultClass="java.util.HashMap" parameterClass="UserVO">	
+		SELECT 
+			count(t.USERNAME) as COUNT
+	    FROM (<include refid="sqlGetListAllUser"/>) t
+</select>
+  
+</sqlMap>

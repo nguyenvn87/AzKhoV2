@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<sqlMap resource="/sqlmap/person.xml"/>
+	<sqlMap resource="/sqlmap/user.xml"/>
+	<sqlMap resource="/sqlmap/srvc.xml"/>
+	<sqlMap resource="/sqlmap/menu.xml"/>
+	<sqlMap resource="/sqlmap/room.xml"/>
+	<sqlMap resource="/sqlmap/roomSrvc.xml"/>
+	<sqlMap resource="/sqlmap/roomTurn.xml"/>
+	<sqlMap resource="/sqlmap/store_srvc.xml"/>
+	<sqlMap resource="/sqlmap/system_code.xml"/>
+	<sqlMap resource="/sqlmap/restaurant.xml"/>
+	<sqlMap resource="/sqlmap/sys_menu.xml"/>
+	<sqlMap resource="/sqlmap/provider.xml"/>
+	<sqlMap resource="/sqlmap/import.xml"/>
+	<sqlMap resource="/sqlmap/importDetail.xml"/>
+	<sqlMap resource="/sqlmap/cmm_cd_user.xml"/>
+	<sqlMap resource="/sqlmap/customer.xml"/>
+	<sqlMap resource="/sqlmap/system_auth.xml"/>
+	<sqlMap resource="/sqlmap/bankAccount.xml"/> 
+	<sqlMap resource="/sqlmap/roomTurnHistory.xml"/> 
+	<sqlMap resource="/sqlmap/roomSrvcHistory.xml"/>
+</sqlMapConfig>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="sys_user">
+	<typeAlias  alias="UserVO"	type="com.kito.madina.test.vo.UserVO"/>
+	<select id="getUserAll" resultClass="UserVO">
+	    SELECT USER_ID 
+			, USER_NAME 
+			, PASSWD 
+			, CMND 
+			, PHONE 
+			, ADDR 
+			, RESTAR_ID 
+			, ROLEGROUP_ID 
+			, USE_YN 
+			, GENDER 
+			, EMAIL 
+			, SALARY 
+	    FROM sys_user
+	</select>
+	<insert id="insert1">
+	    INSERT INTO person (name, address, postcode) values (#name#, #address#, #postcode#)
+	    <selectKey resultClass="Long" keyProperty="id">
+	    	SELECT LAST_INSERT_ID() as id
+	    </selectKey>
+	</insert>
+	<insert id="CreateUserVO">
+	    INSERT INTO sys_user 
+	    	(
+	    	USER_ID
+		    , USER_NAME 
+			, PASSWD 
+			, CMND 
+			, PHONE 
+			, ADDR 
+			, RESTAR_ID 
+			, ROLEGROUP_ID 
+			, USE_YN 
+			, GENDER 
+			, EMAIL 
+			, SALARY 
+	    	) 
+	    VALUES (
+	    	#USER_ID#
+		    , #USER_NAME# 
+			, #PASSWD# 
+			, #CMND# 
+			, #PHONE# 
+			, #ADDR# 
+			, #RESTAR_ID# 
+			, #ROLEGROUP_ID# 
+			, #USE_YN# 
+			, #GENDER# 
+			, #EMAIL# 
+			, #SALARY# 
+			)
+  </insert>
+  <insert id="UpdateUserVo">
+	    UPDATE sys_user 
+	    SET
+		    USER_NAME = #USER_NAME#
+			, PASSWD = #PASSWD#
+			, CMND = #CMND#
+			, PHONE = #PHONE#
+			, ADDR = #ADDR#
+			, RESTAR_ID = #RESTAR_ID#
+			, ROLEGROUP_ID = #ROLEGROUP_ID#
+			, USE_YN = #USE_YN#
+			, GENDER = #GENDER#
+			, EMAIL = #EMAIL#
+			, SALARY  = #SALARY#
+	    WHERE USER_ID = #USER_ID#
+  </insert>
+</sqlMap>

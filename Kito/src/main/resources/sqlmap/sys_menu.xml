@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="sysmenu">
+	<typeAlias  alias="SysMenuVO"	type="com.kito.madina.test.vo.SysMenuVO"/>
+	<select id="getSysMenuVOAll" resultClass="SysMenuVO">
+	    SELECT MENU_ID 
+				,UP_MENU_ID 
+				,MENU_NM 
+				,MENU_DSCR 
+				,USE_YN
+				,SORT_NR
+				,URL_TYPE 
+				,MENU_ICON_ID
+				,RESTAR_ID
+				,FOR_ROOM
+				,FOR_SALE
+	    FROM sys_menu
+	</select>
+	<select id="selectSysMenuVOByVo" resultClass="SysMenuVO" parameterClass="SysMenuVO">
+	    SELECT MENU_ID 
+				,UP_MENU_ID 
+				,MENU_NM 
+				,MENU_DSCR 
+				,USE_YN
+				,SORT_NR
+				,URL_TYPE 
+				,MENU_ICON_ID
+				,FOR_ROOM
+				,FOR_SALE
+	    FROM sys_menu
+	    <dynamic prepend="WHERE">
+	    	<isNotNull prepend="AND" property="MENU_ID">
+	    		MENU_ID = #MENU_ID#
+	    	</isNotNull>
+	    	<isNotNull prepend="AND" property="UP_MENU_ID">
+	    		UP_MENU_ID = #UP_MENU_ID#
+	    	</isNotNull>
+	    	<isNotNull prepend="AND" property="USE_YN">
+	    		USE_YN = #USE_YN#
+	    	</isNotNull>
+	    	<isEqual compareValue="1" property="FOR_ROOM" prepend="AND">
+				<![CDATA[ FOR_ROOM = 1 ]]>
+			</isEqual>
+			<isEqual compareValue="0" property="FOR_ROOM" prepend="AND">
+				<![CDATA[ FOR_ROOM = 0 ]]>
+			</isEqual>
+			<isEqual compareValue="1" property="FOR_SALE" prepend="AND">
+				<![CDATA[ FOR_SALE = 1 ]]>
+			</isEqual>
+			<isEqual compareValue="0" property="FOR_SALE" prepend="AND">
+				<![CDATA[ FOR_SALE = 0 ]]>
+			</isEqual>
+	    </dynamic>
+	    ORDER BY SORT_NR
+	</select>
+	<select id="System.menu.getMainList" resultClass="SysMenuVO" parameterClass="java.util.HashMap">
+	    SELECT  M.*, L.rolegroup_id
+		FROM lo_rolegroup_menu L left join sys_menu M on M.menu_id = L.menu_id   
+	    <dynamic prepend="WHERE">
+	    	<isNotNull prepend="AND" property="MENU_ID">
+	    		M.MENU_ID = #MENU_ID#
+	    	</isNotNull>
+	    	<isNotNull prepend="AND" property="UP_MENU_ID">
+	    		M.UP_MENU_ID = #UP_MENU_ID#
+	    	</isNotNull>
+	    	<isNotNull prepend="AND" property="USE_YN">
+	    		M.USE_YN = #USE_YN#
+	    	</isNotNull>
+	    	<isEqual compareValue="1" property="FOR_ROOM" prepend="AND">
+				<![CDATA[ M.FOR_ROOM = 1 ]]>
+			</isEqual>
+			<isEqual compareValue="0" property="FOR_ROOM" prepend="AND">
+				<![CDATA[ M.FOR_ROOM = 0 ]]>
+			</isEqual>
+			<isEqual compareValue="1" property="FOR_SALE" prepend="AND">
+				<![CDATA[ M.FOR_SALE = 1 ]]>
+			</isEqual>
+			<isEqual compareValue="0" property="FOR_SALE" prepend="AND">
+				<![CDATA[ M.FOR_SALE = 0 ]]>
+			</isEqual>
+			<isNotNull prepend="AND" property="ROLEGROUP_ID">
+	    		L.ROLEGROUP_ID = #ROLEGROUP_ID#
+	    	</isNotNull>
+	    	<isNotNull prepend="AND" property="RESTAR_ID">
+	    		L.RESTAR_ID = #RESTAR_ID#
+	    	</isNotNull>
+	    </dynamic>
+	    ORDER BY SORT_NR
+	</select>
+	<select id="System.menu.getMainList1" resultClass="SysMenuVO">
+				
+		SELECT   
+			a.menu_id, a.up_menu_id, a.up_menu_nm
+			,a.menu_nm
+			, a.menu_dscr, a.use_yn, a.sort_nr,
+		         a.url, a.url_type, a.menu_icon_id,  
+		         (SELECT COUNT (menu_id)
+		            FROM sys_menu
+		           WHERE up_menu_id = a.menu_id AND use_yn = #USE_YN#) child_cnt
+		    	FROM ( SELECT a.menu_id, a.up_menu_id
+					, b.menu_nm AS up_menu_nm
+			    	, a.menu_nm,
+			       	a.menu_nm_en, a.menu_nm_ko, a.menu_dscr, a.use_yn, a.sort_nr, a.url,
+			       	a.menu_icon_id, a.url_type,
+			       	get_cd_nm (#LOCALE#, 'S1020', a.url_type) AS url_type_nm
+		  FROM sys_menu a LEFT OUTER JOIN sys_menu b ON a.up_menu_id = b.menu_id) a, lo_rolegroup_menu b
+		   WHERE a.up_menu_id = #UP_MENU_ID#
+		     AND a.use_yn = #USE_YN#
+		     AND a.menu_id = b.menu_id
+		     AND b.rolegroup_id = #ROLE_GROUP_ID#
+		     AND b.use_yn = 'Y'
+		ORDER BY sort_nr
+	</select> 
+</sqlMap>

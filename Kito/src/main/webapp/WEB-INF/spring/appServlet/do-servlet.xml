@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    - DispatcherServlet application context for Application's web tier.
+-->
+<beans:beans xmlns="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+        xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:util="http://www.springframework.org/schema/util" 
+        xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.kito">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+    
+	
+    <beans:bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <beans:property name="webBindingInitializer">
+            <beans:bean class="com.kito.madina.cmmn.exception.web.GdssBindingInitializer"/>
+        </beans:property>
+    </beans:bean>
+
+    <!-- Interceptor definition to change language, locale interceptor only declared here mean just work for .do servlet -->   
+	<beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+    	<beans:property name="defaultLocale" value="en" />
+    </beans:bean>    
+    
+    <beans:bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+    	<beans:property name="paramName" value="language" />
+	</beans:bean>
+	
+	<beans:bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" >
+		<beans:property name="interceptors">
+		   <beans:list>
+			<beans:ref bean="localeChangeInterceptor" />
+		   </beans:list>
+		</beans:property>
+	</beans:bean>
+	
+   <beans:bean id="ExcelRevenueSummary" class="com.kito.madina.cmmn.excel.ExcelRevenueReportView"></beans:bean>
+   <beans:bean id="ExcelView" class="com.kito.madina.cmmn.excel.MappingExcelView" />    
+   <beans:bean id="baocaotonkhoId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/BaoCaoTonKho.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="baogiabanhangId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/BaoGiaBanHang.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="billPrintId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/bill.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="billRetailPrintId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/billRetail.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="billA4PrintId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/DailyBill.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="profitPrintId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/rptProfit.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="profitPrintIdRetail" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/rptProfitRetail.jrxml"></beans:property>
+   </beans:bean>
+   <beans:bean id="storePrintId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/rptStore.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="rptDailyExportId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/rptDaily.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="storeExportId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/exportStore.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="rptImportProfitId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/rptImportProfit.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="debitPrintId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/rptDebitStatistic.jrxml"></beans:property>
+   </beans:bean>
+   <beans:bean id="idListSrvcSaled" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/rptProductSaled.jrxml"></beans:property>
+   </beans:bean>
+   <beans:bean id="idListSrvcImport" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/rptProductImport.jrxml"></beans:property>
+   </beans:bean>
+   <beans:bean id="rptThongKeChiTiet" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/ThongKeBanHang.jrxml"></beans:property>
+   </beans:bean>
+   <beans:bean id="idDailyReport" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+    	<beans:property name="url" value="classpath:jasper/dailyReportA4.jrxml"></beans:property>
+    	<beans:property name="reportDataKey" value="datasource"></beans:property>
+    </beans:bean>
+    <beans:bean id="billA4PrintRetailId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+    	<beans:property name="url" value="classpath:jasper/billA4Retail.jasper"></beans:property>
+    	<beans:property name="reportDataKey" value="datasource"></beans:property>
+    </beans:bean>
+   <beans:bean id="idDailyReport_bk" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+    	<beans:property name="url" value="classpath:jasper/dailyReportA4.jrxml"></beans:property>
+    	<beans:property name="reportDataKey" value="datasource"></beans:property>
+    	<beans:property name="subReportUrls" ref="multiDSSubReportUrls"></beans:property>
+    	<beans:property name="subReportDataKeys" ref="multiDSSubDataKeys"></beans:property>
+    </beans:bean>
+    <util:map id="multiDSSubReportUrls">
+    	<beans:entry key="subReport_Url_list" value="classpath:jasper/subreportDaily.jasper"></beans:entry>
+    </util:map>
+	<util:list id="multiDSSubDataKeys">
+		<beans:value>subReportDataSource</beans:value>
+	</util:list>
+	
+   <beans:bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0" />
+
+   <beans:bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1" 
+    p:viewClass="org.springframework.web.servlet.view.JstlView" 
+    p:prefix="/WEB-INF/views/" p:suffix=".jsp"/>
+    
+</beans:beans>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="CMM_CD">
+	<typeAlias alias="CodeVO" type="com.kito.madina.test.vo.CodeVO" />
+	<select id="System.Code.getComboList" resultClass="java.util.HashMap">
+		SELECT
+			CD_NM AS DISPLAY,
+			trim(CD) AS VALUE,
+			VALUE1 AS IMG
+		FROM cmm_cd
+		WHERE 
+		    GROUP_CD = #GROUP_CD#
+	</select>
+	<select id="System.Code.getCodeVO" resultClass="codeVO">
+		SELECT GROUP_CD
+			, CD
+			, GROUP_NM
+			, CD_NM
+			, VALUE1
+			, SYS_USE_YN
+			, USE_YN
+			, SORT_SN
+			, DSCR
+			, VALUE2
+			, VALUE3
+			, VALUE4
+			, VALUE5
+			, LOCALE
+			, RESTAR_TYPE
+		FROM cmm_cd
+		<dynamic prepend="where">
+			<isNotEmpty property="CD" prepend="AND">
+				trim(CD)= #CD#
+			</isNotEmpty>
+			<isNotEmpty property="GROUP_CD" prepend="AND">
+				GROUP_CD=#GROUP_CD#
+			</isNotEmpty>
+			<isNotEmpty property="RESTAR_TYPE" prepend="AND">
+				RESTAR_TYPE=#RESTAR_TYPE#
+			</isNotEmpty>
+			<isNotEmpty property="USE_YN" prepend="AND">
+				USE_YN=#USE_YN#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<insert id="System.Code.createCodeVO">
+		INSERT INTO cmm_cd
+		(
+			GROUP_CD
+			, CD
+			, GROUP_NM
+			, CD_NM
+			, VALUE1
+			, USE_YN
+			, SORT_SN
+			, DSCR
+			, VALUE2
+			, VALUE3
+			, VALUE4
+			, VALUE5
+			, LOCALE
+			, RESTAR_TYPE
+		)
+		VALUES (
+			#GROUP_CD#
+			, #CD#
+			, #GROUP_NM#
+			, #CD_NM#
+			, #VALUE1#
+			, 'Y'
+			, #SORT_SN#
+			, #DSCR#
+			, #VALUE2#
+			, #VALUE3#
+			, #VALUE4#
+			, #VALUE5#
+			, #LOCALE#
+			, #RESTAR_TYPE#
+		)
+	</insert>
+	<insert id="System.Code.updateCodeVO">
+		UPDATE cmm_cd
+		SET
+			GROUP_CD 	= #GROUP_CD#
+			,GROUP_NM 	= #GROUP_NM#
+			,CD_NM 		= #CD_NM#
+			,RESTAR_TYPE 	= #RESTAR_TYPE#
+			,SYS_USE_YN = #SYS_USE_YN#
+			,DSCR 		= #DSCR#
+		WHERE CD 	= #CD#
+	</insert>
+	<select id="User.Code.getListCmmCdVO" resultClass="codeVO">
+		SELECT GROUP_CD
+			, CD
+			, GROUP_NM
+			, CD_NM
+			, VALUE1
+			, SYS_USE_YN
+			, USE_YN
+			, SORT_SN
+			, DSCR
+			, LOCALE
+			, RESTAR_ID
+		FROM cmm_cd_user
+		<dynamic prepend="where">
+			<isNotEmpty property="CD" prepend="AND">
+				trim(CD)= #CD#
+			</isNotEmpty>
+			<isNotEmpty property="GROUP_CD" prepend="AND">
+				GROUP_CD=#GROUP_CD#
+			</isNotEmpty>
+			<isNotEmpty property="USE_YN" prepend="AND">
+				USE_YN = #USE_YN#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+</sqlMap>

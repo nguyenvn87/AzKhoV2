@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="room_turn_history">
+	<typeAlias  alias="RoomTurnVO"	type="com.kito.madina.test.vo.RoomTurnVO"/>
+	<insert id="createRoomTurnHistoryVO">
+	    INSERT INTO room_turn_history 
+	    	(
+	    	  ROOM_ID 
+			, ROOM_USED_ID 
+			, TIME_STS 
+			, TIME_END 
+			, TIME_TOTAL 
+			, USER_NAME 
+			, IS_ON 
+			, IS_DEBIT
+			, TOTAL_MONEY
+			, PAYED_MONEY
+			, CHANGE_DATE
+			, DSCRT
+			, DATE
+			, HAS_PAYED
+			, PAY_INFO
+			, RESTAR_ID
+			, CUS_CD
+			, CUS_NM
+			, IS_DELIVERED
+			, BILL_CD
+			, PRINTED
+			, IS_ORDER
+			, IS_CANCELED
+			, PAY_METHOD
+			, ID_BANK
+	    	) 
+	    VALUES (
+	    	  #ROOM_ID# 
+			, #ROOM_USED_ID# 
+			, #TIME_STS# 
+			, #TIME_END# 
+			, #TIME_TOTAL# 
+			, #USER_NAME# 
+			, #IS_ON# 
+			, #IS_DEBIT#
+			, #TOTAL_MONEY#
+			, #PAYED_MONEY#
+			, #CHANGE_DATE# 
+			, #DSCRT#
+			, #DATE#
+			, #HAS_PAYED#
+			, #PAY_INFO#
+			, #RESTAR_ID#
+			, #CUS_CD#
+			, #CUS_NM#
+			, #IS_DELIVERED#
+			, #BILL_CD#
+			, #PRINTED# 
+			, #IS_ORDER#
+			, #IS_CANCELED#
+			, #PAY_METHOD#
+			, #ID_BANK#
+			)
+  </insert>
+  <select id="getListTurnStatisticHistory" resultClass="RoomTurnVO"  parameterClass="java.util.HashMap">
+  		SELECT 
+  			T.ROOM_USED_ID,
+			T.TIME_STS,
+			T.TIME_END,
+			T.IS_ON,
+			T.IS_DEBIT,
+			T.TOTAL_MONEY,
+			T.PAYED_MONEY,
+			T.DATE,
+			T.CHANGE_DATE,
+			T.USER_NAME, 
+			T.DSCRT,
+			T.CUS_CD,
+			T.CUS_NM,
+			T.IS_DELIVERED,
+			T.BILL_CD,
+			T.IS_CANCELED,
+			@row := @row + 1 AS rn1
+		FROM room_turn_history T
+			LEFT JOIN room R
+				ON T.ROOM_ID = R.ROOM_ID
+            ,(SELECT @row := 0) K
+		<dynamic prepend="where">
+			<isNotEmpty property="RESTAR_ID" prepend="AND">
+						R.RESTAR_ID = #RESTAR_ID#
+			</isNotEmpty>	
+		</dynamic>
+  </select>
+  <select id="getRoomTurnHistoryVOByObject" resultClass="RoomTurnVO">
+	    SELECT ROOM_ID 
+			, ROOM_USED_ID 
+			, TIME_STS 
+			, TIME_END 
+			, TIME_TOTAL 
+			, USER_NAME 
+			, IS_ON 
+			, IS_DEBIT
+			, TOTAL_MONEY
+			, PAYED_MONEY
+			, CHANGE_DATE
+			, DSCRT
+			, PAY_DATE
+			, CUS_CD
+			, CUS_NM
+			, IS_DELIVERED
+			, RESTAR_ID
+			, BILL_CD
+			, PRINTED
+			, IS_ORDER
+			, IS_CANCELED
+			, PAY_METHOD
+	    FROM room_turn_history
+	    <dynamic prepend="WHERE">
+		   	<isNotEmpty property="ROOM_ID" prepend="AND">
+		   		ROOM_ID = #ROOM_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="ROOM_USED_ID" prepend="AND">
+		   		ROOM_USED_ID = #ROOM_USED_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="TIME_STS" prepend="AND">
+		   		TIME_STS = #TIME_STS#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="TIME_END" prepend="AND">
+		   		TIME_END = #TIME_END#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="USER_NAME" prepend="AND">
+		   		USER_NAME = #USER_NAME#
+		   	</isNotEmpty>
+	   </dynamic> 
+	</select> 
+   <sql id="getAllListTurnStatisticHistory">	
+		SELECT       
+			 T.ROOM_USED_ID
+			 , T.TIME_STS
+			 , T.TIME_END
+			 , T.IS_ON
+			 , T.IS_DEBIT
+			 , T.TOTAL_MONEY
+			 , T.PAYED_MONEY
+			 , T.DATE
+			 , T.CHANGE_DATE
+			 , T.USER_NAME
+			 , T.DSCRT
+			 , T.HAS_PAYED
+			 , T.PAY_INFO
+			 , T.PAY_DATE  
+			 , T.CUS_CD 
+			 , T.CUS_NM
+			 , T.IS_DELIVERED 
+			 , T.BILL_CD
+			 , T.IS_ORDER
+			 , T.IS_CANCELED
+			 , T.PAY_METHOD
+			 , T.ID_BANK
+			 , R.room_no
+			 ,@row := @row + 1 AS rn1     
+		FROM room_turn_history T
+		left join room R ON T.ROOM_ID = R.ROOM_ID    
+		,(SELECT @row := 0) K
+		<dynamic prepend="where">
+			<isNotEmpty property="RESTAR_ID" prepend="AND">
+					<![CDATA[ T.RESTAR_ID = #RESTAR_ID# ]]>
+			</isNotEmpty>
+		</dynamic>            
+		ORDER BY T.CHANGE_DATE DESC 
+  </sql>
+  <select id="getStatisticHistory.list.paging" resultClass="RoomTurnVO" parameterClass="java.util.HashMap">
+  		SELECT * 
+  		FROM (
+  			<include refid="getAllListTurnStatisticHistory"/>) h
+  		<![CDATA[       
+          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
+                ]]>
+  </select>
+  <select id="getStatisticHistory.getListCount" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">	
+		SELECT 
+			count(t.ROOM_USED_ID) as COUNT
+			, sum(t.total_money)  as total
+            , sum(t.payed_money) as payed     
+	    FROM (<include refid="getAllListTurnStatisticHistory"/>) t
+  </select>
+</sqlMap>

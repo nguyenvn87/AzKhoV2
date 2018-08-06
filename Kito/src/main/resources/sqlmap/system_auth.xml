@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="CMM_CD">
+	<typeAlias alias="RoleGroupVO" type="com.kito.madina.system.auth.vo.RoleGroupVO" />
+	<sql id="System.auth.data">		
+		SELECT 
+			ROLEGROUP_ID, DSCR, USE_YN
+		FROM 
+			lo_rolegroup
+	</sql>	
+	<select id="System.auth.List" resultClass="java.util.HashMap" >
+		<include refid="System.auth.data" />								
+	</select>
+	<select id="System.auth.menu.tree" resultClass="java.util.HashMap" >
+		SELECT t.*
+	  FROM (
+			SELECT m.menu_id AS ID
+			, m.menu_nm	as text	
+			, m.menu_nm AS info
+	        , (select count(menu_id) from sys_menu where up_menu_id = m.menu_id)  as leaf_count
+	        , 'MENU' AS nodetype
+	        , 'icon-lop-group' AS iconcls
+	        , 'false' AS expanded
+	        , 'false' AS leaf
+	        , (CASE m.menu_id
+			           WHEN rg.menu_id
+			              THEN 'true'
+			           ELSE 'false'
+			        END) AS checked
+			 FROM sys_menu m
+			      LEFT OUTER JOIN
+						       (SELECT menu_id
+						          FROM lo_rolegroup_menu		
+						          WHERE rolegroup_id = #ROLEGROUP_ID# AND use_yn = 'Y'    
+						          		AND RESTAR_ID = #RESTAR_ID#     
+						        ) rg
+			 		ON m.menu_id = rg.menu_id 
+			 		WHERE m.up_menu_id =  #node#  and m.use_yn = 1
+			 		<isEqual compareValue="1" property="FOR_ROOM" prepend="AND">
+						<![CDATA[ FOR_ROOM = 1 ]]>
+					</isEqual>
+					<isEqual compareValue="0" property="FOR_ROOM" prepend="AND">
+						<![CDATA[ FOR_ROOM = 0 ]]>
+					</isEqual>
+					<isEqual compareValue="1" property="FOR_SALE" prepend="AND">
+						<![CDATA[ FOR_SALE = 1 ]]>
+					</isEqual>
+					<isEqual compareValue="0" property="FOR_SALE" prepend="AND">
+						<![CDATA[ FOR_SALE = 0 ]]>
+					</isEqual>
+				 ) t				
+	</select> 
+	<select id="System.auth.menu.tree1" resultClass="java.util.HashMap" >
+		SELECT t.*, DECODE (leaf_count, 0, 'true', 'false') AS leaf
+	  FROM (
+			SELECT m.menu_id AS ID
+			
+				, m.menu_nm_ko AS text			
+				, m.menu_nm_ko AS info
+				, 'false' AS expanded
+				,(select count(menu_id) from lo_menu where up_menu_id = m.menu_id)  as leaf_count
+				, 'MENU' AS nodetype,
+			       'icon-lop-group' AS iconcls,
+			       (CASE m.menu_id
+			           WHEN rg.menu_id
+			              THEN 'true'
+			           ELSE 'false'
+			        END) AS checked
+			  FROM sys_menu m
+			       LEFT OUTER JOIN
+			       (SELECT menu_id
+			          FROM lo_rolegroup_menu		          
+			         WHERE rolegroup_id = #ROLEGROUP_ID# AND use_yn = 'Y') rg
+			       ON m.menu_id = rg.menu_id and m.use_yn = 1
+			 WHERE m.up_menu_id =  #node#  
+			 ) t
+								
+	</select> 
+	<update id="System.auth.menu.merge" >
+		MERGE INTO lo_rolegroup_menu 
+		USING DUAL  
+		ON (rolegroup_id = #ROLEGROUP_ID# and MENU_ID = #MENU_ID# )
+		WHEN MATCHED 
+		THEN 
+			UPDATE SET                 
+			USE_YN=#USE_YN# 
+		WHEN NOT MATCHED 
+		THEN      
+		INSERT (rolegroup_id, MENU_ID, USE_YN)    
+		VALUES (#ROLEGROUP_ID#, #MENU_ID#, #USE_YN#)
+	</update>
+	<insert id="System.auth.menu.insert">
+		INSERT INTO lo_rolegroup_menu 
+	    	(
+	    		MENU_ID
+	    		, ROLEGROUP_ID
+				, RESTAR_ID
+				, USE_YN 
+	    	) 
+	    VALUES (
+	    		#MENU_ID#
+	    		, #ROLEGROUP_ID#
+				, #RESTAR_ID#
+				, #USE_YN# 
+			)
+	</insert>
+	<delete id="System.auth.menu.delete">
+		DELETE FROM lo_rolegroup_menu 
+		WHERE
+			ROLEGROUP_ID = #ROLEGROUP_ID#
+			and RESTAR_ID = #RESTAR_ID#
+			and MENU_ID = #MENU_ID#
+	</delete>
+</sqlMap>

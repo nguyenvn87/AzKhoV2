@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="ImportDetailVO">
+	<typeAlias  alias="ImportDetailVO"	type="com.kito.madina.test.vo.ImportDetailVO"/>
+	<select id="getImportDetailVOAll" resultClass="ImportDetailVO">
+	    SELECT IMPRT_CD 
+			, SRVC_ID 
+			, IMPRT_PRICE 
+			, AMOUNT 
+			, TOTAL_MONEY 
+			, UNIT 
+			, RESTAR_ID 
+			, USER_NAME 
+			, CHANGETIME 
+			, NOTE
+	    FROM import_detail
+	</select>
+	<insert id="CreateImportDetailVO" parameterClass="ImportDetailVO">
+	    INSERT INTO import_detail 
+	    	(
+	    		IMPRT_CD 
+			, SRVC_ID 
+			, IMPRT_PRICE 
+			, AMOUNT 
+			, TOTAL_MONEY 
+			, UNIT 
+			, RESTAR_ID
+			, CHANGETIME
+			, NOTE
+	    	) 
+	    VALUES (
+	    	#IMPRT_CD# 
+			, #SRVC_ID# 
+			, #IMPRT_PRICE# 
+			, #AMOUNT# 
+			, #TOTAL_MONEY# 
+			, #UNIT#
+			, #RESTAR_ID# 
+			, now()
+			, #NOTE#
+			)
+  </insert>
+  <insert id="updateImportDetail">
+	    UPDATE import_detail 
+	    <dynamic prepend="SET">
+	    	<isNotEmpty property="SRVC_ID" prepend=",">
+		   		SRVC_ID = #SRVC_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="IMPRT_PRICE" prepend=",">
+		   		IMPRT_PRICE = #IMPRT_PRICE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="AMOUNT" prepend=",">
+		   		AMOUNT = #AMOUNT#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="TOTAL_MONEY" prepend=",">
+		   		TOTAL_MONEY = #TOTAL_MONEY#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="UNIT" prepend=",">
+		   		UNIT = #UNIT#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="NOTE" prepend=",">
+		   		NOTE = #NOTE#
+		   	</isNotEmpty>
+		</dynamic>
+	    WHERE ID_DETAIL = #ID_DETAIL#
+  </insert>
+  <delete id="DeleteImportDetailVOByImportID" parameterClass="ImportDetailVO">
+  	DELETE FROM import_detail WHERE IMPRT_CD = #IMPRT_CD#
+  </delete>
+  <sql id="sqlGetListImportDetail">
+  	SELECT h.*
+  		, S.SRVC_NM as SRVC_NAME
+		, S.TYPE
+		, S.SRVC_CD 
+  	FROM(
+  		SELECT sum(T.TOTAL_MONEY) as TOTAL_MONEY
+		, sum(T.amount) as AMOUNT
+		, T.SRVC_ID
+		FROM import_detail as T
+		<dynamic prepend="where">
+			<isNotEmpty property="STARTDATE" prepend="AND">
+					<![CDATA[ T.CHANGETIME >= #STARTDATE# ]]>
+			</isNotEmpty>	
+			<isNotEmpty property="ENDDATE" prepend="AND">
+					<![CDATA[ T.CHANGETIME <= #ENDDATE# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="RESTAR_ID" prepend="AND">
+					<![CDATA[ T.RESTAR_ID = #RESTAR_ID# ]]>
+			</isNotEmpty>
+		</dynamic>
+		group by(T.SRVC_ID)
+		) h
+	left join srvc S on S.SRVC_ID = h.SRVC_ID
+  </sql>
+  <sql id="sqlGetListImportDetail1">
+  		SELECT sum(T.TOTAL_MONEY) as TOTAL_MONEY
+		, sum(T.amount) as AMOUNT
+		, T.SRVC_ID
+		, S.SRVC_NM as SRVC_NAME
+		, S.TYPE
+		, S.SRVC_CD
+		FROM import_detail as T
+		left join srvc S on S.SRVC_ID = T.SRVC_ID
+		<dynamic prepend="where">
+			<isNotEmpty property="STARTDATE" prepend="AND">
+					<![CDATA[ T.CHANGETIME >= #STARTDATE# ]]>
+			</isNotEmpty>	
+			<isNotEmpty property="ENDDATE" prepend="AND">
+					<![CDATA[ T.CHANGETIME <= #ENDDATE# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="RESTAR_ID" prepend="AND">
+					<![CDATA[ T.RESTAR_ID = #RESTAR_ID# ]]>
+			</isNotEmpty>
+		</dynamic>
+		group by(T.SRVC_ID)
+		order by S.TYPE
+  </sql>
+  <select id="getImportDetailPaging" parameterClass="java.util.HashMap" resultClass="ImportDetailVO"> 
+  		 SELECT * 
+  		FROM (
+  			select h.*
+  				, @row := @row + 1 AS rn1 
+  			from (<include refid="sqlGetListImportDetail"/>) h
+  			,(SELECT @row := 0) K
+  			) t
+  		<![CDATA[       
+          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
+                ]]>
+  </select>
+  <select id="getImportDetailAll" parameterClass="java.util.HashMap" resultClass="java.util.HashMap"> 
+  		 SELECT * 
+  		FROM (<include refid="sqlGetListImportDetail"/>) t
+  		
+  </select>
+  <select id="getImportDetailPaging.getCount" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">	
+		SELECT 
+			count(t.SRVC_ID) as COUNT,
+			sum(t.TOTAL_MONEY)  as TOTAL_MONEY
+	    FROM (<include refid="sqlGetListImportDetail"/>) t
+  </select>
+  <select id="getImportDetailVOByID" parameterClass="ImportDetailVO" resultClass="ImportDetailVO">	
+		SELECT 
+			t.*
+	    FROM import_detail t
+	    WHERE t.ID_DETAIL = #ID_DETAIL#
+  </select>
+  <delete id="deleteImportDetailVOByID" parameterClass="ImportDetailVO">
+  		DELETE FROM import_detail WHERE ID_DETAIL = #ID_DETAIL#
+  </delete>
+  <sql id="sqlThongKeNhapHang">
+  		SELECT L.* , @row := @row + 1 AS rn1  
+  		FROM(
+	  		SELECT srvc_id,date_import as CREATE_DATE, sum(amount) as TOTAL, sum(TOTAL_MONEY) as TOTAL_MONEY
+			FROM(
+				select L.*, DATE_FORMAT(M.DATE_IMPORT, "%Y/%m/%d") as date_import from import_detail L
+				left join import M on L.imprt_cd = M.imprt_cd
+				<dynamic prepend="where">
+					<isNotEmpty property="RESTAR_ID" prepend="AND">
+						<![CDATA[ M.RESTAR_ID = #RESTAR_ID# ]]>
+					</isNotEmpty>
+					<isNotEmpty property="SRVC_ID" prepend="AND">
+						<![CDATA[ L.SRVC_ID = #SRVC_ID# ]]>
+					</isNotEmpty>	
+					<isNotEmpty property="STARTDATE" prepend="AND">
+						<![CDATA[ M.DATE_IMPORT >= #STARTDATE# ]]>
+					</isNotEmpty>	
+					<isNotEmpty property="ENDDATE" prepend="AND">
+						<![CDATA[ M.DATE_IMPORT <= #ENDDATE# ]]>
+					</isNotEmpty>	
+				</dynamic> 
+			) T group by srvc_id, date_import
+			order by date_import desc
+		)L,(SELECT @row := 0) K
+  </sql>
+  <select id="getThongKeNhapHangPaging" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">	
+		SELECT 
+			t.*,
+			S.SRVC_NM,
+			S.SRVC_CD
+	    FROM (<include refid="sqlThongKeNhapHang"/>) t
+	    left join srvc S on t.SRVC_ID = S.SRVC_ID
+	    <dynamic prepend="where">
+	    	<isNotEmpty property="MIN" prepend="AND">
+						<![CDATA[ t.rn1 > #MIN# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="MAX" prepend="AND">
+						<![CDATA[ t.rn1 <= #MAX# ]]>
+			</isNotEmpty>		
+	    </dynamic> 
+  </select>
+  <select id="getThongKeNhapHangCount" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">	
+		SELECT 
+			count(t.rn1) as COUNT
+	    FROM (<include refid="sqlThongKeNhapHang"/>) t
+  </select>
+</sqlMap>

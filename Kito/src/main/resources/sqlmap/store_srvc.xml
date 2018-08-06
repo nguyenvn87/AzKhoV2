@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="menu">
+	<typeAlias  alias="StoreSrvcVO"	type="com.kito.madina.test.vo.StoreSrvcVO"/>
+	<select id="getStoreSrvcVOAll" resultClass="StoreSrvcVO">
+	    SELECT MENU_ID 
+				,SRVC_ID 
+				,PROD_NM 
+				,PRICE 
+				,UNIT
+	    FROM menu
+	</select>
+	<select id="selectStoreSrvcVOByStoreSrvcVO" resultClass="StoreSrvcVO" parameterClass="StoreSrvcVO">
+	    SELECT STORE_ID 
+			, SRVC_ID 
+			, TOTAL_NO 
+			, REMAIN_NO 
+			, RESTAR_ID
+			, UNIT
+			, USERNAME
+			, CHANGETIME
+	    FROM store_srvc
+	    <dynamic prepend="WHERE">
+	    	<isNotEmpty prepend="AND">
+	    		STORE_ID = #STORE_ID#
+	    	</isNotEmpty>
+	    	<isNotEmpty prepend="AND">
+	    		RESTAR_ID = #RESTAR_ID#
+	    	</isNotEmpty>
+	    	<isNotEmpty prepend="AND">
+	    		SRVC_ID = #SRVC_ID#
+	    	</isNotEmpty>
+	    </dynamic>
+	    
+	</select>
+	<sql id="getAllStoreSrvcStatistic">	
+		SELECT M.STORE_ID 
+					, M.SRVC_ID 
+					, M.TOTAL_NO 
+					, M.REMAIN_NO 
+					, M.RESTAR_ID
+					, M.UNIT
+					, M.USERNAME
+					, M.CHANGETIME
+					, S.SRVC_NM
+					, S.TYPE
+					, S.SRVC_CD
+					, R.CD_NM as UNIT_NM
+		    from store_srvc M
+				LEFT JOIN srvc S 
+				ON M.srvc_id = S.srvc_id
+				LEFT JOIN cmm_cd  R
+				ON R.CD = M.UNIT and R.GROUP_CD = 'DONVI'
+			<dynamic prepend="where">
+				<isNotEmpty property="TYPE" prepend="AND">
+						S.TYPE = #TYPE#
+				</isNotEmpty>	
+				<isNotEmpty property="RESTAR_ID" prepend="AND">
+						M.RESTAR_ID = #RESTAR_ID#
+				</isNotEmpty>		
+				and S.IS_USED = 1
+			</dynamic>
+			ORDER BY S.TYPE
+	</sql>
+	<insert id="CreateStoreSrvcVO">
+	    INSERT INTO store_srvc 
+	    	(
+	    		STORE_ID 
+				, SRVC_ID 
+				, TOTAL_NO 
+				, REMAIN_NO 
+				, RESTAR_ID
+				, UNIT
+				, USERNAME
+				, CHANGETIME
+	    	) 
+	    VALUES (
+	    		#STORE_ID# 
+				, #SRVC_ID# 
+				, #TOTAL_NO# 
+				, #REMAIN_NO# 
+				, #RESTAR_ID#
+				, #UNIT#
+				, #USERNAME#
+				, #CHANGETIME#
+			)
+  </insert>
+  <insert id="updateStoreSrvcVo">
+	    UPDATE store_srvc 
+	     <dynamic prepend="SET">
+	     	<isNotEmpty property="TOTAL_NO" prepend=",">
+	    		TOTAL_NO = #TOTAL_NO#
+	    	</isNotEmpty>
+	    	<isNotEmpty property="REMAIN_NO" prepend=",">
+	    		REMAIN_NO = #REMAIN_NO#
+	    	</isNotEmpty>
+			<isNotEmpty property="RESTAR_ID" prepend=",">
+	    		RESTAR_ID = #RESTAR_ID#
+	    	</isNotEmpty>
+			<isNotEmpty property="UNIT" prepend=",">
+	    		UNIT = #UNIT#
+	    	</isNotEmpty>
+	    	<isNotEmpty property="USERNAME" prepend=",">
+	    		USERNAME = #USERNAME#
+	    	</isNotEmpty>
+		</dynamic>
+	    WHERE STORE_ID = #STORE_ID#
+	    and SRVC_ID = #SRVC_ID#
+  </insert>
+  <select id="getListStoreSrvcVOByVO" resultClass="StoreSrvcVO">
+	    SELECT M.STORE_ID 
+				, M.SRVC_ID 
+				, M.TOTAL_NO 
+				, M.REMAIN_NO 
+				, M.RESTAR_ID
+				, M.UNIT
+				, M.USERNAME
+				, M.CHANGETIME
+				, S.SRVC_NM
+				, S.TYPE
+				, R.CD_NM as UNIT_NM
+	    from store_srvc M
+			LEFT JOIN srvc S 
+			ON M.srvc_id = S.srvc_id
+			LEFT JOIN cmm_cd  R
+			ON R.CD = M.UNIT and R.GROUP_CD = 'DONVI'
+		ORDER BY S.TYPE
+	</select>
+	<select id="getStoreSrvcVOByVO" resultClass="StoreSrvcVO" parameterClass="StoreSrvcVO">
+		SELECT M.STORE_ID 
+					, M.SRVC_ID 
+					, M.TOTAL_NO 
+					, M.REMAIN_NO 
+					, M.RESTAR_ID
+					, M.UNIT
+					, M.USERNAME
+					, M.CHANGETIME
+		    from store_srvc M
+			where M.SRVC_ID = #SRVC_ID#
+			and M.RESTAR_ID = #RESTAR_ID#
+			and M.STORE_ID = 'KARAO'
+	</select>
+	<select id="getStore.getListCount" resultClass="java.util.HashMap" parameterClass="StoreSrvcVO">	
+		SELECT 
+			count(t.SRVC_ID) as COUNT
+	    FROM (<include refid="getAllStoreSrvcStatistic"/>) t
+	</select>
+	<select id="getStore.list.paging" resultClass="StoreSrvcVO" parameterClass="StoreSrvcVO">
+  		SELECT * 
+  		FROM (
+  			select h.*
+  				, @row := @row + 1 AS rn1 
+  			from (<include refid="getAllStoreSrvcStatistic"/>) h
+  			,(SELECT @row := 0) K
+  			) t
+  		<![CDATA[       
+          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
+                ]]>
+  </select>
+</sqlMap>

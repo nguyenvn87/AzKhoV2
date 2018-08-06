@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="room_srvc_history">
+	<typeAlias  alias="RoomSrvcVO"	type="com.kito.madina.test.vo.RoomSrvcVO"/>
+	
+	<insert id="createRoomSrvcHistoryVO">
+	    INSERT INTO room_srvc_history 
+	    	(
+	    	ROOM_USED_ID
+		    , SRVC_ID 
+			, AMOUNT 
+			, TOTAL_MONEY 
+			, TOTAL_HOUS 
+			, PRICE 
+			, USER_NAME
+			, CHANGETIME
+	    	) 
+	    VALUES (
+	    	  #ROOM_USED_ID#
+		    , #SRVC_ID#  
+			, #AMOUNT# 
+			, #TOTAL_MONEY# 
+			, #TOTAL_HOUS# 
+			, #PRICE#
+			, #USER_NAME#
+			, #CHANGETIME#
+			)
+  </insert>
+  <select id="getListRoomSrvcVOHistoryByID" resultClass="RoomSrvcVO">
+	    SELECT 
+	    	 R.ROOM_USED_ID ,
+			 R.SRVC_ID,
+			 R.AMOUNT ,
+			 R.PRICE,
+			 R.TOTAL_MONEY ,
+			 R.TOTAL_HOUS ,
+			 R.USER_NAME,
+			 R.ID,
+			 C.CD as UNIT,
+			 C.CD_NM as UNIT_NM,
+			 M.SRVC_NM as MENU_NM,
+			 M.SORT_NO
+	    FROM room_srvc_history R
+	    	LEFT JOIN srvc M
+	    	ON M.SRVC_ID = R.SRVC_ID
+	    	LEFT JOIN cmm_cd  C
+			ON C.CD = M.UNIT and C.GROUP_CD = 'DONVI'
+	    WHERE R.ROOM_USED_ID = #ROOM_USED_ID#
+	    ORDER BY M.SORT_NO
+	</select>
+	 <select id="getRoomSrvcVOHistoryByVo" resultClass="RoomSrvcVO">
+	    SELECT *
+	    FROM room_srvc_history
+	    <dynamic prepend="WHERE">
+		   	<isNotEmpty property="ROOM_USED_ID" prepend="AND">
+		   		ROOM_USED_ID = #ROOM_USED_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="ID" prepend="AND">
+		   		ID = #ID#
+		   	</isNotEmpty>
+	   </dynamic> 
+	</select>
+</sqlMap>

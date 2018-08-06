@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="bank_account">
+	<typeAlias  alias="BankAccountVO"	type="com.kito.madina.test.vo.BankAccountVO"/>
+	 <select id="getBankAccountVOAll" resultClass="BankAccountVO">
+	    SELECT ID_BANK 
+			, ACCOUNT_NO 
+			, BANK_NM 
+			, RESTAR_ID 
+			, ACCOUNT_NM 
+			, NOTE 
+	    FROM bank_account
+	</select>
+	<insert id="createBankAccountVO">
+	    INSERT INTO bank_account 
+	    	(
+			ACCOUNT_NO 
+			, BANK_NM 
+			, RESTAR_ID 
+			, ACCOUNT_NM 
+			, NOTE 
+			, CHANGE_USER
+	    	) 
+	    VALUES (
+			#ACCOUNT_NO# 
+			, #BANK_NM# 
+			, #RESTAR_ID# 
+			, #ACCOUNT_NM# 
+			, #NOTE# 
+			, #CHANGE_USER#
+			)
+  </insert>
+  <update id="updateBankAccountVO">
+	    UPDATE bank_account 
+	    SET 
+			ACCOUNT_NO = #ACCOUNT_NO# 
+			, BANK_NM = #BANK_NM#
+			, RESTAR_ID = #RESTAR_ID#
+			, ACCOUNT_NM = #ACCOUNT_NM#
+			, NOTE = #NOTE#
+			, CHANGE_USER = #CHANGE_USER#
+	    WHERE ID_BANK = #ID_BANK#
+  </update>
+  <select id="getBankAccountVOByVO" resultClass="BankAccountVO">
+	    SELECT R.*
+	    FROM bank_account R
+	    WHERE
+		   	R.ID_BANK = #ID_BANK#
+	</select> 
+	<select id="getListBankAccountVO" resultClass="BankAccountVO">
+	    SELECT *
+	    FROM bank_account
+	    WHERE RESTAR_ID = #RESTAR_ID#
+	</select>
+</sqlMap>

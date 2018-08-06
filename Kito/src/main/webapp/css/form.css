@@ -1,0 +1,185 @@
+.jdvn-main {
+    font-size: 12px;
+    background-color: #f8f8f8;
+    font-family: "Arial", Times New Roman, sans-serif;
+    color: #404040;
+	padding: 20px 15px 20px 15px;
+}
+.input-field{
+	margin:0 0 0 10px;
+}
+.sumary-label{
+	padding: 5px 15px 5px 15px;
+	font-size: 15px;
+	color: #708090;
+	font-weight: bold;
+}
+.sumary-field{
+	padding: 5px 15px 5px 15px;
+	font-size: 15px;
+	font-weight: bold;
+	color: red;
+}
+.jdvn-sub-body{
+	margin:2px 0;
+	
+}
+.jdvn-main-pop {
+    font-size: 12px;
+    background-color: #f8f8f8;
+    font-family: "Arial", Times New Roman, sans-serif;
+    color: #404040;
+	padding: 15px 5px 5px 5px;
+}
+/* START ADD NEW UI ADMIN */
+.jdvn-main-body .jdvn-sub .jdvn-sub-header {
+	margin-bottom: 5px;
+}
+
+/*Apply for title of sub container's header*/
+.jdvn-sub-header .title{
+	margin-left:10px;
+	margin-top:10px;
+	font-size:13px;
+	font-weight:bold;
+	width:250px !important; 
+}
+
+/*Apply for description of sub container's header*/
+.jdvn-sub-header .description{
+	margin-left:10px;
+	margin-top:5px; 
+}
+.description{
+	border-left:1px solid #c8c8c8;
+	/* margin: 10px 20px 10px 15px ; */
+	padding-left: 1px solid #c8c8c8;
+}
+.jdvn-main-body .jdvn-sub .jdvn-sub-body {
+	background-color:none;
+	padding:10px;
+/* 	margin-top:10px; */
+/* 	margin: 10px 20px 0 15px */
+	margin: 0px 20px 0 15px
+}
+.jdvn-sub-body .row {
+	margin:2px 0;
+	/* border: 1px solid; */
+}
+.jdvn-sub-body .row1 {
+	margin:2px 0;
+	border: 1px solid; 
+}
+/* style for input object in a row */
+.jdvn-sub-body .row .input-field{
+	margin:0 0 0 30px;
+}
+.jdvn-sub-body .row .input-field:first-child{
+	margin:0;
+}
+.jdvn-sub-body .row .short-space{
+	margin:0 0 0 10px
+}
+.jdvn-sub {
+ 	border-bottom:1px solid #c8c8c8; 
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.buttonCls:active { background: #000000; font-size: 14px; background-color: #5cb4ff; vertical-align: center; border: 2px solid; border-color: #5cb4ff; }
+.buttonCls { 
+	background: #ffffff; 
+	color: #ff0000; 
+	font-size: 18px; 
+	vertical-align: center; 
+	border: 1px solid; !important 
+}
+.btn-style .x-btn-center .x-btn-text {
+	color: #ff0000;
+}
+.buttonCls1 { 
+	background: #ffffff; 
+	color: #ff0000; 
+	font-size: 18px; 
+	vertical-align: center; 
+	border: 0px solid; !important 
+}
+.input-special-cls .x-form-text{
+	font-size: 14;
+	text-align: center;
+	color: #5d5353;
+	font-weight: 600; 
+	/* background-color:#4a80a7; */
+} 
+.input-search-cls .x-form-text{
+	font-size: 15;
+	text-align: left;
+	color: #5d5353;
+	/* font-weight: 600; */
+	/* background-color:#4a80a7; */
+} 
+.input-total-money-cls .x-form-text{
+	font-size: 15;
+	text-align: right;
+	color: #5d5353;
+	font-weight: 600;
+	background-color:#f1efcd;
+} 
+.input-needpay-money-cls .x-form-text{
+	font-size: 15;
+	text-align: right;
+	color: #5d5353;
+	font-weight: 600;
+	background-color:rgba(221, 234, 226, 0.52);
+} 
+.input-pay-money-cls .x-form-text{
+	font-size: 15;
+	text-align: right;
+	color: #5d5353;
+	font-weight: 600;
+	background-color: rgba(224, 192, 228, 0.52);
+} 
+
+.toolbar-content .x-toolbar-default{
+	background-color: #2d98c3;
+}
+.x-box-inner .x-box-payment{
+	/* background-color: #2d98c3; */
+}
+.x-box-payment .x-fieldset-header-text{
+	color: white;
+    font-weight: 600;
+    background-color: #2d98c3;
+}
+.x-box-payment .x-fieldset-header{
+	color: white;
+    font-weight: 600;
+    background-color: #2d98c3;
+}
+.x-box-customer .x-fieldset-header{
+	color: white;
+    font-weight: 600;
+    background-color: #2d98c3;
+}
+.x-box-customer .x-fieldset-header-text{
+	color: white;
+    font-weight: 600;
+    background-color: #2d98c3;
+}
+.x-box-inner .x-box-customer{
+	background-color: rgba(22, 23, 29, 0.09);
+}
+.x-panel-header-default{
+	background-color: #326488;
+}
+.x-btn-small-extent .x-btn-default-small {
+	background-image: -webkit-linear-gradient(top,#a1a5a9,#595d61 50%,#3e4448 51%,#2e5f82);
+}
+.tab-conent-cls .x-tab-default-active .x-tab-inner{
+	color: #304d7c;
+}
+.x-tab-default .x-tab-inner{
+	color: rgba(236, 232, 232, 0.69);;
+}
+.tab-conent-cls .x-tab-bar-default {
+    background-color: #4b9cd7;
+}

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ProviderVO">
+	<typeAlias alias="ProviderVO" type="com.kito.madina.test.vo.ProviderVO" />
+	<select id="getProviderVOAll" resultClass="ProviderVO">
+		SELECT PROV_CD
+		,PROV_NM
+		,PROV_PHONE
+		,PROV_USER
+		,PROV_ADDR
+		,PROV_EMAIL
+		,RESTAR_ID
+		,PROV_DCSRT
+		FROM provider
+	</select>
+	<select id="selectProviderVOByProviderVO" resultClass="ProviderVO"
+		parameterClass="ProviderVO">
+		SELECT PROV_CD
+		,PROV_NM
+		,PROV_PHONE
+		,PROV_USER
+		,PROV_ADDR
+		,PROV_EMAIL
+		,RESTAR_ID
+		,PROV_DCSRT
+		FROM provider
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="PROV_CD" prepend="AND">
+				PROV_CD = #PROV_CD#
+			</isNotEmpty>
+			<isNotEmpty property="RESTAR_ID" prepend="AND">
+				RESTAR_ID = #RESTAR_ID#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<insert id="createProviderVO">
+		INSERT INTO provider
+		(
+		PROV_NM
+		,PROV_PHONE
+		,PROV_USER
+		,PROV_ADDR
+		,PROV_EMAIL
+		,RESTAR_ID
+		,PROV_DCSRT
+		)
+		VALUES (
+		#PROV_NM#
+		,#PROV_PHONE#
+		,#PROV_USER#
+		,#PROV_ADDR#
+		,#PROV_EMAIL#
+		,#RESTAR_ID#
+		,#PROV_DCSRT#
+		)
+	</insert>
+	<insert id="updateProviderVO">
+		UPDATE provider
+		<dynamic prepend="SET">
+			<isNotEmpty prepend=",">
+				PROV_NM = #PROV_NM#
+			</isNotEmpty>
+			<isNotEmpty prepend=",">
+				PROV_PHONE = #PROV_PHONE#
+			</isNotEmpty>
+			<isNotEmpty prepend=",">
+				PROV_USER = #PROV_USER#
+			</isNotEmpty>
+			<isNotEmpty prepend=",">
+				PROV_ADDR = #PROV_ADDR#
+			</isNotEmpty>
+			<isNotEmpty prepend=",">
+				PROV_EMAIL = #PROV_EMAIL#
+			</isNotEmpty>
+			<isNotEmpty prepend=",">
+				RESTAR_ID = #RESTAR_ID#
+			</isNotEmpty>
+			<isNotEmpty prepend=",">
+				PROV_DCSRT = #PROV_DCSRT#
+			</isNotEmpty>
+		</dynamic>
+		WHERE PROV_CD = #PROV_CD#
+	</insert>
+	<sql id="sqlGetListAllProvider">
+		SELECT PROV_CD
+		,PROV_NM
+		,PROV_PHONE
+		,PROV_USER
+		,PROV_ADDR
+		,PROV_EMAIL
+		,RESTAR_ID
+		,PROV_DCSRT
+		FROM provider
+		WHERE RESTAR_ID = #RESTAR_ID#
+	</sql>
+	<select id="getProvider.getListCount" resultClass="java.util.HashMap"
+		parameterClass="ProviderVO">
+		SELECT
+		count(t.PROV_CD) as COUNT
+		FROM (
+		<include refid="sqlGetListAllProvider" />
+		) t
+	</select>
+	<select id="getProvider.list.paging" resultClass="ProviderVO"
+		parameterClass="ProviderVO">
+		SELECT *
+		FROM (
+		select h.*
+		, @row := @row + 1 AS rn1
+		from (
+		<include refid="sqlGetListAllProvider" />)
+		h
+		,(SELECT @row := 0) K
+		) t
+  		<![CDATA[       
+          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
+                ]]>
+	</select>
+	<delete id="provider.deleteVo">
+    	DELETE FROM provider WHERE PROV_CD = #PROV_CD#
+  	</delete>
+</sqlMap>

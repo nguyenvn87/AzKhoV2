@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreportDaily" pageWidth="750" pageHeight="300" columnWidth="510" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b1452e00-0cc6-4012-801d-44bc791c5ef3">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="SRVC_NM" class="java.lang.String"/>
+	<field name="ItemCode" class="java.lang.String"/>
+	<field name="ItemName" class="java.lang.String"/>
+	<field name="ItemUnit" class="java.lang.String"/>
+	<field name="ItemTotal" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="8"/>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="80" y="6" width="60" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="517e4d77-2cec-41aa-9540-64f4a120d692"/>
+				<box>
+					<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="#8A8383"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="font-extension" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="" pdfEncoding="Cp1258" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ItemCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="140" y="5" width="90" height="22" uuid="846d8a07-7017-4ea5-be3e-4c8dc116337f"/>
+				<box leftPadding="5">
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="rgba(138, 131, 131, 0.1254902)"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="font-extension" size="12" isBold="false" pdfFontName="" pdfEncoding="Cp1258" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ItemName}]]></textFieldExpression>
+			</textField>
+			<textField pattern="�#,##0.0##;�(#,##0.0##)" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="400" y="5" width="90" height="22" forecolor="#000000" backcolor="#FFFFFF" uuid="7bb6be22-58be-4f68-9298-96c0b3bb0f81"/>
+				<box rightPadding="2">
+					<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="#8A8383"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="font-extension" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ItemTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="5" width="80" height="22" uuid="d5fbd008-53ca-4928-9b3f-f99a557917ec"/>
+				<box leftPadding="7">
+					<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="#8A8383"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="font-extension" size="12" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ItemUnit}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,217 @@
+/*Apply for main container*/
+.jdvn-main {
+    font-size: 12px;
+    background-color: #f8f8f8;
+    font-family: "Arial", Times New Roman, sans-serif;
+    color: #404040;
+	padding: 20px 15px 20px 15px;
+}
+/* breadcrumb style*/
+.freehold-breadcum {
+	border-bottom:1px solid #fdfdfd;
+	background-color: #56bfcf;
+}
+.arrow-box {
+	text-align : left;
+	padding: 10px 20px;
+	background-color: #C8C8C8; 
+	background-image: none;
+	border: none;
+	height: 30px;
+	border-radius: unset;
+	color : #fafafa;		
+	position: relative; 
+	display: block;
+	font-weight: bold;
+}
+.arrow-box:after {
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 20px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-bottom: 20px solid transparent;
+	border-left: 10px solid #56bfcf;
+	position: absolute;
+	top: 50%;
+	margin-top: -20px; 
+	left: 100%;
+	z-index: 2; 
+}
+
+.arrow-box:before {
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 20px solid transparent;       
+	border-bottom: 20px solid transparent;
+	border-left: 10px solid white;
+	position: absolute;
+	top: 50%;
+	margin-top: -20px; 
+	margin-left: 3px;
+	left: 100%;
+	z-index: 1; 
+}
+
+.arrow-box-selected {
+	color: #fafafa;
+	background-color : #304D7C;	
+}
+.arrow-box-selected:after{
+	border-left-color: #304D7C;
+}
+
+.arrow-box:hover{
+	color: #fafafa;
+	background-color : #304D7C;	
+	cursor:  pointer;
+}
+
+.arrow-box:hover:after{
+	border-left-color: #304D7C;
+	cursor:  pointer;
+}
+
+/* bottom button style*/
+.bottom-button {
+/* 	height : 30px; */
+	margin : 0px 0px 0px 10px; 
+}
+
+.fix-icon-heigth30 {
+    height : 24px !important;
+}
+
+.hight-light-grid{
+	color: #383838; 
+	font-weight:bold;
+}
+.cls-align-common{
+	padding : 0px 0px 0px 25px;
+	/*border-bottom:2.5px solid #E0E0E0;*/
+	/* border-top:2.5px solid #E0E0E0; */
+}
+.cls-align-sub_grid{
+	padding : 0px 0px 0px 8px;
+}
+.cls-align-header
+{
+	padding : 5px 10px 5px 0px;
+	border-top:2.5px solid #E0E0E0;
+}
+.ext-mb-download{
+	background-image:url('../images/icon/msg-save.png');
+}
+.leftmenu-room-btn{
+	padding : 2px 2px 2px 2px;
+	/* margin : 0px 0px 0px 10px;  */
+	/* border-top: 5px solid #E0E0E0; */
+}
+.arrow-box-occupy{
+	text-align : left;
+	padding: 10px 20px;
+	background-color: #DB7093; 
+	background-image: none;
+	border: none;
+	height: 60px;
+	border-radius: unset;
+	color : #DB7093;		
+	position: relative; 
+	display: block;
+	font-weight: bold;
+}
+.arrow-box-occupy:after {
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 20px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-bottom: 20px solid transparent;
+	border-left: 10px solid #56bfcf;
+	position: absolute;
+	top: 50%;
+	margin-top: -20px; 
+	left: 100%;
+	z-index: 2; 
+}
+
+.arrow-box-occupy:before {
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 20px solid transparent;       
+	border-bottom: 20px solid transparent;
+	border-left: 10px solid white;
+	position: absolute;
+	top: 50%;
+	margin-top: -20px; 
+	margin-left: 3px;
+	left: 100%;
+	z-index: 1; 
+}
+.arrow-box-occupy:hover{
+	color: #fafafa;
+	background-color : #304D7C;	
+	cursor:  pointer;
+}
+
+.arrow-box-occupy:hover:after{
+	border-left-color: #304D7C;
+	cursor:  pointer;
+}
+.arrow-box-empty{
+	text-align : left;
+	padding: 10px 20px;
+	background-color: #56bfcf; 
+	background-image: none;
+	border: none;
+	height: 60px;
+	border-radius: unset;
+	color : #DB7093;		
+	position: relative; 
+	display: block;
+	font-weight: bold;
+}
+.arrow-box-empty:after {
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 20px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-bottom: 20px solid transparent;
+	border-left: 10px solid #56bfcf;
+	position: absolute;
+	top: 50%;
+	margin-top: -20px; 
+	left: 100%;
+	z-index: 2; 
+}
+
+.arrow-box-empty:before {
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 20px solid transparent;       
+	border-bottom: 20px solid transparent;
+	border-left: 10px solid white;
+	position: absolute;
+	top: 50%;
+	margin-top: -20px; 
+	margin-left: 3px;
+	left: 100%;
+	z-index: 1; 
+}
+.arrow-box-empty:hover{
+	color: #fafafa;
+	background-color : #304D7C;	
+	cursor:  pointer;
+}
+
+.arrow-box-empty:hover:after{
+	border-left-color: #304D7C;
+	cursor:  pointer;
+}

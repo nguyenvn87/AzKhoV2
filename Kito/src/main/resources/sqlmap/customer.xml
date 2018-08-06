@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="customer">
+	<typeAlias  alias="CustomerVO"	type="com.kito.madina.test.vo.CustomerVO"/>
+	<select id="getCustomerAll" resultClass="CustomerVO">
+	    SELECT CUS_CD 
+			, NAME 
+			, ADDR 
+			, PHONE 
+			, EMAIL 
+			, SCORE 
+			, RESTAR_ID
+	    FROM customer
+	    WHERE RESTAR_ID = #RESTAR_ID#
+	</select>
+	<insert id="CreateCustomerVO">
+	    INSERT INTO customer 
+	    	(
+		    	CUS_CD 
+				, NAME 
+				, ADDR 
+				, PHONE 
+				, EMAIL 
+				, SCORE 
+				, RESTAR_ID
+				, CHANGE_USER
+				, ACCUMULT
+	    	) 
+	    VALUES (
+	    		#CUS_CD# 
+				, #NAME# 
+				, #ADDR# 
+				, #PHONE# 
+				, #EMAIL# 
+				, #SCORE# 
+				, #RESTAR_ID#
+				, #CHANGE_USER#
+				, #ACCUMULT#
+			)
+	<selectKey resultClass="int" keyProperty="CUS_CD" >
+        SELECT @@IDENTITY AS CUS_CD
+    </selectKey>
+  </insert>
+  <update id="UpdateCustomerVO" parameterClass="CustomerVO">
+	    UPDATE customer 
+	    <dynamic prepend="SET">
+				<isNotEmpty prepend=",">
+					NAME = #NAME#
+				</isNotEmpty>
+				<isNotEmpty prepend=",">
+					ADDR = #ADDR#
+				</isNotEmpty>
+				<isNotEmpty prepend=",">
+					PHONE = #PHONE#
+				</isNotEmpty>
+				<isNotEmpty prepend=",">
+					EMAIL = #EMAIL#
+				</isNotEmpty>
+				<isNotEmpty prepend=",">
+					EMAIL = #EMAIL#
+				</isNotEmpty>
+				<isNotEmpty prepend=",">
+					CHANGE_USER = #CHANGE_USER#
+				</isNotEmpty>
+				<isNotEmpty prepend=",">
+					ACCUMULT = #ACCUMULT#
+				</isNotEmpty>
+		</dynamic>
+	    WHERE CUS_CD = #CUS_CD# and RESTAR_ID = #RESTAR_ID#
+  </update>
+  <select id="getCustomerVOByVo" resultClass="CustomerVO">
+	    SELECT CUS_CD 
+				, NAME 
+				, ADDR 
+				, PHONE 
+				, EMAIL 
+				, SCORE 
+				, RESTAR_ID
+				, CHANGE_USER
+	    FROM customer
+	    WHERE CUS_CD = #CUS_CD# and RESTAR_ID = #RESTAR_ID#
+	</select>
+	<select id="getListCustomerVOByVo" resultClass="CustomerVO">
+	    SELECT R.CUS_CD 
+				, R.NAME 
+				, R.ADDR 
+				, R.PHONE 
+				, R.EMAIL 
+				, R.SCORE 
+				, R.RESTAR_ID
+				, R.CHANGE_USER
+	    FROM customer R
+	   <dynamic prepend="WHERE">
+	   	<isNotEmpty property="CUS_CD" prepend="AND">
+	   		R.CUS_CD = #CUS_CD#
+	   	</isNotEmpty>
+	   	<isNotEmpty property="RESTAR_ID" prepend="AND">
+	   		R.RESTAR_ID = #RESTAR_ID#
+	   	</isNotEmpty>
+	   	<isNotEmpty property="NAME" prepend="AND">
+	   		R.NAME = #NAME#
+	   	</isNotEmpty>
+	   	<isNotEmpty property="EMAIL" prepend="AND">
+	   		R.EMAIL = #EMAIL#
+	   	</isNotEmpty>
+	   </dynamic>
+	    ORDER BY R.NAME
+	</select>
+	<sql id="sqlGetPagingCustomer">	
+		select DISTINCT CUS_CD, NAME, ADDR, PHONE, SCORE, CHANGE_USER, EMAIL, ACCUMULT
+		from(
+			select * from customer S1
+			<dynamic prepend="WHERE">
+			   	<isNotEmpty property="NAME" prepend="AND">
+			   		S1.NAME like  #NAME#
+			   	</isNotEmpty>
+			   	<isNotEmpty property="RESTAR_ID" prepend="AND">
+			   		S1.RESTAR_ID =  #RESTAR_ID#
+			   	</isNotEmpty>
+		   	</dynamic> 
+			UNION
+			select * from customer S2 
+				<dynamic prepend="WHERE">
+			   	<isNotEmpty property="NAME" prepend="AND">
+			   		S2.PHONE like  #NAME#
+			   	</isNotEmpty>
+			   	<isNotEmpty property="RESTAR_ID" prepend="AND">
+			   		S2.RESTAR_ID =  #RESTAR_ID#
+			   	</isNotEmpty>
+		   	</dynamic> 
+		) B
+ </sql>
+ <select id="selectSearchCustomerList" resultClass="CustomerVO" parameterClass="CustomerVO">	
+	SELECT * 
+  		FROM (
+  			select h.*
+  				, @row := @row + 1 AS rn1 
+  			from (<include refid="sqlGetPagingCustomer"/>) h
+  			,(SELECT @row := 0) K
+  			) t
+  		<![CDATA[       
+          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
+                ]]>
+</select>
+<select id="getListCountSearchCustomer" resultClass="java.util.HashMap" parameterClass="CustomerVO">	
+		SELECT 
+			count(t.CUS_CD) as COUNT
+	    FROM (<include refid="sqlGetPagingCustomer"/>) t
+</select>
+</sqlMap>

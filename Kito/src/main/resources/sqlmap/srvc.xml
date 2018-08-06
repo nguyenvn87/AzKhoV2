@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="srvc">
+	<typeAlias  alias="SrvcVO"	type="com.kito.madina.test.vo.SrvcVO"/>
+	<select id="getSrvcVOAll" resultClass="SrvcVO">
+	    SELECT SRVC_ID 
+	    		, SRVC_CD
+				, SRVC_NM 
+				, UNIT 
+				, DSCRT 
+				, RESTAR_ID
+				, IS_USED
+				, TYPE
+				, IS_DEFAULT
+				, PRICE
+				, DISCOUNT
+	    FROM srvc
+	    <dynamic prepend="WHERE">
+		   	<isNotEmpty property="RESTAR_ID" prepend="AND">
+		   		RESTAR_ID = #RESTAR_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="SRVC_CD" prepend="AND">
+		   		SRVC_CD = #SRVC_CD#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="USER_NAME" prepend="AND">
+		   		USER_NAME = #USER_NAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="SRVC_ID" prepend="AND">
+		   		SRVC_ID = #SRVC_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="TYPE" prepend="AND">
+		   		TYPE = #TYPE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="IS_USED" prepend="AND">
+		   		IS_USED = #IS_USED#
+		   	</isNotEmpty>
+		   	<isEqual compareValue="1" property="IS_DEFAULT" prepend="AND">
+				<![CDATA[ IS_DEFAULT = 1 ]]>
+			</isEqual>
+	   </dynamic>
+	</select>
+	<select id="getSrvcVOBySrvcVo" resultClass="SrvcVO" parameterClass="SrvcVO">
+	    SELECT M.SRVC_ID 
+	    		, M.SRVC_CD
+				, M.SRVC_NM 
+				, M.UNIT 
+				, M.DSCRT 
+				, M.RESTAR_ID
+				, M.TYPE
+				, M.IS_USED
+				, M.USER_NAME
+				, M.IS_DEFAULT
+				, M.PRICE
+				, M.DISCOUNT
+				, M.CHANGE_DATE
+				, M.ACCUMULT
+				, M.AMOUNT_STORE
+				, M.REASON
+				, R.CD_NM as TYPE_NM
+	    FROM srvc M
+	    LEFT JOIN cmm_cd  R
+		ON R.CD = M.TYPE and R.GROUP_CD = 'DIHVU'
+	     <dynamic prepend="WHERE">
+		   	<isNotEmpty property="RESTAR_ID" prepend="AND">
+		   		M.RESTAR_ID = #RESTAR_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="USER_NAME" prepend="AND">
+		   		M.USER_NAME = #USER_NAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="SRVC_ID" prepend="AND">
+		   		M.SRVC_ID = #SRVC_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="SRVC_CD" prepend="AND">
+		   		M.SRVC_CD = #SRVC_CD#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="TYPE" prepend="AND">
+		   		M.TYPE = #TYPE#
+		   	</isNotEmpty>
+		   	<isEqual compareValue="1" property="IS_USED" prepend="AND">
+				<![CDATA[ M.IS_USED = 1 ]]>
+			</isEqual>
+			<isEqual compareValue="0" property="IS_USED" prepend="AND">
+				<![CDATA[ M.IS_USED = 0 ]]>
+			</isEqual>
+		   	<isEqual compareValue="1" property="IS_DEFAULT" prepend="AND">
+				<![CDATA[ IS_DEFAULT = 1 ]]>
+			</isEqual>
+	   </dynamic>
+	</select>
+	<sql id="sqlGetListAllSrvc">	
+		SELECT M.SRVC_ID 
+				, M.SRVC_CD
+				, M.SRVC_NM 
+				, M.UNIT 
+				, M.DSCRT 
+				, M.RESTAR_ID
+				, M.TYPE
+				, M.USER_NAME
+				, R.CD_NM as UNIT_NM
+				, M.IS_USED
+				, M.IS_DEFAULT
+				, M.PRICE
+				, M.SORT_NO
+				, M.DISCOUNT
+				, M.CHANGE_DATE
+				, M.ACCUMULT
+				, M.AMOUNT_STORE
+	    FROM srvc M
+	    	LEFT JOIN cmm_cd  R
+			ON R.CD = M.UNIT and R.GROUP_CD = 'DONVI'
+		<dynamic prepend="WHERE">
+		   	<isNotEmpty property="RESTAR_ID" prepend="AND">
+		   		M.RESTAR_ID = #RESTAR_ID#
+		   	</isNotEmpty>
+		   	<isEqual compareValue="1" property="IS_USED" prepend="AND">
+				<![CDATA[ M.IS_USED = 1 ]]>
+			</isEqual>
+			<isEqual compareValue="0" property="IS_USED" prepend="AND">
+				<![CDATA[ M.IS_USED = 0 ]]>
+			</isEqual>
+		</dynamic>
+		ORDER BY M.SRVC_CD 
+	</sql>
+	<insert id="createSrvcVO">
+	    INSERT INTO srvc 
+	    	(
+	    		SRVC_ID
+	    		, SRVC_CD
+				, SRVC_NM 
+				, UNIT 
+				, DSCRT 
+				, RESTAR_ID
+				, TYPE
+				, USER_NAME
+				, IS_USED
+				, IS_DEFAULT
+				, PRICE
+				, SORT_NO
+				, DISCOUNT
+				, CHANGE_DATE
+				, ACCUMULT
+				, AMOUNT_STORE
+	    	) 
+	    VALUES (
+	    		#SRVC_ID#
+	    		, #SRVC_CD#
+				, #SRVC_NM# 
+				, #UNIT# 
+				, #DSCRT# 
+				, #RESTAR_ID#
+				, #TYPE#
+				, #USER_NAME#
+				, #IS_USED#
+				, #IS_DEFAULT#
+				, #PRICE#
+				, #SORT_NO#
+				, #DISCOUNT#
+				, #CHANGE_DATE#
+				, #ACCUMULT#
+				, #AMOUNT_STORE#
+			)
+  </insert>
+  <insert id="UpdateSrvcVO">
+	    UPDATE srvc 
+	    <dynamic prepend="SET">
+		   	<isNotEmpty property="SRVC_CD" prepend=",">
+		   		SRVC_CD = #SRVC_CD#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="SRVC_NM" prepend=",">
+		   		SRVC_NM = #SRVC_NM#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="UNIT" prepend=",">
+		   		UNIT = #UNIT#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="DSCRT" prepend=",">
+		   		DSCRT = #DSCRT#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="TYPE" prepend=",">
+		   		TYPE = #TYPE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RESTAR_ID" prepend=",">
+		   		RESTAR_ID = #RESTAR_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="USER_NAME" prepend=",">
+		   		USER_NAME = #USER_NAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="IS_USED" prepend=",">
+		   		IS_USED = #IS_USED#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="IS_DEFAULT" prepend=",">
+		   		IS_DEFAULT = #IS_DEFAULT#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="SORT_NO" prepend=",">
+		   		SORT_NO = #SORT_NO#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="PRICE" prepend=",">
+		   		PRICE = #PRICE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="DISCOUNT" prepend=",">
+		   		DISCOUNT = #DISCOUNT#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="CHANGE_DATE" prepend=",">
+		   		CHANGE_DATE = #CHANGE_DATE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="ACCUMULT" prepend=",">
+		   		ACCUMULT = #ACCUMULT#
+		   	</isNotEmpty>
+		</dynamic>
+	    WHERE SRVC_ID = #SRVC_ID#
+  </insert>
+  <select id="getSrvc.getListCount" resultClass="java.util.HashMap" parameterClass="SrvcVO">	
+		SELECT 
+			count(t.SRVC_ID) as COUNT
+	    FROM (<include refid="sqlGetListAllSrvc"/>) t
+	</select>
+	<select id="getSrvc.list.paging" resultClass="SrvcVO" parameterClass="SrvcVO">
+  		SELECT * 
+  		FROM (
+  			select h.*
+  				, @row := @row + 1 AS rn1 
+  			from (<include refid="sqlGetListAllSrvc"/>) h
+  			,(SELECT @row := 0) K
+  			) t
+  		<![CDATA[       
+          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
+                ]]>
+  </select>
+  <select id="getSrvc.listImportReport" resultClass="java.util.HashMap" parameterClass="SrvcVO">
+  		select h.*
+  		from (<include refid="sqlGetListAllSrvc"/>) h
+  </select>
+  <delete id="DeleteSrvcVO">
+  		DELETE FROM srvc WHERE SRVC_ID = #SRVC_ID#
+  </delete>
+  <insert id="updateAmountInStore">
+	    UPDATE srvc 
+	    <dynamic prepend="SET">
+	    	<isNotEmpty property="AMOUNT_STORE" prepend=",">
+		   		AMOUNT_STORE = #AMOUNT_STORE#
+		   	</isNotEmpty>
+	    	<isNotEmpty property="CHANGE_DATE" prepend=",">
+		   		CHANGE_DATE = #CHANGE_DATE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="USER_NAME" prepend=",">
+		   		USER_NAME = #USER_NAME#
+		   	</isNotEmpty>
+		   		,REASON = #REASON#
+		</dynamic>
+	    WHERE SRVC_ID = #SRVC_ID#
+  </insert>
+  <insert id="backupSrvcVOToHistory">
+	    INSERT INTO srvc_history 
+	    	(
+	    		SRVC_ID
+	    		, SRVC_CD
+				, SRVC_NM 
+				, UNIT 
+				, DSCRT 
+				, RESTAR_ID
+				, TYPE
+				, USER_NAME
+				, IS_USED
+				, IS_DEFAULT
+				, PRICE
+				, SORT_NO
+				, DISCOUNT
+				, CHANGE_DATE
+				, ACCUMULT
+				, AMOUNT_STORE
+				, HIS_ID
+				, HIS_NOTE
+				, HIS_CHANGE_TIME
+	    	) 
+	    VALUES (
+	    		#SRVC_ID#
+	    		, #SRVC_CD#
+				, #SRVC_NM# 
+				, #UNIT# 
+				, #DSCRT# 
+				, #RESTAR_ID#
+				, #TYPE#
+				, #USER_NAME#
+				, #IS_USED#
+				, #IS_DEFAULT#
+				, #PRICE#
+				, #SORT_NO#
+				, #DISCOUNT#
+				, #CHANGE_DATE#
+				, #ACCUMULT#
+				, #AMOUNT_STORE#
+				, #HIS_ID#
+				, #HIS_NOTE#
+				, #HIS_CHANGE_TIME#
+			)
+  </insert>
+  <sql id="sqlGetListHistorySrvc">	
+  		SELECT h.*
+  				, @row := @row + 1 AS rn1 
+  		FROM(
+		select * from srvc_history S 
+  		<dynamic prepend="WHERE">
+		   	<isNotEmpty property="SRVC_ID" prepend="AND">
+		   		S.SRVC_ID = #SRVC_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RESTAR_ID" prepend="AND">
+		   		S.RESTAR_ID = #RESTAR_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="HIS_CHANGE_TIME" prepend="AND">
+		   		S.HIS_CHANGE_TIME = #HIS_CHANGE_TIME#
+		   	</isNotEmpty>
+		</dynamic>
+  		order by S.his_change_time desc
+  		)h,(SELECT @row := 0) K
+  </sql>
+  <select id="getSrvcHistoryChange" resultClass="SrvcVO" parameterClass="SrvcVO">
+  		select M.* from (<include refid="sqlGetListHistorySrvc"/>) M
+  		<![CDATA[       
+          WHERE M.rn1 > 0  and  M.rn1 <= 31
+                ]]>
+  </select>
+  <insert id="updateSrvcVOHistory">
+	    UPDATE srvc_history 
+	    <dynamic prepend="SET">
+	    	<isNotEmpty property="AMOUNT_STORE" prepend=",">
+		   		AMOUNT_STORE = #AMOUNT_STORE#
+		   	</isNotEmpty>
+	    	<isNotEmpty property="HIS_CHANGE_TIME" prepend=",">
+		   		HIS_CHANGE_TIME = #HIS_CHANGE_TIME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="USER_NAME" prepend=",">
+		   		USER_NAME = #USER_NAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="HIS_NOTE" prepend=",">
+		   		HIS_NOTE = #HIS_NOTE#
+		   	</isNotEmpty>
+		</dynamic>
+	    WHERE HIS_ID = #HIS_ID#
+  </insert>
+</sqlMap>

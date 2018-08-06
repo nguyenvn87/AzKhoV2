@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="room">
+	<typeAlias  alias="RoomVO"	type="com.kito.madina.test.vo.RoomVO"/>
+	<select id="getRoomAll" resultClass="RoomVO">
+	    SELECT ROOM_ID 
+			, ROOM_NO 
+			, ROOM_FLOR 
+			, RESTAR_ID 
+			, ROOM_TYPE 
+			, ROOM_STATUS 
+			, IS_USED
+	    FROM room
+	</select>
+	<insert id="CreateRoomVO">
+	    INSERT INTO room 
+	    	(
+	    	ROOM_ID 
+			, ROOM_NO 
+			, ROOM_FLOR 
+			, RESTAR_ID 
+			, ROOM_TYPE 
+			, ROOM_STATUS
+			, IS_USED
+	    	) 
+	    VALUES (
+	    	#ROOM_ID# 
+			, #ROOM_NO# 
+			, #ROOM_FLOR# 
+			, #RESTAR_ID#
+			, #ROOM_TYPE# 
+			, #ROOM_STATUS#
+			, #IS_USED#
+			)
+  </insert>
+  <update id="UpdateRoomVo" parameterClass="RoomVO">
+	    UPDATE room 
+	    SET 
+			ROOM_NO = #ROOM_NO#
+			, ROOM_FLOR = #ROOM_FLOR# 
+			, RESTAR_ID = #RESTAR_ID#
+			, ROOM_TYPE = #ROOM_TYPE#
+			, ROOM_STATUS = #ROOM_STATUS#
+			, IS_USED = #IS_USED#
+	    WHERE ROOM_ID = #ROOM_ID#
+  </update>
+  <update id="updateStateRoom" parameterClass="RoomVO">
+  		<!-- UPDATE room 
+	    SET IS_EMPTY = #IS_EMPTY#
+	    WHERE ROOM_ID = #ROOM_ID# -->
+  </update>
+  <select id="getRoomVoByObject" resultClass="RoomVO">
+	    SELECT ROOM_ID 
+			, ROOM_NO 
+			, ROOM_FLOR 
+			, RESTAR_ID 
+			, ROOM_TYPE 
+			, ROOM_STATUS
+			, IS_USED
+	    FROM room
+	    WHERE ROOM_ID = #ROOM_ID#
+	</select>
+	<select id="getListRoomVoByRoomVO" resultClass="RoomVO">
+	    SELECT R.ROOM_ID 
+			, R.ROOM_NO 
+			, R.ROOM_FLOR 
+			, R.RESTAR_ID 
+			, R.ROOM_TYPE 
+			, R.ROOM_STATUS
+			, R.IS_USED
+			, C.CD_NM as ROOM_TYPE_NM
+	    FROM room R
+	     	LEFT JOIN cmm_cd  C
+			ON C.CD = R.ROOM_TYPE and C.GROUP_CD = 'GPONG'
+	   <dynamic prepend="WHERE">
+	   	<isNotEmpty property="ROOM_ID" prepend="AND">
+	   		R.ROOM_ID = #ROOM_ID#
+	   	</isNotEmpty>
+	   	<isNotEmpty property="RESTAR_ID" prepend="AND">
+	   		R.RESTAR_ID = #RESTAR_ID#
+	   	</isNotEmpty>
+	   	<isNotEmpty property="ROOM_TYPE" prepend="AND">
+	   		R.ROOM_TYPE = #ROOM_TYPE#
+	   	</isNotEmpty>
+	   	<isNotEmpty property="ROOM_NO" prepend="AND">
+	   		R.ROOM_NO = #ROOM_NO#
+	   	</isNotEmpty>
+	   	<isNotEmpty property="ROOM_STATUS" prepend="AND">
+	   		R.ROOM_STATUS = #ROOM_STATUS#
+	   	</isNotEmpty>
+	   	<isEqual property="IS_USED" compareValue="1" prepend="AND">
+	   		R.IS_USED = 1
+	   	</isEqual>
+	   </dynamic>
+	    ORDER BY R.ROOM_NO
+	</select>
+</sqlMap>
