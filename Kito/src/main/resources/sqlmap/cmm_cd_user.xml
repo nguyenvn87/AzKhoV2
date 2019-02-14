@@ -71,6 +71,7 @@
 				USE_YN=#USE_YN#
 			</isNotEmpty>
 		</dynamic>
+		ORDER BY SORT_SN
 	</select>
 	<insert id="User.Code.createCmmCdUserVO">
 		INSERT INTO cmm_cd_user

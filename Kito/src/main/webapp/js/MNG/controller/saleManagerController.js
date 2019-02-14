@@ -413,6 +413,7 @@ Ext.define('MNG.controller.saleManagerController', {
     			if( text.success == true){
     			
     				if(text.data != null && text.data.IS_ON == 1){
+    					parent.showHideValidation(true);
     					var roomUseId = text.data.ROOM_USED_ID;
     					var turnPrinted = text.data.PRINTED;
     					var sumMoney = text.data.TOTAL_MONEY;
@@ -433,6 +434,7 @@ Ext.define('MNG.controller.saleManagerController', {
 						storeTmp.load();
 						storeTmp.commitChanges();
     				}else{
+    					parent.showHideValidation(false);
     					parent.roomUseId = null;
     					storeTmp.loadData([],false);
     					storeTmp.commitChanges();
@@ -895,6 +897,7 @@ Ext.define('MNG.controller.saleManagerController', {
 				    		}
 				    		else{
 				    			parent.reloadListItem();
+				    			parent.showHideValidation(false);
 				    			var buttonTmp = Ext.ComponentQuery.query('#'+parent.roomId)[0];
 				    			buttonTmp.removeCls('arrow-box-occupy');
 				    		}
@@ -921,7 +924,7 @@ Ext.define('MNG.controller.saleManagerController', {
 	sendRequestInitData: function(_roomStore){
 		me = this;
 		Ext.Ajax.request( {
-    		url: contextPath + '/setDefaultInitData.json',
+    		url: contextPath + '/sample/setDefaultInitData.json',
     		method:'POST',
     		params: {},
     		success: function(response){
@@ -973,7 +976,7 @@ Ext.define('MNG.controller.saleManagerController', {
 				}
 				// Init data
 			if(record.length < 1){
-				me.setInitDataDefault(_roomStore);
+				//me.setInitDataDefault(_roomStore);
 			}
 		});
 	},
@@ -995,5 +998,26 @@ Ext.define('MNG.controller.saleManagerController', {
 			};
 		 }
 		 iframe.src = _url;
+	},
+	showHideValidation:function(_isOn){
+		if(_isOn == true){
+			// Show all
+			Ext.ComponentQuery.query('#btnChangeRoom')[0].show();
+			Ext.ComponentQuery.query('#btnPaymentDebit')[0].show();
+			Ext.ComponentQuery.query('#btnCalculate')[0].show();
+			Ext.ComponentQuery.query('#btnPayment')[0].show();
+			Ext.ComponentQuery.query('#btnCancel')[0].show();
+			Ext.ComponentQuery.query('#btnStartRunningRoom')[0].hide();
+		}
+		else{
+			// Show active button
+			Ext.ComponentQuery.query('#btnStartRunningRoom')[0].show();
+			// Hide all others
+			Ext.ComponentQuery.query('#btnChangeRoom')[0].hide();
+			Ext.ComponentQuery.query('#btnPaymentDebit')[0].hide();
+			Ext.ComponentQuery.query('#btnCalculate')[0].hide();
+			Ext.ComponentQuery.query('#btnPayment')[0].hide();
+			Ext.ComponentQuery.query('#btnCancel')[0].hide();
+		}
 	}
 })

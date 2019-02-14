@@ -12,6 +12,7 @@ public class ImportDetailVO extends DefaultVO {
 	private String AMOUNT;
 	private String TOTAL_MONEY;
 	private String UNIT;
+	private String UNIT_NM;
 	private String RESTAR_ID;
 	private String USER_NAME;
 	private String CHANGETIME;
@@ -200,6 +201,14 @@ public class ImportDetailVO extends DefaultVO {
 
 	public void setNOTE(String nOTE) {
 		NOTE = nOTE;
+	}
+
+	public String getUNIT_NM() {
+		return UNIT_NM;
+	}
+
+	public void setUNIT_NM(String uNIT_NM) {
+		UNIT_NM = uNIT_NM;
 	}
 
 	@Override

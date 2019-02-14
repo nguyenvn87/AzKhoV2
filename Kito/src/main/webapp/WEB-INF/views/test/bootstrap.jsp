@@ -507,10 +507,10 @@
 						title="Phần mềm quản lý karaoke chuyên nghiệp">AzKho.com</a>.
 					All Rights Reserved.
 				</div>
-				<div class="fb-share-button" data-href="http://azkho.com/dangki.do" 
+				<div class="fb-share-button" data-href="http://azkho.com/banhang.do" 
 						data-layout="button_count" data-size="small" data-mobile-iframe="true">
 						<a class="fb-xfbml-parse-ignore" target="_blank" 
-							href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fazkho.com%2Fdangki.do&amp;src=sdkpreparse">
+							href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fazkho.com%2Fbanhang.do&amp;src=sdkpreparse">
 							Chia sẻ
 						</a>
 				</div>

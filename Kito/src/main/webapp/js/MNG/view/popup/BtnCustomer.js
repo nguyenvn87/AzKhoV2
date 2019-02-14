@@ -12,7 +12,7 @@ Ext.define('MNG.view.popup.BtnCustomer', {
 	width : 600,
 	y: 10,
 	//x: 10,
-	title : 'Cập nhật TT khách hàng',
+	title : 'Cập nhật thông tin khách hàng',
 	maxHeight : 600,
 	closeAction : 'hide',
 	resizable : false,

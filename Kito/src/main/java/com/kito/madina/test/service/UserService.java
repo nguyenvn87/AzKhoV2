@@ -3,6 +3,7 @@ package com.kito.madina.test.service;
 import java.util.HashMap;
 import java.util.List;
 
+import com.kito.madina.cmmn.json.JsonVO;
 import com.kito.madina.test.vo.UserVO;
 
 public interface UserService {
@@ -18,4 +19,5 @@ public interface UserService {
 	public int updateUserRight(UserVO vo);
 	public int deleteUserVo(UserVO username);
 	public List<UserVO> getListAllUser(UserVO vo);
+	public JsonVO validateUser(UserVO user);
 }

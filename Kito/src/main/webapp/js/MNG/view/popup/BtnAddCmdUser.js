@@ -3,10 +3,6 @@
  * @description Add/update Forest popup
  * @date 2014/11/14
  */
-var srvcListStore = Ext.create('MNG.store.srvcStore',{});
-
-//srvcListStore.getProxy().url = contextPath + '/getListAllSrvcVo.json';
-//srvcListStore.load();
 
 Ext.define('MNG.view.popup.BtnAddCmdUser', {
 	extend : 'Ext.window.Window',
@@ -19,8 +15,6 @@ Ext.define('MNG.view.popup.BtnAddCmdUser', {
 	resizable : false,
 	CD : null,
 	config:{
-		groupcd: '',
-		code: null,
 		name: 'Tên',
 		value: '',
 		emptytxt: 'Nhập tên'
@@ -54,39 +48,11 @@ Ext.define('MNG.view.popup.BtnAddCmdUser', {
 								flex : 1
 							},
 						items : [
-						         {
-									xtype : 'combo',
-									itemId : 'SRVC_ID',
-									name : 'SRVC_ID',
-									height: 30,
-									hidden: true,
-									//disabled: true,
-									//readOnly: true,
-									editable: false,
-									store: srvcListStore,
-									displayField: 'SRVC_NM',
-								    valueField: 'SRVC_ID',
-									fieldLabel : 'Tên sản phẩm',
-									emptyText : 'Nhập tên sp/dịch vụ',
-									//enableKeyEvents: true,
-									/*listeners:{
-										'keyup': function(key){
-											alert(key.getValue());
-											var valueKey = key.getValue();
-											srvcListStore.clearFilter();
-											console.log(srvcListStore);
-											srvcListStore.filter('SRVC_ID', valueKey);
-											console.log(srvcListStore);
-										}
-									}*/
-								},
 						        {
 									xtype : 'textfield',
 									fieldLabel: me.config.name,
 									itemId:'CD',
 									hidden: true,
-									//emptyText : me.config.emptytxt,
-									//valueField: me.config.value,
 									height: 30
 								},{
 									xtype : 'textfield',
@@ -141,19 +107,16 @@ Ext.define('MNG.view.popup.BtnAddCmdUser', {
 			buttons : [ {
 				xtype : 'button',
 				cls : 'button',
-				height: 40,
 				action : 'saveSrvc',
 				text : 'Lưu',
 				itemId : 'BtnSaveMenu'
 			}, {
 				xtype : 'button',
 				cls : 'button',
-				height : 40,
 				text : 'Đóng',
 				listeners : {
 					click : function() {
 						this.up('.window').hide();
-						console.log(srvcListStore);
 					}
 				}
 			} ]
@@ -162,16 +125,10 @@ Ext.define('MNG.view.popup.BtnAddCmdUser', {
 	},
 	listeners:{
 		afterrender:function(){
-			//var storeTmp = Ext.ComponentQuery.query('#btnMenuContainerId #PROD_NM')[0];
-			//storeTmp.getStore().load();
-			//console.log(srvcListStore);
 		}
 	},
 	changeType:function(combo, value){
 		
-		Ext.each(srvcListStore, function(record){
-    		console.log('1');
-    	});
 	},
 	setDeactiveCreate: function(isActive){
 		var comboTmp = Ext.ComponentQuery.query('#btnMenuContainerId #SRVC_ID')[0];

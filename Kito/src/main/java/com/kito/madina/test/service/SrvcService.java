@@ -20,7 +20,11 @@ public interface SrvcService {
 	public int updateStatusStore(SrvcVO vo);
 	public boolean pushInStore(SrvcVO vo, float value);
 	public boolean popOutStore(SrvcVO vo, float value);
-	public int backupSrvcVOToHistory(SrvcVO vo);
+	public int backupSrvcVOToHistory(SrvcVO vo, float currentNumber);
 	public List<SrvcVO> getListSrvcVOHistory(String srvcId, String changeDate);
 	public int updateSrvcVOHistory(SrvcVO vo);
+	public List<SrvcVO> getSrvcHistoryByDate(SrvcVO vo);
+	public List<SrvcVO> getListSrvcHistoryBySrvcId(String srvdId, String restarId);
+	public boolean checkExistInHistoryStore(String srvcID, List<SrvcVO> store);
+	public HashMap<String, Object> getValueInStore(SrvcVO vo);
 }

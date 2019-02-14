@@ -26,6 +26,19 @@ public class RestaurantVO extends DefaultVO{
 	private String IS_PRINT_BIG; 
 	private String USER_EDIT_BILL;
 	private String PACKAGE;
+	private String BILL_TITLE;
+	private String BILL_SLOGAN;
+	private String BILL_TITLE3;
+	
+	private String BILL_BOTTOM1;
+	private String BILL_BOTTOM2;
+	private String BILL_BOTTOM3;
+	private int IS_PRINT_PAYMENT;
+	private String BILL_LABEL_PAYED1;
+	private String BILL_LABEL_PAYED2;
+	private int IS_PRINT_PAYMETHOD;
+	
+	private boolean HAS_VERIFY;
 	
 	public String getRESTAR_ID() {
 		return RESTAR_ID;
@@ -182,6 +195,72 @@ public class RestaurantVO extends DefaultVO{
 	}
 	public void setPACKAGE(String pACKAGE) {
 		PACKAGE = pACKAGE;
+	}
+	public boolean getHAS_VERIFY() {
+		return HAS_VERIFY;
+	}
+	public void setHAS_VERIFY(boolean hAS_VERIFY) {
+		HAS_VERIFY = hAS_VERIFY;
+	}
+	public String getBILL_TITLE() {
+		return BILL_TITLE;
+	}
+	public void setBILL_TITLE(String bILL_TITLE) {
+		BILL_TITLE = bILL_TITLE;
+	}
+	public String getBILL_SLOGAN() {
+		return BILL_SLOGAN;
+	}
+	public void setBILL_SLOGAN(String bILL_SLOGAN) {
+		BILL_SLOGAN = bILL_SLOGAN;
+	}
+	public String getBILL_TITLE3() {
+		return BILL_TITLE3;
+	}
+	public void setBILL_TITLE3(String bILL_TITLE3) {
+		BILL_TITLE3 = bILL_TITLE3;
+	}
+	public String getBILL_BOTTOM1() {
+		return BILL_BOTTOM1;
+	}
+	public void setBILL_BOTTOM1(String bILL_BOTTOM1) {
+		BILL_BOTTOM1 = bILL_BOTTOM1;
+	}
+	public String getBILL_BOTTOM2() {
+		return BILL_BOTTOM2;
+	}
+	public void setBILL_BOTTOM2(String bILL_BOTTOM2) {
+		BILL_BOTTOM2 = bILL_BOTTOM2;
+	}
+	public String getBILL_BOTTOM3() {
+		return BILL_BOTTOM3;
+	}
+	public void setBILL_BOTTOM3(String bILL_BOTTOM3) {
+		BILL_BOTTOM3 = bILL_BOTTOM3;
+	}
+	public int getIS_PRINT_PAYMENT() {
+		return IS_PRINT_PAYMENT;
+	}
+	public void setIS_PRINT_PAYMENT(int iS_PRINT_PAYMENT) {
+		IS_PRINT_PAYMENT = iS_PRINT_PAYMENT;
+	}
+	public String getBILL_LABEL_PAYED1() {
+		return BILL_LABEL_PAYED1;
+	}
+	public void setBILL_LABEL_PAYED1(String bILL_LABEL_PAYED1) {
+		BILL_LABEL_PAYED1 = bILL_LABEL_PAYED1;
+	}
+	public String getBILL_LABEL_PAYED2() {
+		return BILL_LABEL_PAYED2;
+	}
+	public void setBILL_LABEL_PAYED2(String bILL_LABEL_PAYED2) {
+		BILL_LABEL_PAYED2 = bILL_LABEL_PAYED2;
+	}
+	public int getIS_PRINT_PAYMETHOD() {
+		return IS_PRINT_PAYMETHOD;
+	}
+	public void setIS_PRINT_PAYMETHOD(int iS_PRINT_PAYMETHOD) {
+		IS_PRINT_PAYMETHOD = iS_PRINT_PAYMETHOD;
 	}
 	
 	  

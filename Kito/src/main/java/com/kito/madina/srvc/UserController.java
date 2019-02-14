@@ -81,13 +81,21 @@ public class UserController {
 		if(vo.getSTATUS().trim().equalsIgnoreCase("true")){
 			
 			if(checkVo == null){
-				String passwd = CmmUtil.MD5Hash(vo.getCMND());
-				vo.setPASSWORD(passwd);
-				vo.setENABLED("0");
-				vo.setRESTAR_ID(restarId);
-				System.out.println("passwd = "+passwd);
-				userService.createUserVo(vo);
-				isSuccess = true;
+				JsonVO jsonCK = userService.validateUser(vo);
+				if(jsonCK.isSuccess()){
+					String passwd = CmmUtil.MD5Hash(vo.getCMND());
+					vo.setPASSWORD(passwd);
+					vo.setENABLED("0");
+					vo.setRESTAR_ID(restarId);
+					System.out.println("passwd = "+passwd);
+					userService.createUserVo(vo);
+					
+					// Add role for user
+					vo.setAuthority(UtilConst.ROLE_ADMIN);
+					int k = userService.createUserRight(vo);
+					isSuccess = true;
+				}
+				messageNotify = jsonCK.getMessage();
 			}
 			else{
 				isSuccess = false;
@@ -190,7 +198,7 @@ public class UserController {
 	@RequestMapping("/deleteUserVo.json")
 	public ModelAndView deleteUserVo(Locale locale, Model model, HttpServletRequest req, UserVO rVo){
 		
-		if(rVo.getAuthority() != null && !rVo.getAuthority().equalsIgnoreCase("ROLE_ADMIN")){
+		if(rVo.getAuthority() != null && !rVo.getAuthority().equalsIgnoreCase(UtilConst.ROLE_ADMIN)){
 			userService.deleteUserVo(rVo);
 		}
 		JsonVO jvon = new JsonVO();
@@ -226,7 +234,7 @@ public class UserController {
 		rVo.setPASSWORD(passwd);
 		int i = userService.createUserVo(rVo);
 		
-		rVo.setAuthority(ROLE_ADMIN);
+		rVo.setAuthority(UtilConst.ROLE_ADMIN);
 		int k = userService.createUserRight(rVo);
 		
 		// 5. Create default menu
@@ -288,6 +296,8 @@ public class UserController {
 		// Create group default
 		CreateDefaultCmmCd(UtilConst.GROUP_HANG, _restaurantId, rVO.getRESTAR_TYPE());
 		CreateDefaultCmmCd(UtilConst.GROUP_AREA, _restaurantId, rVO.getRESTAR_TYPE());
+		
+		// Create product
 		srvcService.createDefaultSrvc(UtilConst.GROUP_SRVC, _restaurantId, rVO.getRESTAR_TYPE());
 		
 		// Create list room default
@@ -308,6 +318,7 @@ public class UserController {
 				roomService.CreateRoomVO(rVo);
 			}
 		}
-		
+		// Create room_srvc
+		// Create room_turn
 	}
 }

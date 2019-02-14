@@ -42,7 +42,9 @@
 	</beans:bean>
 	
    <beans:bean id="ExcelRevenueSummary" class="com.kito.madina.cmmn.excel.ExcelRevenueReportView"></beans:bean>
-   <beans:bean id="ExcelView" class="com.kito.madina.cmmn.excel.MappingExcelView" />    
+   <beans:bean id="ExcelView" class="com.kito.madina.cmmn.excel.MappingExcelView" />
+   <beans:bean id="BillLisExcelView" class="com.kito.madina.cmmn.excel.BillLisExcelView" /> 
+   <beans:bean id="BillTemplateExcelView" class="com.kito.madina.cmmn.excel.MappingTemplateExcelView" />    
    <beans:bean id="baocaotonkhoId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
    		<beans:property name="url" value="classpath:jasper/BaoCaoTonKho.jasper"></beans:property>
    </beans:bean>
@@ -56,7 +58,7 @@
    		<beans:property name="url" value="classpath:jasper/billRetail.jasper"></beans:property>
    </beans:bean>
    <beans:bean id="billA4PrintId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
-   		<beans:property name="url" value="classpath:jasper/DailyBill.jasper"></beans:property>
+   		<beans:property name="url" value="classpath:jasper/billKaraokeA4.jasper"></beans:property>
    </beans:bean>
    <beans:bean id="profitPrintId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
    		<beans:property name="url" value="classpath:jasper/rptProfit.jasper"></beans:property>
@@ -96,6 +98,30 @@
     	<beans:property name="url" value="classpath:jasper/billA4Retail.jasper"></beans:property>
     	<beans:property name="reportDataKey" value="datasource"></beans:property>
     </beans:bean>
+    <beans:bean id="danhsachkhachhangId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+    	<beans:property name="url" value="classpath:jasper/DanhSachKhachHang.jasper"></beans:property>
+    	<beans:property name="reportDataKey" value="datasource"></beans:property>
+    </beans:bean>
+    <beans:bean id="pdfLichSuGiaoDichId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+    	<beans:property name="url" value="classpath:jasper/LichSuMuaHang.jasper"></beans:property>
+    	<beans:property name="reportDataKey" value="datasource"></beans:property>
+    </beans:bean>
+    <beans:bean id="rptImportExport" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/rptImportExport.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="rptBarcode" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/barcode.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="rptBarcodeList" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/barcodelist.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="rptBarcodeListDoc" class="com.kito.madina.cmmn.util.jasper.CustomJasperReportsDocxFormatView">
+   		<beans:property name="url" value="classpath:jasper/barcodelist.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="rptBarcodeDoc" class="com.kito.madina.cmmn.util.jasper.CustomJasperReportsDocxFormatView">
+   		<beans:property name="url" value="classpath:jasper/barcode.jasper"></beans:property>
+   </beans:bean>
+   
    <beans:bean id="idDailyReport_bk" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
     	<beans:property name="url" value="classpath:jasper/dailyReportA4.jrxml"></beans:property>
     	<beans:property name="reportDataKey" value="datasource"></beans:property>

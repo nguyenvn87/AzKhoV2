@@ -13,13 +13,14 @@ var tmpComboStore = Ext.create('MNG.store.cdUserStore',{});
 
 Ext.define('MNG.view.popup.BtnAddSrvc', {
 	extend : 'Ext.window.Window',
+	requires:['Ext.custom.common.NumberField'],
 	Height : 300,
-	width : 800,
+	width : 600,
 	y: 10,
 	//x: 10,
 	title : 'Cập nhật sản phẩm/dịch vụ',
 	maxHeight : 600,
-	closeAction : 'hide',
+	closeAction : 'destroy',
 	resizable : false,
 	srvdId : null,
 	config : {
@@ -41,12 +42,13 @@ Ext.define('MNG.view.popup.BtnAddSrvc', {
 					xtype : 'container',
 					layout : {
 						align : 'stretch',
-						type : 'hbox'
+						type : 'vbox'
 					},
 					items : [
 					         {
 					        	xtype : 'fieldset',
-					        	title: 'Sản phẩm',
+					        	title: 'Thông tin sản phẩm',
+					        	collapsible: true,
 					        	padding : '10 10 10 10',
 					        	flex: 1,
 								layout : {
@@ -59,53 +61,99 @@ Ext.define('MNG.view.popup.BtnAddSrvc', {
 								    	   itemId : 'SRVC_NM',
 								    	   name : 'SRVC_NM',
 								    	   height: 30,
-								    	   fieldLabel : 'Tên SP',
+								    	   fieldLabel : 'Tên hàng (*)',
 								    	   emptyText : 'Nhập tên sản phẩm'
-								       },
-								       {
+								       	},{
 								    	   xtype : 'textfield',
 								    	   itemId : 'SRVC_CD',
 								    	   name : 'SRVC_CD',
-								    	   height: 30,
-								    	   fieldLabel : 'Mã SP',
+								    	   fieldLabel : 'Mã hàng',
 								    	   emptyText : 'Mã code'
 								       },{
-											xtype : 'numberfield',
-											fieldLabel: 'Giá bán (vnđ)',
-											itemId:'PRICE',
-											emptyText : 'Giá bán',
-											height: 30,
-											minValue: 0,
-											value: 0,
-				                            maxValue: 1000000,
-											regex: /^-?\d*\.?\d*$/
-								       },{													
+								    	   xtype : 'numericfield',
+								    	   anchor : '100%',
+										   useThousandSeparator: true,
+										   decimalPrecision: 0,
+										   hideTrigger:true,
+										   alwaysDisplayDecimals: false,
+										   allowNegative: false,
+										   currencySymbol:'',
+										   value: 0,
+										   thousandSeparator: ',',
+										   fieldLabel : 'Giá bán (*)',
+										   itemId: 'PRICE',
+										   name: 'PRICE',
+										   cls : 'input-total-money-cls'
+								       },{
+								    	   xtype : 'numericfield',
+								    	   anchor : '100%',
+										   useThousandSeparator: true,
+										   decimalPrecision: 0,
+										   hideTrigger:true,
+										   alwaysDisplayDecimals: false,
+										   allowNegative: false,
+										   currencySymbol:'',
+										   value: 0,
+											thousandSeparator: ',',
+											fieldLabel : 'Giá nhập',
+											itemId: 'PRICE_IMPORT',
+											name: 'PRICE_IMPORT',
+											cls : 'input-pay-money-cls'
+								       },{
 											xtype : 'simplecombobox',
 											flex : 1,
 											itemId:'UNIT',
 											name:'UNIT',
-											fieldLabel : 'Đơn vị',
+											fieldLabel : 'Đơn vị (*)',
 											emptyText: 'Chọn đơn vị',
 											datatype: 'combo',
 											scrid: 'DONVI',
+											initFlag: false,
 											autoload: false
-								       },{													
-											xtype : 'combo',
-											flex : 1,
-											itemId:'TYPE',
-											name:'TYPE',
-											fieldLabel : 'Nhóm hàng',
-											emptyText: 'Chọn nhóm',
-											store: tmpComboStore,
-											displayField: 'CD_NM',
-										    valueField: 'CD',
-										    value: null
-								       	}
+								       },{
+                                            xtype: 'container',
+                                            layout: {
+					                             type: 'hbox',
+					                             align: 'center',
+                                            },
+                                            padding: '0 0 5 0',
+				                            items:[{													
+													xtype : 'combo',
+													flex : 1,
+													itemId:'TYPE',
+													name:'TYPE',
+													fieldLabel : 'Nhóm hàng',
+													emptyText: 'Chọn nhóm',
+													store: tmpComboStore,
+													displayField: 'CD_NM',
+												    valueField: 'CD',
+												    value: null 
+												 },{
+				                                    xtype: 'button',
+										            width: 25,
+										            height: 25,
+										            action: 'create',
+										            tooltip : 'Thêm nhóm mới',
+										            cls: 'addmore'
+				                                }
+				                             ]
+				                       },
+								       {
+										xtype : 'textfield',
+										itemId : 'DSCRT',
+										name : 'DSCRT',
+										height: 50,
+										emptyText : 'Mô tả sản phẩm',
+										flex : 1,
+										fieldLabel : 'Mô tả',
+									}
 								]
 							},
 							 {
 								xtype : 'fieldset',
 								title: 'Thiết lập thêm',
+								collapsible: true,
+								collapsed: true,
 								flex: 1,
 								layout : {
 									align : 'stretch',
@@ -165,13 +213,6 @@ Ext.define('MNG.view.popup.BtnAddSrvc', {
 										value: 100,
 										maxValue: 100000000,
 										fieldLabel : 'Mức ưu tiên'
-									},
-									{
-										xtype : 'textfield',
-										itemId : 'DSCRT',
-										name : 'DSCRT',
-										flex : 1,
-										fieldLabel : 'Ghi chú',
 									}
 								]
 					} ]

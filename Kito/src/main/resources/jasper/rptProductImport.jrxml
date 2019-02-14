@@ -50,7 +50,7 @@
 	<field name="ItemNumber" class="java.lang.String"/>
 	<field name="ItemType" class="java.lang.String"/>
 	<field name="ItemNo" class="java.lang.String"/>
-	<field name="ItemTotal" class="java.lang.Double"/>
+	<field name="ItemTotal" class="java.lang.Number"/>
 	<field name="ItemAmount" class="java.lang.Double"/>
 	<variable name="Variable_1" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{ItemTotal}]]></variableExpression>

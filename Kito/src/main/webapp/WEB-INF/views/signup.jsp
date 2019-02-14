@@ -119,7 +119,7 @@
                 </div>
             </form>
              <p>
-                <a class="linktologin" href="/GDSS/login.do" title="Already have account">Quên mật khẩu</a>
+                <!-- <a class="linktologin" href="/GDSS/login.do" title="Already have account">Quên mật khẩu</a> -->
              </p>
         </div>
     </div>

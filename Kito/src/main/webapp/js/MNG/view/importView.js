@@ -30,8 +30,82 @@ Ext.define('MNG.view.importView', {
 						defaults : {
 							cls : 'row'
 						},
-						items : [
-							{
+						items : [{
+							
+																			xtype : 'fieldset',
+																			title : 'Thời gian',
+																			hidden: true,
+																			padding : '0 10 0 10',
+																			collapsible : false,
+																			flex : 1,
+																			minWidth : 450,
+																			layout : {
+																							type : 'hbox',
+																							flex : 1
+																						},
+																			height : 100,
+																			items : [
+																					{
+																						xtype : 'radiogroup',
+																						itemId : 'radiotime',
+																						name : 'radiotime',
+																						width : 120,
+																						layout : {
+																							type : 'vbox',
+																						},
+																						items : [
+																								{
+																									inputValue : 'Month',
+																									checked : true,
+																									name : 'time',
+																									boxLabel : 'Tháng này'
+																								},
+																								{
+																									inputValue : 'Other',
+																									checked : false,
+																									name : 'time',
+																									boxLabel : 'Khác'
+																								}
+																								]
+																					},{
+																						xtype : 'container',
+																						itemId: 'containerTimeId',
+																						hidden: true,
+																						layout : {
+																							align : 'stretch',
+																							type : 'vbox'
+																						},
+																						items:[
+																						       {
+																									xtype : 'datefield',
+																									itemId:'CHANGETIME1',
+																									name:'CHANGETIME',
+																									format : 'd-m-Y',
+																									altFormats: 'Ymd',
+																									labelWidth: 60,
+																									fieldLabel : 'Từ ngày',
+																									value: new Date(),
+																									submitFormat: 'Y/m/d',
+																									emptyText : 'Từ ngày'
+																								},
+																								{
+																									xtype : 'datefield',
+																									itemId:'CHANGETIME2',
+																									name:'CHANGETIME',
+																									format : 'd-m-Y',
+																									altFormats: 'Ymd',
+																									labelWidth: 60,
+																									fieldLabel : 'Đến ngày',
+																									value: new Date(),
+																									submitFormat: 'Y/m/d',
+																									emptyText : 'Đến ngày'
+																								}
+																						       ]
+																					}
+																					]
+																		}
+						
+							,{
 								 xtype: 'gridpanel',
                                  itemId:'grid-store-srvc',
                                  //flex: 1,
@@ -63,7 +137,6 @@ Ext.define('MNG.view.importView', {
                                          sortable:true,
                                          align:'left',
                                          width: 100,
-                                         //dataIndex: 'DATE_IMPORT',
                                          text: 'Ngày nhập',
                                          renderer :function(value, p , r){
                             					data = r.data['DATE_IMPORT'];
@@ -118,36 +191,34 @@ Ext.define('MNG.view.importView', {
                                      {                                     
                                          xtype: 'gridcolumn',
                                          sortable:true,
-                                         hidden: true,
-                                         align:'right',
-                                         width: 100,
-                                         dataIndex: 'NEEDTOPAYED',
-                                         text: 'Cần trả',
-                                         renderer : function(value, p, r) {
-											data = r.data['NEEDTOPAYED'];
-											if (data != ''){
-												data = formatSupporter.formatToMoney(data);
-											}
-											return data;
-                                    	 }
-                                     },
-                                     {                                     
-                                         xtype: 'gridcolumn',
-                                         sortable:true,
-                                         hidden: true,
-                                         align:'right',
-                                         width: 120,
-                                         dataIndex: 'PAYED_MONEY',
-                                         text: 'Đã thanh toán'
+                                         align:'left',
+                                         flex: 1,
+                                         dataIndex: 'PROV_NM',
+                                         text: 'Đơn vị cung cấp'
                                      },
                                      {                                     
                                          xtype: 'gridcolumn',
                                          sortable:true,
                                          align:'left',
                                          flex: 1,
-                                         dataIndex: 'PROV_NM',
-                                         text: 'Đơn vị cung cấp'
+                                         dataIndex: 'DESCRIPTION',
+                                         text: 'Ghi chú'
                                      },
+                                     {
+										menuDisabled : true,
+										sortable : false,
+										text : '',
+										xtype : 'actioncolumn',
+										align : 'center',
+										width : 50,
+										items : [ 
+											   { 
+												iconCls : 'icon-excel',
+												tooltip : 'Xuất excel',
+												handler : me.exportExcelFile
+											   } 
+											]
+									},
                                      {
                                          xtype: 'gridcolumn',
                                          dataIndex: 'USER_NAME',
@@ -186,13 +257,41 @@ Ext.define('MNG.view.importView', {
                                          store: importStore,
                                          displayInfo: true
                                      }
-                                 ]
-							}
+                                 ],
+							},
+							{
+																xtype : 'container',
+																layout : {
+																	align : 'stretch',
+																	type : 'hbox'
+																},
+																items : [
+																		{
+																			xtype : 'label',
+																			fieldLabel : 'Tổng',
+																			text : 'Tổng: ',
+																			cls : 'sumary-label'
+																		},
+																		{
+																			xtype : 'label',
+																			fieldLabel : 'Tổng',
+																			itemId : 'statis-total-id',
+																			text : '0.0',
+																			cls : 'sumary-field'
+																		}
+																		]
+															}
 						]
 					}]
                 }
             ]
         });
         me.callParent(arguments);
+    },
+    exportExcelFile: function(grid,rowIndex,colIndex){
+    	grid.getSelectionModel().select(rowIndex);
+		var myController = MANAGER.app
+								.getController('MNG.controller.importController');
+		myController.getExcelFillBill(grid.getStore().getAt(rowIndex));
     }
 });

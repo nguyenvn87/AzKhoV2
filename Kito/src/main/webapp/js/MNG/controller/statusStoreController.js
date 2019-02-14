@@ -171,7 +171,8 @@ Ext.define('MNG.controller.statusStoreController', {
 		storeTmp.clearFilter();
 		storeTmp.getProxy().extraParams={
 				IS_USED: 1,
-				SRVC_NM: value
+				SRVC_NM: value,
+				sort: 'AMOUNT_STORE'
 		};
 		//storeTmp.getProxy().url = contextPath + '/getListService.json';
 		storeTmp.load();

@@ -17,9 +17,11 @@ import com.kito.madina.cmmn.util.CmmUtil;
 import com.kito.madina.cmmn.util.SessionUtil;
 import com.kito.madina.cmmn.util.UtilConst;
 import com.kito.madina.test.service.CmmCdUserService;
+import com.kito.madina.test.service.CodeService;
 import com.kito.madina.test.service.MenuService;
 import com.kito.madina.test.service.SrvcService;
 import com.kito.madina.test.vo.CmmCdUserVO;
+import com.kito.madina.test.vo.CodeVO;
 import com.kito.madina.test.vo.MenuVO;
 import com.kito.madina.test.vo.SrvcVO;
 import com.kito.madina.test.vo.StoreSrvcVO;
@@ -35,6 +37,9 @@ public class MenuController {
 	
 	@Resource(name = "cmmCdUserService")
 	private CmmCdUserService cmmCdUserService;
+	
+	@Resource(name = "codeService")
+	private CodeService codeService;
 	
 	@RequestMapping(value = "/saveMenu.json", method = RequestMethod.POST)
 	public ModelAndView saveMenu(HttpServletRequest req, MenuVO vo) {
@@ -136,7 +141,22 @@ public class MenuController {
 		vo.setSRVC_NM(valueSearch);
 		List<SrvcVO> list = menuService.getSearchListAllMenu(vo);
 		
+		CodeVO mVo = new CodeVO();
+		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		HashMap<String, String> mapDonVi = new HashMap<String, String>();
+		
 		HashMap<String, Object> mapResult = menuService.getListCountSearchMenu(vo);
+		
+		for (SrvcVO tmpVo : list) {
+			// Set unit name
+			if(tmpVo.getUNIT()!= null && !tmpVo.getUNIT().isEmpty()){
+				String unitNm = codeService.getUnitNameFromList(tmpVo.getUNIT(), listDonVi, mapDonVi);
+				tmpVo.setUNIT_NM(unitNm);
+		    }
+		}
+		
+		
 		int totalCount = 0;
 		if(mapResult != null && mapResult.get("COUNT") != null){
 			totalCount = Integer.parseInt(mapResult.get("COUNT").toString());

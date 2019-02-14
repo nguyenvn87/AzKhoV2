@@ -44,9 +44,9 @@ var statisticStore = Ext.create('Ext.data.Store',{
 Ext.application({
 	name : 'MANAGER',
 	appFolder : contextPath + '/MNG',
-	controllers : [ 'MNG.controller.ThongKeChiTietController' ],
+	controllers : [ 'MNG.controller.ThongKeChiTietNhapController' ],
 	launch : function() {
-		Ext.create('MNG.view.thongkeChiTietBanhangView', {
+		Ext.create('MNG.view.thongkeChiTietNhaphangView', {
 			renderTo : 'land_contents',
 			tmpStore: statisticStore,
 			listeners:{

@@ -42,6 +42,10 @@ Ext.define('MNG.model.importModel', {
 					}, {
 						name : 'PAYED_MONEY',
 						type : 'string'
-					}
+					},
+					{
+						name : 'DESCRIPTION',
+						type : 'string'
+					},
 					]
 		});

@@ -24,7 +24,7 @@ Ext
 										{
 											items : [ {
 												xtype : 'fieldset',
-												title : 'Khách hàng',
+												//title : 'Khách hàng',
 												padding : '0 10 0 10',
 												collapsible : true,
 												collapsed : false,
@@ -48,7 +48,7 @@ Ext
 															items : [
 																	{
 																		xtype : 'combo',
-																		fieldLabel : "Họ tên",
+																		fieldLabel : "Tên khách",
 																		labelWidth:70,
 																		store : customerComboStore,
 																		itemId: 'comboCustomerId',
@@ -81,7 +81,8 @@ Ext
 																	},
 																	{
 																		xtype : 'button',
-																		itemId : 'btnAddCustomer'
+																		itemId : 'btnAddCustomer',
+																		tooltip : 'Thêm khách hàng mới'
 																	} 
 																	]
 														},

@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//src/main/java/com/kito/madina/HomeController.java=UTF-8
+encoding//src/main/java/com/kito/madina/cmmn/vo/MappingGsonJsonView.java=UTF-8
+encoding//src/main/resources/jasper/barcode.jrxml=UTF-8
+encoding//src/main/resources/jasper/barcodelist.jrxml=UTF-8
+encoding//src/main/resources/madina.properties=UTF-8
+encoding//src/main/resources/sqlmap/Coffee.jrxml=UTF-8
+encoding//src/main/webapp/WEB-INF/views/home.jsp=UTF-8

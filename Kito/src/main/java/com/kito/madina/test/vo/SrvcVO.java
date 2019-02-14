@@ -30,6 +30,7 @@ public class SrvcVO extends DefaultVO{
 	private String HIS_CHANGE_TIME ;
 	private String HIS_NOTE ;
 	private String HIS_ID ;
+	private String  PRICE_IMPORT;
 	
 	public String getSRVC_ID() {
 		return SRVC_ID;
@@ -210,6 +211,12 @@ public class SrvcVO extends DefaultVO{
 	}
 	public void setREASON(String rEASON) {
 		REASON = rEASON;
+	}
+	public String getPRICE_IMPORT() {
+		return PRICE_IMPORT;
+	}
+	public void setPRICE_IMPORT(String pRICE_IMPORT) {
+		PRICE_IMPORT = pRICE_IMPORT;
 	} 
 	
 	

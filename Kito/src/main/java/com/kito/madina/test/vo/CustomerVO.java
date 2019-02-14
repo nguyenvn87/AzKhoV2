@@ -14,7 +14,8 @@ public class CustomerVO extends DefaultVO{
 	private String CHANGE_USER; 
 	private String CHANGE_DATE; 
 	private String ACCUMULT;
-	private Float TOTAL_MONEY;
+	private double TOTAL_MONEY;
+	private String GROUP_NM;
 	private int MIN;
 	private int MAX;
 	private int rn1;
@@ -97,11 +98,17 @@ public class CustomerVO extends DefaultVO{
 	public void setACCUMULT(String aCCUMULT) {
 		ACCUMULT = aCCUMULT;
 	}
-	public Float getTOTAL_MONEY() {
+	public double getTOTAL_MONEY() {
 		return TOTAL_MONEY;
 	}
-	public void setTOTAL_MONEY(Float tOTAL_MONEY) {
+	public void setTOTAL_MONEY(double tOTAL_MONEY) {
 		TOTAL_MONEY = tOTAL_MONEY;
+	}
+	public String getGROUP_NM() {
+		return GROUP_NM;
+	}
+	public void setGROUP_NM(String gROUP_NM) {
+		GROUP_NM = gROUP_NM;
 	}
 	
 }

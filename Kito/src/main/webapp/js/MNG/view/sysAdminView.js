@@ -120,6 +120,13 @@ Ext.define('MNG.view.sysAdminView', {
                             				}
 	                                     },
 	                                     {
+	                                         xtype: 'datecolumn',
+	                                         dataIndex: 'EXPIRED_DATE',
+	                                         format:'d/m/Y',
+	                                         text: 'Hạn sử dụng',
+	                                         width: 120
+	                                     },
+	                                     {
 	                                         xtype: 'gridcolumn',
 	                                         dataIndex: 'ENABLED',
 	                                         sortable:false,

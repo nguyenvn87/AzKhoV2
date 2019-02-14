@@ -54,19 +54,6 @@ Ext.define('MNG.view.popup.BtnAddBankAccount', {
 								fieldLabel : 'Tên ngân hàng',
 								emptyText: 'VD: Vietcombank'
 							},{
-								xtype : 'textfield',
-								itemId : 'ACCOUNT_NO',
-								name : 'ACCOUNT_NO',
-								fieldLabel : 'Số tài khoản',
-								emptyText : 'Nhập số tài khoản'
-							},{													
-								xtype : 'textfield',
-								flex : 1,
-								itemId:'ACCOUNT_NM',
-								name:'ACCOUNT_NM',
-								fieldLabel : 'Chủ tài khoản',
-								emptyText: 'VD: Nguyen Van A'
-							},{
 								xtype : 'textarea',
 								itemId : 'NOTE',
 								name : 'NOTE',
@@ -104,15 +91,11 @@ Ext.define('MNG.view.popup.BtnAddBankAccount', {
 		var parent = this;
 		parent.ID_BANK = null;
 		
-		Ext.ComponentQuery.query('#btnSrvcContainerId #ACCOUNT_NO')[0].setValue('');
 		Ext.ComponentQuery.query('#btnSrvcContainerId #BANK_NM')[0].setValue('');
-		Ext.ComponentQuery.query('#btnSrvcContainerId #ACCOUNT_NM')[0].setValue('');
 		Ext.ComponentQuery.query('#btnSrvcContainerId #NOTE')[0].setValue('');
 	},
 	renderData:function(data){
-		Ext.ComponentQuery.query('#btnSrvcContainerId #ACCOUNT_NO')[0].setValue(data.ACCOUNT_NO);
 		Ext.ComponentQuery.query('#btnSrvcContainerId #BANK_NM')[0].setValue(data.BANK_NM);
-		Ext.ComponentQuery.query('#btnSrvcContainerId #ACCOUNT_NM')[0].setValue(data.ACCOUNT_NM);
 		Ext.ComponentQuery.query('#btnSrvcContainerId #NOTE')[0].setValue(data.NOTE);
 	}
 });

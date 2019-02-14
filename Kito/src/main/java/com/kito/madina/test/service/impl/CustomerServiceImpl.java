@@ -48,4 +48,8 @@ public class CustomerServiceImpl implements CustomerService{
 		HashMap<String, Object> list = CustomerDAO.getListCountSearchCustomer(map);
 		return list;
 	}
+	@Override
+	public int deleteCustomerByID(CustomerVO vo) {
+		return CustomerDAO.deleteCustomerByID(vo);
+	}
 }

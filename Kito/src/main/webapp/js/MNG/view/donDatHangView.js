@@ -106,7 +106,7 @@ Ext
 																		},
 																		{
 																			xtype : 'gridcolumn',
-																			width : 95,
+																			width : 120,
 																			sortable : false,
 																			align : 'right',
 																			text : "Tổng tiền",
@@ -118,7 +118,7 @@ Ext
 																				if (data != '')
 																					data = formatSupporter
 																							.formatToMoney(data);
-																				return data;
+																				return '<span style="color: red">'+data+'</span>';
 																			}
 																		},
 																		{
@@ -127,7 +127,7 @@ Ext
 																			align : 'right',
 																			sortable : false,
 																			text : 'Thanh toán',
-																			width : 110,
+																			width : 130,
 																			renderer : function(
 																					value,
 																					p,
@@ -136,7 +136,7 @@ Ext
 																				if (data != '')
 																					data = formatSupporter
 																							.formatToMoney(data);
-																				return data;
+																				return '<span style="color: green">'+data+'</span>';
 																			}
 																		},
 																		{
@@ -162,7 +162,7 @@ Ext
 																			dataIndex : 'CUS_NM',
 																			sortable : false,
 																			text : 'Khách hàng',
-																			width : 120
+																			width : 160
 																		},
 																		{
 																			xtype : 'gridcolumn',
@@ -317,7 +317,7 @@ Ext
 																			text : 'Excel',
 																			iconCls : 'icon-excel',
 																			height : 35,
-																			itemId : 'btnExcelPrint',
+																			itemId : 'btnExportExcelPrint',
 																		} ],
 																dockedItems : [ {
 																	xtype : 'pagingtoolbar',

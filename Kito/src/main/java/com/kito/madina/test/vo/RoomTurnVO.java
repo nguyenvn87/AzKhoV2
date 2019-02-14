@@ -16,8 +16,8 @@ public class RoomTurnVO extends DefaultVO{
 	private String USER_NAME;
 	private int IS_ON;
 	private int IS_DEBIT;
-	private float TOTAL_MONEY;
-	private float PAYED_MONEY;
+	private double TOTAL_MONEY;
+	private double PAYED_MONEY;
 	private String RESTAR_ID;
 	private String CHANGE_DATE;
 	private int MIN;
@@ -38,7 +38,7 @@ public class RoomTurnVO extends DefaultVO{
 	private int IS_ORDER;
 	private int IS_CANCELED;
 	private String PAY_METHOD;
-	private String ID_BANK;
+	private int IS_SAMPLE;
 	
 	public int getIS_CANCELED() {
 		return IS_CANCELED;
@@ -133,25 +133,25 @@ public class RoomTurnVO extends DefaultVO{
 	/**
 	 * @return the tOTAL_MONEY
 	 */
-	public float getTOTAL_MONEY() {
+	public double getTOTAL_MONEY() {
 		return TOTAL_MONEY;
 	}
 	/**
 	 * @param tOTAL_MONEY the tOTAL_MONEY to set
 	 */
-	public void setTOTAL_MONEY(float tOTAL_MONEY) {
+	public void setTOTAL_MONEY(double tOTAL_MONEY) {
 		TOTAL_MONEY = tOTAL_MONEY;
 	}
 	/**
 	 * @return the pAYED_MONEY
 	 */
-	public float getPAYED_MONEY() {
+	public double getPAYED_MONEY() {
 		return PAYED_MONEY;
 	}
 	/**
 	 * @param pAYED_MONEY the pAYED_MONEY to set
 	 */
-	public void setPAYED_MONEY(float pAYED_MONEY) {
+	public void setPAYED_MONEY(double pAYED_MONEY) {
 		PAYED_MONEY = pAYED_MONEY;
 	}
 	/**
@@ -328,11 +328,11 @@ public class RoomTurnVO extends DefaultVO{
 	public void setPAY_METHOD(String pAY_METHOD) {
 		PAY_METHOD = pAY_METHOD;
 	}
-	public String getID_BANK() {
-		return ID_BANK;
+	public int getIS_SAMPLE() {
+		return IS_SAMPLE;
 	}
-	public void setID_BANK(String iD_BANK) {
-		ID_BANK = iD_BANK;
+	public void setIS_SAMPLE(int iS_SAMPLE) {
+		IS_SAMPLE = iS_SAMPLE;
 	} 
 	
 	

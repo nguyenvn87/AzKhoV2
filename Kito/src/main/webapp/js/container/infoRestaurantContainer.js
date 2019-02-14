@@ -4,6 +4,7 @@
  *          receiver party
  * 
  */
+var convertToVNDateFromEngDate = Ext.create("BIZ.utilities.formatSupporter");
 var collapseExpanseUtil = Ext.create("BIZ.utilities.collapseExpanseSupport");
 Ext
 		.define(
@@ -13,7 +14,7 @@ Ext
 					// cls : 'jdvn-main',
 					itemId : 'rightContainerID',
 					title : '',
-					titleContent : '',
+					titleContent : 'Thiết lập hóa đơn',
 					layout : {
 						align : 'stretch',
 						type : 'vbox'
@@ -29,7 +30,7 @@ Ext
 													{
 														xtype : 'container',
 														cls : 'jdvn-sub-header',
-														hidden : true,
+														//hidden : true,
 														layout : {
 															align : 'stretch',
 															type : 'hbox'
@@ -45,11 +46,12 @@ Ext
 																},
 																{
 																	xtype : 'container',
-																	// cls :
+																	cls: 'hight-light-label',
 																	// 'description',
 																	flex : 1,
 																	items : [ {
 																		xtype : 'displayfield',
+																		itemId: 'ItemTextNotify',
 																		fieldLabel : '',
 																		value : me.titleContent,
 																	} ]
@@ -63,17 +65,21 @@ Ext
 															type : 'vbox'
 														},
 														items : [
-																{
+														         {
 																	xtype : 'fieldset',
-																	title : 'Thông tin cửa hàng trên hóa đơn',
+																	title : 'Tên công ty/cửa hàng',
 																	padding : '10 10 10 10',
 																	collapsible : true,
-																	collapsed : false,
+																	collapsed : true,
 																	// flex: 1,
 																	layout : {
 																		align : 'stretch',
 																		type : 'vbox'
 																	},
+																	fieldDefaults: {
+																        labelAlign: 'right',
+																        msgTarget: 'side'
+																    },
 																	items : [
 																			{
 																				xtype : 'textfield',
@@ -90,47 +96,171 @@ Ext
 																			},
 																			{
 																				xtype : 'textfield',
-																				fieldLabel : 'Quận/huyện',
+																				fieldLabel : 'Email liên hệ ',
+																				name : 'EMAIL',
+																				itemId : 'EMAIL'
+																			} 
+																			]
+																},
+																{
+																	xtype : 'fieldset',
+																	title : 'Tiêu đề hóa đơn',
+																	padding : '10 10 10 10',
+																	collapsible : true,
+																	collapsed : false,
+																	layout : {
+																		align : 'stretch',
+																		type : 'vbox'
+																	},
+																	fieldDefaults: {
+																        labelAlign: 'right',
+																        msgTarget: 'side'
+																    },
+																	items : [
+																			{
+																				xtype : 'textfield',
+																				fieldLabel : 'Tiêu đề hóa đơn',
+																				name : 'BILL_TITLE',
+																				itemId : 'BILL_TITLE'
+																			},
+																			{
+																				xtype : 'textfield',
+																				fieldLabel : 'Tiêu đề chính',
+																				name : 'BILL_SLOGAN',
+																				itemId : 'BILL_SLOGAN'
+																			},
+																			{
+																				xtype : 'textfield',
+																				fieldLabel : 'Tiêu đề 1',
 																				name : 'ADDR',
 																				itemId : 'ADDR'
 																			},
 																			{
 																				xtype : 'textfield',
-																				fieldLabel : 'Địa chỉ',
+																				fieldLabel : 'Tiêu đề 2',
 																				name : 'ADDR2',
 																				itemId : 'ADDR2'
 																			},
 																			{
 																				xtype : 'textfield',
-																				fieldLabel : 'Số điện thoại',
-																				name : 'PHONE',
-																				itemId : 'PHONE'
-																			},
-																			{
-																				xtype : 'textfield',
-																				fieldLabel : 'Email ',
-																				name : 'EMAIL',
-																				itemId : 'EMAIL'
-																			} ]
+																				fieldLabel : 'Tiêu đề 3',
+																				name : 'BILL_TITLE3',
+																				itemId : 'BILL_TITLE3'
+																			}]
 																},
 																{
 																	xtype : 'fieldset',
-																	title : 'Thiết lập khác',
+																	title : 'Cuối trang hóa đơn',
 																	padding : '10 10 10 10',
 																	collapsible : true,
+																	collapsed : true,
+																	layout : {
+																		align : 'stretch',
+																		type : 'hbox'
+																	},
+																	fieldDefaults: {
+																        labelAlign: 'right',
+																        msgTarget: 'side'
+																    },
+																	items : [
+																			{
+																				xtype : 'textfield',
+																				fieldLabel : 'Nhãn trái',
+																				name : 'BILL_BOTTOM1',
+																				flex: 1,
+																				itemId : 'BILL_BOTTOM1'
+																			},
+																			{
+																				xtype : 'textfield',
+																				fieldLabel : 'Nhãn giữa',
+																				padding : '0 0 0 10',
+																				flex: 1,
+																				name : 'BILL_BOTTOM2',
+																				itemId : 'BILL_BOTTOM2'
+																			},
+																			{
+																				xtype : 'textfield',
+																				fieldLabel : 'Nhãn phải',
+																				padding : '0 0 0 10',
+																				flex: 1,
+																				name : 'BILL_BOTTOM3',
+																				itemId : 'BILL_BOTTOM3'
+																			}
+																			]
+																},
+																{
+																	xtype : 'fieldset',
+																	title : 'Thanh toán',
+																	padding : '10 10 10 10',
+																	collapsible : true,
+																	hidden: true,
 																	collapsed : false,
-																	// flex: 1,
+																	layout : {
+																		align : 'stretch',
+																		type : 'hbox'
+																	},
+																	items : [
+																			{
+																				xtype : 'hiddenfield',
+																				//name : 'IS_PRINT_PAYMENT'
+																			},
+																			{
+																				xtype : 'hiddenfield',
+																				//name : 'IS_PRINT_PAYMETHOD'
+																			},
+																			]
+																},
+																{
+																	xtype : 'fieldset',
+																	title : 'Nội dung thanh toán',
+																	padding : '10 10 10 10',
+																	collapsible : true,
+																	collapsed : true,
 																	layout : {
 																		align : 'stretch',
 																		type : 'vbox'
 																	},
 																	items : [
 																			{
+																				xtype: 'checkboxfield',
+											                                    fieldLabel: '',
+											                                    boxLabel: 'In kết quả thanh toán',
+											                                    name: 'IS_PRINT_PAYMENT',
+											                                    checked : false,
+											                                    inputValue : 1
+																			},
+																			{
+																				xtype: 'checkboxfield',
+											                                    fieldLabel: '',
+											                                    boxLabel: 'In hình thức thanh toán',
+											                                    name: 'IS_PRINT_PAYMETHOD',
+											                                    checked : false,
+											                                    inputValue : 1
+																			},
+																			]
+																},
+																{
+																	xtype : 'fieldset',
+																	title : 'Khổ giấy in',
+																	padding : '10 10 10 10',
+																	collapsible : true,
+																	collapsed : true,
+																	// flex: 1,
+																	layout : {
+																		//align : 'stretch',
+																		type : 'vbox'
+																	},
+																	fieldDefaults: {
+																        labelAlign: 'right',
+																        msgTarget: 'side'
+																    },
+																	items : [
+																			{
 																				xtype : 'combo',
 																				itemId : 'IS_PRINT_BIG',
 																				name : 'IS_PRINT_BIG',
 																				fieldLabel : 'Cỡ hóa đơn',
-																				emptyText : 'Chọn loại hóa đơn',
+																				emptyText : 'Chọn khổ giấy hóa đơn',
 																				store : Ext
 																						.create(
 																								'Ext.data.Store',
@@ -141,11 +271,11 @@ Ext
 																									data : [
 																											{
 																												"value" : '1',
-																												"name" : "Hóa đơn cỡ lớn"
+																												"name" : "Giấy A4"
 																											},
 																											{
 																												"value" : '0',
-																												"name" : "Hóa đơn cỡ nhỏ"
+																												"name" : "Giấy A8"
 																											} ]
 																								}),
 																				displayField : 'name',
@@ -156,6 +286,8 @@ Ext
 																				itemId : 'USER_EDIT_BILL',
 																				name : 'USER_EDIT_BILL',
 																				fieldLabel : 'Người sửa HĐ',
+																				value: "ROLE_ADMIN",
+																				hidden: true,
 																				emptyText : 'Chọn người được phép sửa hóa đơn',
 																				store: Ext.create('Ext.data.Store',{
 																					fields: ['value', 'name'],
@@ -169,6 +301,7 @@ Ext
 																			},
 																			{
 																				xtype : 'container',
+																				hidden: true,
 																				layout : {
 																					align : 'stretch',
 																					type : 'hbox'
@@ -250,6 +383,13 @@ Ext
 												RESTAR_ID : _restaurId
 											},
 											success : function(form, actions) {
+												var text = Ext.JSON.decode(actions.response.responseText);
+												var data = text.data;
+												var item = Ext.ComponentQuery.query('#ItemTextNotify');
+												if(item){ 
+													var textExt = convertToVNDateFromEngDate.convertToVNDateFromEngDate(data.EXPIRED_DATE);
+													item[0].setValue('Hạn sử dụng phần mềm đến ngày: '+textExt);
+												}
 											}
 										});
 					},

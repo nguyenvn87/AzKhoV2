@@ -72,22 +72,26 @@ Ext.define('MNG.view.popup.BtnStoreHistory', {
                                          xtype: 'gridcolumn',
                                          dataIndex: 'SRVC_NM',
                                          sortable:false,
+                                         hidden: true,
                                          text: 'Tên hàng',
                                          width: 120
                                       },{
                                          xtype: 'gridcolumn',
-                                         dataIndex: 'AMOUNT_STORE',
-                                         sortable:false,
-                                         align: 'right',
-                                         text: 'Tồn',
-                                         width: 60
-                                      },{
-                                         xtype: 'gridcolumn',
                                          dataIndex: 'HIS_NOTE',
                                          sortable:false,
-                                         text: 'Thay đổi trong ngày',
+                                         text: 'SL tồn thay đổi trong ngày',
                                          flex: 0.5
-                                     },
+                                      },{
+                                         xtype: 'gridcolumn',
+                                         dataIndex: 'AMOUNT_STORE',
+                                         sortable:false,
+                                         align: 'center',
+                                         text: 'Số lượng',
+                                         width: 100,
+                                         renderer : function(value, p, r) {
+											return '<span style="color: red">'+value+'</span>';
+										 }
+                                     }
 								],
 								dockedItems: [
 			                                     {
@@ -109,8 +113,9 @@ Ext.define('MNG.view.popup.BtnStoreHistory', {
 		afterrender:function(){
 		}
 	},
-	loadAndShow:function(_value){
-		
+	loadAndShow:function(_value, _title){
+		me = this;
+		me.title = _title;
 		var Grid = Ext.ComponentQuery.query('#grid-store-history')[0];
 		var storeTmp = Grid.getStore();
 		storeTmp.getProxy().extraParams={

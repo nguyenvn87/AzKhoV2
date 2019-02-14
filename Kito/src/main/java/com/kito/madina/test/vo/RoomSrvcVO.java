@@ -8,8 +8,8 @@ public class RoomSrvcVO extends DefaultVO{
 	private String MENU_ID ;
 	private String MENU_NM ;
 	private float AMOUNT ;
-	private float PRICE ;
-	private float TOTAL_MONEY ;
+	private double PRICE ;
+	private double TOTAL_MONEY ;
 	private float TOTAL_HOUS ;
 	private int IS_ON;
 	private int ID;
@@ -69,25 +69,25 @@ public class RoomSrvcVO extends DefaultVO{
 	/**
 	 * @return the pRICE
 	 */
-	public float getPRICE() {
+	public double getPRICE() {
 		return PRICE;
 	}
 	/**
 	 * @param pRICE the pRICE to set
 	 */
-	public void setPRICE(float pRICE) {
+	public void setPRICE(double pRICE) {
 		PRICE = pRICE;
 	}
 	/**
 	 * @return the tOTAL_MONEY
 	 */
-	public float getTOTAL_MONEY() {
+	public double getTOTAL_MONEY() {
 		return TOTAL_MONEY;
 	}
 	/**
 	 * @param tOTAL_MONEY the tOTAL_MONEY to set
 	 */
-	public void setTOTAL_MONEY(float tOTAL_MONEY) {
+	public void setTOTAL_MONEY(double tOTAL_MONEY) {
 		TOTAL_MONEY = tOTAL_MONEY;
 	}
 	/**

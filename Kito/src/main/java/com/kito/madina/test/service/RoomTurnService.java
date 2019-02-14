@@ -18,8 +18,10 @@ public interface RoomTurnService {
 	public List<HashMap<String, Object>> getListDailyProfit(HashMap<String, Object> map);
 	public int deleteRoomTurnByRoomUsedId(String RoomUsedId);
 	public String generateBillCode();
+	public String generateNewBillCode();
 	public int createRoomTurnHistoryVO(RoomTurnVO vo);
 	public List<RoomTurnVO> getDeletedBillHistory(HashMap<String, Object> map);
 	public HashMap<String, Object> getDeletedBillHistoryCount(HashMap<String, Object> map);
 	public RoomTurnVO getRoomTurnHistoryVOByObject(RoomTurnVO rtVo);
+	public RoomTurnVO getLastRoomTurnByIndex(int index);
 }

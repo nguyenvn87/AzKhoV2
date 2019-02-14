@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import com.kito.madina.ecount.vo.PaymentMethodVO;
 import com.kito.madina.test.vo.RoomSrvcVO;
 
 public class CmmUtil {
@@ -109,7 +110,7 @@ public class CmmUtil {
 			
 		return serialNum;
 	}*/
-	public static String formatNumber2Money(float num){
+	public static String formatNumber2Money(double num){
 		String quantityOut = "";
 		Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("US").build();
 		NumberFormat numberFormatter;
@@ -130,4 +131,20 @@ public class CmmUtil {
 		    }
 		    return null;
 		}
+
+	public static List<PaymentMethodVO> jsonToPayMethodList(JsonReader json) {
+		// TODO Auto-generated method stub
+		Gson gson = new Gson();
+		return gson.fromJson(json, new TypeToken<List<PaymentMethodVO>>(){}.getType());
+	}
+	public static String generateBillCode(String code, int length){
+		String strCD = code;
+		if(code != null && code.length() > 0){
+			int iTmp = 6 - code.length();
+			for(int i=0; i < iTmp; i++){
+				strCD = "0" + strCD;
+			}
+		}
+		return strCD;
+	}
 }

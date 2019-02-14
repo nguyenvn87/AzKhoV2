@@ -8,6 +8,7 @@ Ext.define('MNG.controller.KhachNoController', {
 	views : ['MNG.view.KhachNoView'
 	         ,'Ext.extCombo.view.SimpleComboBox'],
 	popMenu: null,
+	cusId: null,
 	init : function() {
 		this.control({
 			'#addMenuBtn' : {
@@ -20,8 +21,16 @@ Ext.define('MNG.controller.KhachNoController', {
 				itemdblclick: this.doubleClickCustomer
 			},'#btnViewCustomerBill':{
 				click : this.viewBill
+			},
+			'#btnHistoryPDFPrint':{
+				click: this.btnHistoryPDFPrint
 			}
 		});
+	},
+	btnHistoryPDFPrint:function(){
+		var params = 'CUS_CD='+this.cusId+'&page=1&start=0&limit=100';
+		var location = contextPath + "/customer/lichsugiaodich.do?"+params;
+		utilForm.btn_template_popup(location,"Lịch sử giao dịch",600,1024,true)
 	},
 	deleteMenu: function(){
 		alert('Delete');
@@ -31,6 +40,7 @@ Ext.define('MNG.controller.KhachNoController', {
 	},
 	doubleClickCustomer:function(compt, record, item, index, e){
 		var idCus = record.get('CUS_CD');
+		this.cusId = idCus;
 		if(idCus != null){
 			btnListBillCustomer.show();
 			btnListBillCustomer.loadListBills(idCus+'');

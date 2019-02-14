@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version last-->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="230" pageHeight="600" columnWidth="210" leftMargin="10" rightMargin="10" topMargin="5" bottomMargin="5" uuid="9cffc5b9-555b-44c5-9274-91f957e3c90e">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="ParamResName" class="java.lang.String"/>
 	<parameter name="ParamAddr" class="java.lang.String"/>
 	<parameter name="ParamPhone" class="java.lang.String"/>
@@ -17,7 +19,7 @@
 	<field name="ItemName" class="java.lang.String"/>
 	<field name="ItemPrice" class="java.lang.String"/>
 	<field name="ItemNo" class="java.lang.String"/>
-	<field name="ItemTotal" class="java.lang.Float"/>
+	<field name="ItemTotal" class="java.lang.Double"/>
 	<field name="ItemUnit" class="java.lang.String"/>
 	<field name="ItemAmount" class="java.lang.String"/>
 	<variable name="Variable_1" class="java.lang.Float" calculation="Sum">

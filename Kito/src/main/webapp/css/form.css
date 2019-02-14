@@ -169,7 +169,8 @@
 	background-color: rgba(22, 23, 29, 0.09);
 }
 .x-panel-header-default{
-	background-color: #326488;
+	background-color: #326488; 
+	/* background-color: #2d98c3; */
 }
 .x-btn-small-extent .x-btn-default-small {
 	background-image: -webkit-linear-gradient(top,#a1a5a9,#595d61 50%,#3e4448 51%,#2e5f82);

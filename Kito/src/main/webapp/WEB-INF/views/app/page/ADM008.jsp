@@ -20,7 +20,15 @@ Ext.application({
 					var storeTmp = GridUser.getStore();
 					storeTmp.currentPage = 1;
 					storeTmp.pageSize=10;
-					storeTmp.load();
+					storeTmp.load({
+						 callback: function (records, operation, success) {
+					        var data = Ext.JSON.decode(operation.response.responseText);
+					        SumObj = data.SumObj;
+					        console.log('SumObj', SumObj);
+					        value3 = formatSupporter.formatToMoney(SumObj.total);
+					        Ext.ComponentQuery.query('#statis-total-id')[0].setText(value3);
+					     }
+					});
 				}
 			}
 		});

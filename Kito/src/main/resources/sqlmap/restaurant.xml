@@ -19,6 +19,18 @@
 			, IS_PRINT_BIG
 			, USER_EDIT_BILL
 			, PACKAGE
+			, HAS_VERIFY
+			, BILL_TITLE
+			, BILL_SLOGAN
+			, BILL_TITLE3
+			, BILL_BOTTOM1
+			, BILL_BOTTOM2
+			, BILL_BOTTOM3
+			, IS_PRINT_PAYMENT
+			, BILL_LABEL_PAYED1
+			, BILL_LABEL_PAYED2
+			, EXPIRED_DATE
+			, IS_PRINT_PAYMETHOD
 	    FROM sys_restaurant
 	    WHERE RESTAR_ID = #RESTAR_ID#
 	</select>
@@ -51,6 +63,15 @@
 			, IS_PRINT_BIG
 			, USER_EDIT_BILL
 			, PACKAGE
+			, HAS_VERIFY
+			, BILL_TITLE
+			, BILL_SLOGAN
+			, BILL_TITLE3
+			, BILL_BOTTOM1
+			, BILL_BOTTOM2
+			, BILL_BOTTOM3
+			, IS_PRINT_PAYMENT
+			, IS_PRINT_PAYMETHOD
 	    	) 
 	    VALUES (
 	    	#RESTAR_ID# 
@@ -70,6 +91,15 @@
 			, #IS_PRINT_BIG#
 			, #USER_EDIT_BILL#
 			, #PACKAGE#
+			, #HAS_VERIFY#
+			, #BILL_TITLE#
+			, #BILL_SLOGAN#
+			, #BILL_TITLE3#
+			, #BILL_BOTTOM1#
+			, #BILL_BOTTOM2#
+			, #BILL_BOTTOM3#
+			, #IS_PRINT_PAYMENT#
+			, #IS_PRINT_PAYMETHOD#
 			)
   </insert>
   <insert id="UpdateRestaurantVo">
@@ -81,21 +111,13 @@
 		   	<isNotEmpty property="RESTAR_NM" prepend=",">
 				RESTAR_NM = #RESTAR_NM#
 			</isNotEmpty>
-			<isNotEmpty property="ADDR" prepend=",">
-				ADDR = #ADDR#
-			</isNotEmpty>
-			<isNotEmpty property="ADDR2" prepend=",">
-				ADDR2 = #ADDR2#
-			</isNotEmpty>
 			<isNotEmpty property="PHONE" prepend=",">
 				PHONE = #PHONE#
 			</isNotEmpty>
 			<isNotEmpty property="EMAIL" prepend=",">
 				EMAIL 		= #EMAIL#
 			</isNotEmpty>
-			<isNotEmpty property="CONTACT_PHONE" prepend=",">
-				CONTACT_PHONE = #CONTACT_PHONE#
-			</isNotEmpty>
+			
 			<isNotEmpty property="CONTACT_NM" prepend=",">
 				CONTACT_NM 	= #CONTACT_NM#
 			</isNotEmpty>
@@ -111,6 +133,12 @@
 			<isNotEmpty property="IS_PRINT_BIG" prepend=",">
 				IS_PRINT_BIG = #IS_PRINT_BIG#
 			</isNotEmpty>
+			<isNotEmpty property="EXPIRED_DATE" prepend=",">
+				EXPIRED_DATE = #EXPIRED_DATE#
+			</isNotEmpty>
+			<isNotEmpty property="IS_PRINT_PAYMENT" prepend=",">
+				IS_PRINT_PAYMENT = #IS_PRINT_PAYMENT#
+			</isNotEmpty>
 			<isNotEmpty property="RESTAR_TYPE" prepend=",">
 				RESTAR_TYPE = #RESTAR_TYPE#
 			</isNotEmpty>
@@ -120,6 +148,16 @@
 			<isNotEmpty property="PACKAGE" prepend=",">
 				PACKAGE = #PACKAGE#
 			</isNotEmpty>
+				,BILL_TITLE = #BILL_TITLE#,
+				BILL_SLOGAN = #BILL_SLOGAN#,
+				BILL_TITLE3 = #BILL_TITLE3#,
+				CONTACT_PHONE = #CONTACT_PHONE#,
+				ADDR = #ADDR#,
+				ADDR2 = #ADDR2#,
+				BILL_BOTTOM1 = #BILL_BOTTOM1#,
+				BILL_BOTTOM2 = #BILL_BOTTOM2#,
+				BILL_BOTTOM3 = #BILL_BOTTOM3#,
+				IS_PRINT_PAYMETHOD = #IS_PRINT_PAYMETHOD#
 		</dynamic>
 	    WHERE RESTAR_ID 	= #RESTAR_ID#
   </insert>

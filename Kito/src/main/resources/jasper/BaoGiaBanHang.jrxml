@@ -57,7 +57,7 @@
 		<groupHeader>
 			<band height="20">
 				<textField isBlankWhenNull="true">
-					<reportElement x="0" y="-1" width="554" height="21" isRemoveLineWhenBlank="true" forecolor="#453939" uuid="10184e0b-4e66-4691-840b-442638940bbf">
+					<reportElement x="0" y="-1" width="554" height="21" isRemoveLineWhenBlank="true" forecolor="#453939" backcolor="#CCCCCC" uuid="10184e0b-4e66-4691-840b-442638940bbf">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box leftPadding="5">
@@ -92,20 +92,6 @@
 					</textElement>
 					<text><![CDATA[BÁO GIÁ BÁN HÀNG]]></text>
 				</staticText>
-				<staticText>
-					<reportElement x="337" y="66" width="80" height="23" uuid="d37f3533-7f84-459b-a078-b6f41b53dc1c"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="font-extension" size="14" isBold="true" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
-					</textElement>
-					<text><![CDATA[Người lập]]></text>
-				</staticText>
-				<textField isBlankWhenNull="true">
-					<reportElement x="417" y="66" width="130" height="23" forecolor="#2E2727" uuid="b2e1f2d1-09d7-4e16-b648-d3a163115f26"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="font-extension" size="12" isItalic="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{ParamSubtile}]]></textFieldExpression>
-				</textField>
 			</frame>
 		</band>
 	</title>
@@ -118,6 +104,7 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
+					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0" lineColor="#1F0B0B"/>
 				</box>
 				<staticText>
@@ -129,14 +116,18 @@
 						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.0"/>
 						<bottomPen lineWidth="0.1"/>
+						<rightPen lineWidth="1.0" lineColor="#8A8383"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="13"/>
+						<font fontName="font-extension" size="13"/>
 					</textElement>
 					<text><![CDATA[STT]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="258" y="0" width="68" height="23" uuid="a4370fba-2496-4b4f-8c9b-6f5b77af327d"/>
+					<box>
+						<rightPen lineWidth="1.0" lineColor="#8A8383"/>
+					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
@@ -144,6 +135,9 @@
 				</staticText>
 				<staticText>
 					<reportElement x="326" y="0" width="60" height="23" uuid="5c6963c8-5442-4120-9c05-6c040f995d19"/>
+					<box>
+						<rightPen lineWidth="1.0" lineColor="#8A8383"/>
+					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
@@ -151,6 +145,9 @@
 				</staticText>
 				<staticText>
 					<reportElement x="90" y="0" width="168" height="23" uuid="1427b0ea-0cab-4eb7-bd5a-83e068b5fa60"/>
+					<box>
+						<rightPen lineWidth="1.0" lineColor="#8A8383"/>
+					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
@@ -158,6 +155,9 @@
 				</staticText>
 				<staticText>
 					<reportElement x="30" y="0" width="60" height="23" uuid="08c2b1a3-f700-4538-8cd5-7334ad0af030"/>
+					<box>
+						<rightPen lineWidth="1.0" lineColor="#8A8383"/>
+					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
@@ -244,7 +244,7 @@
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="30" y="1" width="60" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5dea6186-7269-4b7b-9912-61b86e8ba851"/>
-					<box>
+					<box leftPadding="3">
 						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="#8A8383"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">

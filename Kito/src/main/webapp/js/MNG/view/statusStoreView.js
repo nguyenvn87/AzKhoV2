@@ -74,6 +74,9 @@ Ext.define('MNG.view.statusStoreView', {
                                          sortable:true,
                                          text: 'SL tồn',
                                          width: 80,
+                                         renderer :function(value, p , r){
+                           					return '<span style="color: red">'+value+'</span>';
+                           				}
                                      },
                                      {
                                          xtype: 'gridcolumn',
@@ -132,20 +135,6 @@ Ext.define('MNG.view.statusStoreView', {
                                           
                                      },
                                      {
-                                         xtype: 'gridcolumn',
-                                         dataIndex: 'CHANGE_DATE',
-                                         sortable:false,
-                                         text: 'Ngày cập nhật',
-                                         width: 160
-                                     },
-                                     {
-                                         xtype: 'gridcolumn',
-                                         dataIndex: 'USER_NAME',
-                                         sortable:false,
-                                         text: 'Người lưu',
-                                         width: 100
-                                     },
-                                     {
 										menuDisabled : true,
 										sortable : false,
 										text : 'Xem lịch sử',
@@ -158,9 +147,40 @@ Ext.define('MNG.view.statusStoreView', {
 											handler : function(grid,rowIndex,colIndex) {
 												rec = grid.getStore().getAt(rowIndex);
 												var _srvcId = rec.get('SRVC_ID');
-												me.showHistory(_srvcId);
+												me.showHistory(_srvcId, rec.get('SRVC_NM'));
 										}
 										} ]
+                                     },
+                                     {
+                                    	 menuDisabled : true,
+										 sortable : false,
+										 text : 'Chỉnh sửa',
+										 xtype : 'actioncolumn',
+										 align : 'center',
+										 width : 90,
+										 items : [ {
+												iconCls : 'icon-edit',
+												tooltip : 'Thay đổi số lượng tồn',
+												handler : function(grid,rowIndex,colIndex) {
+													grid.getSelectionModel().select(rowIndex);
+													var record = grid.getStore().getAt(rowIndex);
+													me.updateTonKho(record);
+												}
+										} ]
+									},
+                                     {
+                                         xtype: 'gridcolumn',
+                                         dataIndex: 'CHANGE_DATE',
+                                         sortable:false,
+                                         text: 'Ngày cập nhật',
+                                         width: 160
+                                     },
+                                     {
+                                         xtype: 'gridcolumn',
+                                         dataIndex: 'USER_NAME',
+                                         sortable:false,
+                                         text: 'Người lưu',
+                                         width: 100
                                      }
                                  ],
                                  tbar: [
@@ -216,8 +236,13 @@ Ext.define('MNG.view.statusStoreView', {
 		storeTmp.clearFilter();
 		storeTmp.filter('SRVC_NM', value);
 	},
-	showHistory:function(srvc_id){
-		btnHistoryStore.loadAndShow(srvc_id);
+	showHistory:function(srvc_id, title){
+		btnHistoryStore.loadAndShow(srvc_id, title);
 		btnHistoryStore.show();
+	},
+	updateTonKho:function(record){
+		var myController = MANAGER.app
+								.getController('MNG.controller.statusStoreController');
+		myController.doubleClickUpdateStore();
 	}
 });

@@ -8,14 +8,15 @@ Ext.define('MNG.view.popup.BtnLookupTime', {
 	extend : 'Ext.window.Window',
 	Height : 300,
 	width : 400,
-	y: 10,
-	title : 'Tìm kiếm theo ngày',
+	y: 55,
+	title : 'Chọn ngày tìm kiếm',
 	maxHeight : 600,
 	closeAction : 'hide',
 	resizable : false,
 	isActive : false,
 	config : {
-		idOfGrid : ""
+		idOfGrid : "",
+		parentObj: null
 	},
 	initComponent : function() {
 		var me = this;

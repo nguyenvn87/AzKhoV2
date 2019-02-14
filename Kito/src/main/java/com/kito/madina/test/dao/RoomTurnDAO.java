@@ -76,4 +76,9 @@ public class RoomTurnDAO extends SqlMapClientDaoSupport{
 		RoomTurnVO record = (RoomTurnVO) getSqlMapClientTemplate().queryForObject("getRoomTurnHistoryVOByObject", vo);
 		 return record;
 	}
+	public RoomTurnVO getLastRoomTurnByIndex(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		RoomTurnVO record = (RoomTurnVO) getSqlMapClientTemplate().queryForObject("getLastRoomturnByIndex", map);
+		return record;
+	}
 }

@@ -25,6 +25,7 @@ Ext
 						name: '',
 						changeDate:''
 					},
+					isChangeDate: false,
 					initComponent : function() {
 						var me = this;
 
@@ -48,7 +49,7 @@ Ext
 																		xtype : 'combo',
 																		cls : 'input-search-cls',
 																		height : 30,
-																		width : 560,
+																		width : 618,
 																		store : srvcListStore,
 																		displayField : 'title',
 																		valueField : 'SRVC_ID',
@@ -131,6 +132,10 @@ Ext
 																					editor : {
 																						xtype : 'numberfield',
 																						allowBlank : false
+																					},
+																					renderer: function(value, metadata, record){
+																						data = formatSupporter.formatToMoney(value);
+																						return data;
 																					}
 																				},
 																				{
@@ -213,6 +218,12 @@ Ext
 																					fieldLabel : 'Ngày đặt',
 																					value: new Date(),
 																					submitFormat: 'Y/m/d',
+																					listeners: {
+												                                        select: {
+												                                            fn: me.onDatefieldChange,
+												                                            scope: me
+												                                        }
+												                                    }
 																		         }
 																		         ]
 																	},
@@ -261,9 +272,10 @@ Ext
 																					xtype : 'checkboxfield',
 																					anchor : '100%',
 																					fieldLabel : 'Đã thanh toán',
+																					cls: 'hight-light-label',
 																					name: 'HAS_PAYED',
 																					itemId: 'HAS_PAYED',
-																					labelWidth : 70,
+																					labelWidth : 110,
 																					boxLabel : '',
 																					listeners: {
 													                                	change: function (checkbox, newVal, oldVal) {
@@ -297,9 +309,10 @@ Ext
 																				{
 																					xtype : 'checkboxfield',
 																					anchor : '100%',
+																					cls: 'hight-light-label',
 																					name : 'IS_DELILVER',
 																					itemId: 'IS_DELILVER',
-																					labelWidth : 70,
+																					labelWidth : 110,
 																					fieldLabel : 'Đã xuất kho',
 																					boxLabel : ''
 																				} ]
@@ -323,7 +336,7 @@ Ext
 																					},
 																					items : [ {
 																						xtype : 'button',
-																						width : 76,
+																						width : 85,
 																						itemId : 'BtnCancelBill',
 																						iconCls : 'icon-delete',
 																						text : 'Hủy đơn'
@@ -356,6 +369,9 @@ Ext
 																					items : [ {
 																						xtype : 'button',
 																						width : 75,
+																						handler: function(){
+																							me.hide();
+																						},
 																						text : 'Cancel'
 																					} ]
 																				} ]
@@ -376,6 +392,11 @@ Ext
 							};
 							srvcRoomStore.load();
 						}
+					},
+					onDatefieldChange: function(field, value, eOpts) {
+						me = this;
+						me.config.changeDate = value;
+						me.isChangeDate = true;
 					},
 					initNew : function() {
 

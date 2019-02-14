@@ -577,7 +577,7 @@ public class RoomController {
 		RoomTurnVO dbVo = roomTurnService.getRoomTurnVOByObject(vo);
 		if(hasPayedStr != null && hasPayedStr.equalsIgnoreCase("true")){
 			hasPayed = 1;
-			float remain = dbVo.getTOTAL_MONEY() - dbVo.getPAYED_MONEY();
+			double remain = dbVo.getTOTAL_MONEY() - dbVo.getPAYED_MONEY();
 			payedInfo = payedInfo +"(Lan 1:{"+ dbVo.getPAYED_MONEY()+"} ; lan 2:{"+remain+"})";
 			dbVo.setPAYED_MONEY(dbVo.getTOTAL_MONEY());
 		}

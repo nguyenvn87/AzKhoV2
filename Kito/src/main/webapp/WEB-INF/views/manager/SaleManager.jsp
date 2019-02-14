@@ -94,23 +94,20 @@
                                 },
                                 {
 	                            	xtype:'container',
+	                            	hidden: true,
 	                            	flex: 1,
 	                            	layout: {
 	                                        type: 'hbox',
-	                                        padding:'5',
 	                                        pack:'end'
 	                                    },
-	                            	items:[
-	                            	       {
+	                            	items:[{
 	                            	    	   xtype:'button',
 				                               text: 'Hủy',
 				                               height: 40,
 				                               iconCls : 'icon-delete',
 				                               itemId : 'btnCancel'
-	                            	       }
-	                            	       ]
-	                            }
-                            	]
+	                            	       }]
+	                            }]
                         },{
                             xtype: 'toolbar',
                             cls: 'toolbar-content',
@@ -132,7 +129,21 @@
                                 handler:function(){
                                 	window.location.href=contextPath+"/mainStatistic.do"; 
                                 }
-                            }]
+                            },{
+	                            xtype:'container',
+	                            flex: 1,
+	                            layout: {
+	                                 type: 'hbox',
+	                                 pack:'end'
+	                            },
+	                            items:[{
+	                            	    xtype:'button',
+	                            	    //hidden: true,
+				                        text: 'Tạo dữ liệu mẫu',
+				                        itemId : 'btnCreateTemplate'
+	                            	  }]
+	                            }
+                            ]
                         }],
                         items:[
 								{
@@ -143,12 +154,14 @@
 									pageSize : 10,
 									padding : '10 0 0 0',
 									autoScroll : true,
+									plugins: [
+										Ext.create('Ext.grid.plugin.CellEditing', {
+										    clicksToEdit: 1
+										})
+									],
 									store : Ext.create('MNG.store.roomSrvcStore', {}),
 									viewConfig : {
 										getRowClass : function(record, index, rowParams) {
-											// tmpId = record.data['ID'];
-											// if(tmpId != null && tmpId != '')
-											// return 'rowClass1';
 										}
 									},
 									features : [ {
@@ -181,6 +194,11 @@
 										sortable : false,
 										align : 'right',
 										dataIndex : 'AMOUNT',
+										editor: {
+											xtype: 'numberfield',
+											minValue : 0,
+											allowBlank: false
+										},
 										text : 'SL'
 									},{
 										xtype : 'gridcolumn',
@@ -192,45 +210,60 @@
 										text : "Đơn giá",
 									}, {
 										xtype : 'gridcolumn',
+										width : 70,
+										sortable : false,
+										align : 'left',
+										dataIndex : 'UNIT_NM',
+										text : "Đ/V",
+										summaryRenderer : function(value) {
+											return 'Tổng:';
+										}
+									}, {	
+										xtype : 'gridcolumn',
 										width : 95,
 										sortable : false,
 										align : 'right',
 										dataIndex : 'PRICE',
 										text : "Đơn giá",
+										editor: {
+											xtype: 'numberfield',
+											allowBlank: false
+										},
 										renderer : function(value, p, r) {
 											data = r.data['PRICE'];
-											console.info('value 1 = '+data);
+											r.data['TOTAL_MONEY'] = r.data['PRICE']*r.data['AMOUNT'];
 											if (data != '')
 												data = formatSupporter.formatToMoney(data);
-											console.info('value 2 = '+data);
 											return data;
-										}
-									}, {
-										xtype : 'gridcolumn',
-										width : 70,
-										sortable : false,
-										hidden: true,
-										align : 'left',
-										dataIndex : 'UNIT_NM',
-										text : "Đơn vị",
-										summaryRenderer : function(value) {
-											return 'Tổng:';
 										}
 									},{
 										xtype : 'gridcolumn',
-										width : 115,
+										width : 140,
 										align : 'right',
 										sortable : true,
 										dataIndex : 'TOTAL_MONEY',
 										text : 'Thành tiền',
 										summaryType : 'sum',
 										renderer : function(value, p, r, rowIndex) {
-											// grid.addRowCls(rowIndex, 'rowClass1');
-											var data = r.data['TOTAL_MONEY'];
+											data = r.data['TOTAL_MONEY'];
 											if (data != '')
 												data = formatSupporter.formatToMoney(data);
 											return data;
-										}
+										},
+										summaryRenderer: function(value, summaryData, dataIndex){
+											tmpStore = Ext.ComponentQuery.query('#grid-room-turn')[0].getStore();
+											var totalValue = 0;
+											var sumValue = 0;
+											tmpStore.each(function(record,id){
+											    totalValue = totalValue + (record.data['PRICE']*record.data['AMOUNT']);
+											});
+											if (totalValue != ''){
+												sumValue = formatSupporter.formatToMoney(totalValue);
+												var myController = MANAGER.app.getController('MNG.controller.retailController');
+												myController.setValueForPay(totalValue);
+											}
+										    return sumValue;
+										},
 									}, {
 										xtype : 'gridcolumn',
 										flex : 1,
@@ -272,7 +305,6 @@
 											iconCls : 'icon-delete',
 											tooltip : 'Xóa mục này',
 											handler : function(grid, rowIndex, colIndex){
-												//me.deleteRecord(grid, rowIndex, colIndex);
 												var myController = MANAGER.app.getController('MNG.controller.retailController');
 												myController.deleteRecord(grid, rowIndex, colIndex);
 											}
@@ -311,7 +343,6 @@
 												listeners:{
 													'keyup': function(field, event){
 														
-														//console.log('key = '+e.keyCode+ ' / '+e.getKey());
 														var myController = MANAGER.app.getController('MNG.controller.retailController');
 														myController.FilterMenu(field, event);	
 													} 
@@ -376,10 +407,8 @@
 										renderer :function(value, p , r){
 			              					data = r.data['PRICE'];
 			              					unit = r.data['UNIT_NM'];
-			              					console.info('Value A = '+data);
 			              					if(data != '')
 			              					data = formatSupporter.formatToMoney(data);
-			              					console.info('Value B = '+ data);
 			              					return  data+' /'+unit;
 			              				}
 								},{

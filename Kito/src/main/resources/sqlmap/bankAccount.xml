@@ -5,55 +5,61 @@
         "http://ibatis.apache.org/dtd/sql-map-2.dtd">
         
 <sqlMap namespace="bank_account">
-	<typeAlias  alias="BankAccountVO"	type="com.kito.madina.test.vo.BankAccountVO"/>
+	<typeAlias  alias="BankAccountVO"	type="com.kito.madina.ecount.vo.BankAccountVO"/>
 	 <select id="getBankAccountVOAll" resultClass="BankAccountVO">
 	    SELECT ID_BANK 
-			, ACCOUNT_NO 
 			, BANK_NM 
 			, RESTAR_ID 
-			, ACCOUNT_NM 
-			, NOTE 
+			, ADDRESS 
+			, OWNER
+			, ISSORT
 	    FROM bank_account
 	</select>
 	<insert id="createBankAccountVO">
 	    INSERT INTO bank_account 
 	    	(
-			ACCOUNT_NO 
-			, BANK_NM 
+			BANK_NM 
 			, RESTAR_ID 
-			, ACCOUNT_NM 
-			, NOTE 
+			, ADDRESS 
 			, CHANGE_USER
+			, ID_BANK
+			, OWNER
+			, ISSORT
 	    	) 
 	    VALUES (
-			#ACCOUNT_NO# 
-			, #BANK_NM# 
+			#BANK_NM# 
 			, #RESTAR_ID# 
-			, #ACCOUNT_NM# 
-			, #NOTE# 
+			, #ADDRESS# 
 			, #CHANGE_USER#
+			, #ID_BANK#
+			, #OWNER#
+			, #ISSORT#
 			)
   </insert>
   <update id="updateBankAccountVO">
 	    UPDATE bank_account 
 	    SET 
-			ACCOUNT_NO = #ACCOUNT_NO# 
-			, BANK_NM = #BANK_NM#
+			 BANK_NM = #BANK_NM#
 			, RESTAR_ID = #RESTAR_ID#
-			, ACCOUNT_NM = #ACCOUNT_NM#
-			, NOTE = #NOTE#
+			, ADDRESS = #ADDRESS#
 			, CHANGE_USER = #CHANGE_USER#
-	    WHERE ID_BANK = #ID_BANK#
+			, OWNER = #OWNER#
+			, ISSORT = #ISSORT#
+	    WHERE ID_BANK = #ID_BANK# and RESTAR_ID = #RESTAR_ID#
   </update>
   <select id="getBankAccountVOByVO" resultClass="BankAccountVO">
 	    SELECT R.*
 	    FROM bank_account R
 	    WHERE
-		   	R.ID_BANK = #ID_BANK#
+		   	R.ID_BANK = #ID_BANK# and R.RESTAR_ID = #RESTAR_ID#
 	</select> 
 	<select id="getListBankAccountVO" resultClass="BankAccountVO">
-	    SELECT *
-	    FROM bank_account
-	    WHERE RESTAR_ID = #RESTAR_ID#
+	    SELECT R.*
+	    FROM bank_account R
+	    WHERE R.RESTAR_ID = #RESTAR_ID#
+	    ORDER BY R.ISSORT
 	</select>
+	<delete id="deleteBankObjectByBankID">
+    	DELETE FROM bank_account WHERE RESTAR_ID = #RESTAR_ID# and ID_BANK = #ID_BANK#
+  	</delete>
 </sqlMap>

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version last-->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DailyBill" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d4a1d5eb-82dd-412f-a620-202e4bdf9dba">
 	<property name="template.engine" value="tabular_template"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
@@ -43,7 +42,7 @@
 		</box>
 	</style>
 	<parameter name="ParamSubtile" class="java.lang.String"/>
-	<field name="ItemDateToDate" class="java.lang.String"/>
+	<parameter name="ParamDate" class="java.lang.String"/>
 	<field name="SRVC_CD" class="java.lang.String"/>
 	<field name="SRVC_NM" class="java.lang.String"/>
 	<field name="UNIT_NM" class="java.lang.String"/>
@@ -78,14 +77,14 @@
 		</groupHeader>
 	</group>
 	<title>
-		<band height="89">
+		<band height="103">
 			<frame>
-				<reportElement x="0" y="0" width="554" height="89" uuid="c48d2fc9-eb81-476a-9160-1da30bb9258b">
+				<reportElement x="0" y="0" width="554" height="103" uuid="c48d2fc9-eb81-476a-9160-1da30bb9258b">
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<staticText>
-					<reportElement x="80" y="8" width="400" height="30" forecolor="#1A1414" uuid="1f24cf8c-4a8c-47c0-9715-403c5806de6f">
+					<reportElement x="80" y="20" width="400" height="30" forecolor="#1A1414" uuid="1f24cf8c-4a8c-47c0-9715-403c5806de6f">
 						<property name="local_mesure_unitwidth" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="local_mesure_unitheight" value="pixel"/>
@@ -97,23 +96,32 @@
 					<text><![CDATA[TỒN KHO]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="337" y="66" width="80" height="23" uuid="d37f3533-7f84-459b-a078-b6f41b53dc1c"/>
+					<reportElement x="344" y="76" width="80" height="23" uuid="d37f3533-7f84-459b-a078-b6f41b53dc1c"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="14" isBold="true" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[Người lập]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement x="417" y="66" width="130" height="23" forecolor="#2E2727" uuid="b2e1f2d1-09d7-4e16-b648-d3a163115f26"/>
+					<reportElement x="424" y="76" width="130" height="23" forecolor="#2E2727" uuid="b2e1f2d1-09d7-4e16-b648-d3a163115f26"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="12" isItalic="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{ParamSubtile}]]></textFieldExpression>
 				</textField>
 				<textField pattern=" hh:mm a dd/MM/yyyy">
-					<reportElement x="192" y="38" width="170" height="20" uuid="ea168e99-4b04-481e-9572-81eb5ca1eeae"/>
-					<textElement textAlignment="Center"/>
+					<reportElement x="427" y="0" width="127" height="20" uuid="ea168e99-4b04-481e-9572-81eb5ca1eeae"/>
+					<textElement textAlignment="Right">
+						<font fontName="font-extension" isItalic="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="180" y="50" width="206" height="20" isRemoveLineWhenBlank="true" uuid="ab8fd4fd-3e79-4a93-9135-4e3a7cfa968b"/>
+					<textElement textAlignment="Center">
+						<font fontName="font-extension" size="12" pdfFontName="C:/Windows/Fonts/timesbd.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{ParamDate}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -253,7 +261,7 @@
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="30" y="1" width="60" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5dea6186-7269-4b7b-9912-61b86e8ba851"/>
-					<box>
+					<box leftPadding="2">
 						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="#8A8383"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">

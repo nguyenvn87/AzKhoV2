@@ -4,7 +4,7 @@ var HELLO_USR = 'Xin chào ';
 
 var MEN_T_001 = 'Bán hàng';
 var MEN_T_002 = 'Thống kê';
-var MEN_T_004 = 'Quản lý nợ';
+var MEN_T_004 = 'Thu chi';
 var MEN_T_003 = 'Hàng hóa';
 var MEN_T_005 = 'Cài đặt';
 var MEN_T_006 = 'menu auth mgt';

@@ -4,7 +4,6 @@ var formatSupporter = Ext.create('BIZ.utilities.formatSupporter',{});
 var supportEvent = Ext.create('BIZ.utilities.supportEvent',{});
 var totalValue = 0;
 var BtnUpdatePayment = Ext.create('MNG.view.popup.BtnUpdatePayment',{});
-var btnViewDetail = Ext.create('MNG.view.popup.BtnXuLyDatHang',{});
 Ext.define('MNG.controller.saleStatisticController', {
 	extend : 'Ext.app.Controller',
 	views : ['MNG.view.statistic'],
@@ -45,6 +44,9 @@ Ext.define('MNG.controller.saleStatisticController', {
 			'#btnStatisPrint':{
 				click : this.btnStatisPrint 
 			},
+			'#btnExcelPrint':{
+				click : this.btnStatisExcelPrint 
+			},
 			'#btnExportPrint':{
 				click: this.btnExportPrint 
 			},
@@ -56,15 +58,6 @@ Ext.define('MNG.controller.saleStatisticController', {
 			},
 			'#btnSaveDebitPayment':{
 				click: this.btnSaveDebitPayment
-			},
-			'#BtnSaveBill':{
-				click: this.updateBillInfo
-			},
-			'#BtnCancelBill':{
-				click: this.BtnCancelBill
-			},
-			'#saveBtnBill':{
-				click: this.submitOrder
 			},
 			'#FULLNAME':{
 				select: this.onSelectUserName
@@ -109,9 +102,7 @@ Ext.define('MNG.controller.saleStatisticController', {
 	},
 	btnStatisDaily: function(){
 		var today = new Date();
-		//this.startDate = formatSupporter.getTimeStempDateFormat(today);
 		arrTime = formatSupporter.getEnglishDate('TODAY');
-		//this.this.paramsRequest.TYPE_STATIS = 'OTHER';
 		this.paramsRequest.STARTDATE = arrTime[0];
 		this.paramsRequest.ENDDATE = arrTime[1];
 		console.info(this.paramsRequest);
@@ -121,7 +112,7 @@ Ext.define('MNG.controller.saleStatisticController', {
 	},
 	btnStatisAllTime:function(){
 		var today = new Date();
-		this.startDate = null;//formatSupporter.getTimeStempDateFormat(today);
+		this.startDate = null;
 		this.endDate = null;//
 		this.paramsRequest.TYPE_STATIS = null;
 		this.paramsRequest.STARTDATE = this.startDate;
@@ -130,6 +121,23 @@ Ext.define('MNG.controller.saleStatisticController', {
 		this.sendRequest(this.paramsRequest);
 		this.selectButton('WEEK');
 		this.statisticType = "WEEK";
+	},
+	getExcelFillBill: function(record){
+		me = this;
+		
+		var roomUseId = record.get('ROOM_USED_ID');
+		var param = "?ROOM_USED_ID="+roomUseId + "&FILENAME=" + record.get('BILL_CD'); 
+		param = param+"&title="+"HÓA ĐƠN";
+		if(roomUseId == null) return;
+		var _url = contextPath + '/saleReport/excel/ChiTietDonHang.do'+param;
+		me.downloadFile(_url);
+	},
+	showPopupPdf: function(record){
+		var roomUseId = record.get('ROOM_USED_ID');
+		if(roomUseId == null) return;
+		var param = "?LIID=" + roomUseId+ "&SUPPLYER="+WEB_ADDR+'&PRINT_TYPE=1'; 
+		var location = contextPath + "/report/billRetailPrint.do" + param;
+		utilForm.btn_template_popup(location,"Hóa đơn",800,1024,true);
 	},
 	doubleClickUser:function(compt, record, item, index, e){
 		var roomUseId = record.get('ROOM_USED_ID');
@@ -140,9 +148,7 @@ Ext.define('MNG.controller.saleStatisticController', {
 	},
 	btnStatisMonthly:function(){
 		var today = new Date();
-		//this.startDate = formatSupporter.getTimeStempDateFormat(today);
 		arrTime = formatSupporter.getEnglishDate('MONTH');
-		//this.paramsRequest.TYPE_STATIS = 'MONTH';
 		this.paramsRequest.STARTDATE = arrTime[0];
 		this.paramsRequest.ENDDATE = arrTime[1];
 		
@@ -173,6 +179,19 @@ Ext.define('MNG.controller.saleStatisticController', {
 				param = param + "&IS_CANCELED="+this.paramsRequest.IS_CANCELED; 
 		var location = contextPath + "/saleReport/calculateProfit.do" + param;
 		utilForm.btn_template_popup(location,"Doanh thu",800,1024,true);
+	},
+	btnStatisExcelPrint: function(){
+		var param = "?FILENAME="+ "Danh_Sach_Don"; 
+		if(this.paramsRequest.STARTDATE != null)
+				param = param + "&STARTDATE=" + this.paramsRequest.STARTDATE;
+		if(this.paramsRequest.ENDDATE != null)
+				param = param + "&ENDDATE=" + this.paramsRequest.ENDDATE;
+		if(this.paramsRequest.USER_NAME != null)
+				param = param + "&USER_NAME=" + this.paramsRequest.USER_NAME;
+		if(this.paramsRequest.IS_CANCELED != null)
+				param = param + "&IS_CANCELED="+this.paramsRequest.IS_CANCELED; 
+		var _url = contextPath + '/saleReport/excel/DanhSachDonHang.do'+param;
+		this.downloadFile(_url);
 	},
 	btnExportPrint:function(){
 		var param = "?LIID=" + this.statisticType+"&STARTDATE="+this.startDate+"&ENDDATE="+this.endDate; 
@@ -237,11 +256,6 @@ Ext.define('MNG.controller.saleStatisticController', {
 	sendRequest:function(_params){
 		userName = Ext.ComponentQuery.query("#MainContainerId #FULLNAME")[0].getValue();
 		isDelivered = Ext.ComponentQuery.query("#MainContainerId #typeOfBill")[0];
-		inputValue = isDelivered.getChecked()[0].inputValue;
-		
-		if(inputValue != null && inputValue == 1)
-			_params.IS_DELIVERED = 1;
-		else _params.IS_DELIVERED = 0;
 		_params.USER_NAME = userName;
 		_params.TYPE_STATIS = 'OTHER';
 		
@@ -265,92 +279,6 @@ Ext.define('MNG.controller.saleStatisticController', {
 		     }
 		});
 	},
-	getCustomerInfo:function(customerId){
-		customerId = 2;
-		var submitFinishUrl = contextPath + '/customer/getCustomersVo.json';
-		var params = {
-				CUS_CD: customerId
-		};
-		Ext.Ajax.request( {
-				url: submitFinishUrl,
-	    		method:'GET',
-	    		params: params,
-	    		success: function(response){
-	    			/*var text = Ext.JSON.decode(response.responseText);
-	    			BtnUpdatePayment.hide();
-	    			var statisStore = Ext.ComponentQuery.query("#grid-srvc-statistic")[0].getStore();
-	    			statisStore.load();
-	    			if( text.success == true){
-    					supportEvent.hiddeMessageBox();
-        			}
-	    			else supportEvent.showMessageError('Có lỗi xảy ra !');*/
-	    		},
-	    		failure: function(response){
-	    			//var text = Ext.JSON.decode(response.responseText);
-	    			//supportEvent.showMessageError('Có lỗi xảy ra !');
-	    		}
-			});
-	},
-	updateBillInfo:function(){
-		var params = {
-				IS_DELIVERED: (Ext.ComponentQuery.query('#btnSrvcContainerId #IS_DELILVER')[0].getValue()==true)?1:0,
-				DSCRT: Ext.ComponentQuery.query('#btnSrvcContainerId #DSCRT')[0].getValue(),
-				HAS_PAYED: (Ext.ComponentQuery.query('#btnSrvcContainerId #HAS_PAYED')[0].getValue()==true)?1:0,
-				ROOM_USED_ID: btnViewDetail.config.ROOM_USED_ID,
-				PAYED_MONEY: Ext.ComponentQuery.query('#btnSrvcContainerId #PAYED_MONEY')[0].getValue(),
-				CUS_NM: Ext.ComponentQuery.query('#btnSrvcContainerId #CUS_NM')[0].getRawValue(),
-				CUS_CD: btnViewDetail.config.cusCd,
-				IS_DELIVERED_OLD: this.billObj.IS_DELIVERED
-		};
-		this.submitUpdateBill(params);
-	},
-	showCustomerInfo:function(param){
-		btnViewDetail.config = param;
-    	btnViewDetail.config.ROOM_USED_ID = param.ROOM_USED_ID;
-    	btnViewDetail.show();
-    	btnViewDetail.renderValue();
-    	btnViewDetail.reloadListProduct(param.ROOM_USED_ID);
-	},
-	BtnCancelBill:function(){
-		var parent = this;
-		var params = {
-				IS_DELIVERED: (Ext.ComponentQuery.query('#deliveryContainerInfo [name=IS_DELILVER]')[0].getValue()==true)?1:0,
-				DSCRT: Ext.ComponentQuery.query('#deliveryContainerInfo [name=DSCRT]')[0].getValue(),
-				HAS_PAYED: (Ext.ComponentQuery.query('#paymentContainerInfo [name=HAS_PAYED]')[0].getValue()==true)?1:0,
-				ROOM_USED_ID: btnViewDetail.config.ROOM_USED_ID,
-				IS_CANCELED: 1,
-		};
-		Ext.MessageBox.confirm('Xác nhận', 'Chắc chắn muốn hủy ?', function(btn){
-			if(btn == 'yes'){
-				parent.submitUpdateBill(params);
-			}
-		});
-	},
-	submitUpdateBill:function(params){
-		console.info('params');
-		console.info(params);
-		var submitFinishUrl = contextPath + '/customer/updateBillCustomer.json';
-		supportEvent.showLoadingOnprogress('Đang cập nhật', '');
-		Ext.Ajax.request( {
-				url: submitFinishUrl,
-	    		method:'POST',
-	    		params: params,
-	    		success: function(response){
-	    			var text = Ext.JSON.decode(response.responseText);
-	    			btnViewDetail.hide();
-	    			var statisStore = Ext.ComponentQuery.query("#grid-srvc-statistic")[0].getStore();
-	    			statisStore.load();
-	    			if( text.success == true){
-    					supportEvent.hiddeMessageBox();
-        			}
-	    			else supportEvent.showMessageError('Có lỗi xảy ra !');
-	    		},
-	    		failure: function(response){
-	    			//var text = Ext.JSON.decode(response.responseText);
-	    			supportEvent.showMessageError('Có lỗi xảy ra !');
-	    		}
-			});
-	},
 	deleteItemRecord:function(grid, rowIndex, colIndex){
 		console.info('grid');
 		store = grid.getStore();
@@ -372,94 +300,20 @@ Ext.define('MNG.controller.saleStatisticController', {
 		});
 		return isExist;
 	},
-	submitDeleteRequestBill:function(_params){
-		var submitFinishUrl = contextPath + '/srvc/deleteProductInBill.json';
-		supportEvent.showLoadingOnprogress('Đang cập nhật', '');
-		Ext.Ajax.request( {
-				url: submitFinishUrl,
-	    		method:'POST',
-	    		params: _params,
-	    		success: function(response){
-	    			var text = Ext.JSON.decode(response.responseText);
-	    			btnViewDetail.hide();
-	    			var statisStore = Ext.ComponentQuery.query("#grid-srvc-statistic")[0].getStore();
-	    			statisStore.load();
-	    			if( text.success == true){
-    					supportEvent.hiddeMessageBox();
-        			}
-	    			else supportEvent.showMessageError('Có lỗi xảy ra !');
-	    		},
-	    		failure: function(response){
-	    			//var text = Ext.JSON.decode(response.responseText);
-	    			supportEvent.showMessageError('Có lỗi xảy ra !');
-	    		}
-			});
-	},
-	submitOrder:function(){
-		btnViewDetail.hide();
-		supportEvent.showLoadingOnprogress('Đang xử lý, vui lòng đợi giây lát !', '');
-		var parent = this;
-		var param = {};
-		var tmpStoreResource = Ext.ComponentQuery.query('#gridListProductID')[0].getStore();
+	downloadFile:function(_url){
 		
-		deletedRecords  = tmpStoreResource.getRemovedRecords();
-		modifiedRecords = tmpStoreResource.getModifiedRecords();
-		tmpStore = Ext.create('MNG.store.roomSrvcStore', {});
-		Ext.each(deletedRecords, function(record){
-		    		record.set('STATUS', 'delete');
-		    		tmpStore.add(record);
-		    	});
-		Ext.each(modifiedRecords, function(record){
-		    		tmpStore.add(record);
-		    	});
-		paramData = Ext.encode(Ext.Array.pluck(tmpStore.data.items,'data'));
-		var param = {};
-		
-		cusCD = Ext.ComponentQuery.query('#customerContainerId [name=CUS_CD]')[0].getValue();
-		cusNM = Ext.ComponentQuery.query('#customerContainerId [name=NAME]')[0].getRawValue();
-		total = Ext.ComponentQuery.query('#paymentContainerInfo [name=TOTAL_MONEY]')[0].getValue();
-		valuePayed = Ext.ComponentQuery.query('#paymentContainerInfo [name=PAYED_MONEY]')[0].getValue();
-		hasPayed = Ext.ComponentQuery.query('#paymentContainerInfo [name=HAS_PAYED]')[0].getValue();
-		isDelivered = Ext.ComponentQuery.query('#deliveryContainerInfo [name=IS_DELILVER]')[0].getValue();
-		dscrt = Ext.ComponentQuery.query('#deliveryContainerInfo [name=DSCRT]')[0].getValue();
-		changeDate = Ext.ComponentQuery.query('#CHANGE_DATE11')[0].getValue();
-		
-		param['DATA'] = paramData;
-		param['ROOM_USE_ID'] = btnViewDetail.config.ROOM_USED_ID;
-		param['TOTAL_MONEY'] = total;
-		param['PAYED_MONEY'] = valuePayed;
-		param['IS_DELIVERED'] = (isDelivered==true)?1:0;;
-		param['HAS_PAYED'] = (hasPayed==true)?1:0;
-		
-		var mydate = new Date(changeDate);
-		param['CHANGE_DATE'] = formatSupporter.getTimeStempDateFormat(mydate)+' 10:10:10';
-		
-		if(cusCD != null && cusCD != undefined && cusCD.length > 0){
-			param['CUS_CD'] = cusCD;
-		}
-		param['CUS_NM'] = cusNM;	
-		param['DSCRT'] = dscrt;
-		
-		
-		parent.btnSavingRequest(param);
-	},
-	btnSavingRequest:function(paramsData){
-				
-		url_request = contextPath + '/sale/saveEditSaleOrderList.json';
-		Ext.Ajax.request( {
-		    	url: url_request,
-		    	method:'POST',
-		    	params: paramsData,
-		    	success: function(response){
-		    		var text = Ext.JSON.decode(response.responseText);
-		    		btnViewDetail.hide();
-	    			var statisStore = Ext.ComponentQuery.query("#grid-srvc-statistic")[0].getStore();
-	    			statisStore.load();
-		    		supportEvent.showMessageSuccess('Cập nhật thành công');
-		    	},
-		    	failure: function(response){
-		    		Ext.MessageBox.alert('Status', 'Có lỗi xảy ra !');
-		    	}
-		 });	
+		 method = 'POST';
+         params = {};
+	    // Create form panel. It contains a basic form that we need for the file download.
+	    var form = Ext.create('Ext.form.Panel', {
+	        standardSubmit: true,
+	        url: _url,
+	        method: method
+	    });
+	    // Call the submit to begin the file download.
+	    form.submit({
+	        target: '_blank', // Avoids leaving the page. 
+	        params: params
+	    });
 	},
 })

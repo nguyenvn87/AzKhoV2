@@ -75,4 +75,14 @@ public class RoomSrvcDAO extends SqlMapClientDaoSupport{
 		List<RoomSrvcVO> queryForList = (List<RoomSrvcVO>) getSqlMapClientTemplate().queryForList("getListRoomSrvcVOHistoryByID", roomUsedId);
 		return queryForList;
 	}
+	public List<HashMap<String, Object>> getChiTietThongKeBanHangTheoNgay(HashMap<String, String> map) {
+		// TODO Auto-generated method stub
+		List<HashMap<String, Object>> queryForList = (List<HashMap<String, Object>>) getSqlMapClientTemplate().queryForList("getChiTietThongKeBanHangTheoNgay", map);
+		return queryForList;
+	}
+	public HashMap<String, Object> getCountChiTietBanHangTheoNgay(HashMap<String, String> map) {
+		// TODO Auto-generated method stub 
+		HashMap<String, Object> record = (HashMap<String, Object>) getSqlMapClientTemplate().queryForObject("getCountChiTietBanHangTheoNgay", map);
+		return record;
+	} 
 }

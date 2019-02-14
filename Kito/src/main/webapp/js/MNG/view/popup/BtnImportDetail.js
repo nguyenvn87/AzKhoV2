@@ -3,22 +3,23 @@
  * @description Add/update ImportDetail popup
  * @date 2016/10/12
  */
-var srvcListStore = Ext.create('MNG.store.srvcStore', {});
+//var srvcListStore = Ext.create('MNG.store.srvcStore', {});
 var importDetailStore = Ext.create('MNG.store.importDetailStore');
-var providerStore = Ext.create('MNG.store.providerStore');
+//var providerStore = Ext.create('MNG.store.providerStore');
 var messageEvent = Ext.create('BIZ.utilities.supportEvent',{});
 
-srvcListStore.getProxy().url = contextPath +'/getSearchListMenu.json',
+//srvcListStore.getProxy().url = contextPath +'/getSearchListMenu.json',
 
 Ext.define('MNG.view.popup.BtnImportDetail', {
 	extend : 'Ext.window.Window',
-	height : 650,
-	width : 1150,
-	//x: 10,
+	requires:['Ext.custom.common.NumberField'],
+	height : 530,
+	width : 850,
 	title : 'Cập nhật hoá đơn nhập hàng',
 	maxHeight : 700,
 	y: 10,
 	resizable : false,
+	srvcListStore : Ext.create('MNG.store.srvcStore', {}),
 	closeAction:'destroy',
 	importVO : {},
 	initComponent : function() {
@@ -27,7 +28,7 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 		Ext.applyIf(me, {
 			items : [{
 				xtype : 'container',
-				cls : 'jdvn-main',
+				padding: '5 5 0 5',
 				itemId : 'btnStoreContainerId',
 				layout : {
 					align : 'stretch',
@@ -61,7 +62,7 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 											            xtype: 'combo',
 											            cls: 'input-search-cls',
 											            height: 30,
-											            store: srvcListStore,
+											            store: me.srvcListStore,
 											            displayField: 'title',
 											            valueField: 'SRVC_ID',
 											            anchor: '100%',
@@ -73,7 +74,7 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 											                // Custom rendering template for each item
 											                getInnerTpl: function() {
 											                    return '<a class="search-item">' 
-											                         + '<h3>{SRVC_NM}<br /><span>{SRVC_CD}</span></h3>'
+											                         + '<h3>{SRVC_NM}<br /><span>{PRICE_IMPORT}</span></h3>'
 											                         + '{UNIT_NM} / {DSCRT}' 
 											                         + '</a>';
 											                }
@@ -82,23 +83,24 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 											            listeners: {
 											            	select: function(obj,record){
 																var data = record[0].raw;
+																var price = (data.PRICE_IMPORT != null&&data.PRICE_IMPORT!='')?data.PRICE_IMPORT:0;
 																if(me.isDupplicateRecord(data.SRVC_ID)){
 																	messageEvent.showWarningTimer('Đơn hàng đã có mặt hàng này !');
 																	return 1;
 																}
 																else{
-																	console.log(data);
+																	
 																	importDetailStore.insert(importDetailStore.getCount(),{
 																		SRVC_ID		: data.SRVC_ID,
 																		SRVC_NAME	: data.SRVC_NM,
 																		UNIT		: data.UNIT,
 																		UNIT_NM		: data.UNIT_NM,
-																		IMPRT_PRICE	: 0.0,
+																		IMPRT_PRICE	: price,
 																		AMOUNT		: 1.0,
 																		TOTAL_MONEY : data.IMPRT_PRICE * 1.0
 																		
 																	});
-																	console.log(importDetailStore);
+																	
 																}
 																return false;
 															}
@@ -110,7 +112,7 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 													itemId : 'grid-import-srvc',
 													minHeight : 340,
 													maxHeight : 540,
-													height: 540,
+													height: 440,
 													fieldLabel : "Loại mặt hàng",
 													store : importDetailStore,
 													plugins: [
@@ -121,39 +123,39 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 													pageSize : 10,
 													columns : [{
 														xtype : 'rownumberer',
-														width : 30,
+														width : 20,
 														align : 'center',
-														text : 'TT',
+														text : '',
 														sortable : true
 													}, {
 														xtype : 'gridcolumn',
 														align : 'left',
 														flex: 1,
 														dataIndex : 'SRVC_NAME',
-														text : 'Tên mặt hàng',
+														text : 'Tên hàng',
 														sortable : true
 													}, {
 														xtype : 'numbercolumn',
 														align : 'right',
-														width : 100,
+														width : 85,
 														editable: true,
 														dataIndex : 'IMPRT_PRICE',
-														text : 'Đơn giá(đ)',
+														text : 'Giá',
 														sortable : true,
 														editor: {
 												            xtype: 'numberfield',
 												            allowBlank: false
 												        },
 												        renderer: function(value, metadata, record){
-															
-															data = formatSupporter.formatToMoney(value);
+															var valuePrice = parseFloat(value);
+															data = formatSupporter.formatToMoney(valuePrice);
 															
 															return data;
 														}
 													}, {
 														xtype : 'numbercolumn',
 														align : 'right',
-														width : 80,
+														width : 70,
 														editable: true,
 														dataIndex : 'AMOUNT',
 														text : 'SL',
@@ -169,33 +171,17 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 														}
 												    }, {
 														xtype : 'gridcolumn',
-														align : 'right',
-														width : 70,
+														align : 'center',
+														width : 60,
 														dataIndex : 'UNIT_NM',
 														text : 'Đ/V',
 													}, {
-														xtype : 'gridcolumn',
-														align : 'right',
-														width : 120,
-														editable: true,
-														editor: {
-												            xtype: 'textfield',
-												            allowBlank: true
-												        },
-														dataIndex : 'NOTE',
-														text : 'Ghi chú',
-														sortable : true,
-													}, {
 														xtype : 'numbercolumn',
 														align : 'right',
-														width : 100,
+														width : 110,
 														dataIndex : 'TOTAL_MONEY',
-														text : 'Tổng tiền',
+														text : 'Tổng $',
 														sortable : true,
-														/*editor: {
-												            xtype: 'numberfield',
-												            allowBlank: false
-												        },*/
 														renderer: function(value, metadata, record){
 															var items = importDetailStore.data.items;
 															var totalMoney = 0;
@@ -205,17 +191,25 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 															tmpValue = Number(totalMoney).toLocaleString('en-US');
 															Ext.getCmp("TOTAL").setValue(tmpValue);
 															Ext.getCmp("TOTAL_VALUE").setValue(totalMoney);
-															_valueNeedPay = totalMoney - Ext.getCmp("DISCOUNT").value;
-															tmpNeedPay = Number(_valueNeedPay).toLocaleString('en-US');
-															Ext.getCmp("NEEDPAYED_NM").setValue(tmpNeedPay);
-															var totalRow = parseFloat(record.get('AMOUNT'))  *  parseFloat(record.get('IMPRT_PRICE'));
 															
 															money = parseFloat(record.get('AMOUNT'))*parseFloat(record.get('IMPRT_PRICE'));
 															data = formatSupporter.formatToMoney(money);
 															return data;
 														}
-													},
-													{
+													},{
+														xtype : 'gridcolumn',
+														align : 'right',
+														width : 100,
+														editable: true,
+														editor: {
+												            xtype: 'textfield',
+												            allowBlank: true
+												        },
+														dataIndex : 'NOTE',
+														hidden: true,
+														text : 'Ghi chú',
+														sortable : true,
+													}, {
 														menuDisabled : true,
 														sortable : false,
 														text : 'Xóa',
@@ -242,8 +236,41 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 												align : 'stretch',
 												type : 'vbox'
 											},
-											padding : '0 0 0 10',
+											padding : '0 0 0 5',
 											items: [
+											        {
+											    	xtype:'fieldset',
+											        columnWidth: 0.5,
+											        title: 'Tổng số tiền',
+											        collapsible: true,
+											        defaultType: 'textfield',
+											        defaults: {anchor: '100%'},
+											        layout: 'anchor',
+											        items :[
+											            {
+											        		xtype : 'numericfield',
+											        		id : 'TOTAL',
+											        		labelWidth: 90,
+											        		fieldLabel : "",
+											        		useThousandSeparator: true,
+															decimalPrecision: 0,
+															hideTrigger:true,
+															alwaysDisplayDecimals: false,
+															allowNegative: false,
+															currencySymbol:'',
+															thousandSeparator: ',',
+											        		cls: 'input-total-money-cls',
+											        		readOnly : true
+											        	},
+											        	{
+											        		xtype : 'numberfield',
+											        		id : 'TOTAL_VALUE',
+											        		fieldLabel : "",
+											        		cls: 'input-total-money-cls',
+											        		hidden : true
+														}
+											        ]
+												},
 											      {
 											        xtype:'fieldset',
 											        columnWidth: 0.5,
@@ -256,103 +283,76 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 														xtype : 'datefield',
 														itemId:'DATE_IMPORT',
 														name:'DATE_IMPORT',
-														format : 'd/m/Y',
+														labelWidth: 90,
+														format : 'd-m-Y',
 														altFormats: 'Ymd',
 														fieldLabel : 'Ngày',
 														value: new Date(),
 														submitFormat: 'Y/m/d',
 														
-											        }, {
-														xtype : 'combobox',
-														datatype : 'combo',
-														store : providerStore,
-														fieldLabel : "Đ/V cung cấp",
-														displayField : 'PROV_NM',
-														valueField : 'PROV_CD',
-														id : 'PROV',
-														enableKeyEvents:true,
-														text : me.PROV_NM,
-														value : me.PROV_CD,
-														editable : true
-											        },{
+											        },
+											        {
 														xtype : 'textfield',
 														id : 'BILL',
+														readOnly: true,
+														labelWidth: 90,
 														fieldLabel : "Số hóa đơn",
 														value : me.IMPRT_BILL
-											        }]
-											    },
-												{
-											    	xtype:'fieldset',
-											        columnWidth: 0.5,
-											        title: 'Thanh toán',
-											        collapsible: true,
-											        defaultType: 'textfield',
-											        defaults: {anchor: '100%'},
-											        layout: 'anchor',
-											        items :[
-											            {
-											        		//xtype : 'numberfield',
-											        		xtype : 'textfield',
-											        		id : 'TOTAL',
-											        		fieldLabel : "Tổng tiền",
-											        		//useThousandSeparator: true,
-											        		//thousandSeparator:'.',
-											        		cls: 'input-total-money-cls',
-											        		readOnly : true
-											        	},
-											        	{
-											        		xtype : 'numberfield',
-											        		id : 'TOTAL_VALUE',
-											        		fieldLabel : "Tổng tiền",
-											        		cls: 'input-total-money-cls',
-											        		hidden : true
-											        	},{
-															xtype : 'numberfield',
-															id : 'DISCOUNT',
-															cls: 'input-special-cls',
-															dataIndex : 'DISCOUNT',
-															fieldLabel : "Giảm giá",
-															useThousandSeparator: true,
-														    thousandSeparator: ',',
-														    align: 'right',
-														    alwaysDisplayDecimals: false,
-															value : me.DISCOUNT_MONEY,
-															listeners: {
-																change : function(object){
-																	//Ext.getCmp("NEEDPAYED").setValue(Ext.getCmp("TOTAL").value - object.value);
-																	//Ext.getCmp("NEEDPAYED").setRawValue(Ext.util.Format.number(Ext.getCmp("TOTAL").value - object.value, '0,00/i'));
-																},
-																blur: function(field) {
-																	_value = Ext.getCmp("TOTAL_VALUE").value - field.value;
-																	tmpValue = Number(_value).toLocaleString('en-US');
-																	Ext.getCmp("NEEDPAYED_NM").setValue(tmpValue);
-																	//field.setRawValue(Ext.util.Format.number(field.getValue(), '0,00/i'));
-																}
-															}
-														},{
-															xtype : 'numberfield',
-															id : 'NEEDPAYED',
-															cls: 'input-needpay-money-cls',
-															fieldLabel : "Tiền cần trả",
-															hidden: true,
-															readOnly : true,
-															value : me.NEEDTOPAYED
-														},{
-															xtype : 'textfield',
-															id : 'NEEDPAYED_NM',
-															cls: 'input-needpay-money-cls',
-															fieldLabel : "Tiền cần trả",
-															readOnly : true,
-															value : me.NEEDTOPAYED
-														},{
-															xtype : 'numberfield',
-															cls: 'input-pay-money-cls',
-															id : 'PAYED',
-															fieldLabel : "Tiền trả",
-															value : me.PAYED_MONEY
-														}
+											        },
+											        {
+											        	xtype : 'container',
+														flex : 1,
+														defaults : {
+															anchor : '100%'
+														},
+														padding : '0 0 5 0',
+														layout : {
+															align : 'stretch',
+															type : 'hbox'
+														},
+														items : [
+														         {
+																	xtype : 'combobox',
+																	datatype : 'combo',
+																	store : Ext.create('MNG.store.providerStore'),
+																	labelWidth: 90,
+																	fieldLabel : "Đ/V cung cấp",
+																	displayField : 'PROV_NM',
+																	valueField : 'PROV_CD',
+																	itemId: 'PROV_CD_Item',
+																	id : 'PROV',
+																	flex: 1,
+																	enableKeyEvents:true,
+																	rawValue : me.PROV_NM,
+																	value : me.PROV_CD,
+																	editable : true
+														        },
+														         {
+														        	xtype : 'button',
+														        	cls: 'addmore',
+														        	width: 20,
+																	itemId : 'btnAddCustomer'
+														         }
+																]
+											        }
 											        ]
-												},
+											    },
+											    {
+												        xtype:'fieldset',
+												        columnWidth: 0.5,
+												        title: 'Ghi chú',
+												        collapsible: true,
+												        defaultType: 'textfield',
+												        defaults: {anchor: '100%'},
+												        layout: 'anchor',
+												        items :[{
+													        	xtype : 'textarea',
+																labelWidth: 90,
+																name:'DESCRIPTION',
+																//fieldLabel : "Ghi chú",
+																value : me.DESCRIPTION
+												        	}]
+											        },
 												{
 													xtype : 'container',
 													layout : {
@@ -391,6 +391,7 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 														},{
 															xtype : 'button',
 															flex: 1,
+															hidden: true,
 															iconCls : 'icon-excel',
 															text : 'Excel',
 															listeners: {
@@ -411,6 +412,10 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 	},
 	listeners : {
 		afterrender : function() {
+			importDetailStore.removeAll();
+			if(importVO.IMPRT_CD == 0) return;
+			if(importVO.IMPRT_CD == null) return;
+			this.srvcListStore.getProxy().url = contextPath +'/getSearchListMenu.json',
 			importDetailStore.load(
 					{
 						params:{IMPRT_CD: importVO.IMPRT_CD},
@@ -421,28 +426,33 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 								totalMoney += (store[index].data.IMPRT_PRICE * store[index].data.AMOUNT);
 							}
 							Ext.getCmp("TOTAL").setValue(totalMoney);
-							Ext.getCmp("NEEDPAYED").setValue(Ext.getCmp("TOTAL").value - Ext.getCmp("DISCOUNT").value);
 						}
 					});
-			
-
+			Ext.ComponentQuery.query('#btnStoreContainerId #PROV_CD_Item')[0].setRawValue(importVO.PROV_NM); 
+			if(importVO.DATE_IMPORT != null && importVO.DATE_IMPORT.length > 8){
+				var mydate = new Date(importVO.DATE_IMPORT);
+				txtDate = formatSupporter.getVNDay(mydate);
+				Ext.ComponentQuery.query('#btnStoreContainerId #DATE_IMPORT')[0].setValue(txtDate);
+			}
 		}
 	},
 	saveImport : function(){
 		var me = this;
 		var dateImport = Ext.ComponentQuery.query('#DATE_IMPORT')[0].getSubmitValue();
-		
+		if(dateImport == null || dateImport.length < 8)
+		 dateImport = importVO.DATE_IMPORT;
 		//messageEvent.showLoadingOnprogress('Lưu...', 'btnCloseToCalculate');
 		var _importVO = {
 			IMPRT_BILL : Ext.getCmp("BILL").value,
 			PROV_CD : Ext.getCmp("PROV").value,
 			PROV_NM : Ext.getCmp("PROV").getRawValue(),
 			TOTAL_MONEY : Ext.getCmp("TOTAL_VALUE").value,
-			DISCOUNT_MONEY : Ext.getCmp("DISCOUNT").value,
-			NEEDTOPAYED : Ext.getCmp("NEEDPAYED").value,
-			PAYED_MONEY : Ext.getCmp("PAYED").value,
+			DISCOUNT_MONEY : 0,
+			NEEDTOPAYED : 0,
+			PAYED_MONEY : 0,
 			IMPRT_CD : importVO.IMPRT_CD,
-			DATE_IMPORT: dateImport
+			DATE_IMPORT: dateImport,
+			DESCRIPTION: Ext.ComponentQuery.query('#btnStoreContainerId [name=DESCRIPTION]')[0].getValue()
 		}
 		importDetailStore.each(function(record){
 			amount = record.data.AMOUNT;
@@ -453,11 +463,10 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 			importVO: JSON.stringify(_importVO),
 			importDetailVO: Ext.encode(Ext.Array.pluck(importDetailStore.data.items, 'data'))
 		};
-		console.log(importDetailStore.data.items);
 		me.sendSubmitRequest(params);
 	},
 	destroyPopup : function(){
-		this.destroy();
+		this.close();
 	},
 	changeType : function(combo, value) {
 
@@ -479,7 +488,7 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 		tmpValue = Number(totalMoney).toLocaleString('en-US');
 		Ext.getCmp("TOTAL").setValue(tmpValue);
 		Ext.getCmp("TOTAL_VALUE").setValue(totalMoney);
-		Ext.getCmp("NEEDPAYED").setValue(Ext.getCmp("TOTAL_VALUE").value - Ext.getCmp("DISCOUNT").value);
+		//Ext.getCmp("NEEDPAYED").setValue(Ext.getCmp("TOTAL_VALUE").value - Ext.getCmp("DISCOUNT").value);
 	},
 	isDupplicateRecord:function(menuId){
 		var isExist = false;

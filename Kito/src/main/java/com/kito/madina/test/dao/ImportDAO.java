@@ -65,11 +65,11 @@ public class ImportDAO extends SqlMapClientDaoSupport {
 		return list;
 	}
 	
-	public List<ImportVO> getImportPaging(ImportVO vo){
+	public List<ImportVO> getImportPaging(HashMap<String, Object> vo){
 		List<ImportVO> list = getSqlMapClientTemplate().queryForList("getImportPaging", vo);
 		return list;
 	}
-	public HashMap<String, Object> getImportCount(ImportVO vo){
+	public HashMap<String, Object> getImportCount(HashMap<String, Object> vo){
 		HashMap<String, Object> list = (HashMap<String, Object>) getSqlMapClientTemplate().queryForObject("getImport.getListCount", vo);
 		return list;
 	}
@@ -113,5 +113,14 @@ public class ImportDAO extends SqlMapClientDaoSupport {
 		// TODO Auto-generated method stub
 		return (HashMap<String, Object>) getSqlMapClientTemplate().queryForObject("getThongKeNhapHangCount", map);
 	}
-	
+	public HashMap<String, Object> getDetailSrvcCount(HashMap<String, Object> map){
+		HashMap<String, Object> list = (HashMap<String, Object>) getSqlMapClientTemplate().queryForObject("getImport.getDetailSrvcCount", map);
+		return list;
+	}
+
+	public ImportVO getLastIDImportIndex(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		ImportVO obj = (ImportVO) getSqlMapClientTemplate().queryForObject("getLastIDImportIndex", map);
+		return obj;
+	}
 }

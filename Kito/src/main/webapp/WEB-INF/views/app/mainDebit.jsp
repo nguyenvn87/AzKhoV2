@@ -32,7 +32,7 @@
 				left : main_left,
 				width:'100%',
 				height:'100%',
-				/* main: request.getContextPath+'/report/debit.do', */
+				main: request.getContextPath+'/application/get/ADM036.do',
 				renderTo : 'main_contents'	
 			});	
 		

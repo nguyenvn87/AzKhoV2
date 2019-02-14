@@ -101,5 +101,21 @@ Ext.define('BIZ.utilities.supportEvent', {
 	autoPrint:function(_url){
 		 var W = window.open(_url);   
 		 W.window.print(); 
-	}
+	},
+	downloadFile:function(_url){
+		
+		 method = 'POST';
+         params = {};
+	    // Create form panel. It contains a basic form that we need for the file download.
+	    var form = Ext.create('Ext.form.Panel', {
+	        standardSubmit: true,
+	        url: _url,
+	        method: method
+	    });
+	    // Call the submit to begin the file download.
+	    form.submit({
+	        target: '_blank', // Avoids leaving the page. 
+	        params: params
+	    });
+	},
 });

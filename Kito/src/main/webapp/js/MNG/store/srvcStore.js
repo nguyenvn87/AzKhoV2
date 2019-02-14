@@ -8,7 +8,8 @@
 		type: 'ajax',											
 		url: contextPath +'/getListService.json',
 		extraParams:{
-			IS_USED: 1
+			IS_USED: 1,
+			sort: 'AMOUNT_STORE'
 		}, 
 		reader: {
 			type: 'json',

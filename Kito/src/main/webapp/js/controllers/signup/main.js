@@ -33,7 +33,8 @@
 			return $http.post(contextPath + '/system/user/register', param).then(
 					function(response) {
 						if(response.data.success){
-							$window.location.href="mainAdmin.do"; 
+							//$window.location.href="mainAdmin.do"; 
+							$window.location.href="mainStatistic.do"; 
 						}
 						else{
 							$scope.signupform.email.$invalid = true;

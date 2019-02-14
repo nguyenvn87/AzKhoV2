@@ -18,6 +18,7 @@
 			, CHANGETIME 
 			, NOTE
 	    FROM import_detail
+	    WHERE <![CDATA[ RESTAR_ID=#RESTAR_ID# ]]>
 	</select>
 	<insert id="CreateImportDetailVO" parameterClass="ImportDetailVO">
 	    INSERT INTO import_detail 
@@ -66,10 +67,10 @@
 		   		NOTE = #NOTE#
 		   	</isNotEmpty>
 		</dynamic>
-	    WHERE ID_DETAIL = #ID_DETAIL#
+	    WHERE ID_DETAIL = #ID_DETAIL# and IMPRT_CD=#IMPRT_CD# and RESTAR_ID=#RESTAR_ID#
   </insert>
   <delete id="DeleteImportDetailVOByImportID" parameterClass="ImportDetailVO">
-  	DELETE FROM import_detail WHERE IMPRT_CD = #IMPRT_CD#
+  	DELETE FROM import_detail WHERE IMPRT_CD = #IMPRT_CD# and RESTAR_ID=#RESTAR_ID#
   </delete>
   <sql id="sqlGetListImportDetail">
   	SELECT h.*
@@ -149,7 +150,7 @@
 	    WHERE t.ID_DETAIL = #ID_DETAIL#
   </select>
   <delete id="deleteImportDetailVOByID" parameterClass="ImportDetailVO">
-  		DELETE FROM import_detail WHERE ID_DETAIL = #ID_DETAIL#
+  		DELETE FROM import_detail WHERE ID_DETAIL = #ID_DETAIL# and IMPRT_CD = #IMPRT_CD# and RESTAR_ID=#RESTAR_ID#
   </delete>
   <sql id="sqlThongKeNhapHang">
   		SELECT L.* , @row := @row + 1 AS rn1  
@@ -161,6 +162,9 @@
 				<dynamic prepend="where">
 					<isNotEmpty property="RESTAR_ID" prepend="AND">
 						<![CDATA[ M.RESTAR_ID = #RESTAR_ID# ]]>
+					</isNotEmpty>
+					<isNotEmpty property="RESTAR_ID" prepend="AND">
+						<![CDATA[ L.RESTAR_ID = #RESTAR_ID# ]]>
 					</isNotEmpty>
 					<isNotEmpty property="SRVC_ID" prepend="AND">
 						<![CDATA[ L.SRVC_ID = #SRVC_ID# ]]>
@@ -194,7 +198,8 @@
   </select>
   <select id="getThongKeNhapHangCount" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">	
 		SELECT 
-			count(t.rn1) as COUNT
+			count(t.rn1) as COUNT,
+			sum(t.TOTAL_MONEY) as total
 	    FROM (<include refid="sqlThongKeNhapHang"/>) t
   </select>
 </sqlMap>

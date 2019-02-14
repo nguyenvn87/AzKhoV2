@@ -151,16 +151,20 @@ public class SrvcController {
 	}
 
 	@RequestMapping(value = "/getListService.json", method = RequestMethod.GET)
-	public ModelAndView getListService(SrvcVO vo) {
+	public ModelAndView getListService(HttpServletRequest req, SrvcVO vo) {
 
 		String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		String query = req.getParameter("query");
+		HashMap<String, Object> mapResult = null;
 		JsonVO jvon = new JsonVO();
 		List<SrvcVO> list = null;
 		int limit = Integer.parseInt(vo.getLimit());
 		int page = Integer.parseInt(vo.getPage());
 		vo.setMIN((page - 1) * limit);
 		vo.setMAX(((page - 1) * limit) + limit);
-
+		
+		if(query != null && !query.isEmpty()) vo.setSRVC_NM(query);
+		
 		vo.setRESTAR_ID(loginRestautant);
 		if (vo.getIS_USED() != 0 && vo.getIS_USED() != 1)
 			vo.setIS_USED(-1);
@@ -168,6 +172,7 @@ public class SrvcController {
 			String valueSearch = "%" + vo.getSRVC_NM() + "%";
 			vo.setSRVC_NM(valueSearch);
 			list = menuService.getSearchListAllMenu(vo);
+			mapResult = menuService.getListCountSearchMenu(vo);
 		} else {
 			list = srvcService.getPagingListSrvc(vo);
 		}
@@ -178,6 +183,11 @@ public class SrvcController {
 		cmmVo.setUSE_YN("Y");
 		List<CmmCdUserVO> listGrp = cmmCdUserService.getListCmmCdUserVO(cmmVo);
 
+		CodeVO mVo = new CodeVO();
+		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		HashMap<String, String> mapDonVi = new HashMap<String, String>();
+		
 		try {
 			for (SrvcVO tmpVo : list) {
 				if (tmpVo.getTYPE() != null) {
@@ -190,14 +200,22 @@ public class SrvcController {
 						}
 					}
 					if (!isNotHaveGroup) {
-						tmpVo.setTYPE_NM(UtilConst.GROUP_NONE);
+						tmpVo.setTYPE_NM("");
 					}
 				}
+				
+				// Set unit name
+				if(tmpVo.getUNIT()!= null && !tmpVo.getUNIT().isEmpty()){
+					String unitNm = codeService.getUnitNameFromList(tmpVo.getUNIT(), listDonVi, mapDonVi);
+					tmpVo.setUNIT_NM(unitNm);
+			    }
+				
 			}
 		} catch (Exception e) {
 
 		}
-		HashMap<String, Object> mapResult = srvcService.getSrvcListCount(vo);
+		if(mapResult == null)
+			mapResult = srvcService.getSrvcListCount(vo);
 		int totalCount = 0;
 		if (mapResult != null && mapResult.get("COUNT") != null) {
 			totalCount = Integer.parseInt(mapResult.get("COUNT").toString());
@@ -235,7 +253,7 @@ public class SrvcController {
 		vo.setRESTAR_ID(loginRestautant);
 		SrvcVO vo1 = null;
 		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-		vo.setCHANGE_DATE(timeStamp);
+		//vo.setCHANGE_DATE(timeStamp);
 		
 		if (vo.getSRVC_CD() != null && vo.getSRVC_CD().length() > 0) {
 			SrvcVO ckVO = new SrvcVO();
@@ -245,7 +263,7 @@ public class SrvcController {
 			vo1 = srvcService.getSrvcVO(ckVO);
 		}
 		if (vo.getSRVC_ID() != null && !vo.getSRVC_ID().isEmpty()) {
-			vo.setUSER_NAME(loginUser);
+			//vo.setUSER_NAME(loginUser);
 			if (vo1 != null && !vo1.getSRVC_ID().trim().equalsIgnoreCase(vo.getSRVC_ID().trim())) {
 				jvon.setSuccess(false);
 				jvon.setMessage(PropertyUtil.getString("message.user.existcode"));
@@ -258,6 +276,7 @@ public class SrvcController {
 			jvon.setMessage(PropertyUtil.getString("message.user.existcode"));
 		} else {
 			String srvcID = CmmUtil.getGUID();
+			vo.setCHANGE_DATE(timeStamp);
 			vo.setSRVC_ID(srvcID);
 			vo.setUSER_NAME(loginUser);
 			srvcService.createSrvcVO(vo);
@@ -461,6 +480,18 @@ public class SrvcController {
 		String endDate = req.getParameter("ENDDATE");
 		String userNm = req.getParameter("USER_NAME");
 		String isDeliver = req.getParameter("IS_DELIVERED");
+		String cusCD = req.getParameter("CUS_CD");
+		
+		UserVO uVo = null;
+		if(userNm != null && !userNm.isEmpty()){ 
+			try{
+				uVo = new UserVO();
+				uVo.setUSERNAME(userNm);
+				uVo = userService.getUserVo(uVo);
+			}catch(Exception e){
+				System.out.println(e.getMessage());
+			}
+		}
 		
 		int limit = Integer.parseInt(vo.getLimit());
 		int page = Integer.parseInt(vo.getPage());
@@ -471,15 +502,19 @@ public class SrvcController {
 		
 		if(startDate != null && !startDate.isEmpty()) mapType.put("STARTDATE", startDate);
 		if(endDate != null && !endDate.isEmpty()) mapType.put("ENDDATE", endDate);
-		if(userNm != null && !userNm.isEmpty()) mapType.put("USER_NAME", userNm);
+		if(uVo != null && !userNm.isEmpty()) mapType.put("USER_NAME", userNm);
 		if(isDeliver != null && isDeliver.equalsIgnoreCase("1"))mapType.put("IS_DELIVERED", "1");
+		if(cusCD != null && !cusCD.isEmpty()) mapType.put("CUS_CD", cusCD);
+		
+		if(vo.getSRVC_ID() != null && !vo.getSRVC_ID().isEmpty()) mapType.put("SRVC_ID", vo.getSRVC_ID());
+		
 		// Get list srvc
 		mapType.put("RESTAR_ID", loginRestautant);
 		List<HashMap<String, Object>> listOut = roomSrvcService.getPagingSaledSrvc(mapType);
 
 		// Get common code
 		CodeVO mVo = new CodeVO();
-		mVo.setGROUP_CD("DONVI");
+		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
 		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
 		HashMap<String, String> mapDonVi = new HashMap<String, String>();
 		for (int i = 0; i < listOut.size(); i++) {
@@ -493,7 +528,7 @@ public class SrvcController {
 				tmpMap.put("TOTAL",CmmUtil.formatNumber2Money(totalObj) );
 			}
 			// Unit name
-			if(userNm != null && !userNm.isEmpty()) tmpMap.put("USER_NAME", userNm);
+			if(uVo != null && !uVo.getFULLNAME().isEmpty()) tmpMap.put("USER_NAME", uVo.getFULLNAME());
 			if(tmpMap.get("UNIT")!= null){
 				if(mapDonVi.get(tmpMap.get("UNIT"))!= null){}
 				else{
@@ -620,7 +655,7 @@ public class SrvcController {
 			bkvo.setRESTAR_ID(vo.getRESTAR_ID());
 			bkvo.setIS_USED(1);
 			SrvcVO storeVo = srvcService.getSrvcVO(vo);
-			srvcService.backupSrvcVOToHistory(storeVo);
+			srvcService.backupSrvcVOToHistory(storeVo, vo.getAMOUNT_STORE());
 			
 			// update store
 			vo.setUSER_NAME(loginUser);

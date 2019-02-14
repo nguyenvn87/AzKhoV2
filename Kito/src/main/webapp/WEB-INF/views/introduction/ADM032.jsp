@@ -22,7 +22,7 @@
 <link rel="apple-touch-icon-precomposed"
 	href="<%=request.getContextPath()%>/images/ico/apple-touch-icon-57-precomposed.png">
 <title>Phần mềm quản lý bán hàng AzKho</title>
-<meta name="description" content="Phần mềm quản lý Karaoke online đơn giản, hiệu quả với AZKho.com">
+<meta name="description" content="Phần mềm quản lý Karaoke online đơn giản, hiệu quả">
 <meta name="keywords" content="Phần mềm AZKho, quản lý quán karaoke, quản lý bán hàng trực tuyến">
 <meta itemprop="image" content="<%=request.getContextPath()%>/images/share-fb2-min.png">
 <meta property="og:image" content="<%=request.getContextPath()%>/images/share-fb2-min.png">
@@ -252,7 +252,7 @@
 							<li>> 10,000 truy vấn/tháng</li>
 							<li>Hỗ trợ miễn phí</li>
 							<li class="plan-action"><a href="signup.do?ID=QH201"
-								class="btn btn-primary btn-lg">Đăng kí</a></li>
+								class="btn btn-primary btn-lg">Dùng thử</a></li>
 						</ul>
 					</div>
 					<!--/.col-sm-4-->
@@ -266,7 +266,7 @@
 							<li>Không giới hạn</li>
 							<li>Hỗ trợ miễn phí</li>
 							<li class="plan-action"><a href="signup.do?ID=QH201"
-								class="btn btn-primary btn-lg">Đăng kí</a></li>
+								class="btn btn-primary btn-lg">Dùng thử</a></li>
 						</ul>
 					</div>
 					<!--/.col-sm-4-->
@@ -280,7 +280,7 @@
 							<li>Không giới hạn</li>
 							<li>Hỗ trợ miễn phí</li>
 							<li class="plan-action"><a href="signup.do?ID=QH201"
-								class="btn btn-primary btn-lg">Đăng kí</a></li>
+								class="btn btn-primary btn-lg">Dùng thử</a></li>
 						</ul>
 					</div>
 					<!--/.col-sm-4-->
@@ -504,10 +504,10 @@
 						title="Phần mềm quản lý bán hàng chuyên nghiệp">AzKho.com</a>.
 					All Rights Reserved.
 				</div>
-				<div class="fb-share-button" data-href="http://azkho.com/dangki.do" 
+				<div class="fb-share-button" data-href="http://azkho.com/banhang.do.do" 
 						data-layout="button_count" data-size="small" data-mobile-iframe="true">
 						<a class="fb-xfbml-parse-ignore" target="_blank" 
-							href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fazkho.com%2Fdangki.do&amp;src=sdkpreparse">
+							href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fazkho.com%2Fbanhang.do&amp;src=sdkpreparse">
 							Chia sẻ
 						</a>
 				</div>

@@ -22,7 +22,7 @@ Ext.define('MNG.controller.BankStatisticController', {
 		endDate: formatSupporter.getEnglishDate('MONTH')[1],
 		paymentType: null,
 		bankID: null,
-		isCancel: 0
+		isChi: 0
 	},
 	init : function() {
 		this.control({
@@ -100,21 +100,21 @@ Ext.define('MNG.controller.BankStatisticController', {
 	onSelectDateStart: function(me){
 		var parent = this;
 		parent.params.startDate = me.getSubmitValue();
-		parent.submiRrequest(parent.params.startDate, parent.params.endDate, parent.params.paymentType, parent.params.bankID, parent.params.isCancel);
+		parent.submiRrequest(parent.params.startDate, parent.params.endDate, parent.params.paymentType, parent.params.bankID, parent.params.isChi);
 	},
 	onSelectDateEnd: function(me){
 		var parent = this;
 		parent.params.endDate = me.getSubmitValue();
-		parent.submiRrequest(parent.params.startDate, parent.params.endDate, parent.params.paymentType, parent.params.bankID, parent.params.isCancel);
+		parent.submiRrequest(parent.params.startDate, parent.params.endDate, parent.params.paymentType, parent.params.bankID, parent.params.isChi);
 	},
 	onChangeStateCancel: function(cb, nv, ov){
 		var parent = this;
-		if(nv.isCancel == '1'){
-			parent.params.isCancel = 1;
+		if(nv.isChi == '1'){
+			parent.params.isChi = 1;
 		}else{
-			parent.params.isCancel = 0;
+			parent.params.isChi = 0;
 		}
-		parent.submiRrequest(parent.params.startDate, parent.params.endDate, parent.params.paymentType, parent.params.bankID, parent.params.isCancel);
+		parent.submiRrequest(parent.params.startDate, parent.params.endDate, parent.params.paymentType, parent.params.bankID, parent.params.isChi);
 	},
 	onChangeRadiotime:function(cb, nv, ov){
 		var parent = this;
@@ -123,7 +123,7 @@ Ext.define('MNG.controller.BankStatisticController', {
 			var arrDate = formatSupporter.getEnglishDate('MONTH');
 			parent.params.startDate = arrDate[0];
 			parent.params.endDate = arrDate[1];
-			parent.submiRrequest(parent.params.startDate, parent.params.endDate, parent.params.paymentType, parent.params.bankID, parent.params.isCancel);
+			parent.submiRrequest(parent.params.startDate, parent.params.endDate, parent.params.paymentType, parent.params.bankID, parent.params.isChi);
 		}else{
 			Ext.ComponentQuery.query("#containerTimeId")[0].show();
 		}
@@ -148,7 +148,7 @@ Ext.define('MNG.controller.BankStatisticController', {
 			parent.params.paymentType = 'EBANK';
 			parent.params.bankID = bankCombo.getValue();
 		}
-		parent.submiRrequest(parent.params.startDate, parent.params.endDate, parent.params.paymentType, parent.params.bankID, parent.params.isCancel);
+		parent.submiRrequest(parent.params.startDate, parent.params.endDate, parent.params.paymentType, parent.params.bankID, parent.params.isChi);
 	},
 	onChangeBank: function(cb, nv, ov){
 		parent = this;
@@ -158,7 +158,7 @@ Ext.define('MNG.controller.BankStatisticController', {
 		
 		BtnAddBankAccount.ID_BANK = _value;
 		var myController = MANAGER.app.getController('MNG.controller.BankStatisticController');
-		myController.submiRrequest(arrDate[0],arrDate[1], 'EBANK', _value, parent.params.isCancel);
+		myController.submiRrequest(arrDate[0],arrDate[1], 'EBANK', _value, parent.params.isChi);
 	},
 	selectButton: function(buttonType){
 		this.statisticType = buttonType;
@@ -178,7 +178,7 @@ Ext.define('MNG.controller.BankStatisticController', {
 		
 		parent.params.startDate = arrDate[0];
 		parent.params.endDate = arrDate[1];
-		parent.submiRrequest(parent.params.startDate, parent.params.endDate, parent.params.paymentType, parent.params.bankID, parent.params.isCancel);
+		parent.submiRrequest(parent.params.startDate, parent.params.endDate, parent.params.paymentType, parent.params.bankID, parent.params.isChi);
 	},
 	btnStatisDebitPrint:function(){
 		var param = "?LIID=" + this.statisticType+"&STARTDATE="+this.startDate+"&ENDDATE="+this.endDate+"&HAS_PAYED=1"; 
@@ -247,16 +247,16 @@ Ext.define('MNG.controller.BankStatisticController', {
 	    		}
 			});
 	},
-	submiRrequest:function(stsDate, endDate, paymethod, bankId, isCancel){
+	submiRrequest:function(stsDate, endDate, paymethod, bankId, isChi){
 		
 		var statisStore = Ext.ComponentQuery.query("#grid-srvc-statistic")[0].getStore();
-		statisStore.getProxy().url = contextPath + '/saleReport/getPagingStatistic.json';
+		statisStore.getProxy().url = contextPath + '/phieuthu/getPagingTongQuanThuChi.json';
 		statisStore.getProxy().extraParams = {
 			STARTDATE: stsDate,
 			ENDDATE: endDate,
-			PAY_METHOD: paymethod,
-			ID_BANK : bankId,
-			IS_CANCELED: isCancel
+			//PAY_METHOD: paymethod,
+			//ID_BANK : bankId,
+			ISCHI: isChi
 		};
 		statisStore.currentPage = 1;
 		statisStore.pageSize=10;
@@ -265,13 +265,13 @@ Ext.define('MNG.controller.BankStatisticController', {
 		        var data = Ext.JSON.decode(operation.response.responseText);
 		        SumObj = data.SumObj;
 		        totalValue = SumObj.total;
-		        payedValue = SumObj.payed;
-		        value1 = formatSupporter.formatToMoney(totalValue);
-		        value2 = formatSupporter.formatToMoney(payedValue);
-		        value3 = formatSupporter.formatToMoney(totalValue - payedValue);
+		        thuValue = SumObj.thu;
+		        chiValue = SumObj.chi;
+		        value1 = formatSupporter.formatToMoney(thuValue);
+				value2 = formatSupporter.formatToMoney(chiValue);
 		        Ext.ComponentQuery.query('#statis-total-id')[0].setText(value1);
 		        Ext.ComponentQuery.query('#statis-payed-id')[0].setText(value2);
-		        Ext.ComponentQuery.query('#statis-debit-id')[0].setText(value3);
+		        //Ext.ComponentQuery.query('#statis-debit-id')[0].setText(value3);*/
 		     }
 		});
 	},
@@ -349,16 +349,12 @@ Ext.define('MNG.controller.BankStatisticController', {
 			});
 	},
 	saveBankAccount: function(){
-		var accountNo = Ext.ComponentQuery.query('#btnSrvcContainerId #ACCOUNT_NO')[0].getValue();
 		var bankNM = Ext.ComponentQuery.query('#btnSrvcContainerId #BANK_NM')[0].getValue();
-		var accountNM = Ext.ComponentQuery.query('#btnSrvcContainerId #ACCOUNT_NM')[0].getValue();
 		var accountNote = Ext.ComponentQuery.query('#btnSrvcContainerId #NOTE')[0].getValue();
 		
 		var params = {
 				ID_BANK: BtnAddBankAccount.ID_BANK,
-				ACCOUNT_NO: accountNo,
 				BANK_NM: bankNM,
-				ACCOUNT_NM: accountNM,
 				NOTE: accountNote
 		};
 		

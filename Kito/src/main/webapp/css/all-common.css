@@ -69,6 +69,9 @@
 .icon-delete{
   	background-image:url('../images/icon/btn-cancel.png') !important;
 }
+.icon-barcode{
+  	background-image:url('../images/icon/barcode.png') !important;
+}
 .icon-remove{
   	background-image:url('../images/icon/remove.png') !important;
 }
@@ -99,11 +102,23 @@
 .icon-pdf{
   	background-image:url('../images/icon/icon-pdf.png') !important;
 }
+.icon-word{
+  	background-image:url('../images/icon/icon-word.png') !important;
+}
 .icon-excel{
   	background-image:url('../images/icon/icoexcel.gif') !important;
 }
 .icon-edit{
   	background-image:url('../images/icon/edit.png') !important;
+}
+.icon-box{
+	background-image:url('../images/icon/icon-box.png') !important;
+}
+.icon-chart{
+	background-image:url('../images/icon/icon-chart.png') !important;
+}
+.icon-bill{
+	background-image:url('../images/icon/icon-bill.png') !important;
 }
 .x-grid-row-summary .x-grid-cell-inner {
   font-weight: bold;
@@ -141,6 +156,12 @@
 .inline-button .x-btn-inner{
 	/* line-height:20px; */
 }
+.sum-text-cls .x-form-display-field{
+	text-align: right;
+	font-weight: 200;
+    font-size: xx-large;
+    color: crimson;
+}
 .inline-button .x-btn-button{
 	/* height:20px; */
 }
@@ -149,6 +170,22 @@
 	background-image:url('../images/icon/user.png') !important;
 	border-style: hidden;
 }
+.addmore{
+	background-color: #f1f4f7;
+	background-image:url('../images/icon/add.png') !important;
+	border-style: hidden;
+}
+.visa{
+	background-color: #f1f4f7;
+	background-image:url('../images/icon/card.png') !important;
+	border-style: hidden;
+}
+.recyle-bin{
+	background-color: #f1f4f7;
+	background-image:url('../images/icon/recyle-bin.png') !important;
+	border-style: hidden;
+}
+
 .payment .card-btn .x-btn-default-small{
 	background-color: #f1f4f7;
 	background-image:url('../images/icon/card.png') !important;
@@ -156,4 +193,18 @@
 }
 .icon-card{
   	background-image:url('../images/icon/card.png') !important;
+}
+.hight-light-label .x-form-item-label{
+	color: #d02d2d;
+    font-weight: bold;
+    font-size: initial;
+    font-family: normal;
+    margin-top: 4px;
+}
+.hight-light-label .x-form-display-field{
+	color: #d02d2d;
+    font-weight: bold;
+    font-size: initial;
+    font-family: normal;
+    margin-top: 4px;
 }

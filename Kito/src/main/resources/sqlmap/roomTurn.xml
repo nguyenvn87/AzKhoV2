@@ -31,7 +31,6 @@
 			, IS_ORDER
 			, IS_CANCELED
 			, PAY_METHOD
-			, ID_BANK
 	    FROM room_turn
 	    <dynamic prepend="WHERE">
 		   	<isNotEmpty property="ROOM_ID" prepend="AND">
@@ -126,7 +125,6 @@
 			, IS_ORDER
 			, IS_CANCELED
 			, PAY_METHOD
-			, ID_BANK
 	    	) 
 	    VALUES (
 	    	  #ROOM_ID# 
@@ -153,7 +151,6 @@
 			, #IS_ORDER#
 			, #IS_CANCELED#
 			, #PAY_METHOD#
-			, #ID_BANK#
 			)
   </insert>
   <update id="updateRoomTurnVO">
@@ -174,19 +171,13 @@
 		   	<isNotEmpty property="USER_NAME" prepend=",">
 		   		 USER_NAME = #USER_NAME# 
 		   	</isNotEmpty>
-		   	<isEqual property="IS_ON" compareValue="1" prepend=",">
-		   		IS_ON = 1
-		   	</isEqual>
-		   	<isEqual property="IS_ON" compareValue="0" prepend=",">
-		   		IS_ON = 0 
-		   	</isEqual>
 		   	<isNotEmpty property="IS_DEBIT" prepend=",">
 		   		 IS_DEBIT = #IS_DEBIT#
 		   	</isNotEmpty>
 			<isNotEqual property="TOTAL_MONEY" compareValue="0" prepend=",">
 		   		 TOTAL_MONEY = #TOTAL_MONEY#
 		   	</isNotEqual>
-			<isNotEqual property="PAYED_MONEY" compareValue="0" prepend=",">
+			<isNotEqual property="PAYED_MONEY" compareValue="-1" prepend=",">
 		   		 PAYED_MONEY = #PAYED_MONEY#
 		   	</isNotEqual>
 		   	<isNotEmpty property="CHANGE_DATE" prepend=",">
@@ -195,12 +186,15 @@
 		   	<isNotEmpty property="DSCRT" prepend=",">
 		   		 DSCRT = #DSCRT#
 		   	</isNotEmpty>
-		   	<isEqual property="HAS_PAYED" compareValue="1" prepend=",">
+		   	<isNotEmpty property="HAS_PAYED" prepend=",">
+		   		 HAS_PAYED = #HAS_PAYED#
+		   	</isNotEmpty>
+		   	<!-- <isEqual property="HAS_PAYED" compareValue="1" prepend=",">
 		   		 HAS_PAYED = 1
 		   	</isEqual>
 		   	<isEqual property="HAS_PAYED" compareValue="0" prepend=",">
 		   		 HAS_PAYED = 0
-		   	</isEqual>
+		   	</isEqual> -->
 		   	<isNotEmpty property="PAY_INFO" prepend=",">
 		   		 PAY_INFO = #PAY_INFO#
 		   	</isNotEmpty>
@@ -216,20 +210,11 @@
 		   	<isNotEqual property="IS_DELIVERED" compareValue="-1" prepend=",">
 		   		IS_DELIVERED = #IS_DELIVERED#
 		   	</isNotEqual>
-		   	<isNotEqual property="PRINTED" compareValue="-1" prepend=",">
-		   		PRINTED = #PRINTED#
-		   	</isNotEqual>
 		   	<isNotEmpty property="BILL_CD" prepend=",">
 		   		 BILL_CD = #BILL_CD#
 		   	</isNotEmpty>
-		   	<isEqual property="IS_CANCELED" compareValue="1" prepend=",">
-		   		 IS_CANCELED = #IS_CANCELED#
-		   	</isEqual>
 		   	<isNotEmpty property="PAY_METHOD" prepend=",">
 		   		 PAY_METHOD = #PAY_METHOD#
-		   	</isNotEmpty>
-		   	<isNotEmpty property="ID_BANK" prepend=",">
-		   		 ID_BANK = #ID_BANK#
 		   	</isNotEmpty>
 		 </dynamic>
 	    WHERE ROOM_USED_ID = #ROOM_USED_ID#
@@ -271,68 +256,33 @@
 		</dynamic>
   </select> 
   <sql id="getAllListTurnStatistic">	
-	  SELECT 
-	  			T.ROOM_USED_ID,
-				T.TIME_STS,
-				T.TIME_END,
-				T.IS_ON,
-				T.IS_DEBIT,
-				T.TOTAL_MONEY,
-				T.PAYED_MONEY,
-				T.DATE,
-				T.CHANGE_DATE,
-				T.USER_NAME, 
-				T.DSCRT,
-				T.HAS_PAYED,
-				T.PAY_INFO,
-				T.PAY_DATE,
-				T.RESTAR_ID,
-				T.CUS_CD,
-				T.CUS_NM,
-				T.IS_DELIVERED,
-				T.BILL_CD,
-				T.IS_ORDER,
-				T.IS_CANCELED,
-				T.PAY_METHOD,
-				T.ID_BANK,
-				R.ROOM_NO
-			FROM room_turn T
-				LEFT JOIN room R
-					ON T.ROOM_ID = R.ROOM_ID
-		<dynamic prepend="where">
-
-			<isNotEmpty property="STARTDATE" prepend="AND">
-					<![CDATA[ T.CHANGE_DATE >= #STARTDATE# ]]>
-			</isNotEmpty>	
-			<isNotEmpty property="ENDDATE" prepend="AND">
-					<![CDATA[ T.CHANGE_DATE <= #ENDDATE# ]]>
-			</isNotEmpty>
-			<isNotEmpty property="RESTAR_ID" prepend="AND">
-						T.RESTAR_ID = #RESTAR_ID#
-			</isNotEmpty>	 
-			<isEqual compareValue="1" property="IS_DEBIT" prepend="AND">
-						T.IS_DEBIT = 1
-			</isEqual>
-			<isEqual compareValue="1" property="HAS_PAYED" prepend="AND">
-						T.HAS_PAYED = 1
-			</isEqual>
-			<isEqual compareValue="0" property="HAS_PAYED" prepend="AND">
-						T.HAS_PAYED = 0
-			</isEqual>
-			<isEqual compareValue="1" property="IS_CANCELED" prepend="AND">
-						T.IS_CANCELED = 1
-			</isEqual>
-			<isEqual compareValue="0" property="IS_CANCELED" prepend="AND">
-						T.IS_CANCELED = 0
-			</isEqual>
-			<isEqual compareValue="1" property="IS_ORDER" prepend="AND">
-						T.IS_ORDER = 1
-			</isEqual>
-			<isNotEmpty property="CUS_CD" prepend="AND">
-					<![CDATA[ T.CUS_CD = #CUS_CD# ]]>
-			</isNotEmpty>
-		</dynamic>
-		ORDER BY T.CHANGE_DATE DESC
+	 SELECT 
+		T.ROOM_USED_ID,
+		T.TIME_STS,
+		T.TIME_END,
+		T.IS_ON,
+		T.IS_DEBIT,
+		T.TOTAL_MONEY,
+		T.PAYED_MONEY,
+		T.DATE,
+		T.CHANGE_DATE,
+		T.USER_NAME, 
+		T.DSCRT,
+		T.HAS_PAYED,
+		T.PAY_INFO,
+		T.PAY_DATE,
+		T.RESTAR_ID,
+		T.CUS_CD,
+		T.CUS_NM,
+		T.IS_DELIVERED,
+		T.BILL_CD,
+		T.IS_ORDER,
+		T.IS_CANCELED,
+		T.PAY_METHOD,
+		@row := @row + 1 AS rn1
+	FROM room_turn T,(SELECT @row := 0) K
+	WHERE T.RESTAR_ID = #RESTAR_ID#
+	ORDER BY T.BILL_CD DESC 	
   </sql>
    <sql id="getAllListTurnStatistic1111">	
 		SELECT       
@@ -357,7 +307,6 @@
 			 , T.IS_ORDER
 			 , T.IS_CANCELED
 			 , T.PAY_METHOD
-			 , T.ID_BANK
 			 , R.room_no
 			 ,@row := @row + 1 AS rn1     
 		FROM room_turn T
@@ -389,12 +338,6 @@
 			<isEqual compareValue="0" property="IS_DELIVERED" prepend="AND">
 						T.IS_DELIVERED = 0
 			</isEqual>
-			<isEqual compareValue="1" property="IS_CANCELED" prepend="AND">
-						T.IS_CANCELED = 1
-			</isEqual>
-			<isEqual compareValue="0" property="IS_CANCELED" prepend="AND">
-						T.IS_CANCELED = 0
-			</isEqual>
 			<isEqual compareValue="1" property="IS_ORDER" prepend="AND">
 						T.IS_ORDER = 1
 			</isEqual>
@@ -407,11 +350,13 @@
 			<isNotEmpty property="PAY_METHOD" prepend="AND">
 					<![CDATA[ T.PAY_METHOD = #PAY_METHOD# ]]>
 			</isNotEmpty>
-			<isNotEmpty property="ID_BANK" prepend="AND">
-					<![CDATA[ T.ID_BANK = #ID_BANK# ]]>
-			</isNotEmpty>
-		</dynamic>            
-		ORDER BY T.CHANGE_DATE DESC 
+		</dynamic>
+		<isEqual compareValue="DESC" property="sort">
+			<![CDATA[ ORDER BY T.CHANGE_DATE DESC]]> 
+		</isEqual>
+		<isNotEqual compareValue="DESC" property="sort">            
+			<![CDATA[ ORDER BY T.CHANGE_DATE ASC]]> 
+		</isNotEqual>
   </sql>
   <select id="getStatistic.list.paging" resultClass="RoomTurnVO" parameterClass="java.util.HashMap">
   		SELECT * 
@@ -426,22 +371,20 @@
 			count(t.ROOM_USED_ID) as COUNT
 			, sum(t.total_money)  as total
             , sum(t.payed_money) as payed     
-	    <!-- FROM (<include refid="getAllListTurnStatistic"/>) t -->
 	    FROM (<include refid="getAllListTurnStatistic1111"/>) t
   </select>
    <select id="getListTurnStatistic" resultClass="RoomTurnVO" parameterClass="java.util.HashMap">
   		SELECT * 
   		FROM (<include refid="getAllListTurnStatistic1111"/>) t
+  		ORDER BY CHANGE_DATE DESC
   </select>
   <select id="getListMonthlyProfit" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
   		SELECT  
 			sum(total_money) as TOTAL,
-			<!-- DATE_FORMAT(change_date, '%Y') as YEAR, -->
 		 	DATE_FORMAT(change_date, '%m') as MONTH
 		FROM  room_turn
 		WHERE DATE_FORMAT(change_date, '%Y') = #YEAR#
 				and RESTAR_ID = #RESTAR_ID#
-				and IS_CANCELED = 0
 		group by Month
   </select>
   <select id="getListDailyProfit" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
@@ -453,11 +396,15 @@
 		FROM  room_turn
 		WHERE DATE_FORMAT(change_date, '%Y') = #YEAR#
 			and RESTAR_ID = #RESTAR_ID#
-			and IS_CANCELED = 0
 			and DATE_FORMAT(change_date, '%m') = #MONTH#
 		group by DAY
   </select>
   <delete id="deleteRoomTurnByRoomUsedId">
     	DELETE FROM room_turn WHERE ROOM_USED_ID = #ROOM_USED_ID#
   </delete>
+  <select id="getLastRoomturnByIndex" resultClass="RoomTurnVO" parameterClass="java.util.HashMap">
+  		SELECT * 
+  		FROM (<include refid="getAllListTurnStatistic"/>) h
+  		<![CDATA[WHERE rn1 = #rn1#]]>
+  </select>
 </sqlMap>

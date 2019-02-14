@@ -21,14 +21,14 @@
 	href="<%=request.getContextPath()%>/images/ico/apple-touch-icon-72-precomposed.png">
 <link rel="apple-touch-icon-precomposed"
 	href="<%=request.getContextPath()%>/images/ico/apple-touch-icon-57-precomposed.png">
-<title>Phần mềm quản lý bán hàng AzKho</title>
-<meta name="description" content="Phần mềm quản lý bán hàng AZKho.com">
-<meta name="keywords" content="Phần mềm AZKho, quản lý bán hàng trực tuyến chuyên nghiệp, hiệu quả">
-<meta itemprop="image" content="<%=request.getContextPath()%>/images/banhang/share-fb2-min.png">
-<meta property="og:image" content="<%=request.getContextPath()%>/images/banhang/share-fb2-min.png">
-<meta property="og:title" content="Phần mềm quản lý bán hàng chuyên nghiệp, hiệu quả với AZKho.com">
+<title>Phần mềm quản lý bán hàng trực tuyến</title>
+<meta name="description" content="Phần mềm quản lý bán hàng trực tuyến chuyên nghiệp, hiệu quả">
+<meta name="keywords" content="Phần mềm AZKho, quản lý bán hàng trực tuyến">
+<meta itemprop="image" content="<%=request.getContextPath()%>/images/share-fb2-min.png">
+<meta property="og:image" content="<%=request.getContextPath()%>/images/share-fb2-min.png">
+<meta property="og:title" content="Phần mềm quản lý bán hàng online chuyên nghiệp, hiệu quả với AZKho.com">
 <meta property="og:site_name" content="AZKho.com">
-<meta property="og:description" content="AzKho là giải pháp hỗ trợ kinh doanh, quản lý bán hàng, Karaoke trực tuyến trên máy tính, mobile cực kỳ hiệu quả: quản lý trạng thái phòng, thời gian vào ra, in hóa đơn, tính tiền nhanh chóng">
+<meta property="og:description" content="AzKho là giải pháp hỗ trợ kinh doanh, quản lý bán hàng trực tuyến trên máy tính, mobile cực kỳ hiệu quả: quản lý trạng thái phòng, thời gian vào ra, in hóa đơn, tính tiền nhanh chóng">
 <meta property="og:type" content="website">
 </head>
 
@@ -52,7 +52,7 @@
 						<li><a href="#services">Dịch vụ</a></li>
 						<li><a href="#portfolio">Tính năng</a></li>
 						<li><a href="#pricing">Bảng giá</a></li>
-						<li><a href="#about-us">Chúng tôi</a></li>
+						<!-- <li><a href="#about-us">Chúng tôi</a></li> -->
 						<li><a href="#contact">Liên hệ</a></li>
 						<li class="login">
 							<a onclick="loginButton()">Đăng nhập</a>
@@ -121,17 +121,11 @@
 									</div>
 									<div class='advantage-content'>
 										<h3>Quản lý bán hàng</h3>
-										<p class=''>Tra cứu hàng hóa, dịch vụ. Tính tiền và in hóa đơn nhanh chóng. Lưu giữ thông tin khách quen, cộng điểm khuyến mãi có từng mặt hàng, đơn hàng</p>
-									</div>
-								</li>
-								<li class="advantage-item">
-									<div class="advantage-icon">
-										<i class="iconsimple"></i>
-									</div>
-									<div class='advantage-content'>
-										<h3>Quản lý công nợ</h3>
-										<p class=''>Thống kê tất cả chi tiết nợ của khách theo
-											ngày. Báo cáo những lượt khách đã trả, chưa trả</p>
+										<p class=''>
+										- Tra cứu giá bán theo mã hàng
+										<br> - Lên đơn hàng.
+										<br> - Bán hàng bằng máy quét mã vạch.
+										<br> - Tính tiền và in hóa đơn.</p>
 									</div>
 								</li>
 								<li class="advantage-item">
@@ -140,9 +134,11 @@
 									</div>
 									<div class='advantage-content'>
 										<h3>Quản lý kho</h3>
-										<p class=''>Quản lý nhập kho, xuất kho theo từng
-											hóa đơn và đơn vị cung ứng. Báo cáo lượng hàng
-											tồn trong kho</p>
+										<p class=''>- Nhập kho, xuất kho, kiểm kho
+											<br>- Thiết lập, tra cứu lịch sử tồn kho
+											<br>- Quản lý danh mục, đặc tính hàng hóa
+											<br>- Tính toán giá trị tồn kho
+										</p>
 									</div>
 								</li>
 								<li class="advantage-item">
@@ -150,9 +146,25 @@
 										<i class="iconsimple"></i>
 									</div>
 									<div class='advantage-content'>
-										<h3>Hệ thống báo cáo</h3>
-										<p class=''>Thống kê doanh thu trong ngày tháng. Báo cáo
-											lợi nhuận, doanh thu, số lượng nhập và bán chi tiết đến từng mặt hàng</p>
+										<h3>Khách hàng</h3>
+										<p class=''>- Quản lý lưu trữ hồ sơ khách hàng và đại lý. 
+											<br>- Thống kê lịch sử giao dịch của từng khách.
+											<br>- Truy xuất lịch sử xuất nhập cho các đại lý, khách hàng. 
+										</p>
+									</div>
+								</li>
+								<li class="advantage-item">
+									<div class="advantage-icon">
+										<i class="iconsimple"></i>
+									</div>
+									<div class='advantage-content'>
+										<h3>Báo cáo, thống kê</h3>
+										<p class=''>- Báo cáo doanh thu theo ngày tháng
+											<br>- Báo cáo hàng xuất nhập
+											<br>- Thống kê lợi nhuận
+											<br>- Thống kê nhập hàng của các đại lý
+											<br>- Thống kê doanh số theo từng nhân viên bán hàng  
+										</p>
 									</div>
 								</li>
 							</ul>
@@ -170,9 +182,10 @@
 			<div class="box">
 				<div class="center">
 					<h2>Quản lý bán hàng</h2>
-					<p class="lead1">Hiển thị danh sách phòng cùng với trạng thái có khách hay chưa, 
-						thời gian khách vào và những loại hàng 
-						<br>và tổng số tiền tương ứng khách đã sử dụng.</p>
+					<p class="lead1">Tính tiền, in hóa đơn, thống kê doanh số theo ngày, tháng. 
+						Tính doanh số theo từng nhân viên. 
+						<br>Quản lý nợ, xuất nhập kho, tra cứu lịch sử tồn kho 
+						<br>và lịch sử giao dịch của khách hàng.</p>
 				</div>
 				<!--/.center-->
 				<div class="center">
@@ -215,23 +228,6 @@
             </div> 
         </div>
     </section>
-	<!-- <section id="introduce2">
-		<div class="container">
-			<div class="box">
-				<div class="center">
-					<img alt="" src="images/features-icon-admin.png"><br>
-					<h2>Quản trị</h2>
-					<p class="lead1">AzKho bao gồm mọi thứ bạn cần để kiểm soát và quản lý con người và các nội dung. 
-					<br>Từ việc phân công các vai trò và đặc quyền tùy chỉnh để quản lý cấp phép và nội dung đến xem trạng thái ổn định của hệ thống. 
-					<br>Các công cụ quản trị đảm bảo rằng bạn có thể tin tưởng sử dụng AzKho để giao phó lại toàn bộ công việc cho nhân viên</p>
-				</div>
-				/.center
-				<div class="center">
-					<img alt="" src="images/features-administration.png">
-				</div>
-			</div>
-		</div>
-	</section> -->
 	<!-- Bang gia -->
 	<section id="pricing">
 		<div class="container">
@@ -244,43 +240,43 @@
 				<div id="pricing-table" class="row">
 					<div class="col-sm-4">
 						<ul class="plan">
-							<li class="plan-name">Siêu tiết kiệm</li>
-							<li class="plan-price">90.000<sub>/th</sub></li>
+							<li class="plan-name">STARTER</li>
+							<li class="plan-price">150.000<sub>/th</sub></li>
 							<li>1 cửa hàng</li>
+							<li>1 chi nhánh</li>
 							<li>3 người dùng</li>
-							<li>100 mặt hàng</li>
-							<li>> 10,000 truy vấn/tháng</li>
 							<li>Hỗ trợ miễn phí</li>
+							<li>Cập nhật miễn phí</li>
 							<li class="plan-action"><a href="signup.do?ID=QH100"
-								class="btn btn-primary btn-lg">Đăng kí</a></li>
+								class="btn btn-primary btn-lg">Dùng thử miễn phí</a></li>
 						</ul>
 					</div>
 					<!--/.col-sm-4-->
 					<div class="col-sm-4">
 						<ul class="plan featured">
-							<li class="plan-name">Thông thường</li>
-							<li class="plan-price">150.000<sub>/th</sub></li>
+							<li class="plan-name">PROFESSIONAL</li>
+							<li class="plan-price">220.000<sub>/th</sub></li>
 							<li>1 cửa hàng</li>
-							<li>10 người dùng</li>
-							<li>1000 mặt hàng</li>
+							<li>1 chi nhánh</li>
 							<li>Không giới hạn</li>
 							<li>Hỗ trợ miễn phí</li>
+							<li>Cập nhật miễn phí</li>
 							<li class="plan-action"><a href="signup.do?ID=QH100"
-								class="btn btn-primary btn-lg">Đăng kí</a></li>
+								class="btn btn-primary btn-lg">Dùng thử miễn phí</a></li>
 						</ul>
 					</div>
 					<!--/.col-sm-4-->
 					<div class="col-sm-4">
 						<ul class="plan">
-							<li class="plan-name">Đặc biệt</li>
-							<li class="plan-price">240.000<sub>/th</sub></li>
+							<li class="plan-name">ENTERPRISE</li>
+							<li class="plan-price">800.000<sub>/th</sub></li>
 							<li>1 cửa hàng</li>
-							<li>Không giới hạn</li>
-							<li>Không giới hạn</li>
+							<li>3 chi nhánh</li>
 							<li>Không giới hạn</li>
 							<li>Hỗ trợ miễn phí</li>
+							<li>Được nâng cấp theo yêu cầu</li>
 							<li class="plan-action"><a href="signup.do?ID=QH100"
-								class="btn btn-primary btn-lg">Đăng kí</a></li>
+								class="btn btn-primary btn-lg">Dùng thử miễn phí</a></li>
 						</ul>
 					</div>
 					<!--/.col-sm-4-->
@@ -349,7 +345,7 @@
 						<div class="center">
 							<i class="icon-cloud icon-md icon-color6"></i> <a
 								href="signup.do?ID=QH100" title="Ngành hàng khác">
-								<h4>Ngành hàng khác</h4>
+								<h4>Tổng kho</h4>
 							</a>
 						</div>
 					</div>
@@ -363,7 +359,7 @@
 		<div class="container">
 			<div class="box">
 				<div class="center">
-					<h2>Tổng đài: 01292.030.668</h2>
+					<h2>Tổng đài: 0820.030.668</h2>
 				</div>
 				<div class="gap"></div>
 				<div id="team-scroller" class="carousel scale">
@@ -389,7 +385,7 @@
 												src="images/team2.jpg" alt="">
 										</p>
 										<h3>
-											Hotline: 094.660.8880
+											Hot line: 094.660.8880
 										</h3>
 									</div>
 								</div>
@@ -404,7 +400,7 @@
 												src="images/team3.jpg" alt="">
 										</p>
 										<h3>
-											Hotline: 01292.030.668
+											Hot line: 01292.030.668
 										</h3>
 									</div>
 								</div>
@@ -415,7 +411,7 @@
 												src="images/team2.jpg" alt="">
 										</p>
 										<h3>
-											Hotline: 094.660.8880
+											Hot line: 094.660.8880
 										</h3>
 									</div>
 								</div>
@@ -441,19 +437,26 @@
 			<div class="box last">
 				<div class="row">
 					<div class="col-sm-6">
-						<h1>AzKho</h1>
+						<h1>Quản lý cửa hàng từ A đến Z</h1>
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-4 col-sm-6">
 								<address>
-									<strong>Hà Nội.</strong><br> Khu liền kề 2007 Xa La<br>
-									Hà Đông<br> <abbr title="Phone">P:</abbr> 094.660.8880
+									<strong>AzKho Hà Nội.</strong><br>Xa La, Hà Đông<br>
+									<abbr title="Phone">P:</abbr> 094.660.8880
 								</address>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-4 col-sm-6">
 								<address>
-									<strong>Hồ Chí Minh.</strong><br> Tầng 5, 42 Nguyễn Huệ<br>
-									Quận 1<br> <abbr title="Phone">P:</abbr>
-									01292.030.668
+									<strong>AzKho Huế.</strong><br>60 Phan Chu Trinh<br>
+									<abbr title="Phone">P:</abbr>
+									0903.951.516
+								</address>
+							</div>
+							<div class="col-md-4 col-sm-6">
+								<address>
+									<strong>AzKho Lâm Đồng.</strong><br> 288 Lê Hồng Phong<br>
+									<abbr title="Phone">P:</abbr>
+									0976.847.248
 								</address>
 							</div>
 						</div>
@@ -499,10 +502,10 @@
 						title="Phần mềm quản lý bán hàng chuyên nghiệp">AzKho.com</a>.
 					All Rights Reserved.
 				</div>
-				<div class="fb-share-button" data-href="http://azkho.com/dangki.do" 
+				<div class="fb-share-button" data-href="http://azkho.com/banhang.do" 
 						data-layout="button_count" data-size="small" data-mobile-iframe="true">
 						<a class="fb-xfbml-parse-ignore" target="_blank" 
-							href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fazkho.com%2Fdangki.do&amp;src=sdkpreparse">
+							href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fazkho.com%2Fbanhang.do&amp;src=sdkpreparse">
 							Chia sẻ
 						</a>
 				</div>

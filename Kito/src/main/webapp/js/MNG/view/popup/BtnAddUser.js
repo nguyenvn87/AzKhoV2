@@ -46,13 +46,7 @@ Ext.define('MNG.view.popup.BtnAddUser', {
 								cls : 'jdvn-sub-body',
 								flex : 1
 							},
-						items : [{
-								xtype : 'textfield',
-								itemId : 'USERNAME',
-								name : 'USERNAME',
-								fieldLabel : 'Tên đăng nhập',
-								emptyText : 'Nhập tên'
-							},{													
+						items : [{													
 								xtype : 'textfield',
 								flex : 1,
 								itemId:'FULLNAME',
@@ -62,6 +56,7 @@ Ext.define('MNG.view.popup.BtnAddUser', {
 							},{
 								xtype : 'textfield',
 								itemId : 'ADDRESS',
+								hidden: true,
 								emptyText : 'Nhập địa chỉ',
 								name : 'ADDRESS',
 								flex : 1,
@@ -69,6 +64,7 @@ Ext.define('MNG.view.popup.BtnAddUser', {
 							},{
 								xtype : 'textfield',
 								itemId : 'PHONE',
+								hidden: true,
 								emptyText : 'Nhập số điện thoại',
 								name : 'PHONE',
 								flex : 1,
@@ -82,11 +78,17 @@ Ext.define('MNG.view.popup.BtnAddUser', {
 								fieldLabel : 'Email',
 							},{
 								xtype : 'textfield',
+								itemId : 'USERNAME',
+								name : 'USERNAME',
+								fieldLabel : 'Tên đăng nhập',
+								emptyText : 'Username'
+							},{
+								xtype : 'textfield',
 								itemId : 'CMND',
 								name : 'CMND',
-								emptyText : 'Số chứng minh thư',
+								emptyText : 'Password',
 								flex : 1,
-								fieldLabel : 'CMND(*)',
+								fieldLabel : 'Mật khẩu',
 							},{													
 								xtype : 'combo',
 								flex : 1,

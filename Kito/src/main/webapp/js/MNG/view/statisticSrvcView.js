@@ -125,7 +125,24 @@ Ext.define('MNG.view.statisticSrvcView', {
                            					}
                            					return  data;
                            				}
-             						},
+             						},{
+						                menuDisabled: true,
+						                sortable: false,
+						                align:'center',
+						                xtype: 'actioncolumn',
+						                text: 'Xem chi tiết',
+						                width: 120,
+						                items: [{
+						                    iconCls : 'icon-bill',
+						                    tooltip: 'Xem chi tiết',
+						                    handler: function(grid, rowIndex, colIndex) {
+						                    	grid.getSelectionModel().select(rowIndex);
+						                    	var rec = grid.getStore().getAt(rowIndex);
+						                    	var myController = MANAGER.app.getController('MNG.controller.statisticSrvcController');
+						                    	myController.showDetailBill(myController, rec);
+						                    }
+						                }]
+						            },
 									 {
                                          xtype: 'gridcolumn',
                                          dataIndex: 'TYPE_NM',

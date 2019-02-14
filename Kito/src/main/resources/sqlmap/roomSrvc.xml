@@ -18,6 +18,7 @@
 			, PRICE 
 			, USER_NAME
 			, CHANGETIME
+			, UNIT
 	    	) 
 	    VALUES (
 	    	  #ROOM_USED_ID#
@@ -28,6 +29,7 @@
 			, #PRICE#
 			, #USER_NAME#
 			, #CHANGETIME#
+			, #UNIT#
 			)
   </insert>
   <insert id="updateRoomSrvcVO">
@@ -40,6 +42,7 @@
 			, TOTAL_HOUS 	= #TOTAL_HOUS#
 			, PRICE 		= #PRICE#
 			, USER_NAME		= #USER_NAME#
+			, UNIT 			= #UNIT#
 	    WHERE ID = #ID#
   </insert>
   <select id="getListRoomSrvcVOByID" resultClass="RoomSrvcVO">
@@ -52,7 +55,7 @@
 			 R.TOTAL_HOUS ,
 			 R.USER_NAME,
 			 R.ID,
-			 C.CD as UNIT,
+			 R.UNIT,
 			 C.CD_NM as UNIT_NM,
 			 M.SRVC_NM as MENU_NM,
 			 M.SORT_NO
@@ -60,7 +63,7 @@
 	    	LEFT JOIN srvc M
 	    	ON M.SRVC_ID = R.SRVC_ID
 	    	LEFT JOIN cmm_cd  C
-			ON C.CD = M.UNIT and C.GROUP_CD = 'DONVI'
+			ON C.CD = R.UNIT and C.GROUP_CD = 'DONVI'
 	    WHERE R.ROOM_USED_ID = #ROOM_USED_ID#
 	    ORDER BY M.SORT_NO
 	</select>
@@ -117,9 +120,9 @@
   	SELECT L.*, @row := @row + 1 AS rn1  
   	FROM(	
 	  	SELECT 
-				sum(M.total_money)as TOTAL ,sum(M.amount) as AMOUNT , M.srvc_id 
+				sum(M.total_money)as TOTAL ,sum(M.amount) as AMOUNT , M.SRVC_ID 
 		FROM (
-	  		select S.srvc_id,S.amount, S.amount*S.price as total_money
+	  		select S.SRVC_ID,S.amount, S.amount*S.price as total_money
 	  		from room_srvc S where S.room_used_id in(select  T.room_used_id from room_turn T
 				<dynamic prepend="where">
 					<isNotEmpty property="STARTDATE" prepend="AND">
@@ -131,27 +134,34 @@
 					<isNotEmpty property="RESTAR_ID" prepend="AND">
 							<![CDATA[ T.RESTAR_ID = #RESTAR_ID# ]]>
 					</isNotEmpty>
+					<isNotEmpty property="SRVC_ID" prepend="AND">
+							<![CDATA[ T.SRVC_ID = #SRVC_ID# ]]>
+					</isNotEmpty>
 					<isNotEmpty property="USER_NAME" prepend="AND">
 							<![CDATA[ T.USER_NAME = #USER_NAME# ]]>
 					</isNotEmpty>
 					<isNotEmpty property="IS_DELIVERED" prepend="AND">
 						<![CDATA[ T.IS_DELIVERED = #IS_DELIVERED# ]]>
 					</isNotEmpty>	
+					<isNotEmpty property="CUS_CD" prepend="AND">
+						<![CDATA[ T.CUS_CD = #CUS_CD# ]]>
+					</isNotEmpty>	
 				</dynamic>
 				)
-			)M group by M.srvc_id
+			)M group by M.SRVC_ID
 			ORDER BY TOTAL desc
 		)L,(SELECT @row := 0) K
   	</sql>
   	<select id="getStatisticExportStore" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
-  	SELECT K.*, N.SRVC_CD, N.UNIT, N.SRVC_NM 
+  	SELECT K.*, N.SRVC_CD, N.UNIT, N.SRVC_NM, N.AMOUNT_STORE, N.PRICE_IMPORT, N.TYPE, N.TYPE_NM
   	FROM(
 		<include refid="sqlSelectSrvcByRoomTurn"/>
 	    ) K
 	    left join srvc N on N.srvc_id = K.srvc_id
+	 ORDER BY TYPE_NM DESC
   	</select>
   	<select id="getSrvcSaleList.paging" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
-  	SELECT K.*, N.SRVC_CD, N.UNIT, N.SRVC_NM 
+  	SELECT K.*, N.SRVC_CD, N.UNIT, N.SRVC_NM, N.AMOUNT_STORE 
   	FROM(
 		<include refid="sqlSelectSrvcByRoomTurn"/>
 	    ) K
@@ -226,5 +236,58 @@
 			count(t.rn1) as COUNT
 			, sum(t.TOTAL_MONEY)  as total
 	    FROM (<include refid="sqlThongKeBanHang"/>) t
+  </select>
+  <select id="getChiTietThongKeBanHangTheoNgay1" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+	SELECT  R.ROOM_USED_ID,T.BILL_CD,T.DSCRT,R.UNIT, R.SRVC_ID, R.AMOUNT, DATE_FORMAT(T.change_date, "%Y/%m/%d") as CREATE_DATE, R.amount*R.price as TOTAL_MONEY1			
+	FROM room_srvc R
+	LEFT JOIN room_turn T ON R.room_used_id = T.room_used_id
+	WHERE  T.RESTAR_ID = #RESTAR_ID#
+		and <![CDATA[R.SRVC_ID = #SRVC_ID#]]>
+		<isNotEmpty property="STARTDATE" prepend="AND">
+			 <![CDATA[T.change_date >= #STARTDATE#]]>
+		</isNotEmpty>	
+		<isNotEmpty property="ENDDATE" prepend="AND">
+			 <![CDATA[T.change_date <= #ENDDATE#]]>
+		</isNotEmpty>	
+		<isNotEmpty property="USER_NAME" prepend="AND">
+			<![CDATA[ T.USER_NAME = #USER_NAME# ]]>
+		</isNotEmpty>	
+ </select>
+ <sql id="sqlChiTietThongKeBanHang">
+ 	SELECT  R.ROOM_USED_ID,T.BILL_CD,T.DSCRT,R.UNIT, R.SRVC_ID, R.AMOUNT,T.change_date, DATE_FORMAT(T.change_date, "%Y/%m/%d") as CREATE_DATE, R.amount*R.price as TOTAL_MONEY1			
+	FROM room_srvc R
+	LEFT JOIN room_turn T ON R.room_used_id = T.room_used_id
+	WHERE  T.RESTAR_ID = #RESTAR_ID#
+		and <![CDATA[R.SRVC_ID = #SRVC_ID#]]>
+		<isNotEmpty property="STARTDATE" prepend="AND">
+			 <![CDATA[T.change_date >= #STARTDATE#]]>
+		</isNotEmpty>	
+		<isNotEmpty property="ENDDATE" prepend="AND">
+			 <![CDATA[T.change_date <= #ENDDATE#]]>
+		</isNotEmpty>	
+		<isNotEmpty property="USER_NAME" prepend="AND">
+			<![CDATA[ T.USER_NAME = #USER_NAME# ]]>
+		</isNotEmpty>
+	ORDER BY change_date DESC	
+ </sql>
+ <select id="getChiTietThongKeBanHangTheoNgay" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">	
+ 	SELECT M.* 
+ 	FROM(
+		SELECT t.*, @row := @row + 1 AS rn1  
+	    FROM (<include refid="sqlChiTietThongKeBanHang"/>) t,(SELECT @row := 0) K)M
+	    <dynamic prepend="where">
+		 	<isNotEmpty property="MIN" prepend="AND">
+				<![CDATA[ M.rn1 > #MIN# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="MAX" prepend="AND">
+				<![CDATA[ M.rn1 <= #MAX# ]]>
+			</isNotEmpty>
+		 </dynamic> 
+  </select>
+  <select id="getCountChiTietBanHangTheoNgay" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">	
+		SELECT 
+			count(t.ROOM_USED_ID) as COUNT
+			, sum(t.AMOUNT)  as total
+	    FROM (<include refid="sqlChiTietThongKeBanHang"/>) t
   </select>
 </sqlMap>

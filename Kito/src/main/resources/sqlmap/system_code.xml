@@ -14,6 +14,7 @@
 		FROM cmm_cd
 		WHERE 
 		    GROUP_CD = #GROUP_CD#
+		ORDER BY SORT_SN
 	</select>
 	<select id="System.Code.getCodeVO" resultClass="codeVO">
 		SELECT GROUP_CD

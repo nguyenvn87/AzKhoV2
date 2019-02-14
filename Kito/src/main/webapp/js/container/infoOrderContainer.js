@@ -6,6 +6,9 @@
  */
 Ext.define('BS.infoOrderContainer', {
 	extend : 'Ext.container.Container',
+	requires: [
+        'Ext.custom.common.NumberField'
+    ],
 	layout : {
 		align : 'stretch',
 		type : 'vbox'
@@ -22,6 +25,7 @@ Ext.define('BS.infoOrderContainer', {
 						xtype : 'fieldset',
 						columnWidth : 0.5,
 						collapsible : true,
+						collapsed: false,
 						defaultType : 'textfield',
 						defaults : {
 							anchor : '100%'
@@ -31,12 +35,13 @@ Ext.define('BS.infoOrderContainer', {
 								{
 									xtype : 'datefield',
 									name : 'CHANGETIME',
-									format : 'd-m-Y H:i',
+									format : 'd-m-Y H:i:s',
 									altFormats : 'Ymd',
 									fieldLabel : 'Ngày đặt',
 									value : new Date(),
 									submitFormat : 'Y-m-d H:i:s',
-									emptyText : 'Ngày'
+									emptyText : 'Ngày',
+									editable : false
 								},
 
 								{
@@ -59,6 +64,7 @@ Ext.define('BS.infoOrderContainer', {
 									xtype : 'numberfield',
 									cls : 'input-needpay-money-cls',
 									fieldLabel : "Giảm giá",
+									hidden: true,
 									value : 0,
 									listeners : {
 										change : function(object) {
@@ -78,13 +84,13 @@ Ext.define('BS.infoOrderContainer', {
 									currencySymbol:'',
 									thousandSeparator: ',',
 									name : 'NEEDPAYED',
+									hidden: true,
 									fieldLabel : "Tiền cần trả",
 									cls : 'input-pay-money-cls',
 									readOnly : true,
 									value : 0
 								},{
 									xtype : 'checkbox',
-									//labelAlign : 'right',
 									fieldLabel : 'Ghi nợ',
 									name : 'IS_DEBIT',
 									checked : true,
@@ -106,8 +112,14 @@ Ext.define('BS.infoOrderContainer', {
 						items : [ {
 							xtype : 'button',
 							iconCls : 'icon-true',
+							name : 'noprint',
+							width : 80,
+							text : 'Lưu'
+						},{
+							xtype : 'button',
+							iconCls : 'icon-true',
 							name : 'submit',
-							text : 'Lưu & hoàn thành',
+							text : 'Lưu & In hóa đơn',
 							flex : 1
 						} ]
 					} ]

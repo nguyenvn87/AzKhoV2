@@ -90,16 +90,13 @@ Ext.define('MNG.view.KhachNoView', {
                                         sortable:true,
                                         text: 'Tổng nợ(vnđ)',
                                         flex: 0.5,
-                                        renderer : function(
-																					value,
-																					p,
-																					r) {
-																				data = r.data['TOTAL_MONEY'];
-																				if (data != '')
-																					data = formatSupporter
-																							.formatToMoney(data);
-																				return data;
-																			}
+                                        renderer : function(value, p, r) 
+                                        {
+                                        	data = r.data['TOTAL_MONEY'];
+											if (data != '')
+											data = formatSupporter.formatToMoney(data);
+											return data;
+										}
                                     }
                                  ],
                                  tbar: [{
@@ -113,8 +110,17 @@ Ext.define('MNG.view.KhachNoView', {
  	                                	hidden: true,
  	                                	iconCls: 'icon-search',
  	                                	itemId: 'delMenuBtn'
- 	 		                           }
-             						],
+ 	 		                           }],
+ 	 		                     bbar : [{
+											text : 'PDF',
+											iconCls : 'icon-pdf',
+											height : 35,
+											itemId : 'btnStatisPrint' },
+										{
+											text : 'Excel',
+											iconCls : 'icon-excel',
+											height : 35,
+											itemId : 'btnExcelPrint' } ],
                                  dockedItems: [
                                      {
                                          xtype: 'pagingtoolbar',

@@ -83,6 +83,7 @@ Ext.define('MNG.view.customerView', {
 									xtype : 'gridcolumn',
 									align : 'right',
 									width : 120,
+									hidden: true,
 									editable: true,
 									dataIndex : 'ACCUMULT',
 									text : 'Tiền tích lũy',
@@ -93,34 +94,97 @@ Ext.define('MNG.view.customerView', {
 					                sortable: false,
 					                align:'center',
 					                xtype: 'actioncolumn',
+					                text: 'Xem biểu đồ',
+					                width: 100,
+					                items: [{
+					                    iconCls : 'icon-chart',
+					                    tooltip: 'Xem biểu đồ lịch sử',
+					                    handler: function(grid, rowIndex, colIndex) {
+					                    	grid.getSelectionModel().select(rowIndex);
+					                    	store = grid.getStore();
+					                    	var rec = store.getAt(rowIndex);
+					                    	me.viewChartAnalysis(rec);
+					                    }
+					                }]
+					            },
+								{
+					                menuDisabled: true,
+					                sortable: false,
+					                align:'center',
+					                xtype: 'actioncolumn',
+					                text: 'Xem theo đơn',
+					                width: 110,
+					                items: [{
+					                    iconCls : 'icon-bill',
+					                    tooltip: 'Lịch sử theo đơn',
+					                    handler: function(grid, rowIndex, colIndex) {
+					                    	grid.getSelectionModel().select(rowIndex);
+					                    	store = grid.getStore();
+					                    	var rec = store.getAt(rowIndex);
+					                    	me.viewHistoryBillInfo(rec);
+					                    }
+					                }]
+					            },
+					            {
+					                menuDisabled: true,
+					                sortable: false,
+					                align:'center',
+					                xtype: 'actioncolumn',
+					                text: 'Theo loại hàng',
+					                width: 110,
+					                items: [{
+					                    iconCls : 'icon-box',
+					                    tooltip: 'Xem lịch sử giao dịch theo từng loại hàng',
+					                    handler: function(grid, rowIndex, colIndex) {
+					                    	grid.getSelectionModel().select(rowIndex);
+					                    	store = grid.getStore();
+					                    	var rec = store.getAt(rowIndex);
+					                    	me.viewHistoryByProduct(rec);
+					                    }
+					                }]
+					            },
+								{
+					                menuDisabled: true,
+					                sortable: false,
+					                align:'center',
+					                xtype: 'actioncolumn',
 					                text: 'Cập nhật',
-					                width: 70,
+					                width: 90,
 					                items: [{
 					                    iconCls : 'icon-edit',
 					                    tooltip: 'Sửa dòng này',
 					                    handler: function(grid, rowIndex, colIndex) {
 					                    	store = grid.getStore();
 					                    	var rec = store.getAt(rowIndex);
-					                    	var params = {
-					                    			cusID: rec.get('CUS_CD'),
-					                    			cusName: rec.get('NAME'),
-					                    			cusPhone: rec.get('PHONE'),
-					                    			cusEmail: rec.get('EMAIL'),
-					                    			accumult: rec.get('ACCUMULT'),
-					                    			cusAddr: rec.get('ADDR')
-					                    	}
-					                    	var myController = MANAGER.app.getController('MNG.controller.customerController');
-					                    	myController.showAddCustomer(params);
+					                    	me.updateCusomerInfo(rec);
 					                    }
 					                }]
 					            },{
 									xtype : 'gridcolumn',
 									align : 'left',
 									width : 120,
+									hidden: true,
 									editable: true,
 									dataIndex : 'CHANGE_USER',
 									text : 'Người lưu',
 									sortable : true
+								},
+								{
+									menuDisabled : true,
+									sortable : false,
+									text : 'Xóa',
+									xtype : 'actioncolumn',
+									align : 'center',
+									width : 60,
+									items : [ {
+										iconCls : 'icon-del',
+										tooltip : 'Xóa dòng này',
+										handler : function(grid, rowIndex, colIndex){
+											var myController = MANAGER.app.getController('MNG.controller.customerController');
+											var rec = grid.getStore().getAt(rowIndex);
+											myController.deleteRecordCustomer(rec);
+										}
+									} ]
 								}
                                  ],
                                  tbar: [{
@@ -160,9 +224,30 @@ Ext.define('MNG.view.customerView', {
  	 		                           {
  	                                	text: 'Tìm',
  	                                	iconCls: 'icon-search',
- 	                                	itemId: 'btnSearchSrvcBtn'
+ 	                                	itemId: 'btnSearchSrvcBtn',
+ 	                                	listeners:{
+ 	                                		click: function(){
+ 	                                			var textSearch = Ext.ComponentQuery.query('#textSearchSrvc')[0];
+ 	                                			value = textSearch.getValue();
+												var Grid = Ext.ComponentQuery.query('#grid-customer-item')[0];
+												var storeTmp = Grid.getStore();
+														
+												storeTmp.clearFilter();
+												me.searchServiceByValue(value);
+ 	                                		}
+ 	                                	}
  	 		                           }
              						],
+             					bbar : [{
+											text : 'PDF',
+											iconCls : 'icon-pdf',
+											height : 35,
+											itemId : 'btnPdfPrint'},
+										{
+											text : 'Excel',
+											iconCls : 'icon-excel',
+											height : 35,
+											itemId : 'btnExcelPrint' } ],
                                  dockedItems: [
                                      {
                                          xtype: 'pagingtoolbar',
@@ -191,5 +276,29 @@ Ext.define('MNG.view.customerView', {
 		storeTmp.currentPage = 1;
 		storeTmp.pageSize=10;
 		storeTmp.load();
+	},
+	updateCusomerInfo:function(rec){
+		var params = {
+		       			cusID: rec.get('CUS_CD'),
+		       			cusName: rec.get('NAME'),
+					    cusPhone: rec.get('PHONE'),
+					    cusEmail: rec.get('EMAIL'),
+					    accumult: rec.get('ACCUMULT'),
+					    cusAddr: rec.get('ADDR')
+					 };
+		var myController = MANAGER.app.getController('MNG.controller.customerController');
+		myController.showAddCustomer(params);
+	},
+	viewHistoryBillInfo:function(rec){
+		var myController = MANAGER.app.getController('MNG.controller.customerController');
+		myController.viewHistoryByBill(rec);
+	},
+	viewHistoryByProduct:function(rec){
+		var myController = MANAGER.app.getController('MNG.controller.customerController');
+		myController.viewHistoryByProduct(rec);
+	},
+	viewChartAnalysis:function(rec){
+		var myController = MANAGER.app.getController('MNG.controller.customerController');
+		myController.viewChartAnalysis(rec);
 	}
 });

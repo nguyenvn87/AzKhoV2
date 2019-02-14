@@ -15,6 +15,7 @@
 				, RESTAR_ID
 				, IS_USED
 				, TYPE
+				, TYPE_NM
 				, IS_DEFAULT
 				, PRICE
 				, DISCOUNT
@@ -51,6 +52,7 @@
 				, M.DSCRT 
 				, M.RESTAR_ID
 				, M.TYPE
+				, M.TYPE_NM
 				, M.IS_USED
 				, M.USER_NAME
 				, M.IS_DEFAULT
@@ -90,6 +92,7 @@
 				<![CDATA[ IS_DEFAULT = 1 ]]>
 			</isEqual>
 	   </dynamic>
+	   ORDER BY M.SRVC_CD 
 	</select>
 	<sql id="sqlGetListAllSrvc">	
 		SELECT M.SRVC_ID 
@@ -99,8 +102,8 @@
 				, M.DSCRT 
 				, M.RESTAR_ID
 				, M.TYPE
+				, M.TYPE_NM
 				, M.USER_NAME
-				, R.CD_NM as UNIT_NM
 				, M.IS_USED
 				, M.IS_DEFAULT
 				, M.PRICE
@@ -109,9 +112,8 @@
 				, M.CHANGE_DATE
 				, M.ACCUMULT
 				, M.AMOUNT_STORE
+				, M.PRICE_IMPORT
 	    FROM srvc M
-	    	LEFT JOIN cmm_cd  R
-			ON R.CD = M.UNIT and R.GROUP_CD = 'DONVI'
 		<dynamic prepend="WHERE">
 		   	<isNotEmpty property="RESTAR_ID" prepend="AND">
 		   		M.RESTAR_ID = #RESTAR_ID#
@@ -123,7 +125,7 @@
 				<![CDATA[ M.IS_USED = 0 ]]>
 			</isEqual>
 		</dynamic>
-		ORDER BY M.SRVC_CD 
+		<!-- ORDER BY M.SRVC_CD  -->
 	</sql>
 	<insert id="createSrvcVO">
 	    INSERT INTO srvc 
@@ -135,6 +137,7 @@
 				, DSCRT 
 				, RESTAR_ID
 				, TYPE
+				, TYPE_NM
 				, USER_NAME
 				, IS_USED
 				, IS_DEFAULT
@@ -144,6 +147,7 @@
 				, CHANGE_DATE
 				, ACCUMULT
 				, AMOUNT_STORE
+				, PRICE_IMPORT
 	    	) 
 	    VALUES (
 	    		#SRVC_ID#
@@ -153,6 +157,7 @@
 				, #DSCRT# 
 				, #RESTAR_ID#
 				, #TYPE#
+				, #TYPE_NM#
 				, #USER_NAME#
 				, #IS_USED#
 				, #IS_DEFAULT#
@@ -162,6 +167,7 @@
 				, #CHANGE_DATE#
 				, #ACCUMULT#
 				, #AMOUNT_STORE#
+				, #PRICE_IMPORT#
 			)
   </insert>
   <insert id="UpdateSrvcVO">
@@ -181,6 +187,9 @@
 		   	</isNotEmpty>
 		   	<isNotEmpty property="TYPE" prepend=",">
 		   		TYPE = #TYPE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="TYPE_NM" prepend=",">
+		   		TYPE_NM = #TYPE_NM#
 		   	</isNotEmpty>
 		   	<isNotEmpty property="RESTAR_ID" prepend=",">
 		   		RESTAR_ID = #RESTAR_ID#
@@ -209,6 +218,9 @@
 		   	<isNotEmpty property="ACCUMULT" prepend=",">
 		   		ACCUMULT = #ACCUMULT#
 		   	</isNotEmpty>
+		   	<isNotEmpty property="PRICE_IMPORT" prepend=",">
+		   		PRICE_IMPORT = #PRICE_IMPORT#
+		   	</isNotEmpty>
 		</dynamic>
 	    WHERE SRVC_ID = #SRVC_ID#
   </insert>
@@ -216,14 +228,21 @@
 		SELECT 
 			count(t.SRVC_ID) as COUNT
 	    FROM (<include refid="sqlGetListAllSrvc"/>) t
-	</select>
-	<select id="getSrvc.list.paging" resultClass="SrvcVO" parameterClass="SrvcVO">
+  </select>
+  <select id="getSrvc.list.paging" resultClass="SrvcVO" parameterClass="SrvcVO">
   		SELECT * 
   		FROM (
   			select h.*
   				, @row := @row + 1 AS rn1 
   			from (<include refid="sqlGetListAllSrvc"/>) h
   			,(SELECT @row := 0) K
+  			<!-- ORDER BY h.TYPE_NM DESC -->
+  			<isEqual property="sort" compareValue="AMOUNT_STORE">
+	  			ORDER BY h.AMOUNT_STORE DESC
+	  		</isEqual>
+	  		<isEqual property="sort" compareValue="TYPE_NM">
+	  			ORDER BY h.TYPE_NM DESC
+	  		</isEqual>
   			) t
   		<![CDATA[       
           WHERE rn1 > #MIN#  and  rn1 <= #MAX#
@@ -232,6 +251,12 @@
   <select id="getSrvc.listImportReport" resultClass="java.util.HashMap" parameterClass="SrvcVO">
   		select h.*
   		from (<include refid="sqlGetListAllSrvc"/>) h
+  		<isEqual property="sort" compareValue="AMOUNT_STORE">
+  			ORDER BY h.AMOUNT_STORE DESC
+  		</isEqual>
+  		<isEqual property="sort" compareValue="TYPE_NM">
+  			ORDER BY h.TYPE_NM DESC
+  		</isEqual>
   </select>
   <delete id="DeleteSrvcVO">
   		DELETE FROM srvc WHERE SRVC_ID = #SRVC_ID#
@@ -247,6 +272,9 @@
 		   	</isNotEmpty>
 		   	<isNotEmpty property="USER_NAME" prepend=",">
 		   		USER_NAME = #USER_NAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="PRICE_IMPORT" prepend=",">
+		   		PRICE_IMPORT = #PRICE_IMPORT#
 		   	</isNotEmpty>
 		   		,REASON = #REASON#
 		</dynamic>
@@ -298,9 +326,6 @@
 			)
   </insert>
   <sql id="sqlGetListHistorySrvc">	
-  		SELECT h.*
-  				, @row := @row + 1 AS rn1 
-  		FROM(
 		select * from srvc_history S 
   		<dynamic prepend="WHERE">
 		   	<isNotEmpty property="SRVC_ID" prepend="AND">
@@ -313,14 +338,15 @@
 		   		S.HIS_CHANGE_TIME = #HIS_CHANGE_TIME#
 		   	</isNotEmpty>
 		</dynamic>
-  		order by S.his_change_time desc
-  		)h,(SELECT @row := 0) K
   </sql>
   <select id="getSrvcHistoryChange" resultClass="SrvcVO" parameterClass="SrvcVO">
-  		select M.* from (<include refid="sqlGetListHistorySrvc"/>) M
-  		<![CDATA[       
-          WHERE M.rn1 > 0  and  M.rn1 <= 31
-                ]]>
+  		SELECT N.*
+  		FROM(
+	  		select M.* , @row := @row + 1 AS rn1 
+	  		from (<include refid="sqlGetListHistorySrvc"/>) M,(SELECT @row := 0) K
+	  		order by M.his_change_time desc
+  		)N
+  		<![CDATA[WHERE rn1 > 0  and  rn1 <= 31]]>
   </select>
   <insert id="updateSrvcVOHistory">
 	    UPDATE srvc_history 
@@ -340,4 +366,26 @@
 		</dynamic>
 	    WHERE HIS_ID = #HIS_ID#
   </insert>
+  <select id="getListSrvcHistoryByDate" resultClass="SrvcVO" parameterClass="SrvcVO">
+  		SELECT * FROM srvc_history H 
+  		<![CDATA[       
+          WHERE H.restar_id = #RESTAR_ID# and H.SRVC_ID = #SRVC_ID# and H.his_change_time <= #HIS_CHANGE_TIME#
+                ]]>
+        order by  H.his_change_time desc                
+  </select>
+  <select id="getListSrvcHistoryBySrvcId" resultClass="SrvcVO" parameterClass="SrvcVO">
+  		SELECT * FROM srvc_history H 
+  		<![CDATA[
+  			WHERE H.restar_id = #RESTAR_ID# and  H.SRVC_ID = #SRVC_ID# and and H.his_change_time <= #HIS_CHANGE_TIME#
+  		]]>
+  		order by  H.his_change_time desc
+  </select>
+  <select id="getSrvc.getCalculateValueStore" resultClass="java.util.HashMap" parameterClass="SrvcVO">	
+  		SELECT sum(M.total) as totalValue
+  		FROM(
+			SELECT 
+				(t.AMOUNT_STORE * t.PRICE_IMPORT) as total
+		    FROM (<include refid="sqlGetListAllSrvc"/>) t
+	    )M
+  </select>
 </sqlMap>

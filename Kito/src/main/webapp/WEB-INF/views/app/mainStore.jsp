@@ -34,7 +34,7 @@
 				left : main_left,
 				width:'100%',
 				height:'100%',
-				/* main: request.getContextPath+'/application/get/ADM023.do', */
+				main: request.getContextPath+'/application/get/ADM023.do', 
 				renderTo : 'main_contents'	
 			});	
 		

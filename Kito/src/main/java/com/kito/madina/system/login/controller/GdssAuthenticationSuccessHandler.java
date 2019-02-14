@@ -96,6 +96,8 @@ public class GdssAuthenticationSuccessHandler implements AuthenticationSuccessHa
 			/* If using select-menu style from same login page using index.do */
 			//response.sendRedirect("/GDSS/index.do");
 			String path = request.getContextPath();
+			response.sendRedirect(path+"/home.do");
+			/*
 			if(isUser){
 				RestaurantVO rVo = restaurantService.getRestaurantVOByID(vo.getRESTAR_ID()) ;
 				int haveRoom = codeService.getHaveRoomInRestaurant(vo.getRESTAR_ID(), rVo.getRESTAR_TYPE());
@@ -105,6 +107,7 @@ public class GdssAuthenticationSuccessHandler implements AuthenticationSuccessHa
 					response.sendRedirect(path+"/home.do");
 			}
 			else response.sendRedirect(path+"/mainStatistic.do");
+			*/
 		}
 	}
 

@@ -23,4 +23,7 @@
 	<sqlMap resource="/sqlmap/bankAccount.xml"/> 
 	<sqlMap resource="/sqlmap/roomTurnHistory.xml"/> 
 	<sqlMap resource="/sqlmap/roomSrvcHistory.xml"/>
+	<sqlMap resource="/sqlmap/paymentMethod.xml"/>
+	<sqlMap resource="/sqlmap/ecount_phieu_thu.xml"/>
+	<sqlMap resource="/sqlmap/ecount_phieu_chi.xml"/>
 </sqlMapConfig>

@@ -37,6 +37,9 @@ Ext.define('MNG.model.srvcModel', {
 						name : 'PRICE',
 						type : 'float'
 					}, {
+						name : 'PRICE_IMPORT',
+						type : 'float'
+					}, {
 						name : 'DISCOUNT',
 						type : 'float'
 					},{

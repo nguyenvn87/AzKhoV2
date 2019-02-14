@@ -7,7 +7,11 @@
 <sqlMap namespace="import">
 	<typeAlias alias="ImportVO" type="com.kito.madina.test.vo.ImportVO"/>
 	<typeAlias alias="ImportDetailVO" type="com.kito.madina.test.vo.ImportDetailVO"/>
-	
+	<sql id="sqlGetListAllImport">
+	  		SELECT im.*
+		    FROM import im
+		    WHERE im.RESTAR_ID = #RESTAR_ID#
+  	</sql>
 	<select id="getImportAll" resultClass="ImportVO" >
 	    SELECT im.*,
   				p.PROV_NM
@@ -16,7 +20,7 @@
 	    on im.PROV_CD = p.PROV_CD
 	</select>
 	<select id="getDetailFromImportVO" resultClass="ImportDetailVO">
-		SELECT detail.*, (SELECT SRVC_NM FROM srvc S WHERE S.SRVC_ID = detail.SRVC_ID) AS SRVC_NAME FROM import_detail detail WHERE detail.IMPRT_CD = #IMPRT_CD#
+		SELECT detail.*, (SELECT SRVC_NM FROM srvc S WHERE S.SRVC_ID = detail.SRVC_ID) AS SRVC_NAME FROM import_detail detail WHERE detail.IMPRT_CD = #IMPRT_CD# and detail.RESTAR_ID = #RESTAR_ID#
 	</select>
 	<insert id="CreateImportVO">
 	    INSERT INTO import 
@@ -31,6 +35,8 @@
 			, PAYED_MONEY 
 			, DATE_IMPORT
 			, RESTAR_ID
+			, DESCRIPTION
+			, IMPRT_CD
 	    	) 
 	    VALUES (
 			#IMPRT_BILL# 
@@ -44,6 +50,8 @@
 			, #PAYED_MONEY# 
 			, #DATE_IMPORT#
 			, #RESTAR_ID#
+			, #DESCRIPTION#
+			, #IMPRT_CD#
 			)
 	<selectKey resultClass="int" keyProperty="IMPRT_CD" >
         SELECT @@IDENTITY AS IMPRT_CD
@@ -57,27 +65,64 @@
 			, PROV_CD = #PROV_CD#
 			, PROV_NM = #PROV_NM#
 			, TOTAL_MONEY = #TOTAL_MONEY#
-			, DISCOUNT_MONEY = #DISCOUNT_MONEY#
 			, NEEDTOPAYED = #NEEDTOPAYED#
 			, PAYED_MONEY = #PAYED_MONEY#
+			<isNotEmpty property="DATE_IMPORT" prepend=",">
+				<![CDATA[ DATE_IMPORT = #DATE_IMPORT# ]]>
+			</isNotEmpty>	
 			, CHANGETIME  = now()
-	    WHERE IMPRT_CD = #IMPRT_CD#
+			, DESCRIPTION = #DESCRIPTION#
+	    WHERE IMPRT_CD = #IMPRT_CD# and RESTAR_ID = #RESTAR_ID#
   </insert>
   <delete id="DeleteImportVo">
   	DELETE FROM import WHERE IMPRT_CD = #IMPRT_CD#
   </delete>
   <sql id="sqlGetListImport">
-  		SELECT im.*
-	    FROM import im
-	    LEFT JOIN provider p
-	    on im.PROV_CD = p.PROV_CD
-	    WHERE im.RESTAR_ID = #RESTAR_ID#
-	    order by im.DATE_IMPORT desc
+	  		SELECT im.*
+		    FROM import im
+		    	LEFT JOIN provider p
+		    	on im.PROV_CD = p.PROV_CD
+		    <dynamic prepend="where">
+				<isNotEmpty property="STARTDATE" prepend="AND">
+						<![CDATA[ im.DATE_IMPORT >= #STARTDATE# ]]>
+				</isNotEmpty>	
+				<isNotEmpty property="ENDDATE" prepend="AND">
+						<![CDATA[ im.DATE_IMPORT <= #ENDDATE# ]]>
+				</isNotEmpty>
+				<isNotEmpty property="RESTAR_ID" prepend="AND">
+						<![CDATA[ im.RESTAR_ID = #RESTAR_ID# ]]>
+				</isNotEmpty>
+			</dynamic>
+			order by im.DATE_IMPORT desc
   </sql>
   <sql id="sqlGetListStatisticImptProfit">
   		SELECT *
 	    FROM srvc S
 	    WHERE S.RESTAR_ID = #RESTAR_ID#
+  </sql>
+  <sql id="sqlSelectDetailImport111">
+  	SELECT L.*, @row := @row + 1 AS rn1  
+	FROM(
+	  		SELECT sum(T.TOTAL_MONEY) as TOTAL_MONEY
+			, sum(T.amount) as IAMOUNT
+			, T.SRVC_ID
+			, T.UNIT
+			FROM import_detail as T
+			 LEFT JOIN import im ON im.IMPRT_CD = T.IMPRT_CD
+			<dynamic prepend="where">
+				<isNotEmpty property="STARTDATE" prepend="AND">
+						<![CDATA[ im.DATE_IMPORT >= #STARTDATE# ]]>
+				</isNotEmpty>	
+				<isNotEmpty property="ENDDATE" prepend="AND">
+						<![CDATA[ im.DATE_IMPORT <= #ENDDATE# ]]>
+				</isNotEmpty>
+				<isNotEmpty property="RESTAR_ID" prepend="AND">
+						<![CDATA[ im.RESTAR_ID = #RESTAR_ID# ]]>
+				</isNotEmpty>
+				and T.unit != ''
+			</dynamic>
+			group by T.srvc_id , T.UNIT
+		) L,(SELECT @row := 0) K
   </sql>
   <select id="GetListStatisticImportProfit" parameterClass="ImportVO" resultClass="java.util.HashMap"> 
   		SELECT * 
@@ -101,38 +146,44 @@
   </select>
   
  <!--  History import -->
-  <select id="getImportPaging" parameterClass="ImportVO" resultClass="ImportVO"> 
-  		 SELECT * 
-  		FROM (
-  			select h.*
-  				, @row := @row + 1 AS rn1 
+  <select id="getImportPaging" parameterClass="java.util.HashMap" resultClass="ImportVO"> 
+  		 
+      SELECT M.* 
+      FROM(
+     		SELECT h.*, @row := @row + 1 AS rn1 
   			from (<include refid="sqlGetListImport"/>) h
   			,(SELECT @row := 0) K
-  			) t
-  		<![CDATA[       
-          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
-                ]]>
+  			order by h.DATE_IMPORT desc
+  		  ) M   
+  	  <![CDATA[WHERE rn1 > #MIN#  and  rn1 <= #MAX#]]>
   </select>
-  <select id="getImport.getListCount" resultClass="java.util.HashMap" parameterClass="ImportVO">	
+  <select id="getImport.getListCount" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">	
 		SELECT 
-			count(t.IMPRT_CD) as COUNT
+			count(t.IMPRT_CD) as COUNT,
+			sum(t.TOTAL_MONEY)  as total
 	    FROM (<include refid="sqlGetListImport"/>) t
   </select>
-  
+  <select id="getImport.getDetailSrvcCount" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">	
+		SELECT 
+			count(t.rn1) as COUNT
+	    FROM (<include refid="sqlSelectDetailImport111"/>) t
+  </select>
   <select id="getStatisticImport" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
-  		SELECT sum(TOTAL_MONEY) as TOTAL_MONEY
-		, sum(amount) as IAMOUNT
-		, SRVC_ID
-		FROM import_detail as T
-		<dynamic prepend="where">
-			<isNotEmpty property="STARTDATE" prepend="AND">
-					<![CDATA[ T.CHANGETIME >= #STARTDATE# ]]>
-			</isNotEmpty>	
-			<isNotEmpty property="ENDDATE" prepend="AND">
-					<![CDATA[ T.CHANGETIME <= #ENDDATE# ]]>
-			</isNotEmpty>
-		</dynamic>
-		group by(srvc_id)
+	  SELECT M.*
+	  FROM(
+	  		SELECT K.*, N.SRVC_CD, N.SRVC_NM, N.AMOUNT_STORE, N.PRICE_IMPORT 
+	  		FROM(<include refid="sqlSelectDetailImport111"/>) K
+		    left join srvc N on N.srvc_id = K.srvc_id
+		    where N.is_used = 1
+		    )M
+  	<dynamic prepend="where">
+	 	<isNotEmpty property="MIN" prepend="AND">
+			<![CDATA[ M.rn1 > #MIN# ]]>
+		</isNotEmpty>
+		<isNotEmpty property="MAX" prepend="AND">
+			<![CDATA[ M.rn1 <= #MAX# ]]>
+		</isNotEmpty>
+	 </dynamic>  
   </select>
   <select id="getListMonthlyImport" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
   		SELECT  
@@ -143,5 +194,13 @@
 		WHERE DATE_FORMAT(changetime, '%Y') = #YEAR#
 				and RESTAR_ID = #RESTAR_ID#
 		group by Month
+  </select>
+  <select id="getLastIDImportIndex" resultClass="ImportVO" parameterClass="java.util.HashMap">	
+  	select A.* 
+  	from( 	
+  		SELECT t.*, @row := @row + 1 AS rn1 
+		FROM (<include refid="sqlGetListAllImport"/>) t ,(SELECT @row := 0) K
+		ORDER BY t.IMPRT_CD DESC ) A
+	where A.rn1 = 1
   </select>
 </sqlMap>

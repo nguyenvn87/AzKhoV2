@@ -86,7 +86,14 @@ public class HomeController {
 	@RequestMapping("/dangki.do")
 	public ModelAndView testlist(Locale locale, Model model) {
 		
-		ModelAndView nav = new ModelAndView("/test/bootstrap","model", model);
+		//ModelAndView nav = new ModelAndView("/test/bootstrap","model", model);
+		ModelAndView nav = new ModelAndView("/introduction/banhang","model", model);
+		return nav;
+	}
+	@RequestMapping("/dangki")
+	public ModelAndView dangki(Locale locale, Model model) {
+		
+		ModelAndView nav = new ModelAndView("/introduction/banhang","model", model);
 		return nav;
 	}
 	@RequestMapping("/karaoke.do")
@@ -170,9 +177,28 @@ public class HomeController {
 		Object objUser = SessionUtil.getSessionAttribute("loggedUserId");
 		model.addAttribute("loggedUserId", objUser.toString());
 		
+		Object objRes = SessionUtil.getSessionAttribute("loginRestautant");
+		
+		String loginUser = null;
+		String loginRestautant = null;
+		if(objUser != null){
+			loginUser = objUser.toString();
+		}
+		if(objRes != null){
+			loginRestautant = objRes.toString();
+		}
+		
+		if(loginUser != null && !loginUser.isEmpty()){
+			
+			RestaurantVO rVo = restaurantService.getRestaurantVOByID(loginRestautant) ;
+			int haveRoom = codeService.getHaveRoomInRestaurant(loginRestautant, rVo.getRESTAR_TYPE());
+			if(haveRoom == 1){
+				model.addAttribute("haveRoom","true");
+			}else model.addAttribute("haveRoom","false");
+		}
+		
 		ModelAndView nav = new ModelAndView("/app/mainStatistic","model", model);
 		return nav;
-		//return "/app/mainStatistic";
 	}
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER','ROLE_USER')")
 	@RequestMapping("/mainStore.do")
@@ -214,9 +240,9 @@ public class HomeController {
 			RestaurantVO rVo = restaurantService.getRestaurantVOByID(loginRestautant) ;
 			int haveRoom = codeService.getHaveRoomInRestaurant(loginRestautant, rVo.getRESTAR_TYPE());
 			if(haveRoom == 1){
-				return "/home";
+				return "/Reception/KaraokeReception";
 			}
-			else return "/manager/SaleManager";
+			else return "/Reception/SaleReception";
 		}
 		else
 			return "index";

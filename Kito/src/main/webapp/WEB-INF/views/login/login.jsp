@@ -101,7 +101,7 @@
                             <span class="need-help-text">Cần hỗ trợ ?</span>
                             <span class="need-help-text need-help--text-bold">Liên hệ chúng tôi</span>
                         </a>
-                        <a href="banhang.do" class="need-help-btn">
+                        <a href="dangki" class="need-help-btn">
                             <span class="need-help-text">Chưa có tài khoản ?</span>
                             <span class="need-help-text need-help--text-bold">Đăng ký miễn phí</span>
                         </a>

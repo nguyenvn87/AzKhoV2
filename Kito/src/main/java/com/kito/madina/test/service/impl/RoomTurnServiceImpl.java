@@ -46,6 +46,7 @@ public class RoomTurnServiceImpl implements RoomTurnService{
 	}
 	@Override  
 	public List<RoomTurnVO> getListPagingTurnStatistic(HashMap<String, Object> map){
+		if(map.get("sort")==null || map.get("sort").toString().isEmpty()) map.put("sort", "DESC");
 		List<RoomTurnVO> list = roomTurnDAO.getListPagingTurnStatistic(map);
 		return list;
 	}
@@ -69,7 +70,7 @@ public class RoomTurnServiceImpl implements RoomTurnService{
 		return roomTurnDAO.deleteRoomTurnByRoomUsedId(RoomUsedId);
 	}
 	@Override
-	public String generateBillCode(){
+	public String generateNewBillCode(){
 		String strCodeBill = "HD";
 		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
 		try{
@@ -87,6 +88,37 @@ public class RoomTurnServiceImpl implements RoomTurnService{
 			}
 		}catch(Exception e){
 			
+		}
+		return strCodeBill;
+	}
+	@Override
+	public String generateBillCode(){
+		String strCodeBill = "HD";
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		try{
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("RESTAR_ID", restarId);
+			RoomTurnVO rVo = getLastRoomTurnByIndex(1);
+			if(rVo != null && rVo.getBILL_CD().length() > 6){
+				String billCode = rVo.getBILL_CD();
+				if(billCode.length() > 6){
+					String abcd = billCode.substring(billCode.length()-6, billCode.length());
+					int iCount = Integer.parseInt(abcd);
+					iCount = iCount + 1;
+					String strCount = iCount+"";
+					if(strCount != null && strCount.length() > 0){
+						int iTmp = 6 - strCount.length();
+						for(int i=0; i < iTmp; i++){
+							strCodeBill = strCodeBill+"0";
+						}
+						strCodeBill = strCodeBill + strCount;
+					}
+				}
+			}else{
+				strCodeBill = generateNewBillCode();
+			}
+		}catch(Exception e){
+			strCodeBill = generateNewBillCode();
 		}
 		return strCodeBill;
 	}
@@ -112,4 +144,14 @@ public class RoomTurnServiceImpl implements RoomTurnService{
 		RoomTurnVO obj = roomTurnDAO.getRoomTurnHistoryVOByObject(vo);
 		return obj;
 	}
+	@Override
+	public RoomTurnVO getLastRoomTurnByIndex(int index){
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("RESTAR_ID", restarId);
+		map.put("rn1", index);
+		RoomTurnVO obj = roomTurnDAO.getLastRoomTurnByIndex(map);
+		return obj;
+	}
+	
 }

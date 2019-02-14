@@ -110,24 +110,24 @@ Ext
 																					width : 100,
 																					dataIndex : 'PRICE',
 																					align: 'right',
-																					editable : true,
-																					text : 'Giá',
-																					editor : {
+																					//editable : true,
+																					text : 'Giá'
+																					/*editor : {
 																						xtype : 'numberfield',
 																						allowBlank : false
-																					}
+																					}*/
 																				},
 																				{
 																					xtype : 'numbercolumn',
 																					width : 70,
 																					text : 'SL',
 																					align: 'right',
-																					editable : true,
-																					dataIndex : 'AMOUNT',
-																					editor : {
+																					//editable : true,
+																					dataIndex : 'AMOUNT'
+																					/*editor : {
 																						xtype : 'numberfield',
 																						allowBlank : false
-																					}
+																					}*/
 																				},
 																				{
 																					xtype : 'gridcolumn',
@@ -179,6 +179,7 @@ Ext
 																					xtype : 'actioncolumn',
 																					width : 50,
 																					align : 'center',
+																					hidden : true,
 																					text : 'Xóa',
 																					items : [ {
 																						iconCls : 'icon-delete',

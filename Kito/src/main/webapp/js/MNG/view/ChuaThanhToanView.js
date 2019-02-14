@@ -106,7 +106,7 @@ Ext
 																		},
 																		{
 																			xtype : 'gridcolumn',
-																			width : 95,
+																			width : 120,
 																			sortable : false,
 																			align : 'right',
 																			text : "Tổng tiền",
@@ -118,7 +118,7 @@ Ext
 																				if (data != '')
 																					data = formatSupporter
 																							.formatToMoney(data);
-																				return data;
+																				return '<span style="color: red">'+data+'</span>';
 																			}
 																		},
 																		{
@@ -136,7 +136,7 @@ Ext
 																				if (data != '')
 																					data = formatSupporter
 																							.formatToMoney(data);
-																				return data;
+																				return '<span style="color: green">'+data+'</span>';
 																			}
 																		},
 																		{
@@ -174,6 +174,7 @@ Ext
 																		{
 																			menuDisabled : true,
 																			sortable : false,
+																			hidden: true,
 																			text : 'Chỉnh sửa',
 																			xtype : 'actioncolumn',
 																			align : 'center',
@@ -190,6 +191,23 @@ Ext
 																									grid,
 																									rowIndex,
 																									colIndex);
+																				}
+																			} ]
+																		},
+																		{
+																			menuDisabled : true,
+																			sortable : false,
+																			text : 'Chỉnh sửa',
+																			xtype : 'actioncolumn',
+																			align : 'center',
+																			width : 90,
+																			items : [ {
+																				iconCls : 'icon-edit',
+																				tooltip : 'Sửa hình thức thanh toán',
+																				handler : function(grid,rowIndex,colIndex) {
+																					grid.getSelectionModel().select(rowIndex);
+																					var record = grid.getStore().getAt(rowIndex);
+																					me.updateHinhThucThanhToan(record);
 																				}
 																			} ]
 																		},
@@ -229,7 +247,7 @@ Ext
 																				debit = r.data['IS_DELIVERED'];
 																				if (debit == '1'
 																						|| debit == 1) {
-																					return 'Đã xuất';
+																					return '';
 																				}
 																				return 'Chưa xuất';
 																			}
@@ -314,7 +332,7 @@ Ext
 																			text : 'Excel',
 																			iconCls : 'icon-excel',
 																			height : 35,
-																			itemId : 'btnExcelPrint',
+																			itemId : 'btnExportExcelPrint',
 																		} ],
 																dockedItems : [ {
 																	xtype : 'pagingtoolbar',
@@ -398,5 +416,10 @@ Ext
 							hasPayed : rec.get('HAS_PAYED')
 						};
 						myController.showCustomerInfo(param);
+					},
+					updateHinhThucThanhToan: function(record){
+						var myController = MANAGER.app
+								.getController('MNG.controller.ChuaThanhToanController');
+						myController.updateHinhThucThanhToan(record);
 					}
 				});

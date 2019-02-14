@@ -43,6 +43,9 @@ Ext.application({
 					       
 					     }
 					});
+					
+					// Checking
+					formatSupporter.checkingTrialAccount();
 				}
 			}
 		});

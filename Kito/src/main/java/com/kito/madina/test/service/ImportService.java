@@ -21,8 +21,8 @@ public interface ImportService {
 	
 	public Integer deleteImportDetailByImportID(ImportDetailVO vo);
 	public List<HashMap<String, Object>> getStatisticImport(HashMap<String, Object> vo);
-	public List<ImportVO> getImportPaging(ImportVO vo);
-	public HashMap<String, Object> getImportCount(ImportVO vo);
+	public List<ImportVO> getImportPaging(HashMap<String, Object> vo);
+	public HashMap<String, Object> getImportCount(HashMap<String, Object> vo);
 	public List<ImportDetailVO> getImportDetailPaging(HashMap<String, Object> map);
 	public HashMap<String, Object> getImportDetailPagingCount(HashMap<String, Object> map);
 	public List<HashMap<String, Object>> getListMonthlyImport(HashMap<String, Object> vo);
@@ -33,4 +33,6 @@ public interface ImportService {
 	public Integer deleteImportDetailVOByID(ImportDetailVO dbVO);
 	public List<HashMap<String, Object>> getThongKeNhapHangPaging(HashMap<String, String> map);
 	public HashMap<String, Object> getThongKeNhapHangCount(HashMap<String, String> map);
+	public HashMap<String, Object> getDetailSrvcCount(HashMap<String, Object> map);
+	public ImportVO getLastIDImportIndex(HashMap<String, Object> map);
 }

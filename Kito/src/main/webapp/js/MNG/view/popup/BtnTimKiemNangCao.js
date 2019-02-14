@@ -107,8 +107,6 @@ Ext.define('MNG.view.popup.BtnTimKiemNangCao', {
 									select: function(obj,record){
 										var data = record[0].raw;
 										var tmpValue = data['CUS_CD'];
-										//Ext.ComponentQuery.query('#customerContainerId [name=CUS_CD]')[0].setValue(tmpValue);
-										//Ext.ComponentQuery.query('#customerContainerId [name=ADDR]')[0].setValue(data['ADDR']);
 										return true;
 									}}
 								}

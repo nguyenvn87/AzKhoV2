@@ -118,7 +118,7 @@ Ext.define('BIZ.utilities.formatSupporter', {
 		if(param == 'TODAY'){
 			_year = currentdate.getFullYear();
 			if(_month < 10) _month = '0'+_month;
-			output[0] = _year + '-' + _month + '-'+ currentdate.getDate() + ' '+'00:00:01';
+			output[0] = _year + '-' + _month + '-'+ currentdate.getDate() + ' '+'00:00:00';
 			output[1] = _year + '-' + _month + '-'+ currentdate.getDate() + ' '+'23:59:59';
 		}
 		if(param == 'YEAR'){
@@ -128,5 +128,52 @@ Ext.define('BIZ.utilities.formatSupporter', {
 			output[1] = _year + '-' + '12' + '-'+  noOfday + ' '+'23:59:59';
 		}
 		return output;
+	},
+	checkingTrialAccount:function(){
+		me = this;
+		Ext.Ajax.request( {
+						url: contextPath + '/sample/getResultOfCheckingTrialAccount.json',
+			    		method:'GET',
+			    		success: function(response){
+			    			var data = Ext.JSON.decode(response.responseText);
+			    			if(data.data != '1'){
+			    				me.setInitDataDefault();
+			    			}
+			    		},
+			    		failure: function(response){
+			    		}
+					});
+	},
+	sendRequestInitData: function(){
+		Ext.Ajax.request( {
+    		url: contextPath + '/sample/setDefaultInitData.json',
+    		method:'POST',
+    		params: {},
+    		success: function(response){
+    			var text = Ext.JSON.decode(response.responseText);
+    			console.log( text);
+    			swal("Thành công !");
+    			window.location.reload();
+    		},
+    		failure: function(response){
+    			var text = Ext.JSON.decode(response.responseText);
+    			console.log( text);   
+    			swal("Thất bại !");
+    		}
+    	});
+	},
+	setInitDataDefault:function(){
+		me = this;
+		swal({
+				title: "Bạn muốn tạo dữ liệu mẫu ?",
+				text: "Click 'OK' để tạo, 'Cancel' để hủy",
+				type: "info",
+				showCancelButton: true,
+				closeOnConfirm: false,
+				showLoaderOnConfirm: true,
+			},
+			function(){
+				me.sendRequestInitData();
+		});
 	}
 });

@@ -41,38 +41,47 @@ public class MappingExcelView extends AbstractExcelView  {
 		// create a new Excel sheet
 	    HSSFSheet sheet = workbook.createSheet( (String)(model.get( "fileName")) );
 	    sheet.setDefaultColumnWidth(30);
+	    sheet.setColumnWidth(0, 1800);
 	    
 	    // create style for header cells
 	    CellStyle style = workbook.createCellStyle();
 	    Font font = workbook.createFont();
-	    font.setFontName("Arial");
-	    //font.setFontHeight((short)(7.5*30));
-	    style.setFillForegroundColor(HSSFColor.ROYAL_BLUE.index);
-	    style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	    font.setFontName("Times New Roman");
+	    style.setAlignment(CellStyle.ALIGN_CENTER);
 	    font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-	    font.setColor(HSSFColor.WHITE.index);
+	    font.setFontHeightInPoints((short) 12);
 	    style.setFont(font);
+	    style.setBorderTop(CellStyle.BORDER_THIN);
+	    style.setBorderBottom(CellStyle.BORDER_THIN);
+	    style.setIndention((short)1);
 	    
 	    CellStyle styleMoney = workbook.createCellStyle();
 	    Font font1 = workbook.createFont();
-	    font1.setFontName("Arial");
+	    font1.setFontName("Times New Roman");
 	    font1.setFontHeightInPoints((short) 12);
 	    styleMoney.setFont(font1);
 	    DataFormat df = workbook.createDataFormat();
+	    styleMoney.setAlignment(CellStyle.ALIGN_RIGHT);
 	    styleMoney.setDataFormat(df.getFormat("#,#0.00"));
+	    styleMoney.setIndention((short)1);
 	    
 	    CellStyle styleNumber = workbook.createCellStyle();
 	   
-	    font1.setFontName("Arial");
+	    font1.setFontName("Times New Roman");
 	    styleNumber.setFont(font1);
+	    styleNumber.setAlignment(CellStyle.ALIGN_RIGHT);
 	    styleNumber.setDataFormat(df.getFormat("#,#0"));
+	    styleNumber.setIndention((short)1);
 	    
 	    CellStyle styleString = workbook.createCellStyle();
 	    font1.setFontName("Times New Roman");
 	    styleString.setFont(font1);
+	    styleString.setAlignment(CellStyle.ALIGN_LEFT);
+	    styleString.setIndention((short)1);
 	    
 	    // create header row
-	    HSSFRow header = sheet.createRow(0);
+	    sheet.createRow(0);
+	    HSSFRow header = sheet.createRow(1);
 	    
 	    int i = 0;
 	    for ( String column : column_header ) {
@@ -84,15 +93,16 @@ public class MappingExcelView extends AbstractExcelView  {
 	    		header.createCell( i ).setCellValue( column_header[ i ] );
 	    	}
 		    header.getCell( i ).setCellStyle(style);
+		    header.setHeightInPoints(40);
 	    	i++;	    	
 	    }	    
 	    // create data rows
-	    int rowCount = 1;
+	    int rowCount = 2;
 	    
 	    for (HashMap<String, String> listItem : list) {
 	    	int RowTmp = rowCount++;
 	    	HSSFRow aRow = sheet.createRow( RowTmp );	    
-	    	
+	    	aRow.setHeightInPoints(25);
 	    	for( int k=0; k<column_arr.length; k++  ) {
 	    		String field = column_arr[ k ];
 	    		Object type  = listItem.get(field);
@@ -112,11 +122,9 @@ public class MappingExcelView extends AbstractExcelView  {
 	    			cell.setCellStyle(styleNumber);
 	    		}
 	    		else {
-	    			//aRow.createCell( k ).setCellValue(type.toString());
-	    			//aRow.createCell( k ).setCellStyle(styleString);
 	    			HSSFCell cell = aRow.createCell( k );
 	    			cell.setCellValue(type.toString());
-	    			cell.setCellStyle(styleNumber);
+	    			cell.setCellStyle(styleString);
 	    		}
 	    	}
 	    	

@@ -58,6 +58,18 @@ Ext.define('MNG.model.restaurantModel', {
 						name : 'USER_EDIT_BILL',
 						type : 'string' }
 					,{
+						name : 'BILL_TITLE',
+						type : 'string' }
+					,{
+						name : 'BILL_SLOGAN',
+						type : 'string' }
+					,{
+						name : 'EXPIRED_DATE',
+						type : 'string' }
+					,{
+						name : 'BILL_TITLE3',
+						type : 'string' }
+					,{
 						name : 'PACKAGE',
 						type : 'string' }
 					]

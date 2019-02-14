@@ -31,6 +31,7 @@ import com.kito.madina.cmmn.util.CmmUtil;
 import com.kito.madina.cmmn.util.DateUtil;
 import com.kito.madina.cmmn.util.PropertyUtil;
 import com.kito.madina.cmmn.util.SessionUtil;
+import com.kito.madina.cmmn.util.UtilConst;
 import com.kito.madina.test.service.CmmCdUserService;
 import com.kito.madina.test.service.CodeService;
 import com.kito.madina.test.service.CustomerService;
@@ -61,7 +62,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
-//@RequestMapping("/v2/ladm/baunit/**")
 public class ReportController {
 	
 	@Resource(name = "roomTurnService")
@@ -178,7 +178,7 @@ public class ReportController {
 		for(int i=0; i< listSrvc.size(); i++){
 			RoomSrvcVO vo = listSrvc.get(i);
 			String stt = (i+1)+"";
-			float totalMoney = vo.getAMOUNT() * vo.getPRICE();
+			double totalMoney = vo.getAMOUNT() * vo.getPRICE();
 			String totalM = CmmUtil.formatNumber2Money(totalMoney);
 			Map<String, Object> mapVo = new HashMap<String, Object>();
 			String unitName = (vo.getUNIT_NM()!=null) ? vo.getUNIT_NM():"";
@@ -212,11 +212,15 @@ public class ReportController {
 		JRDataSource ds = new JRBeanCollectionDataSource(al);
 		map.put( "ParamResName", restaurntVO.getRESTAR_NM());
 		map.put( "ParamAddr", restaurntVO.getADDR());
-		map.put( "ParamPhone", "SDT: "+restaurntVO.getPHONE());
+		map.put( "ParamPhone",restaurntVO.getBILL_TITLE3());
 		map.put( "ParamHours", paramTimeIn);
 		map.put( "ParamHoursOut", paramTimeOut);
 		map.put( "ParamRoomNo", paramRoomNo);
 		map.put( "ParamUser", uVo.getFULLNAME());
+		String billTitle = (restaurntVO.getBILL_TITLE()!= null)?restaurntVO.getBILL_TITLE():PropertyUtil.getStringUTF8("info.restar.title");
+		map.put("paramMainTitle", billTitle);
+		map.put("paramTitle2", restaurntVO.getADDR2()!=null?restaurntVO.getADDR2():"");
+		
 		map.put( "ParameterWebAddr", (webAddr != null)?webAddr:"");
 		map.put( "datasource", ds);
 		map.put( "format", "pdf");
@@ -245,7 +249,7 @@ public class ReportController {
 		for(int i=0; i< listSrvc.size(); i++){
 			RoomSrvcVO vo = listSrvc.get(i);
 			String stt = (i+1)+"";
-			float totalMoney = vo.getAMOUNT() * vo.getPRICE();
+			double totalMoney = vo.getAMOUNT() * vo.getPRICE();
 			String totalM = CmmUtil.formatNumber2Money(totalMoney);
 			Map<String, Object> mapVo = new HashMap<String, Object>();
 			mapVo.put("ItemName", vo.getMENU_NM());
@@ -576,7 +580,7 @@ public class ReportController {
 		
 		CmmCdUserVO cVo = new CmmCdUserVO();
 		cVo.setRESTAR_ID(restarId);
-		cVo.setGROUP_CD("GRHAG");
+		cVo.setGROUP_CD(UtilConst.GROUP_HANG);
 		List<CmmCdUserVO> listCode = cmmCdUserService.getListCmmCdUserVO(cVo);
 		
 		java.util.Date dateCrr= new java.util.Date();
@@ -779,97 +783,82 @@ public class ReportController {
 	public ModelAndView rptImportProfit(HttpServletRequest req, @RequestParam(value="LIID", required=false)String liid, 
 			@RequestParam(value="CRID", required=false)String crid, Map<String, Object> model) throws JRException, IOException {
 		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
-		String statisType = req.getParameter("LIID");
+		String userName = req.getParameter("USERNAME");
 		
 		List<Map<String, Object>> al = new ArrayList<Map<String, Object>>();
 		Map<String, Object> mapRpt = new HashMap<String, Object>();
 		HashMap<String, Object> mapType =  null ;
-		String arrangeTime = "";
+		String arrangeTime = null;
 		
-		if(statisType != null && statisType.equalsIgnoreCase("OTHER")){
-			mapType = new HashMap<String, Object>();
-			String startDateParam = req.getParameter("STARTDATE");
-			String endDateParam = req.getParameter("ENDDATE");
-			arrangeTime = "("+startDateParam.substring(8, 10)
-						+"/"+startDateParam.substring(5, 7)
-						+"/"+startDateParam.substring(0, 4)
-						+" -> "
-						+ endDateParam.substring(8, 10)
-						+ "/"+endDateParam.substring(5, 7)
-						+ "/"+endDateParam.substring(0, 4)
-						+ ")";
-			mapType.put("STARTDATE", startDateParam);
-			mapType.put("ENDDATE", endDateParam);
-		}
-		else{
-			mapType = getArrangeTime(statisType);
-		}
 		
-		HashMap<String, Object> iVo = new HashMap<String, Object>();
-		iVo.put("RESTAR_ID",restarId);
-		iVo.put("STARTDATE", mapType.get("STARTDATE"));
-		iVo.put("ENDDATE", mapType.get("ENDDATE"));
-		List<HashMap<String, Object>> listImport = importService.getStatisticImport(iVo);
+		mapType = new HashMap<String, Object>();
+		String startDateParam = req.getParameter("STARTDATE");
+		String endDateParam = req.getParameter("ENDDATE");
+		mapType.put("STARTDATE", startDateParam);
+		mapType.put("ENDDATE", endDateParam);
 		
 		// Sale list
-		mapType.put("RESTAR_ID", restarId);
+		if(userName != null && !userName.isEmpty())mapType.put("USER_NAME", userName);
 		List<HashMap<String, Object>> listOut = roomSrvcService.getStatisticExportStore(mapType);
 		
-		CmmCdUserVO mVo = new CmmCdUserVO();
-		mVo.setRESTAR_ID(restarId);
-		mVo.setGROUP_CD("GRHAG");
-		List<CmmCdUserVO> listCode = cmmCdUserService.getListCmmCdUserVO(mVo);
+		CodeVO codeVo = new CodeVO();
+		codeVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		codeVo.setUSE_YN("Y");
+		List<CodeVO> listCodeUnit = codeService.getListCodeVO(codeVo);
+		HashMap<String, String> mapDonVi = new HashMap<String, String>();
+		for(CodeVO cVO : listCodeUnit){
+			mapDonVi.put(cVO.getCD(), cVO.getCD_NM());
+		}
 		
 		for(int i=0; i< listOut.size(); i++){
 			int j = i+1;
 			HashMap<String, Object> tmpMap = listOut.get(i);
-			String groupName = "";
+			tmpMap.put("SRVC_ID", tmpMap.get("SRVC_ID"));
+			String groupName = tmpMap.get("TYPE_NM")!=null?tmpMap.get("TYPE_NM").toString():"";
 			Map<String, Object> mapVo = new HashMap<String, Object>();
-			    
-			if(tmpMap.get("TYPE") != null){
-				try{
-					int _code = Integer.parseInt(tmpMap.get("TYPE").toString().trim());
-					CmmCdUserVO tmpVo = cmmCdUserService.getCmmCdUserVoByCD(listCode, _code);
-					if(tmpVo != null)
-						groupName = tmpVo.getCD_NM();
-				}
-				catch(Exception e){}
-			}
-			if(tmpMap.get("SRVC_ID") != null){
-				HashMap<String, Object> iMap = getObjectInList(listImport, "SRVC_ID", tmpMap.get("SRVC_ID").toString());
-				
-				if(iMap != null){
-					mapVo.put("ItemAmountImpt", iMap.get("IAMOUNT"));
-					mapVo.put("ItemImptMoney", iMap.get("TOTAL_MONEY"));
-					
-					if(tmpMap.get("TOTAL_MONEY") != null && iMap.get("TOTAL_MONEY") != null){
-						double moneySold = (Double)tmpMap.get("TOTAL_MONEY");
-						double moneyImport = (Double)iMap.get("TOTAL_MONEY");
-						double moneyProfit = moneySold - moneyImport;
-						mapVo.put("ItemProfit", moneyProfit);
-					}
-				}
-				else{
-					double iTmp = 0;
-					mapVo.put("ItemAmountImpt", iTmp);
-					mapVo.put("ItemImptMoney", iTmp);
-					mapVo.put("ItemProfit", tmpMap.get("TOTAL_MONEY"));
-				}
-			}
+			
+			Double totalAmount = tmpMap.get("TOTAL") != null?Double.valueOf(tmpMap.get("TOTAL").toString()):0.0;
+			Double soBan = Double.parseDouble(tmpMap.get("AMOUNT").toString());
+			Double giaNhap = Double.parseDouble(tmpMap.get("PRICE_IMPORT").toString());
+			Double tienvon = soBan * giaNhap;
+			Double loiNhuan = totalAmount - tienvon;
 			mapVo.put("ItemName", tmpMap.get("SRVC_NM"));
 			mapVo.put("ItemNo", ""+j);
-			mapVo.put("ItemUnit", "234");
-			mapVo.put("ItemPayed", tmpMap.get("TOTAL_MONEY"));
-			mapVo.put("ItemAmount", tmpMap.get("TOTAL"));
+			mapVo.put("ItemUnit", mapDonVi.get(tmpMap.get("UNIT")));
+			mapVo.put("ItemTienVon", tienvon);
+			mapVo.put("ItemPayed", totalAmount);
+			mapVo.put("ItemAmount", tmpMap.get("AMOUNT"));
 			mapVo.put("ItemType", groupName);
+			mapVo.put("ItemProfit", loiNhuan);
 			
 			al.add(mapVo);
 		}
-		
-		if(arrangeTime.isEmpty() && mapType != null && mapType.get("paramDate")!= null){
-			arrangeTime = mapType.get("paramDate").toString();
+		UserVO userVo = null;
+		try{
+			UserVO uVo = new UserVO();
+			uVo.setUSERNAME(userName);
+			uVo.setRESTAR_ID(restarId);
+			userVo = userService.getUserVo(uVo);
+		}catch(Exception e){
+			
 		}
+		if(startDateParam!= null && !startDateParam.isEmpty()){
+			startDateParam = startDateParam.substring(0, 10);
+			startDateParam = startDateParam.split("-")[2] +"/"+ startDateParam.split("-")[1] +"/"+ startDateParam.split("-")[0];
+			String startDate = PropertyUtil.getStringUTF8("date.fromdate");
+			arrangeTime = startDate + ": " +startDateParam;
+		}
+		if(endDateParam!= null && !endDateParam.isEmpty()){
+			endDateParam = endDateParam.substring(0, 10);
+			endDateParam = endDateParam.split("-")[2] +"/"+ endDateParam.split("-")[1] +"/"+ endDateParam.split("-")[0];
+			String startDate = PropertyUtil.getStringUTF8("date.todate");
+			if(arrangeTime != null) arrangeTime = arrangeTime + " - " + startDate + ": " +endDateParam;
+			else arrangeTime = startDate + ": " +endDateParam;
+		}
+		
 		JRDataSource ds = new JRBeanCollectionDataSource(al);
+		
+		mapRpt.put( "paramUserName", userVo!=null?userVo.getFULLNAME():null);
 		mapRpt.put( "datasource", ds);
 		mapRpt.put( "format", "pdf");
 		mapRpt.put( "paramDate", arrangeTime);
@@ -1457,7 +1446,7 @@ public class ReportController {
 			map.put("SRVC_ID", srvcID);
 		}
 		CodeVO mVo = new CodeVO();
-		mVo.setGROUP_CD("DONVI");
+		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
 		List<CodeVO> listCode = codeService.getListCodeVO(mVo);
 		
 		List<HashMap<String, Object>> listOut = null;
@@ -1496,4 +1485,48 @@ public class ReportController {
 		mapRpt.put( "format", "pdf");
 		return new ModelAndView("rptThongKeChiTiet", mapRpt);
 	}
+	@RequestMapping(value="/report/barcode.do")
+	public ModelAndView printBarcode(HttpServletRequest req, @RequestParam(value="SRVC_ID", required=true)String SRVC_ID, String type, String list,
+			Map<String, Object> model) throws JRException, IOException {
+		
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		Map<String, Object> mapRpt = new HashMap<String, Object>();
+		SrvcVO sVo = new SrvcVO();
+		sVo.setRESTAR_ID(restarId);
+		sVo.setSRVC_ID(SRVC_ID);
+		sVo.setIS_USED(1);
+		SrvcVO tmpVO = srvcService.getSrvcVO(sVo);
+		
+		List<Map<String, Object>> al = new ArrayList<Map<String, Object>>();
+			
+		Double value = 0.0;
+		if(tmpVO.getPRICE()!= null && !tmpVO.getPRICE().isEmpty()) 
+			value =	Double.parseDouble(tmpVO.getPRICE());
+		int rowTotal = 1;
+		if(list!=null&&!list.isEmpty())  rowTotal = 9;
+		for(int i=0; i < rowTotal; i++) {
+			Map<String, Object> tmpMap = new HashMap<String, Object>(); 
+			tmpMap.put("FieldBarcode",tmpVO.getSRVC_CD());
+			tmpMap.put("GiaBan", value);
+			tmpMap.put("FieldGhiChu",tmpVO.getSRVC_NM());
+			al.add(tmpMap);
+		}
+		
+		JRDataSource ds = new JRBeanCollectionDataSource(al);
+		mapRpt.put( "datasource", ds);
+		String viewName = "rptBarcode";
+		if(type != null && type.equalsIgnoreCase("pdf")) {
+			mapRpt.put( "format", "pdf");
+			if(list!=null&&!list.isEmpty()) viewName = "rptBarcodeList";
+			else viewName = "rptBarcode";
+		}
+		else {
+			mapRpt.put( "format", "docx");
+			if(list!=null&&!list.isEmpty()) viewName = "rptBarcodeListDoc";
+			else viewName = "rptBarcodeDoc";
+		}
+		mapRpt.put("filename", tmpVO.getSRVC_CD());
+		return new ModelAndView(viewName, mapRpt);
+	}
+
 }

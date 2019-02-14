@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="PhieuThu">
+	<typeAlias  alias="PhieuThuVO"	type="com.kito.madina.ecount.vo.PhieuThuVO"/>
+	<sql id="sqlGetListAllPhieuThuBase">	
+		SELECT 
+				M.RESTAR_ID 
+				,M.BILL_CD
+				,M.BOOK_NO
+				,M.BILL_DATE
+				,M.THU_NAME
+				,M.THU_TYPE
+				,M.VALUE
+				,M.RECEPT_CD
+				,M.RECEPT_NM
+				,M.RECEIPT_DATE
+				,M.DESCRIPTION
+				,M.USER_NAME
+				,M.CHUNGTU_DATE
+				,M.CHUNGTU_CODE
+				,M.HACHTOAN_DATE
+				,M.CHANGE_DATE
+				,M.PAY_METHOD
+				,M.CUSTOMMER
+				,M.NGUOINOP
+				,M.NGUOINOP_ADDR
+				,M.ROOM_USED_ID
+				,M.BANK_ID
+				,M.BANK_NM
+	    FROM phieu_thu M
+		WHERE M.RESTAR_ID = #RESTAR_ID#
+		ORDER BY M.RECEIPT_DATE desc
+	</sql>
+	<select id="getPhieuThu.list.paging" resultClass="PhieuThuVO" parameterClass="java.util.HashMap">
+	  select N.*
+	  from(  
+	    SELECT h.*, @row := @row + 1 AS rn1 
+	    from (<include refid="sqlGetListAllPhieuThuBase"/>) h,(SELECT @row := 0) K
+	    <dynamic prepend="WHERE">
+		   	<isNotEmpty property="USER_NAME" prepend="AND">
+		   		h.USER_NAME = #USER_NAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="THU_TYPE" prepend="AND">
+		   		h.THU_TYPE = #THU_TYPE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="CHUNGTU_CODE" prepend="AND">
+		   		h.CHUNGTU_CODE = #CHUNGTU_CODE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RECEPT_CD" prepend="AND">
+		   		h.RECEPT_CD = #RECEPT_CD#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="BOOK_NO" prepend="AND">
+		   		h.BOOK_NO = #BOOK_NO#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="STARTDATE" prepend="AND">
+		   		<![CDATA[ h.RECEIPT_DATE >= #STARTDATE# ]]>
+		   	</isNotEmpty>
+		   	<isNotEmpty property="ENDDATE" prepend="AND">
+		   		<![CDATA[ h.RECEIPT_DATE <= #ENDDATE# ]]>
+		   	</isNotEmpty>
+	   </dynamic>)N
+	   <dynamic prepend="WHERE">
+	   		<isNotEmpty property="MIN" prepend="AND">
+		   		<![CDATA[ N.rn1 > #MIN# ]]>
+		   	</isNotEmpty>
+		   	<isNotEmpty property="MAX" prepend="AND">
+		   		<![CDATA[ N.rn1 <= #MAX# ]]>
+		   	</isNotEmpty>
+	   </dynamic>
+	</select>
+	
+	<insert id="createPhieuThu">
+	    INSERT INTO phieu_thu 
+	    	(
+				RESTAR_ID 
+				,BILL_CD
+				,BOOK_NO
+				,BILL_DATE
+				,THU_NAME
+				,THU_TYPE
+				,VALUE
+				,RECEPT_CD
+				,RECEPT_NM
+				,RECEIPT_DATE
+				,DESCRIPTION
+				,USER_NAME
+				,CHUNGTU_DATE
+				,CHUNGTU_CODE
+				,HACHTOAN_DATE
+				,BANK_ID
+				,PAY_METHOD
+				,CUSTOMMER
+				,NGUOINOP
+				,NGUOINOP_ADDR
+				,ROOM_USED_ID
+				,BANK_NM
+	    	) 
+	    VALUES (
+				#RESTAR_ID# 
+				,#BILL_CD#
+				,#BOOK_NO#
+				,#BILL_DATE#
+				,#THU_NAME#
+				,#THU_TYPE#
+				,#VALUE#
+				,#RECEPT_CD#
+				,#RECEPT_NM#
+				,#RECEIPT_DATE#
+				,#DESCRIPTION#
+				,#USER_NAME#
+				,#CHUNGTU_DATE#
+				,#CHUNGTU_CODE#
+				,#HACHTOAN_DATE#
+				,#BANK_ID#
+				,#PAY_METHOD#
+				,#CUSTOMMER#
+				,#NGUOINOP#
+				,#NGUOINOP_ADDR#
+				,#ROOM_USED_ID#
+				,#BANK_NM#
+			)
+  </insert>
+  <insert id="UpdatePhieuThu">
+	    UPDATE phieu_thu 
+	    <dynamic prepend="SET">
+		   	<isNotEmpty property="BILL_CD" prepend=",">
+		   		BILL_CD = #BILL_CD#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="BOOK_NO" prepend=",">
+		   		BOOK_NO = #BOOK_NO#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="BILL_DATE" prepend=",">
+		   		BILL_DATE = #BILL_DATE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="THU_NAME" prepend=",">
+		   		THU_NAME = #THU_NAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="THU_TYPE" prepend=",">
+		   		THU_TYPE = #THU_TYPE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="VALUE" prepend=",">
+		   		VALUE = #VALUE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RECEPT_CD" prepend=",">
+		   		RECEPT_CD = #RECEPT_CD#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RECEPT_NM" prepend=",">
+		   		RECEPT_NM = #RECEPT_NM#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RECEIPT_DATE" prepend=",">
+		   		RECEIPT_DATE = #RECEIPT_DATE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="DESCRIPTION" prepend=",">
+		   		DESCRIPTION = #DESCRIPTION#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="USER_NAME" prepend=",">
+		   		USER_NAME = #USER_NAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="CUSTOMMER" prepend=",">
+		   		CUSTOMMER = #CUSTOMMER#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="NGUOINOP" prepend=",">
+		   		NGUOINOP = #NGUOINOP#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="PAY_METHOD" prepend=",">
+		   		PAY_METHOD = #PAY_METHOD#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="CHUNGTU_CODE" prepend=",">
+		   		CHUNGTU_CODE = #CHUNGTU_CODE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="ROOM_USED_ID" prepend=",">
+		   		ROOM_USED_ID = #ROOM_USED_ID#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="BANK_NM" prepend=",">
+		   		BANK_NM = #BANK_NM#
+		   	</isNotEmpty>
+		</dynamic>
+	    WHERE BILL_CD = #BILL_CD# and RESTAR_ID = #RESTAR_ID#
+  </insert>
+  <select id="getPhieuThu.paging.getListCount" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">	
+		SELECT 
+			count(t.BILL_CD) as COUNT,
+			sum(t.VALUE) as total
+	    FROM (<include refid="sqlGetListAllPhieuThuBase"/>) t
+  </select>
+  <select id="getPhieuThu.getListCount" resultClass="java.util.HashMap" parameterClass="PhieuThuVO">	
+		SELECT 
+			count(t.BILL_CD) as COUNT
+	    FROM (<include refid="sqlGetListAllPhieuThuBase"/>) t
+	</select>
+	<select id="getPhieuThu.list.paging1" resultClass="PhieuThuVO" parameterClass="PhieuThuVO">
+  		SELECT * 
+  		FROM (
+  			select h.*
+  				, @row := @row + 1 AS rn1 
+  			from (<include refid="sqlGetListAllPhieuThuBase"/>) h
+  			,(SELECT @row := 0) K
+  			) t
+  		<![CDATA[       
+          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
+                ]]>
+  </select>
+  
+  <delete id="deletePhieuThuVO">
+  		DELETE FROM phieu_thu 
+  		WHERE BILL_CD = #BILL_CD# and RESTAR_ID = #RESTAR_ID#
+  </delete>
+  <delete id="deletePhieuThuByRoomUsedId">
+  		DELETE FROM phieu_thu 
+  		WHERE ROOM_USED_ID = #ROOM_USED_ID# and RESTAR_ID = #RESTAR_ID#
+  </delete>
+  <select id="getLastBillCDPhieuThuByIndex" resultClass="PhieuThuVO" parameterClass="PhieuThuVO">	
+  	select A.* 
+  	from( 	SELECT t.*, @row := @row + 1 AS rn1 
+			FROM (<include refid="sqlGetListAllPhieuThuBase"/>) t ,(SELECT @row := 0) K
+			ORDER BY t.BILL_CD DESC ) A
+	where A.rn1 = 1
+  </select>
+  <select id="getPhieuThuVOByPhieuThuVO" resultClass="PhieuThuVO" parameterClass="PhieuThuVO">	
+  	SELECT t.*
+	FROM (<include refid="sqlGetListAllPhieuThuBase"/>) t 
+	<![CDATA[WHERE ROOM_USED_ID = #ROOM_USED_ID#]]> 
+  </select>
+  <select id="getPhieuThuByVo" resultClass="PhieuThuVO" parameterClass="PhieuThuVO">	
+ 	SELECT t.* 
+	FROM (<include refid="sqlGetListAllPhieuThuBase"/>)t
+	<![CDATA[WHERE BILL_CD = #BILL_CD#]]> 
+  </select>
+  <delete id="deletePhieuThuByVO">
+    	DELETE FROM phieu_thu 
+    	WHERE BILL_CD = #BILL_CD# and RESTAR_ID = #RESTAR_ID#
+  </delete>
+</sqlMap>

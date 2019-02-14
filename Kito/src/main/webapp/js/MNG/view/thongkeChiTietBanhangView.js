@@ -33,7 +33,7 @@ Ext.define('MNG.view.thongkeChiTietBanhangView', {
 						items : [
 							{
 								 xtype: 'gridpanel',
-                                 id:'grid-srvc',
+                                 itemId:'grid-srvc-chitiet',
                                  minHeight: 500,
                                  maxHeight: 800,
                                  pageSize:10,
@@ -79,22 +79,6 @@ Ext.define('MNG.view.thongkeChiTietBanhangView', {
                                          flex: 1,
                                          text: 'Tên hàng'
                                      },
-                                     
-                                     {
-                                         xtype: 'gridcolumn',
-                                         dataIndex: 'PRICE',
-                                         sortable:true,
-                                         hidden: true,
-                                         align:'right',
-                                         text: 'Giá hiện bán',
-                                         width: 120,
-                                         renderer :function(value, p , r){
-                           					data = r.data['PRICE'];
-                           					if(data != '')
-                           						data = formatSupporter.formatToMoney(data);
-                           					return  data;
-                           				}
-                                     },
                                      {
                                          xtype: 'gridcolumn',
                                          dataIndex: 'TOTAL',
@@ -130,6 +114,24 @@ Ext.define('MNG.view.thongkeChiTietBanhangView', {
                            					return  data;
                            				}
              						},
+             						 {
+						                menuDisabled: true,
+						                sortable: false,
+						                align:'center',
+						                xtype: 'actioncolumn',
+						                text: 'Xem chi tiết',
+						                width: 120,
+						                items: [{
+						                    iconCls : 'icon-bill',
+						                    tooltip: 'Xem chi tiết',
+						                    handler: function(grid, rowIndex, colIndex) {
+						                    	grid.getSelectionModel().select(rowIndex);
+						                    	var rec = grid.getStore().getAt(rowIndex);
+						                    	var myController = MANAGER.app.getController('MNG.controller.ThongKeChiTietController');
+						                    	myController.showDetailBill(myController, rec);
+						                    }
+						                }]
+						            },
 									{
                                          xtype: 'gridcolumn',
                                          dataIndex: 'USER_NAME',

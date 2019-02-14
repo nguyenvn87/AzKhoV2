@@ -36,7 +36,7 @@ Ext.define('MNG.view.srvcView', {
 								 xtype: 'gridpanel',
                                  id:'grid-srvc',
                                  //flex: 1,
-                                 minHeight: 300,
+                                 minHeight: 600,
                                  maxHeight: 800,
                                  pageSize:10,
                                  padding:'10 0 0 0',
@@ -101,7 +101,7 @@ Ext.define('MNG.view.srvcView', {
                            					console.log('data = '+data);
                            					if(data != '')
                            						data = formatSupporter.formatToMoney(data);
-                           					return  data;
+                           					return '<span style="color: green">'+data+'</span>';
                            				}
              						},
                                      {
@@ -112,22 +112,32 @@ Ext.define('MNG.view.srvcView', {
                                          width : 80,
                                          text: 'Đơn vị'
                                      },
-									 {
-                                         xtype: 'gridcolumn',
-                                         hidden: true,
-                                         dataIndex: 'TYPE_NM',
-                                         sortable:true,
-                                         text: 'Nhóm hàng',
-                                         flex: 0.5
-                                     },
                                      {
                                          xtype: 'gridcolumn',
                                          dataIndex: 'AMOUNT_STORE',
                                          align : 'right',
                                          sortable:false,
-                                         text: 'Tồn kho',
-                                         width: 100
+                                         text: 'SL Tồn',
+                                         width: 80,
+                                         renderer :function(value, p , r){
+                           					var data = r.data['AMOUNT_STORE'];
+                           					return '<span style="color: red">'+data+'</span>';
+                           				}
                                           
+                                     },
+                                      {
+                                         xtype: 'gridcolumn',
+                                         dataIndex: 'PRICE_IMPORT',
+                                         sortable:false,
+                                         text: 'Giá nhập',
+                                         align : 'right',
+                                         width : 100,
+                                         renderer :function(value, p , r){
+                           					var data = r.data['PRICE_IMPORT'];
+                           					if(data != '')
+                           						data = formatSupporter.formatToMoney(data);
+                           					return '<span style="color: orange">'+data+'</span>';
+                           				}
                                      },
                                      {
                                          xtype: 'gridcolumn',
@@ -140,6 +150,7 @@ Ext.define('MNG.view.srvcView', {
                                      {
 										menuDisabled : true,
 										sortable : false,
+										hidden: true,
 										xtype : 'actioncolumn',
 										text: 'Mặc định',
 										align : 'center',
@@ -169,12 +180,36 @@ Ext.define('MNG.view.srvcView', {
 									{
                                          xtype: 'gridcolumn',
                                          dataIndex: 'DSCRT',
-                                         //hidden: true,
                                          sortable:false,
                                          text: 'Mô tả',
                                          flex: 1
                                           
                                      },
+                                     {
+                                         xtype: 'gridcolumn',
+                                         dataIndex: 'TYPE_NM',
+                                         sortable:false,
+                                         text: 'Nhóm',
+                                         width : 150,
+                                     },
+                                     {
+										menuDisabled : true,
+										sortable : false,
+										text : 'Chỉnh sửa',
+										xtype : 'actioncolumn',
+										align : 'center',
+										width : 90,
+										items : [ {
+											iconCls : 'icon-edit',
+											tooltip : 'Chỉnh sửa dòng này',
+											handler : function(grid, rowIndex, colIndex){
+												var record = grid.getStore().getAt(rowIndex);
+												grid.getSelectionModel().select(rowIndex);
+												var myController = MANAGER.app.getController('MNG.controller.srvcController');
+												myController.editRowByRecord(record);
+											}
+										} ]
+									},
                                      {
                                          xtype: 'gridcolumn',
                                          dataIndex: 'ACCUMULT',
@@ -194,6 +229,7 @@ Ext.define('MNG.view.srvcView', {
                                      {
                                          xtype: 'gridcolumn',
                                          dataIndex: 'SORT_NO',
+                                         hidden: true,
                                          sortable:false,
                                          text: 'Ưu tiên',
                                          align : 'center',
@@ -213,16 +249,17 @@ Ext.define('MNG.view.srvcView', {
 											}
 											return DAT_T_002;
                                     	 }
-                                     },{
+                                     },
+                                     {
 										menuDisabled : true,
 										sortable : false,
 										text : 'Xóa',
 										xtype : 'actioncolumn',
 										align : 'center',
-										width : 45,
+										width : 60,
 										items : [ {
 											iconCls : 'icon-del',
-											tooltip : 'Xóa',
+											tooltip : 'Xóa dòng này',
 											handler : function(grid, rowIndex, colIndex){
 												//me.deleteRecord(grid, rowIndex, colIndex);
 												var myController = MANAGER.app.getController('MNG.controller.srvcController');
@@ -247,7 +284,7 @@ Ext.define('MNG.view.srvcView', {
  	 		                        	xtype : 'textfield',
 										emptyText : 'Tìm kiếm',
 										height: 40,
-										width: 200,
+										width: 300,
 										itemId: 'textSearchSrvc',
 										enableKeyEvents: true,
 										listeners:{
@@ -288,11 +325,16 @@ Ext.define('MNG.view.srvcView', {
         });
         me.callParent(arguments);
     },
-    keyupFilter: function(key){
+    keyupFilter: function(key, event){
 		value = key.getValue();
 		var Grid = Ext.ComponentQuery.query('#grid-srvc')[0];
 		var storeTmp = Grid.getStore();
 		storeTmp.clearFilter();
 		storeTmp.filter('SRVC_NM', value);
+		
+		if(event.getCharCode() == 13){
+			var myController = MANAGER.app.getController('MNG.controller.srvcController');
+			myController.clickSrvcSearch();	
+		}
 	}
 });

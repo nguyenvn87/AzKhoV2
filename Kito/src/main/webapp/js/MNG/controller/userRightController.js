@@ -115,13 +115,15 @@ Ext.define('MNG.controller.userRightController', {
     			var text = Ext.JSON.decode(response.responseText);
     			if( text.success == true){
     				parent.popup.hide();
-    				alert('Cập nhật thành công');
+    				//alert('Cập nhật thành công');
+    				supportEvent.notiSuccess('Thành công', 'Cập nhật thành công !');
     				// 4. Forest loading
     				var Grid = Ext.ComponentQuery.query('#grid-user')[0];
     				var storeTmp = Grid.getStore();
     				storeTmp.load();
     			}else{
-    				alert(text.message)
+    				//alert(text.message);
+    				supportEvent.showWarningTimer(text.message);
     			}
     		},
     		failure: function(response){

@@ -11,7 +11,12 @@ var GROUP_AREA = "KHUVC";
 var GROUP_ROOM = "GRROM";
 
 var PaymentTypeGroup = {
-		CASH :  'CASH1', // Tien mat
+		CASH :  'CASH', // Tien mat
 		CARD :  'CARD1', // Qua the
 		EBANK : 'EBANK', // Chuyen khoan
+};
+var GroupCode = {
+		THU :  'PHTHU', // Tien mat
+		CHI :  'PHCHI', // Qua the
+		PAY_METHOD: 'PAYMT' // Phuong thuc thanh toan  
 };

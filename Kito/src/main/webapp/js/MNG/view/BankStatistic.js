@@ -1,10 +1,6 @@
-var bankAccountStore = Ext.create('MNG.store.bankAccountStore');
-var statisticStore = Ext.create('MNG.store.roomTurnStore', {
-	sorters : [ {
-		property : 'CHANGE_DATE',
-		direction : 'desc'
-	} ]
-});
+var bankAccountStore = Ext.create('ECNT.store.bankAccountStore');
+var thuChiStore = Ext.create('ECNT.store.ThuChiStore', {});
+
 var _height = 90;
 
 Ext
@@ -69,14 +65,14 @@ Ext
 																						{
 																							inputValue : '0',
 																							checked : true,
-																							name : 'isCancel',
-																							boxLabel : 'Đã hoàn thành'
+																							name : 'isChi',
+																							boxLabel : 'Thu'
 																						},
 																						{
 																							inputValue : '1',
 																							checked : false,
-																							name : 'isCancel',
-																							boxLabel : 'Đã hủy'
+																							name : 'isChi',
+																							boxLabel : 'Chi'
 																						} ]
 																			} ]
 																		},
@@ -133,7 +129,7 @@ Ext
 																									store : bankAccountStore,
 																									itemId : 'comboBankId',
 																									emptyText : 'Chọn tài khoản',
-																									displayField : 'ACCOUNT_NO',
+																									displayField : 'BANK_NM',
 																									valueField : 'ID_BANK',
 																									labelWidth: 65,
 																									//width : 300,
@@ -143,17 +139,19 @@ Ext
 																										emptyText : 'Không có bản ghi nào phù hợp.',
 																										getInnerTpl : function() {
 																											return '<a class="search-item">'
-																													+ '{ACCOUNT_NO}<br/>'
+																													+ '{ID_BANK}<br/>'
 																													+ '<h3>{BANK_NM}</h3>'
 																													+ '</a>';
 																										}
 																									}
 																								},{
 																						    	   xtype : 'button',
+																						    	   hidden: true,
 																						    	   itemId : 'btn-edit-bank',
 																						    	   text: 'edit'
 																						       },{
 																						    	   xtype : 'button',
+																						    	   hidden: true,
 																						    	   itemId : 'btn-add-bank',
 																						    	   text: 'add'
 																						       }
@@ -243,7 +241,7 @@ Ext
 																pageSize : 10,
 																padding : '10 0 0 0',
 																autoScroll : true,
-																store : statisticStore,
+																store : thuChiStore,
 																columns : [
 																		{
 																			xtype : 'gridcolumn',
@@ -254,241 +252,91 @@ Ext
 																			text : 'TT'
 																		},
 																		{
-																			xtype : 'gridcolumn',
-																			sortable : true,
-																			align : 'left',
-																			width : 150,
-																			hidden : true,
-																			dataIndex : 'CHANGE_DATE',
-																			text : 'Time'
-																		},
-																		{
-																			xtype : 'gridcolumn',
+																			xtype : 'datecolumn',
 																			sortable : false,
 																			align : 'left',
 																			text : 'Ngày',
-																			width : 90,
-																			renderer : function(
-																					value,
-																					p,
-																					r) {
-																				data = r.data['CHANGE_DATE'];
-																				console
-																						.log(data);
-																				if (data != '')
-																					data = formatSupporter
-																							.convertToVNDateFromEngDate(data);
-																				console
-																						.log(data);
-																				return data;
-																			}
+																			format:'d/m/Y',
+																			dataIndex : 'PAYDATE',
+																			width : 90
 																		},
 																		{
 																			xtype : 'gridcolumn',
 																			sortable : true,
 																			align : 'left',
-																			width : 95,
+																			width : 100,
 																			dataIndex : 'BILL_CD',
 																			text : 'Số HĐ'
 																		},
 																		{
-																			xtype : 'gridcolumn',
-																			dataIndex : 'TOTAL_MONEY',
-																			hidden : true,
+																			xtype : 'numbercolumn',
+																			dataIndex : 'VALUE',
 																			sortable : false,
+																			align: 'right',
 																			text : 'Số tiền',
-																			flex : 0.5,
-																		},
-																		{
-																			xtype : 'gridcolumn',
-																			width : 95,
-																			sortable : false,
-																			align : 'right',
-																			text : "Tổng tiền",
-																			renderer : function(
-																					value,
-																					p,
-																					r) {
-																				data = r.data['TOTAL_MONEY'];
-																				if (data != '')
-																					data = formatSupporter
-																							.formatToMoney(data);
-																				return data;
-																			}
-																		},
-																		{
-																			xtype : 'gridcolumn',
-																			dataIndex : 'PAYED_MONEY',
-																			align : 'right',
-																			sortable : false,
-																			text : 'Thanh toán',
-																			width : 110,
-																			renderer : function(
-																					value,
-																					p,
-																					r) {
-																				data = r.data['PAYED_MONEY'];
-																				if (data != '')
-																					data = formatSupporter
-																							.formatToMoney(data);
-																				return data;
-																			}
-																		},
-																		{
-																			xtype : 'gridcolumn',
-																			dataIndex : 'IS_DEBIT',
-																			sortable : true,
-																			hidden : true,
-																			text : 'Ghi nợ',
-																			width : 60,
-																			renderer : function(
-																					value,
-																					p,
-																					r) {
-																				data = r.data['IS_DEBIT'];
-																				if (data != ''
-																						&& data == '1')
-																					return 'Nợ'
-																				return '';
-																			}
-																		},
-																		{
-																			xtype : 'gridcolumn',
-																			dataIndex : 'HAS_PAYED',
-																			sortable : true,
-																			text : 'Ghi chú nợ',
-																			width : 100,
-																			renderer : function(
-																					value,
-																					p,
-																					r) {
-																				data = r.data['HAS_PAYED'];
-																				debit = r.data['IS_DEBIT'];
-																				if (debit != '1') {
-																					return '';
+																			width : 120,
+																			renderer :function(value, p , r){
+									                           					data = r.data['VALUE'];
+																				if (data != ''){
+																				var value = Ext.util.Format.number(data, '0');
+																					data = formatSupporter.formatToMoney(value);
 																				}
-																				if (data != ''
-																						&& data == '1')
-																					return 'Nợ, đã trả'
-																				return 'Nợ, chưa trả';
-																			}
-
+									                           					return '<span style="color: red">'+data+'</span>';
+									                           				}
 																		},
 																		{
 																			xtype : 'gridcolumn',
-																			dataIndex : 'CUS_NM',
+																			dataIndex : 'TYPE',
+																			sortable : true,
+																			text : 'Thu/chi',
+																			width : 75,
+																			renderer : function(
+																					value,
+																					p,
+																					r) {
+																				data = r.data['TYPE'];
+																				if (data != ''
+																						&& data == '1')
+																					return 'Chi'
+																				return 'Thu';
+																			}
+																		},
+																		{
+																			xtype : 'gridcolumn',
+																			dataIndex : 'PERSON',
 																			sortable : false,
-																			text : 'Khách hàng',
+																			text : 'Người nhận/nộp',
+																			width : 140
+																		},
+																		{
+																			xtype : 'gridcolumn',
+																			dataIndex : 'BANK_ID',
+																			sortable : false,
+																			text : 'Tài khoản',
 																			width : 120
 																		},
 																		{
 																			xtype : 'gridcolumn',
-																			dataIndex : 'DSCRT',
+																			dataIndex : 'DESCRIPTION',
 																			sortable : false,
-																			text : 'Ghi chú',
+																			text : 'Lý do',
 																			flex : 0.5
-																		},
-																		{
-																			menuDisabled : true,
-																			sortable : false,
-																			text : 'Edit',
-																			xtype : 'actioncolumn',
-																			align : 'center',
-																			width : 50,
-																			items : [ {
-																				iconCls : 'icon-edit',
-																				tooltip : 'Sửa',
-																				handler : function(
-																						grid,
-																						rowIndex,
-																						colIndex) {
-																					me
-																							.showDetail(
-																									grid,
-																									rowIndex,
-																									colIndex);
-																				}
-																			} ]
-																		},
-																		{
-																			xtype : 'gridcolumn',
-																			dataIndex : 'IS_DELIVERED',
-																			sortable : true,
-																			text : 'Xuất kho',
-																			width : 90,
-																			renderer : function(
-																					value,
-																					p,
-																					r) {
-																				data = r.data['IS_DELIVERED'];
-																				debit = r.data['IS_DELIVERED'];
-																				if (debit == '1'
-																						|| debit == 1) {
-																					return 'Đã xuất';
-																				}
-																				return 'Chưa xuất';
-																			}
-																		},
-																		{
-																			xtype : 'gridcolumn',
-																			dataIndex : 'IS_ORDER',
-																			sortable : true,
-																			hidden : true,
-																			text : 'Loại đơn',
-																			width : 80,
-																			renderer : function(
-																					value,
-																					p,
-																					r) {
-																				debit = r.data['IS_ORDER'];
-																				if (debit != '1') {
-																					return '';
-																				}
-																				if (debit == '1'
-																						|| debit == 1) {
-																					return 'Đặt hàng'
-																				}
-																				return '';
-																			}
-
-																		},
-																		{
-																			xtype : 'gridcolumn',
-																			dataIndex : 'USER_NAME',
-																			sortable : false,
-																			text : 'User',
-																			width : 80
-																		} ],
+																		}
+																		],
 																tbar : [],
 																bbar : [
 																		{
-																			text : 'In PDF',
-																			iconCls : 'icon-pdf',
-																			height : 35,
-																			itemId : 'btnStatisPrint',
-																		},
-																		{
-																			text : 'Xuất kho',
-																			iconCls : 'icon-pdf',
-																			height : 35,
-																			itemId : 'btnExportPrint',
-																		},
-																		{
-																			text : 'Tồn kho',
-																			iconCls : 'icon-pdf',
-																			height : 35,
-																			itemId : 'btnStoreRemainPrint',
+																			text : 'PDF',
+																			iconCls : 'icon-pdf'
 																		},
 																		{
 																			text : 'Excel',
-																			iconCls : 'icon-excel',
-																			height : 35,
-																			itemId : 'btnExcelPrint',
+																			iconCls : 'icon-excel'
 																		} ],
 																dockedItems : [ {
 																	xtype : 'pagingtoolbar',
 																	dock : 'bottom',
-																	store : statisticStore,
+																	store : thuChiStore,
 																	displayInfo : true
 																} ]
 															},
@@ -501,13 +349,13 @@ Ext
 																items : [
 																		{
 																			xtype : 'label',
-																			fieldLabel : 'Tổng',
-																			text : 'Tổng: ',
+																			fieldLabel : 'Tổng thu',
+																			text : 'Tổng thu: ',
 																			cls : 'sumary-label'
 																		},
 																		{
 																			xtype : 'label',
-																			fieldLabel : 'Tổng',
+																			fieldLabel : 'Tổng thu',
 																			itemId : 'statis-total-id',
 																			text : '0.0',
 																			cls : 'sumary-field'
@@ -515,7 +363,7 @@ Ext
 																		{
 																			xtype : 'label',
 																			fieldLabel : 'Đã thanh toán',
-																			text : 'Thanh toán: ',
+																			text : 'Tổng chi: ',
 																			cls : 'sumary-label'
 																		},
 																		{
@@ -528,7 +376,7 @@ Ext
 																		{
 																			xtype : 'label',
 																			fieldLabel : 'Nợ',
-																			text : 'Còn nợ: ',
+																			text : 'Số dư: ',
 																			cls : 'sumary-label'
 																		},
 																		{

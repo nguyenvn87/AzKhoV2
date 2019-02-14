@@ -73,6 +73,9 @@ Ext.define('MNG.view.TonKhoView', {
                                          sortable:true,
                                          text: 'SL tồn',
                                          width: 80,
+                                         renderer :function(value, p , r){
+                           					return '<span style="color: red">'+value+'</span>';
+                           				}
                                      },
                                      {
                                          xtype: 'gridcolumn',
@@ -109,17 +112,17 @@ Ext.define('MNG.view.TonKhoView', {
                                      },
                                      {
                                          xtype: 'gridcolumn',
-                                         dataIndex: 'CHANGE_DATE',
+                                         dataIndex: 'PRICE_IMPORT',
                                          sortable:false,
-                                         text: 'Ngày cập nhật',
-                                         width: 160
-                                     },
-                                     {
-                                         xtype: 'gridcolumn',
-                                         dataIndex: 'USER_NAME',
-                                         sortable:false,
-                                         text: 'Người lưu',
-                                         width: 100
+                                         text: 'Giá nhập',
+                                         align : 'right',
+                                         width : 120,
+                                         renderer :function(value, p , r){
+                           					var data = r.data['PRICE_IMPORT'];
+                           					if(data != '')
+                           						data = formatSupporter.formatToMoney(data);
+                           					return  data;
+                           				}
                                      },
                                      {
 										menuDisabled : true,
@@ -134,9 +137,23 @@ Ext.define('MNG.view.TonKhoView', {
 											handler : function(grid,rowIndex,colIndex) {
 												rec = grid.getStore().getAt(rowIndex);
 												var _srvcId = rec.get('SRVC_ID');
-												me.showHistory(_srvcId);
+												me.showHistory(_srvcId, rec.get('SRVC_NM'));
 										}
 										} ]
+                                     },
+                                     {
+                                         xtype: 'gridcolumn',
+                                         dataIndex: 'CHANGE_DATE',
+                                         sortable:false,
+                                         text: 'Ngày cập nhật',
+                                         width: 160
+                                     },
+                                     {
+                                         xtype: 'gridcolumn',
+                                         dataIndex: 'USER_NAME',
+                                         sortable:false,
+                                         text: 'Người lưu',
+                                         width: 100
                                      }
                                  ],
                                  tbar: [
@@ -156,7 +173,31 @@ Ext.define('MNG.view.TonKhoView', {
  	                                	height: 40,
  	                                	iconCls: 'icon-search',
  	                                	itemId: 'btnSearchSrvcBtn'
- 	 		                           }
+ 	 		                           },{
+										xtype : 'datefield',
+										itemId: 'itemSelectDate',
+										format : 'd-m-Y',
+										altFormats: 'Ymd',
+										submitFormat: 'Y/m/d',
+										fieldLabel : 'Chọn ngày',
+										value: new Date(),
+										emptyText : 'Ngày',
+										listeners:{
+											change: function (btn, newValue, oldValue, eOpts) {
+								                var tmpValue = Ext.Date.format(newValue, 'Y-m-d')
+								                console.log(tmpValue);
+								                var Grid = Ext.ComponentQuery.query('#grid-srvc')[0];
+												var storeTmp = Grid.getStore();
+												storeTmp.currentPage = 1;
+												storeTmp.pageSize=1000;
+												storeTmp.getProxy().url = 	contextPath + '/store/getStoreHistory.json';
+												storeTmp.getProxy().extraParams = {
+																datetime: tmpValue
+															};
+												storeTmp.load();
+								            }
+										}
+									}
              						],
              					bbar: [{
 	                                	 	text: 'PDF',
@@ -192,8 +233,8 @@ Ext.define('MNG.view.TonKhoView', {
 		storeTmp.clearFilter();
 		storeTmp.filter('SRVC_NM', value);
 	},
-	showHistory: function(_srvcId){
-		btnHistoryStore.loadAndShow(_srvcId);
+	showHistory: function(_srvcId, title){
+		btnHistoryStore.loadAndShow(_srvcId, title);
 		btnHistoryStore.show();
 	}
 });

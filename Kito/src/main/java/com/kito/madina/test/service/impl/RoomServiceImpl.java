@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kito.madina.cmmn.util.SessionUtil;
 import com.kito.madina.test.dao.RestaurantDAO;
 import com.kito.madina.test.dao.RoomDAO;
 import com.kito.madina.test.service.RestaurantService;
@@ -37,6 +38,8 @@ public class RoomServiceImpl implements RoomService{
 	}
 	@Override  
 	public List<RoomVO> getListRoomVoByRoomVO(RoomVO vo){
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		vo.setRESTAR_ID(restarId);
 		List<RoomVO> list = RoomDAO.getListRoomVoByRoomVO(vo);
 		return list;
 	}

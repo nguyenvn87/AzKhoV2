@@ -33,7 +33,7 @@
 			, IS_ORDER
 			, IS_CANCELED
 			, PAY_METHOD
-			, ID_BANK
+			<!-- , ID_BANK -->
 	    	) 
 	    VALUES (
 	    	  #ROOM_ID# 
@@ -60,7 +60,7 @@
 			, #IS_ORDER#
 			, #IS_CANCELED#
 			, #PAY_METHOD#
-			, #ID_BANK#
+			<!-- , #ID_BANK# -->
 			)
   </insert>
   <select id="getListTurnStatisticHistory" resultClass="RoomTurnVO"  parameterClass="java.util.HashMap">

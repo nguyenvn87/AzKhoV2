@@ -5,6 +5,7 @@ var supportEvent = Ext.create('BIZ.utilities.supportEvent',{});
 var totalValue = 0;
 var BtnUpdatePayment = Ext.create('MNG.view.popup.BtnUpdatePayment',{});
 var btnLookup = Ext.create('MNG.view.popup.BtnLookupTime');
+//var btnLookup = Ext.create('MNG.view.popup.BtnTimKiemKhac');
 
 Ext.define('MNG.controller.statisticSrvcController', {
 	extend : 'Ext.app.Controller',
@@ -13,8 +14,8 @@ Ext.define('MNG.controller.statisticSrvcController', {
 	popup: null,
 	popLookupTime: null,
 	statisticType: 'WEEK',
-	startDate: null,
-	endDate: null,
+	startDate: formatSupporter.getEnglishDate('MONTH')[0],
+	endDate: formatSupporter.getEnglishDate('MONTH')[1],
 	userNm: null,
 	init : function() {
 		this.control({
@@ -242,5 +243,21 @@ Ext.define('MNG.controller.statisticSrvcController', {
 	},
 	btnOther:function(){
 		btnLookup.show();
-	}
+	},
+	showDetailBill: function(me, record){
+		me = this;
+		var startDate = me.startDate +' -' + me.endDate;
+		var srvcId = record.get('SRVC_NM');
+		var title1 = srvcId + ' : '+ startDate;
+		if(me.popup != null ) me.popup.close();
+		me.popup = Ext.create('MNG.view.popup.BtnChiTietBanHangTheoNgay',{title: title1});
+		me.popup.show();
+		var params = { 
+				STARTDATE: this.startDate,
+				ENDDATE: this.endDate,
+				SRVC_ID: record.get('SRVC_ID')
+				//USER_NAME: userName
+		};
+		me.popup.loadListBills(params);
+	},
 })

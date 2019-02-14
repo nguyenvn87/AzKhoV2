@@ -7,6 +7,7 @@
 	<title>Phần mềm quản lý bán hàng AzKho</title>
 		<script>		
 		var loggedUserId = '${model.loggedUserId}';
+		var haveRoom = '${model.haveRoom}';
 		var main_top	= Ext.create('pckg.cmmn.body.Top',{
 			data: {
 				clsName: 'icon_main_top_menu',
@@ -28,14 +29,21 @@
 		var main_left	= Ext.create('pckg.cmmn.body.Left',{UP_MENU_ID:'LEFT_STATIS'});
 		
 		Ext.onReady(function() {
+			var urlTmp = '/application/get/ADM026.do';
+			if(haveRoom ==  'true')
+				urlTmp = '/report/statistic.do';
+			
 			mainPanel = Ext.create('pckg.cmmn.body.Main', {
 				top : main_top,
 				left : main_left,
 				width:'100%',
 				height:'100%',
-				//main: request.getContextPath+'/report/statistic.do',
-				/* main: request.getContextPath+'/application/get/ADM015.do', */
-				renderTo : 'main_contents'	
+				main: request.getContextPath + urlTmp, 
+				renderTo : 'main_contents',
+				listeners:{
+					afterrender:function(){
+					}
+				}
 			});	
 		
 		});

@@ -556,3 +556,6 @@ ul#topMenuList {
 .testMainCls:hover {
 	color: red !important;
 }
+.toolbar-content .x-toolbar-default {
+    border-color: #2d98c3;
+}

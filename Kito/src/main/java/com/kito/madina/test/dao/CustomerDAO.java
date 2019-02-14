@@ -46,4 +46,10 @@ public class CustomerDAO extends SqlMapClientDaoSupport{
 		HashMap<String, Object> _object = (HashMap<String, Object>)getSqlMapClientTemplate().queryForObject("getListCountSearchCustomer", map);
 		 return _object;
 	}
+	//deleteCustomerByID
+	public int deleteCustomerByID(CustomerVO vo){
+		
+		 Object i = getSqlMapClientTemplate().delete("deleteCustomerByID", vo);
+		return 1;
+	 }
 }

@@ -1,6 +1,6 @@
 var formatSupporter = Ext.create('BIZ.utilities.formatSupporter',{});
 var gridSupport = Ext.create('BIZ.utilities.GridSupporter',{});
-
+var btnAddProvider = Ext.create('MNG.view.popup.BtnAddProvider',{});
 
 Ext.define('MNG.controller.importController', {
 	extend : 'Ext.app.Controller',
@@ -24,7 +24,13 @@ Ext.define('MNG.controller.importController', {
 			},
 			'#btnSaveImportDetail':{
 				click: this.btnSaveImportDetail
-			}
+			},
+			'#btnAddCustomer':{
+				click: this.btnAddCustomer
+			},
+			'#BtnSaveSrvc' : {
+				click : this.btnSaveProvider
+			},
 		});
 	},
 	deleteMenu: function(){
@@ -47,6 +53,7 @@ Ext.define('MNG.controller.importController', {
 		});
 	},
 	openBtnPopStore:function(){
+		
 		Ext.Ajax.request( {
     		url: contextPath + '/store/countImport.json',
     		method:'POST',
@@ -55,11 +62,12 @@ Ext.define('MNG.controller.importController', {
     			var maxID = text.data + 1;
     			var s = maxID+"";
 			    while (s.length < 6) s = "0" + s;
-			    //if(this.popStore == null)
-					this.popStore = Ext.create('MNG.view.popup.BtnImportDetail',
+			    if(this.popStore) this.popStore.close();
+				this.popStore = Ext.create('MNG.view.popup.BtnImportDetail',
 								{
 									IMPRT_CD: 0, 
-									IMPRT_BILL: "CD"+s,
+									//IMPRT_BILL: "CD"+s,
+									IMPRT_BILL: "",
 									DISCOUNT_MONEY: 0,
 									TOTAL_MONEY : 0,
 									NEEDTOPAYED : 0,
@@ -78,9 +86,11 @@ Ext.define('MNG.controller.importController', {
 		this.downloadFile(_url);
 	},
 	doubleClickStore:function(object,record){
-		this.popStore = Ext.create('MNG.view.popup.BtnImportDetail',record.raw);
-		this.popStore.show();
-		gridSupport.selectGridPopup('#container-store-srvc','#grid-store-srvc','#btnStoreContainerId');
+		me = this;
+		if(me.popStore) me.popStore.close();
+		me.popStore = Ext.create('MNG.view.popup.BtnImportDetail',record.raw);
+		me.popStore.show();
+		//gridSupport.selectGridPopup('#container-store-srvc','#grid-store-srvc','#btnStoreContainerId');
 	},
 	BtnSaveStore:function(){
 		this.request();
@@ -118,7 +128,7 @@ Ext.define('MNG.controller.importController', {
     		params: param,
     		success: function(response){
     			var text = Ext.JSON.decode(response.responseText);
-    			parent.popStore.hide();
+    			parent.popStore.close();
     			if( text.success == true){
     				// 4. Forest loading
     				var Grid = Ext.ComponentQuery.query('#grid-store-srvc')[0];
@@ -131,5 +141,56 @@ Ext.define('MNG.controller.importController', {
     			alert('Save failure' );
     		}
     	});
+	},
+	btnAddCustomer: function(){
+		btnAddProvider.show();
+	},
+	btnSaveProvider:function(){
+		
+		//formRoom = this.popup;
+		var prvName = Ext.ComponentQuery.query('#btnSrvcContainerId #PROV_NM')[0].getValue();
+		var prvFone = Ext.ComponentQuery.query('#btnSrvcContainerId #PROV_PHONE')[0].getValue();
+		var prvUser = Ext.ComponentQuery.query('#btnSrvcContainerId #PROV_USER')[0].getValue();
+		var prvAddr = Ext.ComponentQuery.query('#btnSrvcContainerId #PROV_ADDR')[0].getValue();
+		var prvEmail = Ext.ComponentQuery.query('#btnSrvcContainerId #PROV_EMAIL')[0].getValue();
+		var prvDcsrt = Ext.ComponentQuery.query('#btnSrvcContainerId #PROV_DCSRT')[0].getValue();
+		
+		param={};
+		param['PROV_NM'] =  prvName;
+		param['PROV_PHONE'] = prvFone;
+		param['PROV_USER'] = prvUser;
+		param['PROV_ADDR'] = prvAddr;
+		param['PROV_EMAIL'] = prvEmail;
+		param['PROV_DCSRT'] = prvDcsrt;
+		
+		Ext.Ajax.request( {
+    		url: contextPath + '/saveProvider.json',
+    		method:'POST',
+    		params: param,
+    		success: function(response){
+    			var text = Ext.JSON.decode(response.responseText);
+    			btnAddProvider.hide();
+    			if( text.success == true){
+    				console.log('1111111111111111111');
+    				
+    				var providerStore = Ext.ComponentQuery.query('#PROV_CD_Item')[0].getStore();
+    				providerStore.load();
+    			}
+    		},
+    		failure: function(response){
+    			var text = Ext.JSON.decode(response.responseText);
+    			alert('Save failure' );
+    		}
+    	});
+	},
+	getExcelFillBill:function(record){
+		me = this;
+		console.log('record', record);
+		var importCd = record.get('IMPRT_CD');
+		var param = "?IMPRT_CD="+importCd + "&FILENAME=" + record.get('IMPRT_BILL'); 
+		param = param+"&title="+"HÓA ĐƠN NHẬP HÀNG";
+		if(importCd == null) return;
+		var _url = contextPath + '/store/Excel/ChiTietNhapHang.do'+param;
+		me.downloadFile(_url);
 	}
 })

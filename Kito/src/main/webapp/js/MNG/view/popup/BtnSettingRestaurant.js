@@ -172,7 +172,8 @@ Ext.define('MNG.view.popup.BtnSettingRestaurant', {
 	    		params: {
 					RESTAR_ID: Ext.ComponentQuery.query('#btnSrvcContainerId #RESTAR_ID')[0].getValue(),
 					RESTAR_CODE: Ext.ComponentQuery.query('#btnSrvcContainerId #RESTAR_CODE')[0].getValue(),
-					RESTAR_TYPE: Ext.ComponentQuery.query('#btnSrvcContainerId #RESTAR_TYPE')[0].getValue()
+					RESTAR_TYPE: Ext.ComponentQuery.query('#btnSrvcContainerId #RESTAR_TYPE')[0].getValue(),
+					EXPIRED_DATE: Ext.ComponentQuery.query('#btnSrvcContainerId #EXPIRED_DATE')[0].getValue(),
 					},
 	    		success: function(response){
 	    			supportEvent.hiddeMessageBox();

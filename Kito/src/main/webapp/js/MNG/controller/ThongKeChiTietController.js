@@ -46,6 +46,9 @@ Ext.define('MNG.controller.ThongKeChiTietController', {
 			},
 			'#btnOther':{
 				click: this.btnOther
+			},
+			'#grid-srvc-chitiet':{
+				itemdblclick: this.doubleClickChiTiet
 			}
 		});
 	},
@@ -186,7 +189,7 @@ Ext.define('MNG.controller.ThongKeChiTietController', {
 	},
 	submitRequest:function(params){
 		
-		var Grid = Ext.ComponentQuery.query('#grid-srvc')[0];
+		var Grid = Ext.ComponentQuery.query('#grid-srvc-chitiet')[0];
 			var storeTmp = Grid.getStore();
 			storeTmp.getProxy().url = contextPath + URL_PAGING_THONGKECHITIET;
 			storeTmp.getProxy().extraParams = params;
@@ -204,5 +207,33 @@ Ext.define('MNG.controller.ThongKeChiTietController', {
 	},
 	btnOther:function(){
 		btnLookup.show();
-	}
+	},
+	showDetailBill: function(me, record){
+		var startDate = record.get('CREATE_DATE');
+		var srvcId = record.get('SRVC_NM');
+		var title1 = startDate+' : '+srvcId;
+		if(me.popup != null ) me.popup.close();
+		me.popup = Ext.create('MNG.view.popup.BtnChiTietBanHangTheoNgay',{title: title1});
+		me.popup.show();
+		var userName = record.get('USER_NAME');
+		var params = { 
+				STARTDATE: startDate,
+				ENDDATE: startDate+ ' 23:59:59',
+				SRVC_ID: record.get('SRVC_ID'),
+				USER_NAME: userName
+		};
+		me.popup.loadListBills(params);
+	},
+	doubleClickChiTiet:function(compt, record, item, index, e){
+		
+		var me = this;
+		me.showDetailBill(me, record);
+	},
+	printViewBill:function(record){
+		var roomUseId = record.get('ROOM_USED_ID');
+		console.log('record',record);
+		var param = "?LIID=" + roomUseId+ "&SUPPLYER="+WEB_ADDR+'&PRINT_TYPE=1'; 
+		var location = contextPath + "/report/billRetailPrint.do" + param;
+		utilForm.btn_template_popup(location,"Hóa đơn",800,1024,true);
+	},
 })

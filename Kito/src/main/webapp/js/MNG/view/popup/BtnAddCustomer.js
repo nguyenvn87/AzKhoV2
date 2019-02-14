@@ -10,7 +10,7 @@ Ext.define('MNG.view.popup.BtnAddCustomer', {
 	extend : 'Ext.window.Window',
 	Height : 300,
 	width : 600,
-	y: 10,
+	y: 200,
 	//x: 10,
 	title : 'Cập nhật TT khách hàng',
 	maxHeight : 600,
@@ -26,7 +26,7 @@ Ext.define('MNG.view.popup.BtnAddCustomer', {
 		Ext.applyIf(me, {
 			items : [ {
 				xtype : 'container',
-				cls : 'jdvn-main',
+				//cls : 'jdvn-main',
 				itemId : 'addCustomerId',
 				layout : {
 					align : 'stretch',

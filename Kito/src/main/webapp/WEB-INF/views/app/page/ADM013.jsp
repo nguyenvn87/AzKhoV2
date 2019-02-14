@@ -9,6 +9,7 @@ var statisticStore = Ext.create('Ext.data.Store',{
           fields: [
            			{ name: 'SRVC_NM', 	type: 'string'},
            			{ name: 'SRVC_CD', 	type: 'string'},
+           			{ name: 'SRVC_ID', 	type: 'string'},
                     { name: 'TYPE_NM', 	type: 'string'},
                     { name: 'PRICE', 	type: 'float'},
                     { name: 'UNIT_NM', 	type: 'string'},

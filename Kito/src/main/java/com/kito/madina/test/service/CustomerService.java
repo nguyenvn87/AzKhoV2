@@ -13,4 +13,5 @@ public interface CustomerService {
 	public List<CustomerVO> getListCustomerVO(CustomerVO vo);
 	public List<CustomerVO> getSearchListAllCustomer(CustomerVO map);
 	public HashMap<String, Object> getListCountSearchCustomer(CustomerVO map);
+	public int deleteCustomerByID(CustomerVO vo);
 }

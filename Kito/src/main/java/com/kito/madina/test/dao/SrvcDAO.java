@@ -70,5 +70,19 @@ public class SrvcDAO extends SqlMapClientDaoSupport{
 		Object i = getSqlMapClientTemplate().update("updateSrvcVOHistory", vo);
 		return 1;
 	}
-	 
+	public List<SrvcVO> getSrvcHistoryByDate(SrvcVO vo) {
+		List<SrvcVO> queryForList = (List<SrvcVO>) getSqlMapClientTemplate().queryForList("getListSrvcHistoryByDate", vo);
+		return queryForList;
+	}
+	public List<SrvcVO> getListSrvcHistoryBySrvcId(String srvdId, String restarId) {
+		SrvcVO vo = new SrvcVO();
+		vo.setRESTAR_ID(restarId);
+		vo.setSRVC_ID(srvdId);
+		List<SrvcVO> queryForList = (List<SrvcVO>) getSqlMapClientTemplate().queryForList("getListSrvcHistoryBySrvcId", vo);
+		return queryForList;
+	}
+	public HashMap<String, Object> getValueInStore(SrvcVO vo) {
+		HashMap<String, Object> map = (HashMap<String, Object>)getSqlMapClientTemplate().queryForObject("getSrvc.getCalculateValueStore", vo);
+		return map;
+	}
 }

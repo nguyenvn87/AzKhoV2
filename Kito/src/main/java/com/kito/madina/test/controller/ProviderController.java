@@ -1,5 +1,6 @@
 package com.kito.madina.test.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kito.madina.cmmn.json.JsonVO;
+import com.kito.madina.cmmn.util.PropertyUtil;
 import com.kito.madina.cmmn.util.SessionUtil;
-import com.kito.madina.test.service.BankAccountService;
+import com.kito.madina.cmmn.util.UtilConst;
 import com.kito.madina.test.service.ProviderService;
-import com.kito.madina.test.vo.BankAccountVO;
+import com.kito.madina.ecount.service.BankAccountService;
+import com.kito.madina.ecount.vo.BankAccountVO;
 import com.kito.madina.test.vo.CustomerVO;
 import com.kito.madina.test.vo.ProviderVO;
 
@@ -49,6 +52,28 @@ public class ProviderController {
 		bankVo.setRESTAR_ID(loginRestautant);
 
 		List<BankAccountVO> list = bankAccountService.getListBankAccountVO(bankVo);
+		if(list != null && list.size() > 0){
+			boolean isOk = false;
+			for(BankAccountVO vo: list){
+				if(vo.getID_BANK()!= null && vo.getID_BANK().equalsIgnoreCase(UtilConst.ECOUNT_PAY_METHOD_CASH)){
+					isOk = true;
+					break;
+				}
+			}
+			if(isOk==false){
+				bankVo.setID_BANK(UtilConst.ECOUNT_PAY_METHOD_CASH);
+				bankVo.setBANK_NM(PropertyUtil.getStringUTF8("paymethod.cash"));
+				bankAccountService.createBankAccountVO(bankVo);
+				list.add(bankVo);
+			}
+		}
+		else{
+			list = new ArrayList<BankAccountVO>();
+			bankVo.setID_BANK(UtilConst.ECOUNT_PAY_METHOD_CASH);
+			bankVo.setBANK_NM(PropertyUtil.getStringUTF8("paymethod.cash"));
+			bankAccountService.createBankAccountVO(bankVo);
+			list.add(bankVo);
+		}
 		jvon.setData(list);
 		jvon.setSuccess(true);
 		

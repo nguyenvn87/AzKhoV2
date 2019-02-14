@@ -399,7 +399,6 @@ Ext
 					showDetail : function(grid, rowIndex, colIndex) {
 						var myController = MANAGER.app
 								.getController('MNG.controller.saleStatisticController');
-						myController.getCustomerInfo(2);
 						store = grid.getStore();
 						rec = store.getAt(rowIndex);
 						var isDeliver = rec.get('IS_DELIVERED');

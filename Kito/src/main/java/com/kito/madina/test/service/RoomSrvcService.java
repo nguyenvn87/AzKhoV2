@@ -23,4 +23,6 @@ public interface RoomSrvcService {
 	public HashMap<String, Object> getThongKeBanHangCount(HashMap<String, String> map);
 	public int createRoomSrvcHistoryVO(RoomSrvcVO vo);
 	public List<RoomSrvcVO> getListRoomSrvcHistoryVOByID(String roomUsedId);
+	public List<HashMap<String, Object>> getChiTietThongKeBanHangTheoNgay(HashMap<String, String> map);
+	public HashMap<String, Object> getCountChiTietBanHangTheoNgay(HashMap<String, String> map);
 }

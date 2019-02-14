@@ -72,6 +72,9 @@
 		</dynamic>
 	    WHERE CUS_CD = #CUS_CD# and RESTAR_ID = #RESTAR_ID#
   </update>
+  <delete id="deleteCustomerByID">
+    	DELETE FROM customer WHERE CUS_CD = #CUS_CD# and RESTAR_ID=#RESTAR_ID#
+  </delete>
   <select id="getCustomerVOByVo" resultClass="CustomerVO">
 	    SELECT CUS_CD 
 				, NAME 
@@ -95,9 +98,12 @@
 				, R.CHANGE_USER
 	    FROM customer R
 	   <dynamic prepend="WHERE">
-	   	<isNotEmpty property="CUS_CD" prepend="AND">
+	   <isNotEqual property="CUS_CD" compareValue="-1" prepend="AND">
 	   		R.CUS_CD = #CUS_CD#
-	   	</isNotEmpty>
+	   </isNotEqual>
+	   	<!-- <isNotEmpty property="CUS_CD" prepend="AND">
+	   		R.CUS_CD = #CUS_CD#
+	   	</isNotEmpty> -->
 	   	<isNotEmpty property="RESTAR_ID" prepend="AND">
 	   		R.RESTAR_ID = #RESTAR_ID#
 	   	</isNotEmpty>

@@ -14,6 +14,8 @@ import com.kito.madina.test.service.SrvcService;
 import com.kito.madina.test.vo.ImportDetailVO;
 import com.kito.madina.test.vo.ImportVO;
 import com.kito.madina.test.vo.SrvcVO;
+import com.kito.madina.cmmn.util.CmmUtil;
+import com.kito.madina.cmmn.util.SessionUtil;
 
 @Service("importService")
 public class ImportServiceImpl implements ImportService {
@@ -30,6 +32,8 @@ public class ImportServiceImpl implements ImportService {
 
 	@Override
 	public List<ImportDetailVO> getDetailFromImportVO(ImportVO vo) {
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		vo.setRESTAR_ID(restarId);
 		return importDAO.getDetailFromImportVO(vo);
 	}
 
@@ -49,7 +53,17 @@ public class ImportServiceImpl implements ImportService {
 
 	@Override
 	public Integer addImport(ImportVO vo) {
-		return importDAO.addImport(vo);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		ImportVO iVo = this.getLastIDImportIndex(map);
+		int idImport = 1;
+		if(iVo != null && iVo.getIMPRT_CD() > 0)
+			idImport = iVo.getIMPRT_CD()+1;
+		vo.setIMPRT_CD(idImport);
+		String str = CmmUtil.generateBillCode(vo.getIMPRT_CD()+"", 6);
+		vo.setIMPRT_BILL("CD"+str);
+		importDAO.addImport(vo);
+		return idImport;
+		//return importDAO.addImport(vo);
 	}
 
 	@Override
@@ -71,6 +85,9 @@ public class ImportServiceImpl implements ImportService {
 			sVo.setSRVC_ID(vo.getSRVC_ID());
 			sVo.setRESTAR_ID(vo.getRESTAR_ID());
 			sVo.setIS_USED(1);
+			if(vo.getIMPRT_PRICE()!= null && Float.parseFloat(vo.getIMPRT_PRICE()) > 0){
+				sVo.setPRICE_IMPORT(vo.getIMPRT_PRICE());
+			}
 			float fValue =  Float.parseFloat(vo.getAMOUNT());
 			srvcService.pushInStore(sVo, fValue);
 		}catch(Exception e){
@@ -89,11 +106,11 @@ public class ImportServiceImpl implements ImportService {
 		return importDAO.getStatisticImport(vo);
 	}
 	@Override
-	public List<ImportVO> getImportPaging(ImportVO vo){
+	public List<ImportVO> getImportPaging(HashMap<String, Object> vo){
 		return importDAO.getImportPaging(vo);
 	}
 	@Override
-	public HashMap<String, Object> getImportCount(ImportVO vo){
+	public HashMap<String, Object> getImportCount(HashMap<String, Object> vo){
 		return importDAO.getImportCount(vo);
 	}
 	@Override
@@ -124,9 +141,9 @@ public class ImportServiceImpl implements ImportService {
 		sVo = srvcService.getSrvcVO(sVo);
 		if(sVo != null && oldVO != null){
 			float fValue =  Float.parseFloat(vo.getAMOUNT()) - Float.parseFloat(oldVO.getAMOUNT());
-			//float newValue = sVo.getAMOUNT_STORE() + fValue;
-			//sVo.setAMOUNT_STORE(newValue);
-			//srvcService.updateSrvcVO(sVo);
+			if(vo.getIMPRT_PRICE()!= null && Float.parseFloat(vo.getIMPRT_PRICE())>0){
+				sVo.setPRICE_IMPORT(vo.getIMPRT_PRICE());
+			}
 			if(fValue > 0) srvcService.pushInStore(sVo, fValue);
 			else if(fValue < 0)srvcService.popOutStore(sVo, fValue);
 		}
@@ -156,5 +173,15 @@ public class ImportServiceImpl implements ImportService {
 	@Override
 	public HashMap<String, Object> getThongKeNhapHangCount(HashMap<String, String> map){
 		return importDAO.getThongKeNhapHangCount(map);
+	}
+	@Override
+	public HashMap<String, Object> getDetailSrvcCount(HashMap<String, Object> map){
+		return importDAO.getDetailSrvcCount(map);
+	}
+	@Override
+	public ImportVO getLastIDImportIndex(HashMap<String, Object> map){
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		map.put("RESTAR_ID", restarId);
+		return importDAO.getLastIDImportIndex(map);
 	}
 }

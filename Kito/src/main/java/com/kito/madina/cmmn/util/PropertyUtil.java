@@ -23,11 +23,12 @@ public class PropertyUtil {
 		return getBean().getString(key);
 	}
 	public static String getStringUTF8(String key) {
-		String str = getBean().getString(key);
+		
 		String newValue = null;
 		try {
+			String str = getBean().getString(key);
 			 newValue = new String(str.getBytes("iso-8859-1"), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

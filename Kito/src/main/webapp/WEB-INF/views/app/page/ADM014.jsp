@@ -25,12 +25,12 @@ Ext.application({
 	       // title    : 'Thống kê lợi nhuận',
 	       // cls: 'jdvn-main-body',
 	        pageScale: 1,                                          
-	        src      : url_ 
+	        //src      : url_ 
 	    });
 	
-	    mainPanel.add( pdfPanel);
+	   // mainPanel.add( pdfPanel);
 		
-		mainPanel.doLayout(); 
+		//mainPanel.doLayout(); 
 	}
 });
 </script>

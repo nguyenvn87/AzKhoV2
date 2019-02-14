@@ -4,7 +4,7 @@
 Ext.define('MNG.store.importDetailStore', {
 			extend : 'Ext.data.Store',
 			model : 'MNG.model.importDetailModel',
-			autoload : true,
+			autoload : false,
 			proxy : {
 				type : 'ajax',
 				url : contextPath + '/store/getDetailFromImportVO.json',

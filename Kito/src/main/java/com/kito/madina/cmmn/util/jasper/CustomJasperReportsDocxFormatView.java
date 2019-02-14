@@ -64,6 +64,7 @@ public class CustomJasperReportsDocxFormatView extends CustomAbstractJasperRepor
 			Map<String, Object> model, HttpServletResponse response)
 			throws Exception {
 		String format = (String) model.get(this.formatKey);
+		String fileName = (String) model.get("filename");
 		if (format == null) {
 			throw new IllegalArgumentException("No format format found in model");
 		}
@@ -81,8 +82,13 @@ public class CustomJasperReportsDocxFormatView extends CustomAbstractJasperRepor
 
 		view.setExporterParameters(getExporterParameters());
 		view.setConvertedExporterParameters(getConvertedExporterParameters());
-
-		populateContentDispositionIfNecessary(response, format);
+		if(fileName!=null && !fileName.isEmpty()) {
+			String fileNames = fileName + ".docx";
+			response.setHeader("content-disposition", "attachment; filename=\""+fileNames+"\"");
+		}
+		else
+			populateContentDispositionIfNecessary(response, format);
+		
 		view.renderReport(populatedReport, model, response);
 	}
 

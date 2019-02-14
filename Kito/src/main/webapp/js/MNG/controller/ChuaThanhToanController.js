@@ -2,11 +2,10 @@ var gridSupport = Ext.create('BIZ.utilities.GridSupporter',{});
 var utilForm = Ext.create('CMM.form.util',{});
 var formatSupporter = Ext.create('BIZ.utilities.formatSupporter',{});
 var supportEvent = Ext.create('BIZ.utilities.supportEvent',{});
-//var messageEvent = Ext.create('BIZ.utilities.supportEvent',{});
 var totalValue = 0;
 var BtnUpdatePayment = Ext.create('MNG.view.popup.BtnUpdatePayment',{});
-var btnViewDetail = Ext.create('MNG.view.popup.BtnBillInfo',{});
-//var btnViewDetail = Ext.create('MNG.view.popup.BtnChiTietDonHang',{});
+var btnViewDetail = null;
+var btnUpdateThanhToan = null;
 Ext.define('MNG.controller.ChuaThanhToanController', {
 	extend : 'Ext.app.Controller',
 	views : ['MNG.view.statistic'],
@@ -50,6 +49,9 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 			'#btnStatisPrint':{
 				click : this.btnStatisPrint 
 			},
+			'#btnExportExcelPrint':{
+				click : this.btnExportExcelPrint 
+			},
 			'#btnExportPrint':{
 				click: this.btnExportPrint 
 			},
@@ -70,9 +72,6 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 			},
 			'#BtnCancelBill':{
 				click: this.BtnCancelBill
-			},
-			'#saveBtnBill':{
-				click: this.submitOrder
 			},
 			'#FULLNAME':{
 				select: this.onSelectUserName
@@ -107,9 +106,7 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 	},
 	btnStatisDaily: function(){
 		var today = new Date();
-		//this.startDate = formatSupporter.getTimeStempDateFormat(today);
 		arrTime = formatSupporter.getEnglishDate('TODAY');
-		//this.this.paramsRequest.TYPE_STATIS = 'OTHER';
 		this.paramsRequest.STARTDATE = arrTime[0];
 		this.paramsRequest.ENDDATE = arrTime[1];
 		console.info(this.paramsRequest);
@@ -169,6 +166,8 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 				param = param + "&USER_NAME=" + this.paramsRequest.USER_NAME;
 		if(this.paramsRequest.IS_CANCELED != null)
 				param = param + "&IS_CANCELED="+this.paramsRequest.IS_CANCELED; 
+		if(this.paramsRequest.DEBIT != null)
+				param = param + "&DEBIT="+this.paramsRequest.DEBIT; 
 		var location = contextPath + "/saleReport/calculateProfit.do" + param;
 		utilForm.btn_template_popup(location,"Doanh thu",800,1024,true);
 	},
@@ -257,7 +256,6 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 		});
 	},
 	btnStatisAllDebit:function(){
-		alert('1234');
 	},
 	getCustomerInfo:function(customerId){
 		customerId = 2;
@@ -287,33 +285,28 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 	},
 	updateBillInfo:function(){
 		var params = {
-				IS_DELIVERED: (Ext.ComponentQuery.query('#btnSrvcContainerId #IS_DELILVER')[0].getValue()==true)?1:0,
-				DSCRT: Ext.ComponentQuery.query('#btnSrvcContainerId #DSCRT')[0].getValue(),
+				//IS_DELIVERED: (Ext.ComponentQuery.query('#btnSrvcContainerId #IS_DELILVER')[0].getValue()==true)?1:0,
+				//DSCRT: Ext.ComponentQuery.query('#btnSrvcContainerId #DSCRT')[0].getValue(),
 				HAS_PAYED: (Ext.ComponentQuery.query('#btnSrvcContainerId #HAS_PAYED')[0].getValue()==true)?1:0,
 				ROOM_USED_ID: btnViewDetail.config.ROOM_USED_ID,
 				PAYED_MONEY: Ext.ComponentQuery.query('#btnSrvcContainerId #PAYED_MONEY')[0].getValue(),
 				CUS_NM: Ext.ComponentQuery.query('#btnSrvcContainerId #CUS_NM')[0].getRawValue(),
-				CUS_CD: btnViewDetail.config.cusCd,
-				IS_DELIVERED_OLD: this.billObj.IS_DELIVERED
+				CUS_CD: btnViewDetail.config.cusCd
+				//IS_DELIVERED_OLD: this.billObj.IS_DELIVERED
 		};
 		this.submitUpdateBill(params);
 	},
 	showCustomerInfo1:function(param){
-		//this.billObj.IS_DELIVERED = -1;
-		//this.billObj.IS_DELIVERED = param.isdeliver;
-		console.info(param);
     	btnViewDetail.config = param;
     	btnViewDetail.show();
-    	//btnViewDetail.renderValue();
 	},
 	showCustomerInfo:function(param){
-		//this.billObj.IS_DELIVERED = -1;
-		//this.billObj.IS_DELIVERED = param.isdeliver;
-		btnViewDetail.config = param;
-    	btnViewDetail.config.ROOM_USED_ID = param.ROOM_USED_ID;
+		if(btnViewDetail != null) btnViewDetail.close();
+		btnViewDetail = Ext.create('MNG.view.popup.BtnBillInfo',{config:param});
+		//btnViewDetail.config = param;
+    	//btnViewDetail.config.ROOM_USED_ID = param.ROOM_USED_ID;
     	btnViewDetail.show();
     	btnViewDetail.renderValue();
-    	//btnViewDetail.reloadListProduct(param.ROOM_USED_ID);
 	},
 	BtnCancelBill:function(){
 		var parent = this;
@@ -331,8 +324,8 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 		});
 	},
 	submitUpdateBill:function(params){
-		console.info('params');
-		console.info(params);
+		var storeTmp = btnViewDetail.savePaymentMethod();
+		console.log('storeTmp',storeTmp);
 		var submitFinishUrl = contextPath + '/customer/updateBillCustomer.json';
 		supportEvent.showLoadingOnprogress('Đang cập nhật', '');
 		Ext.Ajax.request( {
@@ -341,7 +334,7 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 	    		params: params,
 	    		success: function(response){
 	    			var text = Ext.JSON.decode(response.responseText);
-	    			btnViewDetail.hide();
+	    			btnViewDetail.close();
 	    			var statisStore = Ext.ComponentQuery.query("#grid-srvc-statistic")[0].getStore();
 	    			statisStore.load();
 	    			if( text.success == true){
@@ -365,7 +358,6 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 				SRVC_ID: rec.get('SRVC_ID')
 		};
 		this.submitDeleteRequestBill(_params);
-		//this.submitUpdateBill(_params);
 	},
 	isDupplicateRecord:function(menuId, _srvcRoomStore){
 		var isExist = false;
@@ -386,7 +378,7 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 	    		params: _params,
 	    		success: function(response){
 	    			var text = Ext.JSON.decode(response.responseText);
-	    			btnViewDetail.hide();
+	    			btnViewDetail.close();
 	    			var statisStore = Ext.ComponentQuery.query("#grid-srvc-statistic")[0].getStore();
 	    			statisStore.load();
 	    			if( text.success == true){
@@ -400,45 +392,6 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 	    		}
 			});
 	},
-	submitOrder:function(){
-		
-		var parent = this;
-		var param = {};
-		var tmpStoreResource = Ext.ComponentQuery.query('#gridListProductID')[0].getStore();
-		
-		deletedRecords  = tmpStoreResource.getRemovedRecords();
-		modifiedRecords = tmpStoreResource.getModifiedRecords();
-		tmpStore = Ext.create('MNG.store.roomSrvcStore', {});
-		Ext.each(deletedRecords, function(record){
-		    		record.set('STATUS', 'delete');
-		    		tmpStore.add(record);
-		    	});
-		Ext.each(modifiedRecords, function(record){
-		    		tmpStore.add(record);
-		    	});
-		paramData = Ext.encode(Ext.Array.pluck(tmpStore.data.items,'data'));
-		var param = {};
-		
-		cusCD = Ext.ComponentQuery.query('#customerContainerId [name=CUS_CD]')[0].getValue();
-		cusNM = Ext.ComponentQuery.query('#customerContainerId [name=NAME]')[0].getRawValue();
-		total = Ext.ComponentQuery.query('#paymentContainerInfo [name=TOTAL_MONEY]')[0].getValue();
-		valuePayed = Ext.ComponentQuery.query('#paymentContainerInfo [name=PAYED_MONEY]')[0].getValue();
-		hasPayed = Ext.ComponentQuery.query('#paymentContainerInfo [name=HAS_PAYED]')[0].getValue();
-		isDelivered = Ext.ComponentQuery.query('#deliveryContainerInfo [name=IS_DELILVER]')[0].getValue();
-		dscrt = Ext.ComponentQuery.query('#deliveryContainerInfo [name=DSCRT]')[0].getValue();
-		
-		param['DATA'] = paramData;
-		param['ROOM_USE_ID'] = btnViewDetail.config.ROOM_USED_ID;
-		param['TOTAL_MONEY'] = total;
-		param['PAYED_MONEY'] = valuePayed;
-		param['IS_DELIVERED'] = (isDelivered==true)?1:0;;
-		param['HAS_PAYED'] = (hasPayed==true)?1:0;
-		param['CUS_CD'] = cusCD;
-		param['DSCRT'] = dscrt;
-		param['CUS_NM'] = cusNM;
-		
-		parent.btnSavingRequest(param);
-	},
 	btnSavingRequest:function(paramsData){
 				
 		url_request = contextPath + '/sale/saveEditSaleOrderList.json';
@@ -448,7 +401,7 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 		    	params: paramsData,
 		    	success: function(response){
 		    		var text = Ext.JSON.decode(response.responseText);
-		    		btnViewDetail.hide();
+		    		btnViewDetail.close();
 	    			var statisStore = Ext.ComponentQuery.query("#grid-srvc-statistic")[0].getStore();
 	    			statisStore.load();
 		    		supportEvent.showMessageSuccess('Cập nhật thành công');
@@ -458,4 +411,35 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 		    	}
 		 });	
 	},
+	btnExportExcelPrint: function(){
+		var param = "?FILENAME="+ "Danh_Sach_Don"; 
+		if(this.paramsRequest.STARTDATE != null)
+				param = param + "&STARTDATE=" + this.paramsRequest.STARTDATE;
+		if(this.paramsRequest.ENDDATE != null)
+				param = param + "&ENDDATE=" + this.paramsRequest.ENDDATE;
+		if(this.paramsRequest.USER_NAME != null)
+				param = param + "&USER_NAME=" + this.paramsRequest.USER_NAME;
+		if(this.paramsRequest.IS_CANCELED != null)
+				param = param + "&IS_CANCELED="+this.paramsRequest.IS_CANCELED; 
+		if(this.paramsRequest.DEBIT != null)
+				param = param + "&DEBIT="+this.paramsRequest.DEBIT;
+		if(this.paramsRequest.HAS_PAYED != null)
+				param = param + "&HAS_PAYED="+this.paramsRequest.HAS_PAYED;
+		
+		var _url = contextPath + '/saleReport/excel/DanhSachDonHang.do'+param;
+		supportEvent.downloadFile(_url);
+	},
+	updateHinhThucThanhToan:function(record){
+		var _targetComponent = Ext.ComponentQuery.query("#grid-srvc-statistic")[0].getStore();
+		
+		if(btnUpdateThanhToan) btnUpdateThanhToan.close();
+		btnUpdateThanhToan = Ext.create('ECNT.view.popup.BtnUpdateThanhToan'
+				,{roomUsedId:record.data.ROOM_USED_ID
+				, valueTotal: record.data.TOTAL_MONEY
+				, valuePayed: record.data.PAYED_MONEY
+				, hasPayed: record.data.HAS_PAYED
+				, targetComponent: _targetComponent
+				});
+		btnUpdateThanhToan.show();
+	}
 })

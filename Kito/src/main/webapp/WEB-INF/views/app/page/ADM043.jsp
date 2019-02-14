@@ -14,6 +14,7 @@ var statisticStore = Ext.create('Ext.data.Store',{
           fields: [
            			{ name: 'SRVC_NM', 	type: 'string'},
            			{ name: 'SRVC_CD', 	type: 'string'},
+           			{ name: 'SRVC_ID', 	type: 'string'},
                     { name: 'CREATE_DATE', 	type: 'string'},
                     { name: 'PRICE', 	type: 'float'},
                     { name: 'UNIT_NM', 	type: 'string'},
@@ -52,7 +53,7 @@ Ext.application({
 			listeners:{
 				afterrender:function(){
 					var arrDate = formatSupporter.getEnglishDate('MONTH');
-					var Grid = Ext.ComponentQuery.query('#grid-srvc')[0];
+					var Grid = Ext.ComponentQuery.query('#grid-srvc-chitiet')[0];
 					tmpStore = Grid.getStore();
 					tmpStore.currentPage = 1;
 					tmpStore.pageSize = 10;

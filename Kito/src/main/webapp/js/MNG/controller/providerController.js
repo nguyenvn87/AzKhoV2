@@ -80,7 +80,6 @@ Ext.define('MNG.controller.providerController', {
     		success: function(response){
     			var text = Ext.JSON.decode(response.responseText);
     			console.log( text);
-    			//console.log( text.result);
     			if( text.success == true){
     				formRoom.hide();
     				// 4. Forest loading

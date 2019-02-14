@@ -48,7 +48,7 @@
 	</subDataset>
 	<parameter name="paramDate" class="java.lang.String"/>
 	<parameter name="paramUser" class="java.lang.String"/>
-	<parameter name="paramTotal" class="java.lang.Long"/>
+	<parameter name="paramTotal" class="java.lang.Double"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -59,8 +59,8 @@
 	<field name="ItemNote" class="java.lang.String"/>
 	<field name="ItemPrice" class="java.lang.String"/>
 	<field name="ItemNo" class="java.lang.String"/>
-	<field name="ItemTotal" class="java.lang.Float"/>
-	<field name="ItemPayed" class="java.lang.Float"/>
+	<field name="ItemTotal" class="java.lang.Double"/>
+	<field name="ItemPayed" class="java.lang.Double"/>
 	<field name="ItemUnit" class="java.lang.String"/>
 	<field name="ItemAmount" class="java.lang.String"/>
 	<field name="ItemCusNm" class="java.lang.String"/>

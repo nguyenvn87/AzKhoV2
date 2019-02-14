@@ -17,6 +17,10 @@ import com.google.gson.stream.JsonReader;
 import com.kito.madina.cmmn.json.JsonVO;
 import com.kito.madina.cmmn.util.CmmUtil;
 import com.kito.madina.cmmn.util.SessionUtil;
+import com.kito.madina.cmmn.util.UtilConst;
+import com.kito.madina.ecount.service.PaymentMethodService;
+import com.kito.madina.ecount.service.PhieuThuService;
+import com.kito.madina.ecount.vo.PaymentMethodVO;
 import com.kito.madina.test.service.CodeService;
 import com.kito.madina.test.service.CustomerService;
 import com.kito.madina.test.service.MenuService;
@@ -65,6 +69,12 @@ public class SaleController {
 	@Resource(name = "codeService")
 	private CodeService codeService;
 	
+	@Resource(name = "paymentMethodService")
+	private PaymentMethodService paymentMethodService;
+	
+	@Resource(name = "phieuThuService")
+	private PhieuThuService phieuThuService;
+	
 	@RequestMapping("/sale/saveSaleOrderList.json")
 	public ModelAndView saveSaleServices111(HttpServletRequest req, RoomTurnVO rtVo) {
 		
@@ -81,14 +91,15 @@ public class SaleController {
 		String isDebitStr = req.getParameter("IS_DEBIT");
 		String shipAddr = req.getParameter("SHIP_ADDR");
 		String aCCUMULT = req.getParameter("ACCUMULT");
+		String methodList = req.getParameter("METHOD");
 		
 		String cusCD = req.getParameter("CUS_CD");
 		int iCusCD = (cusCD != null && !cusCD.isEmpty()) ? Integer.parseInt(cusCD):0;
 		int isDebit = (isDebitStr != null && !isDebitStr.isEmpty()) ? Integer.parseInt(isDebitStr):0;
 		
-		float totalMoneyf = Float.parseFloat(totalMoney);
-		float payedMoneyf = Float.parseFloat(payMoney);
-		
+		double totalMoneyf = Double.valueOf(totalMoney);
+		double payedMoneyf = Double.valueOf(payMoney);
+		boolean isValid = false;
 		roomUseId = CmmUtil.getGUID();
 		//RoomTurnVO rtVo = new RoomTurnVO();
 		rtVo.setROOM_USED_ID(roomUseId);
@@ -98,12 +109,25 @@ public class SaleController {
 		rtVo.setUSER_NAME(loginUser);
 		rtVo.setIS_DELIVERED(Integer.parseInt(isDiliver));
 		rtVo.setCUS_CD(iCusCD+"");
-		rtVo.setIS_ORDER(1);
 		rtVo.setIS_DEBIT(isDebit);
+		rtVo.setIS_ORDER(1);
 		rtVo.setSHIP_ADDR(shipAddr);
 		String billCD = roomTurnService.generateBillCode();
 		rtVo.setBILL_CD(billCD);
 		roomTurnService.CreateRoomTurnVO(rtVo);
+		
+		// Save payment method
+		List<PaymentMethodVO> listMethod = null;
+		if(methodList != null && methodList.length() > 10){
+			String data = methodList.replaceAll("&quot;", "\"");
+			data = data.replaceAll("false", "N");
+			data = data.replaceAll("true", "Y");
+			JsonReader reader1 = new JsonReader(new StringReader(data));
+			reader1.setLenient(true);
+					
+			listMethod = CmmUtil.jsonToPayMethodList(reader1);
+		}
+		
 		if(dataList != null && dataList.length() > 10){
 						
 			String data = dataList.replaceAll("&quot;", "\"");
@@ -118,14 +142,13 @@ public class SaleController {
 				vo.setROOM_USED_ID(roomUseId);
 				vo.setUSER_NAME(loginUser);
 				
-				//if(vo.getTOTAL_MONEY() > 0){}
-				//else {
-					float total = vo.getAMOUNT() * vo.getPRICE();
-					vo.setTOTAL_MONEY(total);
-				//}
+				double total = vo.getAMOUNT() * vo.getPRICE();
+				vo.setTOTAL_MONEY(total);
+				
 				roomSrvcService.createAnOrder(vo, rtVo);
 				jvon.setData(roomUseId);
 				jvon.setSuccess(true);
+				isValid = true;
 			}
 			
 			// Update customer's score
@@ -147,6 +170,12 @@ public class SaleController {
 				}
 			}
 		}
+		if(isValid && listMethod!= null && listMethod.size() >0){
+			for(PaymentMethodVO pVo : listMethod){
+				pVo.setROOM_USED_ID(roomUseId);
+				phieuThuService.createPhieuThuPayment(rtVo, pVo);
+			}
+		}
 		return new ModelAndView("jsonView", jvon);
 	}
 	@RequestMapping("/sale/saveEditSaleOrderList.json")
@@ -164,12 +193,14 @@ public class SaleController {
 		String aCCUMULT = req.getParameter("ACCUMULT");
 		String hAS_PAYED = req.getParameter("HAS_PAYED");
 		String cusCD = req.getParameter("CUS_CD");
+		String description = req.getParameter("DSCRT");
+		
 		int iCusCD = (cusCD != null && !cusCD.isEmpty()) ? Integer.parseInt(cusCD):0;
 		int isDebit = (isDebitStr != null && !isDebitStr.isEmpty()) ? Integer.parseInt(isDebitStr):0;
 		int iHasPay = (hAS_PAYED != null && !hAS_PAYED.isEmpty()) ? Integer.parseInt(hAS_PAYED):0;
 		
-		float totalMoneyf = Float.parseFloat(totalMoney);
-		float payedMoneyf = Float.parseFloat(payMoney);
+		double totalMoneyf = Double.parseDouble(totalMoney);
+		double payedMoneyf = Double.parseDouble(payMoney);
 		
 		if(roomUseId == null || roomUseId.isEmpty()) return new ModelAndView("jsonView", jvon);
 		
@@ -199,7 +230,9 @@ public class SaleController {
 			dbVo.setPAYED_MONEY(payedMoneyf);
 			dbVo.setTOTAL_MONEY(totalMoneyf);
 			dbVo.setCUS_NM(rtVo.getCUS_NM());
-			dbVo.setCHANGE_DATE(rtVo.getCHANGE_DATE());
+			if(rtVo.getCHANGE_DATE() != null && !rtVo.getCHANGE_DATE().isEmpty())
+				dbVo.setCHANGE_DATE(rtVo.getCHANGE_DATE());
+			dbVo.setDSCRT(description);
 			roomTurnService.UpdateRoomTurnVO(dbVo);
 		}
 		
@@ -242,16 +275,16 @@ public class SaleController {
 			}
 		}
 		// 2.2 Update store info
-		if (isDiliver != null && isDiliver.equalsIgnoreCase("0") 
-				&& isDeliverOld == 1){
-			List<RoomSrvcVO> listSrvc = roomSrvcService.getListRoomSrvcVOByID(roomUseId);
-			for(RoomSrvcVO rVo : listSrvc){
-				SrvcVO sVo = new SrvcVO();
-				sVo.setSRVC_ID(rVo.getSRVC_ID());
-				sVo.setRESTAR_ID(restarId);
-				sVo.setIS_USED(1);
-				srvcService.pushInStore(sVo, rVo.getAMOUNT());
-			}
+		else if (isDiliver != null && isDiliver.equalsIgnoreCase("0") 
+						&& isDeliverOld == 1){
+				List<RoomSrvcVO> listSrvc = roomSrvcService.getListRoomSrvcVOByID(roomUseId);
+				for(RoomSrvcVO rVo : listSrvc){
+					SrvcVO sVo = new SrvcVO();
+					sVo.setSRVC_ID(rVo.getSRVC_ID());
+					sVo.setRESTAR_ID(restarId);
+					sVo.setIS_USED(1);
+					srvcService.pushInStore(sVo, rVo.getAMOUNT());
+				}
 		}
 		// 3. Update customer info
 		if(iCusCD != 0){
@@ -302,7 +335,7 @@ public class SaleController {
 			map.put("SRVC_ID", vo.getSRVC_ID());
 		}
 		CodeVO mVo = new CodeVO();
-		mVo.setGROUP_CD("DONVI");
+		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
 		List<CodeVO> listCode = codeService.getListCodeVO(mVo);
 		List<HashMap<String, Object>> list = roomSrvcService.getThongKeBanHang(map);
 		
@@ -371,6 +404,67 @@ public class SaleController {
 		jvon.addObject("SumObj", mapResult);
 		jvon.setData(listTurnVo);
 		jvon.setTotalCount(totalCount);
+		return new ModelAndView("jsonView", jvon);
+	}
+	/**
+	 * @author Nguyen
+	 * @description Get chi tiet ban hàng theo ngày
+	 * */
+	@RequestMapping(value="/sale/getChitietbanhangtheongay.json", method = RequestMethod.GET)
+	public ModelAndView getChitietbanhangtheongay(HttpServletRequest req, SrvcVO vo) {
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		JsonVO jvon = new JsonVO();
+		String userName = req.getParameter("USER_NAME");
+		String startDate = req.getParameter("STARTDATE");
+		String endDate = req.getParameter("ENDDATE");
+		String isDeliver = req.getParameter("IS_DELIVERED");
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		int limit = Integer.parseInt(vo.getLimit());
+		int page = Integer.parseInt(vo.getPage());
+		vo.setMIN((page - 1) * limit);
+		vo.setMAX(((page - 1) * limit) + limit);
+		map.put("MIN", vo.getMIN()+"");
+		map.put("MAX", vo.getMAX()+"");
+		
+		if(userName != null && !userName.isEmpty())map.put("USER_NAME", userName);
+		if(startDate != null && !startDate.isEmpty() && startDate.length() > 5)map.put("STARTDATE", startDate);
+		if(endDate != null && !endDate.isEmpty() && endDate.length() > 5) map.put("ENDDATE", endDate);
+		if(isDeliver != null && isDeliver.equalsIgnoreCase("1"))map.put("IS_DELIVERED", "1");
+		
+		if(vo.getSRVC_ID() != null && !vo.getSRVC_ID().isEmpty()){
+			map.put("SRVC_ID", vo.getSRVC_ID());
+		}
+		HashMap<String, String> mapUnit = new HashMap<String, String>();
+		List<HashMap<String, Object>> list = roomSrvcService.getChiTietThongKeBanHangTheoNgay(map);
+		
+		CodeVO mVo = new CodeVO();
+		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		List<CodeVO> listCode = codeService.getListCodeVO(mVo);
+		for(CodeVO cVo : listCode){
+			mapUnit.put(cVo.getCD(), cVo.getCD_NM());
+		}
+		for(HashMap<String, Object> tmpMap : list){
+			
+			SrvcVO sVo = new SrvcVO();
+			sVo.setSRVC_ID(tmpMap.get("SRVC_ID").toString());
+			sVo.setRESTAR_ID(restarId);
+			sVo.setIS_USED(1);
+			sVo = srvcService.getSrvcVO(sVo);
+			if(sVo != null)tmpMap.put("SRVC_NM", sVo.getSRVC_NM());
+			tmpMap.put("UNIT_NM", mapUnit.get(tmpMap.get("UNIT")));
+		}
+		
+		HashMap<String, Object> mapCount = roomSrvcService.getCountChiTietBanHangTheoNgay(map);
+		int count = 0;
+		if(mapCount!=null&&mapCount.get("COUNT")!=null) {
+			count = Integer.parseInt(mapCount.get("COUNT").toString());
+			jvon.addObject("SumObj", mapCount);
+		}
+		jvon.setSuccess(true);
+		jvon.setData(list);
+		jvon.setTotalCount(count);
 		return new ModelAndView("jsonView", jvon);
 	}
 }

@@ -27,13 +27,6 @@ Ext.application({
 					var GridTurn = Ext.ComponentQuery.query('#grid-srvc-statistic')[0];
 					var storeTmp = GridTurn.getStore();
 					storeTmp.getProxy().extraParams = paramsRequest;
-					/* storeTmp.getProxy().extraParams = {
-						RESTAR_ID: 'roomUseId',
-						TYPE_STATIS: null,
-						DEBIT: 'true',
-						HAS_PAYED: 0,
-						IS_CANCELED: 0
-					}; */
 					var url = contextPath +'/report/getPagingStatistic.json';		
 					storeTmp.getProxy().url = url;
 					storeTmp.currentPage = 1;

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="srvc">
+	<typeAlias  alias="PhieuChiVO"	type="com.kito.madina.ecount.vo.PhieuChiVO"/>
+	<sql id="sqlGetListAllPhieuChiBase">	
+		SELECT 
+				M.RESTAR_ID 
+				,M.BILL_CD
+				,M.BOOK_NO
+				,M.BILL_DATE
+				,M.CHI_NAME
+				,M.CHI_TYPE
+				,M.VALUE
+				,M.RECEPT_CD
+				,M.RECEPT_NM
+				,M.RECEPTER
+				,M.DESCRIPTION
+				,M.USER_NAME
+				,M.CHUNGTU_DATE
+				,M.CHUNGTU_CODE
+				,M.HACHTOAN_DATE
+				,M.CHANGE_DATE
+				,M.PAY_METHOD
+				,M.RECEPTER_ADDR
+	    FROM phieu_chi M
+		WHERE M.RESTAR_ID = #RESTAR_ID#
+		ORDER BY M.HACHTOAN_DATE desc
+	</sql>
+	<select id="getPhieuChi.list.paging" resultClass="PhieuChiVO" parameterClass="java.util.HashMap">
+	select N.*
+	from(
+	    SELECT h.*, @row := @row + 1 AS rn1 
+	    from (<include refid="sqlGetListAllPhieuChiBase"/>) h,(SELECT @row := 0) K
+	    <dynamic prepend="WHERE">
+		   	<isNotEmpty property="USER_NAME" prepend="AND">
+		   		h.USER_NAME = #USER_NAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="CHI_TYPE" prepend="AND">
+		   		h.CHI_TYPE = #CHI_TYPE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="CHUNGTU_CODE" prepend="AND">
+		   		h.CHUNGTU_CODE = #CHUNGTU_CODE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RECEPT_CD" prepend="AND">
+		   		h.RECEPT_CD = #RECEPT_CD#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="BOOK_NO" prepend="AND">
+		   		h.BOOK_NO = #BOOK_NO#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="STARTDATE" prepend="AND">
+		   		<![CDATA[ h.HACHTOAN_DATE >= #STARTDATE# ]]>
+		   	</isNotEmpty>
+		   	<isNotEmpty property="ENDDATE" prepend="AND">
+		   		<![CDATA[ h.HACHTOAN_DATE <= #ENDDATE# ]]>
+		   	</isNotEmpty>
+	   </dynamic>)N
+	   <dynamic prepend="WHERE">
+	   		<isNotEmpty property="MIN" prepend="AND">
+		   		<![CDATA[ N.rn1 > #MIN# ]]>
+		   	</isNotEmpty>
+		   	<isNotEmpty property="MAX" prepend="AND">
+		   		<![CDATA[ N.rn1 <= #MAX# ]]>
+		   	</isNotEmpty>
+	   </dynamic>
+	   
+	</select>
+	
+	<insert id="createPhieuChi">
+	    INSERT INTO phieu_chi 
+	    	(
+				RESTAR_ID 
+				,BILL_CD
+				,BOOK_NO
+				,BILL_DATE
+				,CHI_NAME
+				,CHI_TYPE
+				,VALUE
+				,RECEPT_CD
+				,RECEPT_NM
+				,RECEPTER
+				,DESCRIPTION
+				,USER_NAME
+				,CHUNGTU_DATE
+				,CHUNGTU_CODE
+				,HACHTOAN_DATE
+				,BANK_ID
+				,PAY_METHOD
+				,RECEPTER_ADDR
+	    	) 
+	    VALUES (
+				#RESTAR_ID# 
+				,#BILL_CD#
+				,#BOOK_NO#
+				,#BILL_DATE#
+				,#CHI_NAME#
+				,#CHI_TYPE#
+				,#VALUE#
+				,#RECEPT_CD#
+				,#RECEPT_NM#
+				,#RECEPTER#
+				,#DESCRIPTION#
+				,#USER_NAME#
+				,#CHUNGTU_DATE#
+				,#CHUNGTU_CODE#
+				,#HACHTOAN_DATE#
+				,#BANK_ID#
+				,#PAY_METHOD#
+				,#RECEPTER_ADDR#
+			)
+  </insert>
+  <insert id="UpdatePhieuChi">
+	    UPDATE phieu_chi 
+	    <dynamic prepend="SET">
+		   	<isNotEmpty property="BILL_CD" prepend=",">
+		   		BILL_CD = #BILL_CD#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="BOOK_NO" prepend=",">
+		   		BOOK_NO = #BOOK_NO#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="BILL_DATE" prepend=",">
+		   		BILL_DATE = #BILL_DATE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="CHI_NAME" prepend=",">
+		   		CHI_NAME = #CHI_NAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="CHI_TYPE" prepend=",">
+		   		CHI_TYPE = #CHI_TYPE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="VALUE" prepend=",">
+		   		VALUE = #VALUE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RECEPT_CD" prepend=",">
+		   		RECEPT_CD = #RECEPT_CD#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RECEPT_NM" prepend=",">
+		   		RECEPT_NM = #RECEPT_NM#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="RECEPTER" prepend=",">
+		   		RECEPTER = #RECEPTER#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="DESCRIPTION" prepend=",">
+		   		DESCRIPTION = #DESCRIPTION#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="USER_NAME" prepend=",">
+		   		USER_NAME = #USER_NAME#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="PAY_METHOD" prepend=",">
+		   		PAY_METHOD = #PAY_METHOD#
+		   	</isNotEmpty> 
+		   	<isNotEmpty property="HACHTOAN_DATE" prepend=",">
+		   		HACHTOAN_DATE = #HACHTOAN_DATE#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="CHUNGTU_CODE" prepend=",">
+		   		CHUNGTU_CODE = #CHUNGTU_CODE#
+		   	</isNotEmpty>
+		</dynamic>
+	    WHERE BILL_CD = #BILL_CD# and RESTAR_ID = #RESTAR_ID#
+  </insert>
+  <select id="getPhieuChi.getListCount" resultClass="java.util.HashMap" parameterClass="PhieuChiVO">	
+		SELECT 
+			count(t.BILL_CD) as COUNT
+	    FROM (<include refid="sqlGetListAllPhieuChiBase"/>) t
+	</select>
+	<select id="getPhieuChi.paging.getListCount" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">	
+		SELECT 
+			count(t.BILL_CD) as COUNT,
+			sum(t.VALUE) as total
+	    FROM (<include refid="sqlGetListAllPhieuChiBase"/>) t
+  </select>
+	<select id="getPhieuChi.list.paging1" resultClass="PhieuChiVO" parameterClass="PhieuChiVO">
+  		SELECT * 
+  		FROM (
+  			select h.*
+  				, @row := @row + 1 AS rn1 
+  			from (<include refid="sqlGetListAllPhieuChiBase"/>) h
+  			,(SELECT @row := 0) K
+  			) t
+  		<![CDATA[       
+          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
+                ]]>
+  </select>
+  
+  <delete id="deletePhieuChiVO">
+  		DELETE FROM phieu_chi 
+  		WHERE BILL_CD = #BILL_CD# and RESTAR_ID = #RESTAR_ID#
+  </delete>
+  <select id="getLastBillCDPhieuChiByIndex" resultClass="PhieuChiVO" parameterClass="PhieuChiVO">	
+  	select A.* 
+  	from( 	SELECT t.*, @row := @row + 1 AS rn1 
+			FROM (<include refid="sqlGetListAllPhieuChiBase"/>) t ,(SELECT @row := 0) K
+			ORDER BY t.BILL_CD DESC ) A
+	where A.rn1 = 1
+  </select>
+  <select id="getPhieuChiByVo" resultClass="PhieuChiVO" parameterClass="PhieuChiVO">	
+ 	SELECT t.* 
+	FROM (<include refid="sqlGetListAllPhieuChiBase"/>)t
+	<![CDATA[WHERE BILL_CD = #BILL_CD#]]> 
+  </select>
+</sqlMap>

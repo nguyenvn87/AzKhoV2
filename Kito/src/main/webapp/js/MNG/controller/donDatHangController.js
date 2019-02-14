@@ -48,6 +48,9 @@ Ext.define('MNG.controller.donDatHangController', {
 			'#btnStatisPrint':{
 				click : this.btnStatisPrint 
 			},
+			'#btnExportExcelPrint':{
+				click : this.btnExportExcelPrint 
+			},
 			'#btnExportPrint':{
 				click: this.btnExportPrint 
 			},
@@ -167,6 +170,11 @@ Ext.define('MNG.controller.donDatHangController', {
 				param = param + "&USER_NAME=" + this.paramsRequest.USER_NAME;
 		if(this.paramsRequest.IS_CANCELED != null)
 				param = param + "&IS_CANCELED="+this.paramsRequest.IS_CANCELED; 
+		if(this.paramsRequest.IS_CANCELED != null)
+				param = param + "&IS_ORDER="+this.paramsRequest.IS_ORDER;
+		if(this.paramsRequest.IS_DELIVERED != null)
+				param = param + "&IS_DELIVERED="+this.paramsRequest.IS_DELIVERED; 
+		
 		var location = contextPath + "/saleReport/calculateProfit.do" + param;
 		utilForm.btn_template_popup(location,"Doanh thu",800,1024,true);
 	},
@@ -299,6 +307,7 @@ Ext.define('MNG.controller.donDatHangController', {
 	showCustomerInfo:function(param){
 		//this.billObj.IS_DELIVERED = -1;
 		//this.billObj.IS_DELIVERED = param.isdeliver;
+		btnViewDetail.isChangeDate = false;
 		btnViewDetail.config = param;
     	btnViewDetail.config.ROOM_USED_ID = param.ROOM_USED_ID;
     	btnViewDetail.show();
@@ -425,8 +434,12 @@ Ext.define('MNG.controller.donDatHangController', {
 		param['IS_DELIVERED'] = (isDelivered==true)?1:0;;
 		param['HAS_PAYED'] = (hasPayed==true)?1:0;
 		
-		var mydate = new Date(changeDate);
-		param['CHANGE_DATE'] = formatSupporter.getTimeStempDateFormat(mydate)+' 10:10:10';
+		if(btnViewDetail.isChangeDate == true){
+			var mydate = new Date(changeDate);
+			param['CHANGE_DATE'] = formatSupporter.getTimeStempDateFormat(mydate)+' 05:10:10';
+		}else{
+			param['CHANGE_DATE'] = '';
+		}
 		
 		if(cusCD != null && cusCD != undefined && cusCD.length > 0){
 			param['CUS_CD'] = cusCD;
@@ -456,4 +469,23 @@ Ext.define('MNG.controller.donDatHangController', {
 		    	}
 		 });	
 	},
+	btnExportExcelPrint: function(){
+		var me = this;
+		var param = "?FILENAME="+ "Danh_Sach_Don"; 
+		if(me.paramsRequest.STARTDATE != null)
+				param = param + "&STARTDATE=" + me.paramsRequest.STARTDATE;
+		if(me.paramsRequest.ENDDATE != null)
+				param = param + "&ENDDATE=" + me.paramsRequest.ENDDATE;
+		if(me.paramsRequest.USER_NAME != null)
+				param = param + "&USER_NAME=" + me.paramsRequest.USER_NAME;
+		if(me.paramsRequest.IS_CANCELED != null)
+				param = param + "&IS_CANCELED="+me.paramsRequest.IS_CANCELED; 
+		if(me.paramsRequest.IS_CANCELED != null)
+				param = param + "&IS_ORDER="+me.paramsRequest.IS_ORDER;
+		if(me.paramsRequest.IS_DELIVERED != null)
+				param = param + "&IS_DELIVERED="+me.paramsRequest.IS_DELIVERED; 
+		
+		var _url = contextPath + '/saleReport/excel/DanhSachDonHang.do'+param;
+		supportEvent.downloadFile(_url);
+	}
 })

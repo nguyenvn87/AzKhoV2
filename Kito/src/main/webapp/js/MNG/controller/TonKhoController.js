@@ -175,8 +175,11 @@ Ext.define('MNG.controller.TonKhoController', {
 	},
 	btnExcelPrint:function(){
 		fileName = formatSupporter.getVNDay(new Date());
-		var param = "?FILENAME="+ 'TonKho('+fileName+')'; 
-		var _url = contextPath + '/report/excel/ExcelDataStore.do'+param;
+		var itemSelectDate = Ext.ComponentQuery.query('#itemSelectDate')[0].getValue();
+		var tmpValue = Ext.Date.format(itemSelectDate, 'Y-m-d');
+		var dateTime = "datetime="+tmpValue;
+		var param = "&FILENAME="+ 'TonKho('+fileName+')'; 
+		var _url = contextPath + '/store/excel/ExcelDataStore.do?'+ dateTime + param;
 		this.downloadFile(_url);
 	},
 	downloadFile:function(_url){
@@ -196,7 +199,10 @@ Ext.define('MNG.controller.TonKhoController', {
 	    });
 	},
 	btnPdfPrint:function(){
-		var location = contextPath + "/saleReport/baocaotonkho.do";// + param;
+		
+		var itemSelectDate = Ext.ComponentQuery.query('#itemSelectDate')[0].getValue();
+		var tmpValue = Ext.Date.format(itemSelectDate, 'Y-m-d');
+		var location = contextPath + "/store/tonkhohistory.do?datetime=" + tmpValue;
 		utilForm.btn_template_popup(location,"Báo Cáo Tồn Kho",850,800,true);
 	},
 	doubleClickUpdateStore:function(){

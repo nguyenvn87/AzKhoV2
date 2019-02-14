@@ -70,6 +70,26 @@ public class CodeServiceImpl implements CodeService {
 	public int updateCodeVO(CodeVO vo){
 		return codeDao.updateCodeVO(vo);
 	}
+	public String getUnitNameFromList(String codeCD, List<CodeVO> listDonVi, HashMap<String, String> mapDonVi){
+		String nameStr = "";
+		try{
+			if(codeCD!= null && !codeCD.isEmpty()){
+				if(mapDonVi.get(codeCD)!= null){}
+				else{
+			    	for(CodeVO coMap : listDonVi){
+			    		if(codeCD.toString().trim().equalsIgnoreCase(coMap.getCD()+"")){
+			    			mapDonVi.put(codeCD.toString(), coMap.getCD_NM());
+			    			break;
+			    		}
+			    	}
+				}
+		    }
+			nameStr = mapDonVi.get(codeCD);
+		}catch(Exception e){
+			
+		}
+		return nameStr;
+	}
 }
 
 

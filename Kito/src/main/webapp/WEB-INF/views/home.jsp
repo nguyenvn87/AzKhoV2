@@ -65,6 +65,7 @@
                                     {
                                     xtype:'button',
                                     text: 'Báo cáo ngày',
+                                    hidden: true,
                                     itemId : 'btnRptDaily',
                                     iconCls : 'icon-pdf'
                                 },

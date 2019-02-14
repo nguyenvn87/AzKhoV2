@@ -42,6 +42,8 @@
 		</box>
 	</style>
 	<parameter name="ParamSubtile" class="java.lang.String"/>
+	<parameter name="ParamCustomName" class="java.lang.String"/>
+	<parameter name="ParamCustomFone" class="java.lang.String"/>
 	<field name="ItemDateToDate" class="java.lang.String"/>
 	<field name="ItemCode" class="java.lang.String"/>
 	<field name="ItemName" class="java.lang.String"/>
@@ -81,9 +83,30 @@
 		</groupHeader>
 	</group>
 	<title>
-		<band height="89">
+		<band height="124">
 			<frame>
-				<reportElement x="0" y="0" width="554" height="89" uuid="c48d2fc9-eb81-476a-9160-1da30bb9258b">
+				<reportElement x="0" y="80" width="553" height="44" isRemoveLineWhenBlank="true" uuid="fa5b622e-35cf-495e-8eda-423e96595583">
+					<printWhenExpression><![CDATA[!$P{ParamCustomName}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<textField isBlankWhenNull="true">
+					<reportElement x="81" y="4" width="436" height="20" isRemoveLineWhenBlank="true" uuid="51710954-67cc-496a-b1d1-4d7c3cdad04b"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font fontName="font-extension" size="13" isBold="true" pdfFontName="C:/Windows/Fonts/timesbd.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{ParamCustomName}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="81" y="24" width="436" height="20" isRemoveLineWhenBlank="true" uuid="112c724d-5c80-4867-8495-8cc2f13d7524"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font fontName="font-extension" size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{ParamCustomFone}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="1" y="0" width="554" height="124" uuid="c48d2fc9-eb81-476a-9160-1da30bb9258b">
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -106,6 +129,22 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$P{ParamSubtile}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement x="0" y="84" width="80" height="20" uuid="a35129bc-03d2-433e-a2aa-e1600e288340"/>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Khách hàng:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="104" width="80" height="20" uuid="79a2bbb8-1ddf-464d-b74d-7ca5215ef704"/>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Điện thoại:]]></text>
+				</staticText>
 			</frame>
 		</band>
 	</title>
@@ -118,6 +157,7 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
+					<topPen lineWidth="0.1"/>
 					<bottomPen lineWidth="1.0" lineColor="#1F0B0B"/>
 				</box>
 				<staticText>
@@ -264,7 +304,9 @@
 				<textField isBlankWhenNull="true">
 					<reportElement x="440" y="0" width="114" height="22" uuid="1ef3a42c-4b4b-43e8-80fd-0ae43cc1819d"/>
 					<box leftPadding="5"/>
-					<textElement verticalAlignment="Middle"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="font-extension" size="12"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{itemUserName}]]></textFieldExpression>
 				</textField>
 			</frame>

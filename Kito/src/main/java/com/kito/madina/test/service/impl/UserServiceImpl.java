@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kito.madina.cmmn.json.JsonVO;
+import com.kito.madina.cmmn.util.PropertyUtil;
 import com.kito.madina.test.dao.UserDAO;
 import com.kito.madina.test.service.UserService;
 import com.kito.madina.test.vo.UserVO;
@@ -64,5 +66,35 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<UserVO> getListAllUser(UserVO vo){
 		return userDao.getListAllUser(vo);
+	}
+	@Override
+	public JsonVO validateUser(UserVO user){
+		
+		JsonVO jvon = new JsonVO();
+		if(user.getUSERNAME().length() < 8){
+			jvon.setSuccess(false);
+			jvon.setMessage(PropertyUtil.getStringUTF8("notify.user.user"));
+			return jvon;
+		}
+		if(user.getCMND().length() < 8){
+			jvon.setSuccess(false);
+			jvon.setMessage(PropertyUtil.getStringUTF8("notify.user.pass"));
+			return jvon;
+		}
+		// Checking contain number
+		/*if(user.getPASSWORD().contains("[0-9]+")){
+			jvon.setSuccess(false);
+			jvon.setMessage("Password have to at least 8 charactor(include char and number)");
+			return jvon;
+		}*/
+		// Checking contain charactor
+		/*if(user.getPASSWORD().contains("[0-9]+")){
+			jvon.setSuccess(false);
+			jvon.setMessage("Password have to at least 8 charactor(include char and number)");
+			return jvon;
+		}*/
+		jvon.setMessage("");
+		jvon.setSuccess(true);
+		return jvon;
 	}
 }

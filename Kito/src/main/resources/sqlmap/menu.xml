@@ -187,49 +187,49 @@
                 ]]>
   </select>
   <sql id="sqlSearchListAllMenu">	
-		select srvc_id, srvc_nm,UNIT, UNIT_NM, srvc_cd, price, is_used, SORT_NO, DSCRT,ACCUMULT, AMOUNT_STORE
+		select srvc_id, srvc_nm,UNIT, srvc_cd, price, is_used, SORT_NO, DSCRT,ACCUMULT, AMOUNT_STORE, PRICE_IMPORT
 		from(
-			select S1.*,R.CD_NM as UNIT_NM from srvc S1
-				LEFT JOIN cmm_cd  R
-				ON R.CD = S1.UNIT and R.GROUP_CD = 'DONVI'
-			<dynamic prepend="WHERE">
-			   	<isNotEmpty property="SRVC_NM" prepend="AND">
-			   		S1.srvc_nm like  #SRVC_NM#
-			   	</isNotEmpty>
+			select S1.* 
+			FROM srvc S1
+			<!-- <dynamic prepend="WHERE">
+			    	<isNotEmpty property="SRVC_NM" prepend="AND">
+			   		S1.srvc_nm like  #SRVC_NM# OR S1.srvc_cd like  #SRVC_NM#
+			   	</isNotEmpty> 
 			   	<isNotEmpty property="RESTAR_ID" prepend="AND">
 			   		S1.RESTAR_ID =  #RESTAR_ID#
 			   	</isNotEmpty>
 			   	and S1.IS_USED = 1
-		   	</dynamic> 
-			<!-- UNION
-			select * from srvc S2 
-				<dynamic prepend="WHERE">
-			   	<isNotEmpty property="SRVC_NM" prepend="AND">
-			   		S2.srvc_cd like  #SRVC_NM#
-			   	</isNotEmpty>
-			   	<isNotEmpty property="RESTAR_ID" prepend="AND">
-			   		S2.RESTAR_ID =  #RESTAR_ID#
-			   	</isNotEmpty>
-			   	and S2.IS_USED = 1
 		   	</dynamic>  -->
+		   	WHERE S1.RESTAR_ID =  #RESTAR_ID# and S1.IS_USED = 1
 		) B
-		order by B.SORT_NO
  </sql>
 <select id="selectSearchMenuList" resultClass="SrvcVO" parameterClass="SrvcVO">	
 	SELECT * 
-  		FROM (
+  	FROM (
   			select h.*
   				, @row := @row + 1 AS rn1 
   			from (<include refid="sqlSearchListAllMenu"/>) h
   			,(SELECT @row := 0) K
+  			<dynamic prepend="WHERE">
+			   	<isNotEmpty property="SRVC_NM" prepend="AND">
+			   		h.srvc_nm like  #SRVC_NM# OR h.srvc_cd like  #SRVC_NM#
+			   	</isNotEmpty>
+			</dynamic>   	
+  			order by h.AMOUNT_STORE desc
   			) t
-  		<![CDATA[       
-          WHERE rn1 > #MIN#  and  rn1 <= #MAX#
-                ]]>
+  		<![CDATA[WHERE rn1 > #MIN#  and  rn1 <= #MAX#]]>
 </select>
 <select id="getListCountSearchMenu" resultClass="java.util.HashMap" parameterClass="SrvcVO">	
 		SELECT 
-			count(t.SRVC_ID) as COUNT
-	    FROM (<include refid="sqlSearchListAllMenu"/>) t
+			count(M.SRVC_ID) as COUNT
+	    FROM (
+		    select * 
+		    from (<include refid="sqlSearchListAllMenu"/>) t
+		    <dynamic prepend="WHERE">
+			   	<isNotEmpty property="SRVC_NM" prepend="AND">
+			   		t.srvc_nm like  #SRVC_NM# OR t.srvc_cd like  #SRVC_NM#
+			   	</isNotEmpty>
+			</dynamic>
+			)M   	
 </select>
 </sqlMap>

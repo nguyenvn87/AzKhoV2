@@ -86,6 +86,8 @@ public class RoomSrvcServiceImpl implements RoomSrvcService{
 	}
 	@Override 
 	public List<HashMap<String, Object>> getStatisticExportStore(HashMap<String, Object> map){
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		map.put("RESTAR_ID", restarId);
 		return roomSrvcDAO.getStatisticExportStore(map);
 	}
 	@Override
@@ -117,5 +119,17 @@ public class RoomSrvcServiceImpl implements RoomSrvcService{
 	public List<RoomSrvcVO> getListRoomSrvcHistoryVOByID(String roomUsedId){
 		List<RoomSrvcVO> list = roomSrvcDAO.getListRoomSrvcHistoryVOByID(roomUsedId);
 		return list;
+	}
+	@Override
+	public List<HashMap<String, Object>> getChiTietThongKeBanHangTheoNgay(HashMap<String, String> map){
+		String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		map.put("RESTAR_ID", loginRestautant);
+		return roomSrvcDAO.getChiTietThongKeBanHangTheoNgay(map);
+	}
+	@Override
+	public HashMap<String, Object> getCountChiTietBanHangTheoNgay(HashMap<String, String> map){
+		String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		map.put("RESTAR_ID", loginRestautant);
+		return roomSrvcDAO.getCountChiTietBanHangTheoNgay(map);
 	}
 }

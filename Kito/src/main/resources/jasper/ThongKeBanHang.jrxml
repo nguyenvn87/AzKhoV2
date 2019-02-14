@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version last-->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DailyBill" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d4a1d5eb-82dd-412f-a620-202e4bdf9dba">
 	<property name="template.engine" value="tabular_template"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
@@ -51,14 +50,16 @@
 	<field name="ItemNote" class="java.lang.String"/>
 	<field name="ItemType" class="java.lang.String"/>
 	<field name="ItemNo" class="java.lang.String"/>
-	<field name="ItemTotal" class="java.lang.Double"/>
-	<field name="ItemAmount" class="java.lang.Double"/>
+	<field name="ItemTotal" class="java.lang.Number"/>
+	<field name="ItemAmount" class="java.lang.Number"/>
 	<field name="CREATE_DATE" class="java.lang.String"/>
 	<field name="ItemUserName" class="java.lang.String"/>
 	<variable name="Variable_1" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{ItemTotal}]]></variableExpression>
 	</variable>
-	<variable name="Variable_2" class="java.lang.String" calculation="Count"/>
+	<variable name="Variable_2" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{ItemAmount}]]></variableExpression>
+	</variable>
 	<group name="Group1">
 		<groupExpression><![CDATA[$F{CREATE_DATE}]]></groupExpression>
 		<groupHeader>
@@ -273,20 +274,41 @@
 	<summary>
 		<band height="23" splitType="Stretch">
 			<property name="local_mesure_unitheight" value="pixel"/>
-			<textField pattern="#,##0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="350" y="0" width="122" height="23" forecolor="#000000" backcolor="#FFFFFF" uuid="43518437-07de-473d-a827-5b8468c062f1"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="font-extension" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{Variable_1}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="270" y="0" width="80" height="23" uuid="d37f3533-7f84-459b-a078-b6f41b53dc1c"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="font-extension" size="14" isBold="true" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
-				</textElement>
-				<text><![CDATA[Tổng]]></text>
-			</staticText>
+			<frame>
+				<reportElement x="1" y="0" width="554" height="23" uuid="5562df71-224d-4848-adb3-623247adff05"/>
+				<box>
+					<bottomPen lineWidth="0.1"/>
+				</box>
+				<textField pattern="#,##0">
+					<reportElement x="286" y="0" width="39" height="23" uuid="7745aa2c-9dce-46c3-92a7-bc41443cfcff"/>
+					<box rightPadding="5">
+						<leftPen lineWidth="0.1" lineColor="#999999"/>
+						<rightPen lineWidth="0.1" lineColor="#999999"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="font-extension" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Variable_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0" isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="379" y="0" width="92" height="23" forecolor="#000000" backcolor="#FFFFFF" uuid="43518437-07de-473d-a827-5b8468c062f1"/>
+					<box rightPadding="5">
+						<leftPen lineWidth="0.1" lineColor="#999999"/>
+						<rightPen lineWidth="0.1" lineColor="#999999"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="font-extension" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Variable_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="154" y="0" width="80" height="23" uuid="d37f3533-7f84-459b-a078-b6f41b53dc1c"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="font-extension" size="14" isBold="true" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Tổng]]></text>
+				</staticText>
+			</frame>
 		</band>
 	</summary>
 </jasperReport>

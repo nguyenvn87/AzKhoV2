@@ -76,7 +76,7 @@ Ext.define('MNG.view.thongkeChiTietNhaphangView', {
                                          sortable:true,
                                          align:'left',
                                          dataIndex: 'SRVC_NM',
-                                         flex: 1,
+                                         width: 200,
                                          text: 'Tên hàng'
                                      },
                                      {

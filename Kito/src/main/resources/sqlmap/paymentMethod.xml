@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+<sqlMap namespace="payment_method">
+	<typeAlias  alias="PaymentMethodVO"	type="com.kito.madina.ecount.vo.PaymentMethodVO"/>
+	 <select id="getPaymentMethodVOAll" resultClass="PaymentMethodVO">
+	    SELECT ID_BANK 
+			, ACCOUNT_NO 
+			, BANK_NM 
+			, RESTAR_ID 
+			, ACCOUNT_NM 
+			, NOTE 
+	    FROM payment_method
+	</select>
+	<sql id="sqlGetAllPayment">
+		SELECT 
+			p.RESTAR_ID
+			,p.ID_BANK
+			,p.METHOD_ID
+			,p.ROOM_USED_ID
+			,p.PAY_TYPE
+			,p.VALUE
+			,p.NOTE
+			,p.BANK_NM
+		FROM payment_method  p
+		WHERE p.RESTAR_ID = #RESTAR_ID# order by p.METHOD_ID desc 
+  	</sql>
+	<insert id="createPaymentMethodVO">
+	    INSERT INTO payment_method 
+	    	(
+			 METHOD_ID 
+			, ROOM_USED_ID 
+			, PAY_TYPE 
+			, PAY_TYPE_NM 
+			, ID_BANK 
+			, VALUE
+			, RESTAR_ID
+			, NOTE
+			, BANK_NM
+	    	) 
+	    VALUES (
+			 #METHOD_ID# 
+			, #ROOM_USED_ID# 
+			, #PAY_TYPE# 
+			, #PAY_TYPE_NM# 
+			, #ID_BANK# 
+			, #VALUE#
+			, #RESTAR_ID#
+			, #NOTE#
+			, #BANK_NM#
+			)
+  </insert>
+  <update id="updatePaymentMethodVO">
+	    UPDATE payment_method 
+	    SET 
+			ROOM_USED_ID = #ROOM_USED_ID#
+			, PAY_TYPE = #PAY_TYPE#
+			, PAY_TYPE_NM = #PAY_TYPE_NM#
+			, ID_BANK = #ID_BANK#
+			, NOTE = #NOTE#
+			, BANK_NM = #BANK_NM#
+	    WHERE METHOD_ID = #METHOD_ID# and RESTAR_ID = #RESTAR_ID#
+  </update>
+  <select id="getPaymentMethodVOByVO" resultClass="PaymentMethodVO">
+	    SELECT R.*
+	    FROM payment_method R
+	    WHERE
+		   	R.ID_BANK = #ID_BANK# and R.RESTAR_ID = #RESTAR_ID#
+	</select> 
+	<select id="getListPaymentMethodVO" resultClass="PaymentMethodVO">
+	    SELECT *
+	    FROM payment_method
+	    WHERE RESTAR_ID = #RESTAR_ID#
+	    ODER BY METHOD_ID DESC
+	</select>
+	<select id="getPaymentMethodByIndex" resultClass="PaymentMethodVO" parameterClass="PaymentMethodVO">	
+		SELECT 
+			t.* 
+	    FROM (<include refid="sqlGetAllPayment"/>) t
+	    WHERE t.ROOM_USED_ID = #ROOM_USED_ID#
+  </select>
+  <delete id="deletePaymentMethodByRoomTurnId">
+    	DELETE FROM payment_method 
+    	WHERE ROOM_USED_ID = #ROOM_USED_ID# and RESTAR_ID = #RESTAR_ID#
+  </delete>
+</sqlMap>

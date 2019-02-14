@@ -24,13 +24,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 import com.kito.madina.cmmn.json.JsonVO;
 import com.kito.madina.cmmn.util.CmmUtil;
 import com.kito.madina.cmmn.util.DateUtil;
+import com.kito.madina.cmmn.util.MessageUtil;
 import com.kito.madina.cmmn.util.PropertyUtil;
 import com.kito.madina.cmmn.util.SessionUtil;
+import com.kito.madina.cmmn.util.UtilConst;
+import com.kito.madina.ecount.service.PaymentMethodService;
+import com.kito.madina.ecount.vo.PaymentMethodVO;
 import com.kito.madina.test.service.CmmCdUserService;
 import com.kito.madina.test.service.CodeService;
 import com.kito.madina.test.service.CustomerService;
@@ -62,7 +67,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
-//@RequestMapping("/v2/ladm/baunit/**")
 public class SaleReportController {
 
 	@Resource(name = "roomTurnService")
@@ -97,6 +101,10 @@ public class SaleReportController {
 
 	@Resource(name = "userService")
 	private UserService userService;
+	
+	@Resource(name = "paymentMethodService")
+	private PaymentMethodService paymentMethodService;
+	
 
 	@RequestMapping(value = "/report/billRetailPrint.do")
 	public ModelAndView billRetailPrint(HttpServletRequest req,
@@ -152,7 +160,7 @@ public class SaleReportController {
 		for (int i = 0; i < listSrvc.size(); i++) {
 			RoomSrvcVO vo = listSrvc.get(i);
 			String stt = (i + 1) + "";
-			float totalMoney = vo.getAMOUNT() * vo.getPRICE();
+			double totalMoney = vo.getAMOUNT() * vo.getPRICE();
 			String totalM = CmmUtil.formatNumber2Money(totalMoney);
 			Map<String, Object> mapVo = new HashMap<String, Object>();
 			String unitName = "";
@@ -210,18 +218,44 @@ public class SaleReportController {
 				e.printStackTrace();
 			}
 		}
-		map.put("ParamResName", restaurntVO.getRESTAR_NM());
+		map.put("ParamResName", restaurntVO.getBILL_SLOGAN());
 		map.put("ParamAddr", restaurntVO.getADDR());
-		map.put("ParamPhone", "Fone: " + restaurntVO.getPHONE());
+		map.put("ParamPhone", "" + restaurntVO.getBILL_TITLE3());
 		map.put("ParamHours", timeInOut);
 		map.put("ParamBillCD", (tmpRtVo.getBILL_CD() != null) ? tmpRtVo.getBILL_CD() : "");
-		map.put("ParamCusName", (tmpRtVo.getCUS_NM() != null) ? tmpRtVo.getCUS_NM() : "");
+		map.put("ParamCusName", (tmpRtVo.getCUS_NM() != null) ? tmpRtVo.getCUS_NM() : PropertyUtil.getStringUTF8("info.bill.customer.name"));
 		map.put("ParamCusAddr", (tmpRtVo.getDSCRT() != null) ? tmpRtVo.getDSCRT() : "");
-		map.put("ParamCusFone", (cVo != null && cVo.getPHONE() != null) ? cVo.getPHONE() : "");
+		map.put("ParamCusFone1", (cVo != null && cVo.getPHONE() != null) ? cVo.getPHONE() : "");
 		map.put("ParamHours", timeInOut);
-		map.put("ParamUser", uVo.getFULLNAME());
+		map.put("ParamUser", uVo != null?uVo.getFULLNAME():"");
 		map.put("ParameterWebAddr", (webAddr != null) ? webAddr : "");
 		map.put("ParamTotal", CmmUtil.formatNumber2Money(totalAmount));
+		String billTitle = (restaurntVO.getBILL_TITLE()!= null)?restaurntVO.getBILL_TITLE():PropertyUtil.getStringUTF8("info.restar.title");
+		map.put("paramMainTitle", billTitle);
+		map.put("paramTitle2", restaurntVO.getADDR2()!=null?restaurntVO.getADDR2():"");
+		
+		map.put("paramButtom1", restaurntVO.getBILL_BOTTOM1()!=null?restaurntVO.getBILL_BOTTOM1():"");
+		map.put("paramButtom2", restaurntVO.getBILL_BOTTOM2()!=null?restaurntVO.getBILL_BOTTOM2():"");
+		map.put("paramButtom3", restaurntVO.getBILL_BOTTOM3()!=null?restaurntVO.getBILL_BOTTOM3():"");
+		map.put("paramCusPayed", tmpRtVo.getPAYED_MONEY());
+		Number remain = tmpRtVo.getTOTAL_MONEY() - tmpRtVo.getPAYED_MONEY();
+		map.put("paramCusRemain", remain);
+		String isPrintPayment = restaurntVO.getIS_PRINT_PAYMENT()==1?"1":"";
+		String isPrintPayMethod = restaurntVO.getIS_PRINT_PAYMETHOD()==1?"1":"";
+		map.put("paramPayPrint", isPrintPayment);
+		map.put("paramPayMethodPrint", isPrintPayMethod);
+		map.put("paramPayLabel1", restaurntVO.getBILL_LABEL_PAYED1()!= null&&!restaurntVO.getBILL_LABEL_PAYED1().isEmpty()? restaurntVO.getBILL_LABEL_PAYED1():PropertyUtil.getStringUTF8("info.bill.customer.payed"));
+		map.put("paramPayLabel2", restaurntVO.getBILL_LABEL_PAYED2()!= null? restaurntVO.getBILL_LABEL_PAYED2():PropertyUtil.getStringUTF8("info.bill.customer.remain"));
+		
+		String txtInfo = MessageUtil.getMessage("common.sys.azkho.info");
+		map.put("paramAzKhoInfo", txtInfo);
+		
+		HashMap<String, String> mapMethod = paymentMethodService.getPaymentMethodSumaryTurnId(roomUsedId);
+		if(mapMethod !=null){
+			if(mapMethod.get("METHOD")!=null)map.put("paramPayMethod",mapMethod.get("METHOD"));
+			if(mapMethod.get("BANK_ID")!=null)map.put("paramPayBankID",mapMethod.get("BANK_ID"));
+			if(mapMethod.get("BANK_NM")!=null)map.put("paramPayBankNM",mapMethod.get("BANK_NM"));
+		}
 		map.put("datasource", ds);
 		map.put("format", "pdf");
 		String strPrintParam = "billRetailPrintId";
@@ -244,6 +278,7 @@ public class SaleReportController {
 		String isOder = req.getParameter("IS_ORDER");
 		String isCanceled = req.getParameter("IS_CANCELED");
 		String isDelivered = req.getParameter("IS_DELIVERED");
+		String isDebit = req.getParameter("DEBIT");
 
 		String statisType = req.getParameter("LIID");
 		String startDateParam = req.getParameter("STARTDATE");
@@ -297,6 +332,7 @@ public class SaleReportController {
 			map.put("IS_DELIVERED", 1);
 		if (isDelivered != null && isDelivered.equalsIgnoreCase("0"))
 			map.put("IS_DELIVERED", 0);
+		if (isDebit != null && isDebit.equals("true")) map.put("IS_DEBIT", 1);
 
 		map.put("RESTAR_ID", restarId);
 
@@ -328,9 +364,7 @@ public class SaleReportController {
 		}
 		else ItemDateToDate = "(" + startDate + " -> " + endDate + ")";
 		mapdate.put("ItemDateToDate", ItemDateToDate);
-		long totalMoney = 0;
-		//HashMap<String, Object> mapResult = roomTurnService.getTotalStatisticCount(map);
-		///totalMoney = Long.parseLong(mapResult.get("total").toString());
+		double totalMoney = 0;
 		for (int i = 0; i < listTurnVo.size(); i++) {
 			int j = i + 1;
 			String timeEnd = "";
@@ -343,7 +377,7 @@ public class SaleReportController {
 			if (vo.getTIME_STS() != null) {
 				timeStart = vo.getTIME_STS().split(" ")[0];
 			}
-			totalMoney = totalMoney + (long)vo.getTOTAL_MONEY();
+			totalMoney = totalMoney + vo.getTOTAL_MONEY();
 			mapVo.put("ItemDate", vo.getCHANGE_DATE());
 			mapVo.put("ItemRoom", (vo.getBILL_CD() != null) ? vo.getBILL_CD() : "");
 			mapVo.put("ItemNote", vo.getDSCRT());
@@ -445,11 +479,23 @@ public class SaleReportController {
 		SrvcVO sVo = new SrvcVO();
 		sVo.setRESTAR_ID(restarId);
 		sVo.setIS_USED(1);
-
+		if(sVo.getSort()==null||sVo.getSort().isEmpty())sVo.setSort("AMOUNT_STORE");
 		List<HashMap<String, Object>> list = srvcService.listImportReport(sVo);
+		
+		CodeVO mVo = new CodeVO();
+		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		HashMap<String, String> mapDonVi = new HashMap<String, String>();
+		
 		for(int i=0; i< list.size();i++){
 			HashMap<String, Object> map = list.get(i);
 			map.put("TT", i+1);
+			
+			// Set unit name
+			if(map.get("UNIT")!= null && !map.get("UNIT").toString().isEmpty()){
+				String unitNm = codeService.getUnitNameFromList(map.get("UNIT").toString(), listDonVi, mapDonVi);
+				map.put("UNIT_NM", unitNm);
+		    }
 		}
 
 		String[] column_arr = { "TT", "SRVC_NM", "SRVC_CD", "AMOUNT_STORE", "UNIT_NM", "DSCRT" };
@@ -483,10 +529,35 @@ public class SaleReportController {
 		SrvcVO sVo = new SrvcVO();
 		sVo.setRESTAR_ID(restarId);
 		sVo.setIS_USED(1);
-
+		sVo.setSort("TYPE_NM");
+		// Get list unit
+		CodeVO mVo = new CodeVO();
+		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		HashMap<String, String> mapDonVi = new HashMap<String, String>();
+		
 		List<HashMap<String, Object>> list = srvcService.listImportReport(sVo);
+		int count = 0;
+		for(HashMap<String, Object> map : list){
+			count++;
+			if(map.get("PRICE") != null){
+				float fPrice = Float.parseFloat(map.get("PRICE").toString());
+				map.put("PRICE", fPrice);
+			}
+			if(map.get("PRICE_IMPORT") != null){
+				double fPrice = Double.parseDouble(map.get("PRICE_IMPORT").toString());
+				map.put("PRICE_IMPORT", fPrice);
+			}
+			map.put("STT", count);
+	
+			// Set unit name
+			if(map.get("UNIT")!= null && !map.get("UNIT").toString().isEmpty()){
+				String unitNm = codeService.getUnitNameFromList(map.get("UNIT").toString().trim(), listDonVi, mapDonVi);
+				map.put("UNIT_NM", unitNm);
+		    }
+		}
 
-		String[] column_arr = { "SRVC_NM", "SRVC_CD","PRICE","UNIT_NM", "DSCRT" };
+		String[] column_arr = {"STT", "SRVC_NM", "SRVC_CD","UNIT_NM","PRICE","PRICE_IMPORT","DSCRT", "TYPE_NM"};
 		String[] column_header = new String[column_arr.length];
 		for (int i = 0; i < column_arr.length; i++) {
 			String str = PropertyUtil.getStringUTF8(column_arr[i]);
@@ -518,13 +589,25 @@ public class SaleReportController {
 		SrvcVO sVo = new SrvcVO();
 		sVo.setRESTAR_ID(restarId);
 		sVo.setIS_USED(1);
+		sVo.setSort("AMOUNT_STORE");
 
 		List<HashMap<String, Object>> listSrvc = srvcService.listImportReport(sVo);
+		//List<HashMap<String, Object>> listSrvc = srvcService.listSrvcTonKho(sVo);
+		CodeVO mVo = new CodeVO();
+		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		HashMap<String, String> mapDonVi = new HashMap<String, String>();
 
 		for (int i = 0; i < listSrvc.size(); i++) {
 			HashMap<String, Object> vo = listSrvc.get(i);
 			String stt = (i + 1) + "";
 			vo.put("STT", stt);
+			
+			// Set unit name
+			if(vo.get("UNIT") != null && !vo.get("UNIT").toString().isEmpty()){
+					String unitNm = codeService.getUnitNameFromList(vo.get("UNIT").toString(), listDonVi, mapDonVi);
+					vo.put("UNIT_NM",unitNm);
+			}
 		}
 
 		JRDataSource ds = new JRBeanCollectionDataSource(listSrvc);
@@ -544,12 +627,19 @@ public class SaleReportController {
 		UserVO uVo = new UserVO();
 		uVo.setUSERNAME(loginUser);
 		uVo = userService.getUserVo(uVo);
+		
+		CodeVO mVo = new CodeVO();
+		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		HashMap<String, String> mapDonVi = new HashMap<String, String>();
+		
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		SrvcVO sVo = new SrvcVO();
 		sVo.setRESTAR_ID(restarId);
 		sVo.setIS_USED(1);
-
+		sVo.setSort("TYPE_NM");
+		
 		List<HashMap<String, Object>> listSrvc = srvcService.listImportReport(sVo);
 
 		for (int i = 0; i < listSrvc.size(); i++) {
@@ -559,6 +649,13 @@ public class SaleReportController {
 			String price = vo.get("PRICE").toString();
 			float fPrice = Float.parseFloat(price);
 			vo.put("PRICE", CmmUtil.formatNumber2Money(fPrice));
+			vo.put("ItemType", vo.get("TYPE_NM"));
+			
+			// Set unit name
+			if(vo.get("UNIT") != null && !vo.get("UNIT").toString().isEmpty()){
+				String unitNm = codeService.getUnitNameFromList(vo.get("UNIT").toString(), listDonVi, mapDonVi);
+				vo.put("UNIT_NM",unitNm);
+		    }
 		}
 
 		JRDataSource ds = new JRBeanCollectionDataSource(listSrvc);
@@ -579,6 +676,15 @@ public class SaleReportController {
 		String endDateParam = req.getParameter("ENDDATE");
 		String userName = req.getParameter("USER_NAME");
 		String isDeliver = req.getParameter("IS_DELIVERED");
+		String cusCD = req.getParameter("CUS_CD");
+		
+		// Get Username
+		UserVO uVo = null;
+		if(userName != null && !userName.isEmpty()){
+			uVo = new UserVO();
+			uVo.setUSERNAME(userName);
+			uVo = userService.getUserVo(uVo);
+		}
 		
 		String subtitle = "";
 		if(startDateParam!= null){
@@ -593,13 +699,14 @@ public class SaleReportController {
 		map.put("RESTAR_ID", restarId);
 		if(startDateParam != null && !startDateParam.isEmpty()) map.put("STARTDATE", startDateParam);
 		if(endDateParam != null && !endDateParam.isEmpty()) map.put("ENDDATE", endDateParam);
-		if(userName != null && !userName.isEmpty())map.put("ENDDATE", userName);
+		if(userName != null && !userName.isEmpty())map.put("USER_NAME", userName);
 		if(isDeliver != null && isDeliver.equalsIgnoreCase("1"))map.put("IS_DELIVERED", "1");
+		if(cusCD != null && !cusCD.isEmpty())map.put("CUS_CD", cusCD);
 		
 		List<HashMap<String, Object>> listOut = roomSrvcService.getStatisticExportStore(map);
 		
 		CodeVO mVo = new CodeVO();
-		mVo.setGROUP_CD("DONVI");
+		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
 		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
 		
 		Map<String, Object> mapRpt = new HashMap<String, Object>();
@@ -639,14 +746,29 @@ public class SaleReportController {
 			mapVo.put("ItemNo", ""+j);
 			mapVo.put("ItemType", "1");
 			mapVo.put("ItemUnit", mapDonVi.get(Vo.get("UNIT")));
-			if(userName != null && !userName.isEmpty()) mapVo.put("itemUserName", userName);
+			if(uVo != null && !uVo.getFULLNAME().isEmpty()) mapVo.put("itemUserName", uVo.getFULLNAME());
 			
 			al.add(mapVo);
 		}
+		// Customer info
+		CustomerVO cVo = new CustomerVO();
+		if(cusCD != null && !cusCD.isEmpty()){
+			try{
+				cVo.setCUS_CD(Integer.parseInt(cusCD));
+				cVo.setRESTAR_ID(restarId);
+				cVo = customerService.getCustomerVOByVo(cVo);
+				mapRpt.put( "ParamCustomName",cVo.getNAME());
+				mapRpt.put( "ParamCustomFone",cVo.getPHONE());
+			}catch(Exception e){
+				
+			}
+		}
+		
 		System.out.println("totalMoney = "+totalMoney);
 		JRDataSource ds = new JRBeanCollectionDataSource(al);
 		mapRpt.put( "datasource", ds);
 		mapRpt.put( "ParamSubtile",subtitle);
+		
 		mapRpt.put( "format", "pdf");
 		return new ModelAndView("idListSrvcSaled", mapRpt);
 	}
@@ -703,7 +825,7 @@ public class SaleReportController {
 		for (int i = 0; i < listSrvc.size(); i++) {
 			RoomSrvcVO vo = listSrvc.get(i);
 			String stt = (i + 1) + "";
-			float totalMoney = vo.getAMOUNT() * vo.getPRICE();
+			double totalMoney = vo.getAMOUNT() * vo.getPRICE();
 			String totalM = CmmUtil.formatNumber2Money(totalMoney);
 			Map<String, Object> mapVo = new HashMap<String, Object>();
 			String unitName = "";
@@ -761,18 +883,35 @@ public class SaleReportController {
 				e.printStackTrace();
 			}
 		}
-		map.put("ParamResName", restaurntVO.getRESTAR_NM());
+		map.put("ParamResName", restaurntVO.getBILL_SLOGAN());
 		map.put("ParamAddr", restaurntVO.getADDR());
-		map.put("ParamPhone", "Fone: " + restaurntVO.getPHONE());
+		map.put("ParamPhone", "" + restaurntVO.getBILL_TITLE3());
 		map.put("ParamHours", timeInOut);
 		map.put("ParamBillCD", (tmpRtVo.getBILL_CD() != null) ? tmpRtVo.getBILL_CD() : "");
-		map.put("ParamCusName", (tmpRtVo.getCUS_NM() != null) ? tmpRtVo.getCUS_NM() : "");
+		map.put("ParamCusName", (tmpRtVo.getCUS_NM() != null) ? tmpRtVo.getCUS_NM() : PropertyUtil.getStringUTF8("info.bill.customer.name"));
 		map.put("ParamCusAddr", (tmpRtVo.getDSCRT() != null) ? tmpRtVo.getDSCRT() : "");
-		map.put("ParamCusFone", (cVo != null && cVo.getPHONE() != null) ? cVo.getPHONE() : "");
+		map.put("ParamCusFone1", (cVo != null && cVo.getPHONE() != null) ? cVo.getPHONE() : "");
 		map.put("ParamHours", timeInOut);
-		map.put("ParamUser", uVo.getFULLNAME());
+		map.put("ParamUser", uVo != null?uVo.getFULLNAME():"");
 		map.put("ParameterWebAddr", (webAddr != null) ? webAddr : "");
 		map.put("ParamTotal", CmmUtil.formatNumber2Money(totalAmount));
+		String billTitle = (restaurntVO.getBILL_TITLE()!= null)?restaurntVO.getBILL_TITLE():PropertyUtil.getStringUTF8("info.restar.title");
+		map.put("paramMainTitle", billTitle);
+		map.put("paramTitle2", restaurntVO.getADDR2()!=null?restaurntVO.getADDR2():"");
+		
+		map.put("paramButtom1", restaurntVO.getBILL_BOTTOM1()!=null?restaurntVO.getBILL_BOTTOM1():"");
+		map.put("paramButtom2", restaurntVO.getBILL_BOTTOM2()!=null?restaurntVO.getBILL_BOTTOM2():"");
+		map.put("paramButtom3", restaurntVO.getBILL_BOTTOM3()!=null?restaurntVO.getBILL_BOTTOM3():"");
+		map.put("paramCusPayed", tmpRtVo.getPAYED_MONEY());
+		Number remain = tmpRtVo.getTOTAL_MONEY() - tmpRtVo.getPAYED_MONEY();
+		map.put("paramCusRemain", remain);
+		String isPrintPayment = restaurntVO.getIS_PRINT_PAYMENT()==1?"1":"";
+		String isPrintPayMethod = restaurntVO.getIS_PRINT_PAYMETHOD()==1?"1":"";
+		map.put("paramPayPrint", isPrintPayment);
+		map.put("paramPayMethodPrint", isPrintPayMethod);
+		map.put("paramPayLabel1", restaurntVO.getBILL_LABEL_PAYED1()!= null? restaurntVO.getBILL_LABEL_PAYED1():PropertyUtil.getStringUTF8("info.bill.customer.payed"));
+		map.put("paramPayLabel2", restaurntVO.getBILL_LABEL_PAYED2()!= null? restaurntVO.getBILL_LABEL_PAYED2():PropertyUtil.getStringUTF8("info.bill.customer.remain"));
+		
 		map.put("datasource", ds);
 		map.put("format", "pdf");
 		String strPrintParam = "billRetailPrintId";
@@ -781,4 +920,130 @@ public class SaleReportController {
 		}
 		return new ModelAndView(strPrintParam, map);
 	}
+	// Export data of status store
+	@RequestMapping(value = "/saleReport/excel/DanhSachDonHang.do")
+	public ModelAndView DanhSachDonHang(HttpSession session, HttpServletRequest req) throws Exception {
+
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		ExcelVO evo = null;
+		String fileName = req.getParameter("FILENAME");
+		List<Map<String, Object>> al = new ArrayList<Map<String, Object>>();		
+			
+		String userName = req.getParameter("USER_NAME");
+		String isOder = req.getParameter("IS_ORDER");
+		String isCanceled = req.getParameter("IS_CANCELED");
+		String isDelivered = req.getParameter("IS_DELIVERED");
+		String isDebit = req.getParameter("DEBIT");
+		String hasPayed = req.getParameter("HAS_PAYED");
+		String startDateParam = req.getParameter("STARTDATE");
+		String endDateParam = req.getParameter("ENDDATE");
+			
+		HashMap<String, Object> map = new HashMap<String, Object>();
+			
+		if (isOder != null && isOder.equalsIgnoreCase("1")) map.put("IS_ORDER", 1);
+		if (isCanceled != null && isCanceled.equalsIgnoreCase("1")) map.put("IS_CANCELED", 1);
+		if (isCanceled != null && isCanceled.equalsIgnoreCase("0")) map.put("IS_CANCELED", 0);
+		if (isDelivered != null && isDelivered.equalsIgnoreCase("1")) map.put("IS_DELIVERED", 1);
+		if (isDelivered != null && isDelivered.equalsIgnoreCase("0")) map.put("IS_DELIVERED", 0);
+		if (isDebit != null && isDebit.equals("true")) map.put("IS_DEBIT", 1);
+		if (startDateParam != null && !startDateParam.isEmpty()) map.put("STARTDATE", startDateParam);
+		if (endDateParam != null && !endDateParam.isEmpty()) map.put("ENDDATE", endDateParam);
+		if (hasPayed != null && hasPayed.equalsIgnoreCase("1")) map.put("HAS_PAYED", 1);
+		if (hasPayed != null && hasPayed.equalsIgnoreCase("0")) map.put("HAS_PAYED", 0);
+		
+		map.put("RESTAR_ID", restarId);
+			
+		List<RoomTurnVO> listTurnVo = roomTurnService.getListTurnStatistic(map);
+		DecimalFormat decimalFormat = new DecimalFormat("###.#");
+		for (int i = 0; i < listTurnVo.size(); i++) {
+			RoomTurnVO rVo = listTurnVo.get(i);
+			int j = i+1;
+			HashMap<String, Object> tmpMap = new HashMap<String, Object>();
+			tmpMap.put("STT", j);
+			tmpMap.put("CHANGE_DATE", rVo.getCHANGE_DATE().split(" ")[0]);
+			tmpMap.put("BILL_CD", rVo.getBILL_CD());
+			tmpMap.put("CUS_NM", rVo.getCUS_NM());
+			tmpMap.put("DSCRT", rVo.getDSCRT());
+			String strTotal =  decimalFormat.format(rVo.getTOTAL_MONEY());
+			String strPayed =  decimalFormat.format(rVo.getPAYED_MONEY());
+			tmpMap.put("TOTAL_MONEY", Double.parseDouble(strTotal));
+			tmpMap.put("PAYED_MONEY", Double.parseDouble(strPayed));
+			al.add(tmpMap);
+		}
+
+		String[] column_arr = {"STT","CHANGE_DATE","BILL_CD","TOTAL_MONEY","PAYED_MONEY","CUS_NM","DSCRT"};
+		String[] column_header = new String[column_arr.length];
+		for (int i = 0; i < column_arr.length; i++) {
+			String str = PropertyUtil.getStringUTF8(column_arr[i]);
+			String newValue = column_arr[i];
+			if (str != null) newValue = str;
+			column_header[i] = newValue;
+		}
+				
+		evo = new ExcelVO(al);
+		evo.addObject("fileName", fileName);
+		evo.addObject("column_arr", column_arr);
+		evo.addObject("column_header", column_header);
+		evo.addObject("comment", "");
+
+		return new ModelAndView("BillLisExcelView", evo);
+	}
+	// Export data of status store
+	@RequestMapping(value = "/saleReport/excel/ChiTietDonHang.do")
+	public ModelAndView ChiTietDonHang(HttpSession session, HttpServletRequest req) throws Exception {
+
+			String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+			ExcelVO evo = null;
+			String fileName = req.getParameter("FILENAME");
+			String title = req.getParameter("title");
+			String roomUsedId = req.getParameter("ROOM_USED_ID");
+			
+			String webAddr = req.getParameter("SUPPLYER");
+			
+			CustomerVO cVo = null;
+			
+			List<Map<String, Object>> al = new ArrayList<Map<String, Object>>();
+			List<RoomSrvcVO> listSrvc = roomSrvcService.getListRoomSrvcVOByID(roomUsedId);
+			RoomTurnVO rtVo = new RoomTurnVO();
+			rtVo.setROOM_USED_ID(roomUsedId);
+			RoomTurnVO tmpRtVo = roomTurnService.getRoomTurnVOByObject(rtVo);
+			
+			UserVO uVo = new UserVO();
+			uVo.setUSERNAME(tmpRtVo.getUSER_NAME());
+			uVo = userService.getUserVo(uVo);
+
+			String[] column_arr = {"STT","SRVC_NM","SL","UNIT_NM", "PRICE","SUM_MONEY"};
+			String[] column_header = new String[column_arr.length];
+			for (int i = 0; i < column_arr.length; i++) {
+				String str = PropertyUtil.getStringUTF8(column_arr[i]);
+				String newValue = column_arr[i];
+				if (str != null) newValue = str;
+				column_header[i] = newValue;
+			}
+			int iCount = 0;
+			for(RoomSrvcVO rVo : listSrvc){
+				iCount++;
+				float price = Float.parseFloat(rVo.getPRICE()+"");
+				Double total = 0.0;
+				Map<String, Object> mapTmp = new HashMap<String, Object>();
+				mapTmp.put("STT", iCount);
+				mapTmp.put("SRVC_NM", rVo.getMENU_NM());
+				mapTmp.put("SL", Double.parseDouble(rVo.getAMOUNT()+""));
+				mapTmp.put("PRICE", price);
+				total = rVo.getAMOUNT() * rVo.getPRICE();
+				mapTmp.put("SUM_MONEY", total);
+				mapTmp.put("PAYED_MONEY", total);
+				mapTmp.put("UNIT_NM", rVo.getUNIT_NM());
+				al.add(mapTmp);
+			}
+					
+			evo = new ExcelVO(al);
+			evo.addObject("fileName", fileName);
+			evo.addObject("title", title);
+			evo.addObject("column_arr", column_arr);
+			evo.addObject("column_header", column_header);
+			evo.addObject("comment", "");
+
+			return new ModelAndView("BillTemplateExcelView", evo);
+		}
 }

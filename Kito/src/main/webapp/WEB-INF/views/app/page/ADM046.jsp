@@ -19,7 +19,8 @@ Ext.application({
 		storeTmp.currentPage = 1;
 		storeTmp.pageSize=13;
 		storeTmp.getProxy().extraParams = {
-						IS_USED: 1
+						IS_USED: 1,
+						sort: 'AMOUNT_STORE'
 					};
 		storeTmp.load();
 	}

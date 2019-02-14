@@ -18,6 +18,7 @@ public class ImportVO extends DefaultVO {
 	private String NEEDTOPAYED;
 	private String PAYED_MONEY;
 	private String PROV_NM;
+	private String DESCRIPTION;
 	private int MIN;
 	private int MAX;
 	
@@ -156,12 +157,20 @@ public class ImportVO extends DefaultVO {
 		PROV_NM = pROV_NM;
 	}
 
+	public String getDESCRIPTION() {
+		return DESCRIPTION;
+	}
+
+	public void setDESCRIPTION(String dESCRITION) {
+		DESCRIPTION = dESCRITION;
+	}
+
 	@Override
 	public String toString() {
 		return "ImportVO [NOWNUM=" + NOWNUM + ", DATE_IMPORT=" + DATE_IMPORT + ", PRICE_IMPORT=" + PRICE_IMPORT
 				+ ", IMPRT_CD=" + IMPRT_CD + ", IMPRT_BILL=" + IMPRT_BILL + ", RESTAR_ID=" + RESTAR_ID + ", USER_NAME="
 				+ USER_NAME + ", CHANGETIME=" + CHANGETIME + ", PROV_CD=" + PROV_CD + ", TOTAL_MONEY=" + TOTAL_MONEY
-				+ ", DISCOUNT_MONEY=" + DISCOUNT_MONEY + ", NEEDTOPAYED=" + NEEDTOPAYED + ", PAYED_MONEY=" + PAYED_MONEY
+				+ ", DISCOUNT_MONEY=" + DISCOUNT_MONEY + ", NEEDTOPAYED=" + NEEDTOPAYED + ", PAYED_MONEY=" + PAYED_MONEY+ ", DESCRITION=" + DESCRIPTION
 				+ ", MIN=" + MIN + ", MAX=" + MAX + "]";
 	}
 }

@@ -7,8 +7,6 @@ var statisticStore = Ext.create('MNG.store.roomTurnStore', {
 
 var useStore = Ext.create('MNG.store.userStore', {});
 useStore.load();
-//useStore.on('load', function(store, records, successful, eOpts) {});
-
 Ext
 		.define(
 				'MNG.view.saleStatisticAll',
@@ -108,7 +106,7 @@ Ext
 																		},
 																		{
 																			xtype : 'gridcolumn',
-																			width : 95,
+																			width : 120,
 																			sortable : false,
 																			align : 'right',
 																			text : "Tổng tiền",
@@ -120,7 +118,7 @@ Ext
 																				if (data != '')
 																					data = formatSupporter
 																							.formatToMoney(data);
-																				return data;
+																				return '<span style="color: red">'+data+'</span>';
 																			}
 																		},
 																		{
@@ -138,7 +136,7 @@ Ext
 																				if (data != '')
 																					data = formatSupporter
 																							.formatToMoney(data);
-																				return data;
+																				return '<span style="color: green">'+data+'</span>';
 																			}
 																		},
 																		{
@@ -176,25 +174,32 @@ Ext
 																		{
 																			menuDisabled : true,
 																			sortable : false,
-																			text : 'Chỉnh sửa',
-																			hidden : true,
+																			text : '',
 																			xtype : 'actioncolumn',
 																			align : 'center',
-																			width : 100,
-																			items : [ {
-																				iconCls : 'icon-edit',
-																				tooltip : 'Sửa',
-																				handler : function(
-																						grid,
-																						rowIndex,
-																						colIndex) {
-																					me
-																							.showDetail(
-																									grid,
-																									rowIndex,
-																									colIndex);
-																				}
-																			} ]
+																			width : 50,
+																			items : [ 
+																			   { 
+																				iconCls : 'icon-pdf',
+																				tooltip : 'In hóa đơn PDF',
+																				handler : me.exportPdfFile
+																			   }
+																			   ]
+																		},
+																		{
+																			menuDisabled : true,
+																			sortable : false,
+																			text : '',
+																			xtype : 'actioncolumn',
+																			align : 'center',
+																			width : 50,
+																			items : [ 
+																			   { 
+																				iconCls : 'icon-excel',
+																				tooltip : 'Xuất excel',
+																				handler : me.exportExcelFile
+																			   } 
+																			   ]
 																		},
 																		{
 																			xtype : 'gridcolumn',
@@ -232,7 +237,7 @@ Ext
 																				debit = r.data['IS_DELIVERED'];
 																				if (debit == '1'
 																						|| debit == 1) {
-																					return 'Đã xuất';
+																					return '';
 																				}
 																				return 'Chưa xuất';
 																			}
@@ -302,6 +307,7 @@ Ext
 																			autoload : false
 																		},{
 																            xtype: 'radiogroup',
+																            hidden: true,
 																            itemId : 'typeOfBill',
 																            fieldLabel: '',
 																            layout : {
@@ -384,29 +390,17 @@ Ext
 											} ]
 										});
 						me.callParent(arguments);
-					},
-					showDetail : function(grid, rowIndex, colIndex) {
-						var myController = MANAGER.app
+	},
+	exportPdfFile: function(grid,rowIndex,colIndex){
+		grid.getSelectionModel().select(rowIndex);
+		var myController = MANAGER.app
 								.getController('MNG.controller.saleStatisticController');
-						myController.getCustomerInfo(2);
-						store = grid.getStore();
-						rec = store.getAt(rowIndex);
-						var isDeliver = rec.get('IS_DELIVERED');
-						var dscrt = rec.get('DSCRT');
-						console.info(rec);
-						var param = {
-							name : rec.get('CUS_NM'),
-							cusCd : rec.get('CUS_CD'),
-							phone : '',
-							addr : '',
-							addrship : dscrt,
-							score : 600,
-							isdeliver : parseInt(isDeliver),
-							turnId : rec.get('ROOM_USED_ID'),
-							totalMoney : rec.get('TOTAL_MONEY'),
-							payedMoney : rec.get('PAYED_MONEY'),
-							hasPayed : rec.get('HAS_PAYED')
-						};
-						myController.showCustomerInfo(param);
-					}
-				});
+		myController.showPopupPdf(grid.getStore().getAt(rowIndex));
+	},
+	exportExcelFile: function(grid,rowIndex,colIndex){
+		grid.getSelectionModel().select(rowIndex);
+		var myController = MANAGER.app
+								.getController('MNG.controller.saleStatisticController');
+		myController.getExcelFillBill(grid.getStore().getAt(rowIndex));
+	}
+});
