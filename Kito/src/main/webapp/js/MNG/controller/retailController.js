@@ -109,8 +109,6 @@ Ext.define('MNG.controller.retailController', {
 		if(roomUsedId == null) return;
 		var param = "?LIID=" + roomUsedId + "&SUPPLYER="+WEB_ADDR+ "&PRINT_TYPE="+type;
 		var location = contextPath + "/report/billRetailPrint.do" + param;
-		//utilForm.btn_template_popup(location,"Hóa đơn",850,800,true);
-		//supportEvent.autoPrint(location);
 		parent.autoPrint(location);
 	},
 	openBtnMenu:function(){
@@ -132,10 +130,6 @@ Ext.define('MNG.controller.retailController', {
 		var parent = this;
 		var Grid = Ext.ComponentQuery.query('#grid-room-turn')[0];
 		var storeTmp = Grid.getStore();
-		//storeTmp.getProxy().extraParams = {
-		//					ROOM_ID : parent.roomId,
-		//					ROOM_USED_ID: parent.roomUseId
-		//				};
 		storeTmp.loadData([],false);
 		storeTmp.commitChanges();
 	},
@@ -290,16 +284,6 @@ Ext.define('MNG.controller.retailController', {
 	showNotificationRoom:function(){
 		var parent = this;
 		value1 = formatSupporter.formatToMoney(parent.payedMoney);
-	},
-	checkingStatusMenu:function(mainStore, menuStore){
-		console.log(menuStore);
-		mainStore.each(function(record) {
-			menuStore.each(function(recordMenu) {
-				if(record.get('SRVC_ID').trim() == recordMenu.get('SRVC_ID').trim()){
-					recordMenu.set('IS_EXIST','1');
-				}
-			});
-		});
 	},
 	deleteRecord:function(grid, rowIndex, colIndex){
 		me = this;
@@ -525,38 +509,6 @@ Ext.define('MNG.controller.retailController', {
 		Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].setValue(valueTotal);
 		
 		Ext.ComponentQuery.query('#orderMainContainer [name=TOTAL_MONEY]')[0].setValue(valueTotal);
-	},
-	sendRequestInitData: function(){
-		Ext.Ajax.request( {
-    		url: contextPath + '/sample/setDefaultInitData.json',
-    		method:'POST',
-    		params: {},
-    		success: function(response){
-    			var text = Ext.JSON.decode(response.responseText);
-    			console.log( text);
-    			swal("Thành công !");
-    			window.location.reload();
-    		},
-    		failure: function(response){
-    			var text = Ext.JSON.decode(response.responseText);
-    			console.log( text);   
-    			swal("Thất bại !");
-    		}
-    	});
-	},
-	setInitDataDefault:function(){
-		me = this;
-		swal({
-				title: "Bạn muốn tạo dữ liệu mẫu ?",
-				text: "Click 'OK' để tạo, 'Cancel' để hủy",
-				type: "info",
-				showCancelButton: true,
-				closeOnConfirm: false,
-				showLoaderOnConfirm: true,
-			},
-			function(){
-				me.sendRequestInitData();
-		});
 	},
 	caculateScore: function(_store){
 		var _value = 0;
