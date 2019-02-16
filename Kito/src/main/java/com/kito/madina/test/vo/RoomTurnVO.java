@@ -39,6 +39,7 @@ public class RoomTurnVO extends DefaultVO{
 	private int IS_CANCELED;
 	private String PAY_METHOD;
 	private int IS_SAMPLE;
+	private double DISCOUNT;
 	
 	public int getIS_CANCELED() {
 		return IS_CANCELED;
@@ -333,6 +334,12 @@ public class RoomTurnVO extends DefaultVO{
 	}
 	public void setIS_SAMPLE(int iS_SAMPLE) {
 		IS_SAMPLE = iS_SAMPLE;
+	}
+	public double getDISCOUNT() {
+		return DISCOUNT;
+	}
+	public void setDISCOUNT(double dISCOUNT) {
+		DISCOUNT = dISCOUNT;
 	} 
 	
 	

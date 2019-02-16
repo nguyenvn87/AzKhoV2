@@ -31,6 +31,7 @@
 			, IS_ORDER
 			, IS_CANCELED
 			, PAY_METHOD
+			, DISCOUNT
 	    FROM room_turn
 	    <dynamic prepend="WHERE">
 		   	<isNotEmpty property="ROOM_ID" prepend="AND">
@@ -79,6 +80,7 @@
 			, IS_ORDER
 			, IS_CANCELED
 			, PAY_METHOD
+			, DISCOUNT
 	    FROM room_turn
 	    <dynamic prepend="WHERE">
 		   	<isNotEmpty property="ROOM_ID" prepend="AND">
@@ -125,6 +127,7 @@
 			, IS_ORDER
 			, IS_CANCELED
 			, PAY_METHOD
+			, DISCOUNT
 	    	) 
 	    VALUES (
 	    	  #ROOM_ID# 
@@ -151,6 +154,7 @@
 			, #IS_ORDER#
 			, #IS_CANCELED#
 			, #PAY_METHOD#
+			, #DISCOUNT#
 			)
   </insert>
   <update id="updateRoomTurnVO">
@@ -189,12 +193,6 @@
 		   	<isNotEmpty property="HAS_PAYED" prepend=",">
 		   		 HAS_PAYED = #HAS_PAYED#
 		   	</isNotEmpty>
-		   	<!-- <isEqual property="HAS_PAYED" compareValue="1" prepend=",">
-		   		 HAS_PAYED = 1
-		   	</isEqual>
-		   	<isEqual property="HAS_PAYED" compareValue="0" prepend=",">
-		   		 HAS_PAYED = 0
-		   	</isEqual> -->
 		   	<isNotEmpty property="PAY_INFO" prepend=",">
 		   		 PAY_INFO = #PAY_INFO#
 		   	</isNotEmpty>
@@ -216,6 +214,10 @@
 		   	<isNotEmpty property="PAY_METHOD" prepend=",">
 		   		 PAY_METHOD = #PAY_METHOD#
 		   	</isNotEmpty>
+		   	<isNotEqual property="DISCOUNT" compareValue="-1" prepend=",">
+		   		 DISCOUNT = #DISCOUNT#
+		   	</isNotEqual>
+		   	
 		 </dynamic>
 	    WHERE ROOM_USED_ID = #ROOM_USED_ID#
   </update>
@@ -237,6 +239,7 @@
 			T.IS_DELIVERED,
 			T.BILL_CD,
 			T.IS_CANCELED,
+			T.DISCOUNT
 			@row := @row + 1 AS rn1
 		FROM room_turn T
 			LEFT JOIN room R
@@ -307,6 +310,7 @@
 			 , T.IS_ORDER
 			 , T.IS_CANCELED
 			 , T.PAY_METHOD
+			 , T.DISCOUNT
 			 , R.room_no
 			 ,@row := @row + 1 AS rn1     
 		FROM room_turn T

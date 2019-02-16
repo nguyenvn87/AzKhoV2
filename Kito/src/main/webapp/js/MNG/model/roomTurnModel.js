@@ -81,6 +81,9 @@ Ext.define('MNG.model.roomTurnModel', {
 					}, {
 						name : 'ID_BANK',
 						type : 'string' 
+					},{
+						name : 'DISCOUNT',
+						type : 'float' 
 					}
 					]
 		});
