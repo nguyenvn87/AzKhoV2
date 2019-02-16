@@ -95,7 +95,24 @@ Ext.define('MNG.view.providerView', {
                                          sortable:false,
                                          text: 'Thông tin thêm',
                                          flex: 1
-                                     }
+                                     },
+                                     {
+ 										menuDisabled : true,
+ 										sortable : false,
+ 										text : 'Xóa',
+ 										xtype : 'actioncolumn',
+ 										align : 'center',
+ 										width : 60,
+ 										items : [ {
+ 											iconCls : 'icon-del',
+ 											tooltip : 'Xóa dòng này',
+ 											handler : function(grid, rowIndex, colIndex){
+ 												grid.getSelectionModel().select(rowIndex);
+ 												var myController = MANAGER.app.getController('MNG.controller.providerController');
+ 												myController.deleteUser();
+ 											}
+ 										} ]
+ 									}
                                  ],
                                  tbar: [{
                                 	 	text: 'Thêm mới',

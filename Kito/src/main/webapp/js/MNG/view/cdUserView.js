@@ -73,17 +73,18 @@ Ext.define('MNG.view.cdUserView', {
                                      },
                                      {
 										menuDisabled : true,
-										hidden: true,
 										sortable : false,
 										text : 'Xóa',
 										xtype : 'actioncolumn',
 										align : 'center',
-										flex : 1,
+										width : 90,
 										items : [ {
-											iconCls : 'icon-delete',
-											tooltip : 'Xóa mục này',
+											iconCls : 'icon-del',
+											tooltip : 'Xóa dòng này',
 											handler : function(grid, rowIndex, colIndex){
-												//me.deleteRecord(grid, rowIndex, colIndex);
+												grid.getSelectionModel().select(rowIndex);
+ 												var myController = ADM.app.getController('MNG.controller.cdUserController');
+ 												myController.deleteUser();
 											}
 										} ]
 									}
