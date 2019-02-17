@@ -44,4 +44,8 @@ public class UtilConst {
 	public static String ECOUNT_CODE_PREFIX_CHI = "CH";
 	
 	public static String ECOUNT_CODE_AUTO = "AUTO";
+	
+	// USE_YN
+	public static String USE_YN_Y = "Y";
+	public static String USE_YN_N = "N";
 }

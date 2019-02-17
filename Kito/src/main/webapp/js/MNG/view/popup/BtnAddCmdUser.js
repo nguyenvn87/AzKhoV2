@@ -65,6 +65,7 @@ Ext.define('MNG.view.popup.BtnAddCmdUser', {
 								{													
 									xtype : 'combo',
 									flex : 1,
+									hidden: true,
 									itemId:'ACTIVE',
 									height: 30,
 									name:'ACTIVE',
@@ -85,6 +86,7 @@ Ext.define('MNG.view.popup.BtnAddCmdUser', {
 									flex : 1,
 									itemId:'IS_DEFAULT',
 									name:'IS_DEFAULT',
+									hidden: true,
 									height: 30,
 									fieldLabel : 'Đăt mặc định',
 									emptyText: 'Chọn trạng thái',

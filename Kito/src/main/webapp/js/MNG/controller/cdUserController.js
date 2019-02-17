@@ -41,6 +41,26 @@ Ext.define('MNG.controller.cdUserController', {
 		this.popup.show();
 	},
 	doubleClickUser:function(component, record, index, eOpts){
+		/*var idCD = record.get('CD');
+		if(this.popup==null){
+			this.popup = Ext.create('MNG.view.popup.BtnAddCmdUser',{
+				 config:{
+					groupcd: '',
+					code: idCD,
+					name: 'Tên',
+					value: '',
+					emptytxt: 'Nhập tên'
+				 },
+				 title: 'Cập nhật nhóm'});
+		}
+		
+		this.popup.idProvider = idCD;
+		this.popup.config.code = idCD;
+		this.popup.show();
+		gridSupport.selectGridPopup('#mainContainerID','#grid-srvc','#btnMenuContainerId');*/
+		this.showToEditForm(record);
+	},
+	showToEditForm: function(record){
 		var idCD = record.get('CD');
 		if(this.popup==null){
 			this.popup = Ext.create('MNG.view.popup.BtnAddCmdUser',{

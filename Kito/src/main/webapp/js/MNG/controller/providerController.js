@@ -43,12 +43,22 @@ Ext.define('MNG.controller.providerController', {
 		this.popup.show();
 	},
 	doubleClickUser:function(component, record, index, eOpts){
+		/*if(this.popup==null){
+			this.popup = Ext.create('MNG.view.popup.BtnAddProvider',{});
+		}
+		var idProvider = record.get('PROV_CD');
+		this.popup.idProvider = idProvider;
+		this.popup.show();
+		gridSupport.selectGridPopup('#mainContainerID','#grid-srvc','#btnSrvcContainerId');
+		*/
+		this.showToEditForm(record);
+	},
+	showToEditForm: function(record){
 		if(this.popup==null){
 			this.popup = Ext.create('MNG.view.popup.BtnAddProvider',{});
 		}
 		var idProvider = record.get('PROV_CD');
 		this.popup.idProvider = idProvider;
-		console.log('idProvider = '+idProvider);
 		this.popup.show();
 		gridSupport.selectGridPopup('#mainContainerID','#grid-srvc','#btnSrvcContainerId');
 	},

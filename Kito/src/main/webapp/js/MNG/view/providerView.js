@@ -97,6 +97,24 @@ Ext.define('MNG.view.providerView', {
                                          flex: 1
                                      },
                                      {
+  										menuDisabled : true,
+  										sortable : false,
+  										text : 'Chỉnh sửa',
+  										xtype : 'actioncolumn',
+  										align : 'center',
+  										width : 90,
+  										items : [ {
+  											iconCls : 'icon-edit',
+  											tooltip : 'Chỉnh sửa dòng này',
+  											handler : function(grid, rowIndex, colIndex){
+  												var record = grid.getStore().getAt(rowIndex);
+  												grid.getSelectionModel().select(rowIndex);
+  												var myController = MANAGER.app.getController('MNG.controller.providerController');
+  												myController.showToEditForm(record);
+  											}
+  										} ]
+  									},
+                                     {
  										menuDisabled : true,
  										sortable : false,
  										text : 'Xóa',

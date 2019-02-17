@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kito.madina.cmmn.util.SessionUtil;
+import com.kito.madina.cmmn.util.UtilConst;
 import com.kito.madina.test.dao.CmmCdUserDAO;
 import com.kito.madina.test.service.CmmCdUserService;
 import com.kito.madina.test.vo.CmmCdUserVO;
@@ -46,10 +47,14 @@ public class CmmCdUserServiceImpl implements CmmCdUserService {
 		return codeDao.getCmmCdUserVO(_Cd);
 	}
 	public int createCodeVO(CmmCdUserVO vo){
+		vo.setUSE_YN(UtilConst.USE_YN_Y);
 		return codeDao.createCodeVO(vo);
 	}
 	public int updateCodeVO(CmmCdUserVO vo){
 		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		if(vo.getUSE_YN()==null|| vo.getUSE_YN().isEmpty())
+			vo.setUSE_YN(UtilConst.USE_YN_Y);
+		else vo.setUSE_YN(UtilConst.USE_YN_N);
 		vo.setRESTAR_ID(restarId);
 		return codeDao.updateCodeVO(vo);
 	}
