@@ -238,6 +238,8 @@ public class SaleReportController {
 		map.put("paramButtom2", restaurntVO.getBILL_BOTTOM2()!=null?restaurntVO.getBILL_BOTTOM2():"");
 		map.put("paramButtom3", restaurntVO.getBILL_BOTTOM3()!=null?restaurntVO.getBILL_BOTTOM3():"");
 		map.put("paramCusPayed", tmpRtVo.getPAYED_MONEY());
+		map.put("paramDiscount", tmpRtVo.getDISCOUNT());
+		
 		Number remain = tmpRtVo.getTOTAL_MONEY() - tmpRtVo.getPAYED_MONEY();
 		map.put("paramCusRemain", remain);
 		String isPrintPayment = restaurntVO.getIS_PRINT_PAYMENT()==1?"1":"";

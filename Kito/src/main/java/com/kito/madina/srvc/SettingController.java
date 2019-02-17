@@ -60,7 +60,6 @@ public class SettingController {
 		
 				String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
 				vo.setRESTAR_ID(restarId);
-				vo.setUSE_YN("Y");
 				System.out.println("getListCDUser");
 				if(vo.getCD() > 0){
 					if(vo.getSTATUS() != null && vo.getSTATUS().equalsIgnoreCase("DELETE"))
@@ -72,7 +71,6 @@ public class SettingController {
 				}
 				
 				JsonVO jvon = new JsonVO();
-				//jvon.setData(list);
 				jvon.setSuccess(true);
 				return new ModelAndView("jsonView", jvon);
 	}

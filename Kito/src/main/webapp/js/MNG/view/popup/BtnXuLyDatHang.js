@@ -151,17 +151,20 @@ Ext
 																					align: 'right',
 																					dataIndex : 'TOTAL_MONEY',
 																					renderer : function(value, p, r, rowIndex) {
-																						var items = srvcRoomStore.data.items;
-																						var totalMoney = 0;
+																						//var items = srvcRoomStore.data.items;
+																						//var totalMoney = 0;
 																						
 																						var data = r.data['TOTAL_MONEY'];
 																						money = parseFloat(r.get('AMOUNT')) * parseFloat(r.get('PRICE'));
 																						data = formatSupporter.formatToMoney(money);
 																						
-																						for(var index = 0 ; index < items.length ; index++){
-																							totalMoney += (items[index].data.PRICE * items[index].data.AMOUNT);
-																						}
-																						Ext.ComponentQuery.query('#TOTAL_MONEY')[0].setValue(totalMoney);
+																						//for(var index = 0 ; index < items.length ; index++){
+																						//	totalMoney += (items[index].data.PRICE * items[index].data.AMOUNT);
+																						//}
+																						var totalMoney = me.getSumMoney();
+																						var remainMoney = totalMoney - me.getDiscountValue();
+																						Ext.ComponentQuery.query('#TOTAL_MONEY')[0].setValue(remainMoney);
+																						
 																						return data;
 																					}
 																				},
@@ -230,10 +233,31 @@ Ext
 															         
 																	{
 																		xtype : 'fieldset',
-																		height : 126,
+																		height : 135,
 																		title : 'Thanh toán',
 																		itemId : 'paymentContainerInfo',
 																		items : [
+																				{
+												                                    xtype : 'numericfield',
+																					anchor : '100%',
+																					useThousandSeparator: true,
+																					decimalPrecision: 0,
+																					hideTrigger:true,
+																					alwaysDisplayDecimals: false,
+																					allowNegative: false,
+																					currencySymbol:'',
+																					thousandSeparator: ',',
+																					name : 'DISCOUNT',
+																					value : 0,
+																					cls : 'input-pay-money-cls',
+																					fieldLabel : "Chiết khấu",
+												                                    labelWidth: 70,
+												                                    listeners:{
+												                                    	change: function(field, value){
+												                                    		me.ChangeDiscountValue(field, value, me);
+												                                    	}
+												                                    }
+												                                },
 																				{
 																					xtype : 'numericfield',
 																					anchor : '100%',
@@ -466,6 +490,7 @@ Ext
 						return false;
 					},
 					renderValue : function() {
+						
 						me = this;
 						Ext.ComponentQuery
 								.query('#paymentContainerInfo #TOTAL_MONEY')[0]
@@ -484,13 +509,31 @@ Ext
 								.query('#paymentContainerInfo #HAS_PAYED')[0]
 								.setValue(me.config.hasPayed);
 						Ext.ComponentQuery.query('#customerContainerId [name=CUS_CD]')[0].setValue(me.config.cusCd);
+						Ext.ComponentQuery.query('#paymentContainerInfo [name=DISCOUNT]')[0].setValue(me.config.DISCOUNT);
 						
-						
-						//alert(me.config.changeDate+'////'+txtDate);
 						var mydate = new Date(me.config.changeDate);
-						console.log(mydate.toDateString());
 						txtDate = formatSupporter.getVNDay(mydate);
 						Ext.ComponentQuery.query('#CHANGE_DATE11')[0].setValue(txtDate);
 
+					},
+					getSumMoney: function(){
+						
+						var items = srvcRoomStore.data.items;
+						var totalMoney = 0;
+						for(var index = 0 ; index < items.length ; index++){
+							totalMoney += (items[index].data.PRICE * items[index].data.AMOUNT);
+						}
+						return totalMoney;
+					},
+					getDiscountValue: function(){
+						var discountValue = Ext.ComponentQuery.query('#paymentContainerInfo [name=DISCOUNT]')[0].getValue();
+						return discountValue;
+					},
+					setSumValueHaveToPay: function(valueTotal){
+						Ext.ComponentQuery.query('#paymentContainerInfo #TOTAL_MONEY')[0].setValue(valueTotal);
+					},
+					ChangeDiscountValue: function(field, value, parent){
+						var sumHaveToPay = parent.getSumMoney() - value;
+						parent.setSumValueHaveToPay(sumHaveToPay);
 					}
 				});

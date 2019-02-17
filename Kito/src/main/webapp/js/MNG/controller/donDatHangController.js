@@ -426,6 +426,7 @@ Ext.define('MNG.controller.donDatHangController', {
 		isDelivered = Ext.ComponentQuery.query('#deliveryContainerInfo [name=IS_DELILVER]')[0].getValue();
 		dscrt = Ext.ComponentQuery.query('#deliveryContainerInfo [name=DSCRT]')[0].getValue();
 		changeDate = Ext.ComponentQuery.query('#CHANGE_DATE11')[0].getValue();
+		discountValue = Ext.ComponentQuery.query('#paymentContainerInfo [name=DISCOUNT]')[0].getValue();
 		
 		param['DATA'] = paramData;
 		param['ROOM_USE_ID'] = btnViewDetail.config.ROOM_USED_ID;
@@ -433,6 +434,7 @@ Ext.define('MNG.controller.donDatHangController', {
 		param['PAYED_MONEY'] = valuePayed;
 		param['IS_DELIVERED'] = (isDelivered==true)?1:0;;
 		param['HAS_PAYED'] = (hasPayed==true)?1:0;
+		param['DISCOUNT'] = discountValue != null?discountValue:0;
 		
 		if(btnViewDetail.isChangeDate == true){
 			var mydate = new Date(changeDate);

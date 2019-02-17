@@ -92,6 +92,7 @@ public class SaleController {
 		String shipAddr = req.getParameter("SHIP_ADDR");
 		String aCCUMULT = req.getParameter("ACCUMULT");
 		String methodList = req.getParameter("METHOD");
+		String discountMoney = req.getParameter("DISCOUNT");
 		
 		String cusCD = req.getParameter("CUS_CD");
 		int iCusCD = (cusCD != null && !cusCD.isEmpty()) ? Integer.parseInt(cusCD):0;
@@ -99,9 +100,11 @@ public class SaleController {
 		
 		double totalMoneyf = Double.valueOf(totalMoney);
 		double payedMoneyf = Double.valueOf(payMoney);
+		double discountValue = 0;
+		if(discountMoney != null && !discountMoney.isEmpty()) discountValue = Double.valueOf(discountMoney);
+		
 		boolean isValid = false;
 		roomUseId = CmmUtil.getGUID();
-		//RoomTurnVO rtVo = new RoomTurnVO();
 		rtVo.setROOM_USED_ID(roomUseId);
 		rtVo.setCHANGE_DATE(timePay);
 		rtVo.setPAYED_MONEY(payedMoneyf);
@@ -112,6 +115,7 @@ public class SaleController {
 		rtVo.setIS_DEBIT(isDebit);
 		rtVo.setIS_ORDER(1);
 		rtVo.setSHIP_ADDR(shipAddr);
+		rtVo.setDISCOUNT(discountValue);
 		String billCD = roomTurnService.generateBillCode();
 		rtVo.setBILL_CD(billCD);
 		roomTurnService.CreateRoomTurnVO(rtVo);
@@ -188,6 +192,7 @@ public class SaleController {
 		String dataList = req.getParameter("DATA");
 		String totalMoney = req.getParameter("TOTAL_MONEY");
 		String payMoney = req.getParameter("PAYED_MONEY");
+		String discountMoneyStr = req.getParameter("DISCOUNT");
 		String isDiliver = req.getParameter("IS_DELIVERED");
 		String isDebitStr = req.getParameter("IS_DEBIT");
 		String aCCUMULT = req.getParameter("ACCUMULT");
@@ -201,6 +206,8 @@ public class SaleController {
 		
 		double totalMoneyf = Double.parseDouble(totalMoney);
 		double payedMoneyf = Double.parseDouble(payMoney);
+		double discountMoney = 0;
+		if(discountMoneyStr != null && !discountMoneyStr.isEmpty()) discountMoney = Double.parseDouble(discountMoneyStr);
 		
 		if(roomUseId == null || roomUseId.isEmpty()) return new ModelAndView("jsonView", jvon);
 		
@@ -229,6 +236,7 @@ public class SaleController {
 			dbVo.setHAS_PAYED(iHasPay);
 			dbVo.setPAYED_MONEY(payedMoneyf);
 			dbVo.setTOTAL_MONEY(totalMoneyf);
+			dbVo.setDISCOUNT(discountMoney);
 			dbVo.setCUS_NM(rtVo.getCUS_NM());
 			if(rtVo.getCHANGE_DATE() != null && !rtVo.getCHANGE_DATE().isEmpty())
 				dbVo.setCHANGE_DATE(rtVo.getCHANGE_DATE());

@@ -35,8 +35,8 @@ Ext.define('MNG.controller.retailController', {
 			'#btnPayment' : {
 				click : this.btnPayment
 			},
-			'#btnRoomPayment button[action=pay]' : {
-				click : this.onSelectPaymentType
+			'#paymentItemId [name=DISCOUNT]' : {
+				change: this.ChangeDiscountValue
 			},
 			'#grid-menu-id' :{
 				itemdblclick: this.doubleClickSelectMenu
@@ -319,7 +319,6 @@ Ext.define('MNG.controller.retailController', {
 	FilterMenu:function(key, event){
 		me = this;
 		value = key.getValue();
-		console.log('Key = '+value + ' / '+event.getCharCode());
 		var Grid = Ext.ComponentQuery.query('#grid-menu-id')[0];
 			var storeTmp = Grid.getStore();
 			
@@ -371,6 +370,7 @@ Ext.define('MNG.controller.retailController', {
 		param['ROOM_ID'] = parent.roomId;
 		param['ROOM_USE_ID'] = parent.roomUseId;
 		
+		var discountValue = Ext.ComponentQuery.query('#paymentItemId [name=DISCOUNT]')[0].getValue();
 		var total = Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].getValue();
 		var paymoney = Ext.ComponentQuery.query('#paymentItemId [name=PAYED]')[0].getValue();
 		var isDeliver = Ext.ComponentQuery.query('#paymentItemId [name=IS_DELIVERED]')[0].getValue();
@@ -378,13 +378,15 @@ Ext.define('MNG.controller.retailController', {
 		var cusCD = Ext.ComponentQuery.query('#customerContainerId [name=CUS_CD]')[0].getValue();
 		var cusAddr = Ext.ComponentQuery.query('#customerContainerId [name=ADDR]')[0].getValue();
 		var cusNM = Ext.ComponentQuery.query('#customerContainerId [name=NAME]')[0].getRawValue();
+		
 		// Payment params
 		param['CHANGE_DATE'] = timeEnd;
 		param['PAYED_MONEY'] = paymoney;
 		param['TOTAL_MONEY'] = total;
-	    param['IS_DEBIT'] = 1;
-	    param['HAS_PAYED'] = (isPayed == true)?'1':'0';
-	    param['DSCRT'] = '';
+		param['DISCOUNT'] 	 = discountValue!=null?discountValue:0;
+	    param['IS_DEBIT'] 	 = 1;
+	    param['HAS_PAYED'] 	 = (isPayed == true)?'1':'0';
+	    param['DSCRT'] 		 = '';
 	    
 	    // Bill info
 	    param['IS_DELIVERED'] = (isDeliver == true)?'1':'0';
@@ -395,6 +397,7 @@ Ext.define('MNG.controller.retailController', {
 	    param['DSCRT'] = cusAddr;
 	    param['PAY_METHOD'] = parent.payment.type;
 	    param['ID_BANK'] = parent.payment.bankId;
+	    
 	    // Calculate total score
 		param['ACCUMULT'] = parent.caculateScore(tmpStoreResource);
 	    if(itemsLength > 0)
@@ -486,6 +489,8 @@ Ext.define('MNG.controller.retailController', {
 			    		Ext.ComponentQuery.query('#customerContainerId [name=ADDR]')[0].setValue("");
 			    		Ext.ComponentQuery.query('#paymentItemId [name=HAS_PAYED]')[0].setValue('0');
 			    		Ext.ComponentQuery.query('#paymentItemId [name=IS_DELIVERED]')[0].setValue('0');
+			    		Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].setValue(0);
+			    		Ext.ComponentQuery.query('#paymentItemId [name=DISCOUNT]')[0].setValue(0);
 			    	},
 			    	failure: function(response){
 			    		supportEvent.hiddeMessageBox();
@@ -500,15 +505,23 @@ Ext.define('MNG.controller.retailController', {
 		
 		Ext.ComponentQuery.query('#orderMainContainer [name=TOTAL_MONEY]')[0].setValue(valueTotal);
 	},
-	setPaymentInfo:function(){
+	getTotalSumvalue: function(){
 		
 		var storeTarget = Ext.ComponentQuery.query('#grid-room-turn')[0].getStore(); 
-		var valueTotal = gridSupport.calculateMoney(storeTarget)
+		var valueTotal = gridSupport.calculateMoney(storeTarget);
+		return valueTotal;
+	},
+	setPaymentInfo:function(){
+		parent = this;
+		var valueTotal = parent.getTotalSumvalue();
 		var value = Ext.util.Format.number(valueTotal, '0,')
 		
 		Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].setValue(valueTotal);
-		
 		Ext.ComponentQuery.query('#orderMainContainer [name=TOTAL_MONEY]')[0].setValue(valueTotal);
+	},
+	setSumValueHaveToPay: function(valueTotal){
+		
+		Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].setValue(valueTotal);
 	},
 	caculateScore: function(_store){
 		var _value = 0;
@@ -555,29 +568,6 @@ Ext.define('MNG.controller.retailController', {
 			paymentOption.hide();
 		}
 	},
-	onSelectPaymentType:function(button){
-		parent = this;
-		payType = button.name;
-		bankObject = Ext.ComponentQuery.query('#btnRoomPayment #comboCustomerId')[0];
-		_content = "Thanh toán";
-		if(payType == 'ebank'){
-			paymentOption.paymentOption.type = PaymentTypeGroup.EBANK;
-			paymentOption.paymentOption.text = 'chuyển khoản';
-			_content = _content + ' chuyển khoản TK số '+bankObject.getRawValue();
-			bankObject.show();
-		}else if(payType == 'card'){
-			paymentOption.paymentOption.type = PaymentTypeGroup.CARD;
-			paymentOption.paymentOption.text = 'qua thẻ';
-			_content = _content + ' qua thẻ TK số '+bankObject.getRawValue();
-			bankObject.show();
-		}else if(payType == 'cash'){
-			paymentOption.paymentOption.type = PaymentTypeGroup.CASH;
-			_content = _content + ' tiền mặt';
-			paymentOption.paymentOption.text = 'tiền mặt';
-			bankObject.hide();
-		}
-		Ext.ComponentQuery.query('#btnRoomPayment #PAY_DSCRT')[0].setValue(_content);
-	},
 	autoPrint:function(_url){
 		me = this;
 		 var iframe = me.printIframe;
@@ -607,5 +597,12 @@ Ext.define('MNG.controller.retailController', {
 		storeTmp.currentPage = 1;
 		storeTmp.pageSize= 100;
 		storeTmp.load();
+	},
+	ChangeDiscountValue: function(field, value){
+		
+		parent = this;
+		var totalValue = parent.getTotalSumvalue();
+		var havePayValue = totalValue - value;
+		parent.setSumValueHaveToPay(havePayValue);
 	}
 })

@@ -15,8 +15,6 @@ Ext.define('BS.infoPaymentContainer', {
         'Ext.button.Button',
         'Ext.custom.common.NumberField'
     ],
-
-    //height: 164,
     itemId : 'paymentItemId',
     layout: {
         type: 'vbox',
@@ -32,7 +30,7 @@ Ext.define('BS.infoPaymentContainer', {
                 {
                     xtype: 'fieldset',
                     flex: 1,
-                    //height: 106,
+                    border: false,
                     layout: {
                         type: 'hbox',
                         align: 'stretch'
@@ -42,7 +40,6 @@ Ext.define('BS.infoPaymentContainer', {
                             xtype: 'container',
                             flex: 1,
                             margins: '0 5 0 0',
-                            //height: 108,
                             width: 200,
                             padding: '',
                             layout: {
@@ -62,7 +59,23 @@ Ext.define('BS.infoPaymentContainer', {
 									submitFormat : 'Y-m-d H:i:s',
 									emptyText : 'Ngày',
 									editable : false,
-                                    labelWidth: 60
+                                    labelWidth: 70
+                                },
+                                {
+                                    xtype : 'numericfield',
+									anchor : '100%',
+									useThousandSeparator: true,
+									decimalPrecision: 0,
+									hideTrigger:true,
+									alwaysDisplayDecimals: false,
+									allowNegative: false,
+									currencySymbol:'',
+									thousandSeparator: ',',
+									name : 'DISCOUNT',
+									value : 0,
+									cls : 'input-pay-money-cls',
+									fieldLabel : "Chiết khấu",
+                                    labelWidth: 70
                                 },
                                 {
                                     xtype : 'numericfield',
@@ -79,7 +92,7 @@ Ext.define('BS.infoPaymentContainer', {
 									cls : 'input-total-money-cls',
 									fieldLabel : "Tổng tiền",
 									readOnly : true,
-                                    labelWidth: 60
+                                    labelWidth: 70
                                 },
                                 {
                                     xtype: 'numericfield',
@@ -95,14 +108,14 @@ Ext.define('BS.infoPaymentContainer', {
                                     name: 'PAYED',
                                     value : 0,
 									cls : 'input-total-money-cls',
-                                    labelWidth: 60
+                                    labelWidth: 70
                                 }
                             ]
                         },
                         {
                             xtype: 'container',
                             margins: '0 5 0 0',
-                            height: 99,
+                            height: 110,
                             width: 100,
                             layout: {
                                 type: 'vbox',

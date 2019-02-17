@@ -398,7 +398,8 @@ Ext
 							totalMoney : rec.get('TOTAL_MONEY'),
 							payedMoney : rec.get('PAYED_MONEY'),
 							hasPayed : rec.get('HAS_PAYED'),
-							changeDate : rec.get('CHANGE_DATE')
+							changeDate : rec.get('CHANGE_DATE'),
+							DISCOUNT : rec.get('DISCOUNT'),
 						};
 						myController.showCustomerInfo(param);
 					}
