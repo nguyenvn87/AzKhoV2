@@ -61,9 +61,6 @@
 			<isNotEmpty property="GROUP_CD" prepend="AND">
 				GROUP_CD=#GROUP_CD#
 			</isNotEmpty>
-			<isNotEmpty property="USE_YN" prepend="AND">
-				USE_YN=#USE_YN#
-			</isNotEmpty>
 			<isNotEmpty property="RESTAR_ID" prepend="AND">
 				RESTAR_ID=#RESTAR_ID#
 			</isNotEmpty>
@@ -105,7 +102,7 @@
 			,GROUP_NM 	= #GROUP_NM#
 			,CD_NM 		= #CD_NM#
 			,RESTAR_ID 	= #RESTAR_ID#
-			,SYS_USE_YN = #SYS_USE_YN#
+			,USE_YN 	= #USE_YN#
 			,DSCR 		= #DSCR#
 		WHERE CD 	= #CD#
 	</insert>

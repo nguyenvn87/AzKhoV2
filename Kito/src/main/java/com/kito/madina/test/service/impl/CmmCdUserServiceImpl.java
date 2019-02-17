@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kito.madina.cmmn.util.SessionUtil;
 import com.kito.madina.test.dao.CmmCdUserDAO;
 import com.kito.madina.test.service.CmmCdUserService;
 import com.kito.madina.test.vo.CmmCdUserVO;
@@ -48,6 +49,8 @@ public class CmmCdUserServiceImpl implements CmmCdUserService {
 		return codeDao.createCodeVO(vo);
 	}
 	public int updateCodeVO(CmmCdUserVO vo){
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		vo.setRESTAR_ID(restarId);
 		return codeDao.updateCodeVO(vo);
 	}
 	public CmmCdUserVO getCmmCdUserVoByCD(List<CmmCdUserVO> _list, int _code){
@@ -63,6 +66,7 @@ public class CmmCdUserServiceImpl implements CmmCdUserService {
 		return vo;
 	}
 	public int deleteCmmCdUserVO(int Id){
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
 		return codeDao.deleteCmmCdUserVO(Id);
 	}
 }
