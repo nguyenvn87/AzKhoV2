@@ -107,13 +107,13 @@ Ext.define('MNG.view.popup.BtnCustomer', {
 			],
 			buttons : [ {
 				xtype : 'button',
-				cls : 'button',
 				action : 'saveSrvc',
 				text : 'Lưu',
+				iconCls : 'icon-true',
 				itemId : 'BtnSaveSrvc'
 			}, {
 				xtype : 'button',
-				cls : 'button',
+				iconCls : 'icon-delete',
 				height : 25,
 				text : 'Đóng',
 				listeners : {

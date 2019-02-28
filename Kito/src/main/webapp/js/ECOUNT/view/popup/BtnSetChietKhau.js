@@ -189,6 +189,7 @@ Ext.define('ECNT.view.popup.BtnSetChietKhau', {
 			buttons : [ {
 				xtype : 'button',
 				cls : 'button',
+				iconCls : 'icon-true',
 				text : 'OK',
 				handler: function(){
 					me.okChietKhau(me);
@@ -197,6 +198,7 @@ Ext.define('ECNT.view.popup.BtnSetChietKhau', {
 				xtype : 'button',
 				cls : 'button',
 				height : 25,
+				iconCls : 'icon-delete',
 				text : 'Đóng',
 				listeners : {
 					click : function() {
