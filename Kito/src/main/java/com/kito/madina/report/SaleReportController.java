@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -105,6 +107,7 @@ public class SaleReportController {
 	@Resource(name = "paymentMethodService")
 	private PaymentMethodService paymentMethodService;
 	
+	protected Log log = LogFactory.getLog(this.getClass());
 
 	@RequestMapping(value = "/report/billRetailPrint.do")
 	public ModelAndView billRetailPrint(HttpServletRequest req,

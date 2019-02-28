@@ -1,11 +1,9 @@
 var formatSupporter = Ext.create('BIZ.utilities.formatSupporter',{});
 var supportEvent = Ext.create('BIZ.utilities.supportEvent',{});
-var startEvent = Ext.create('MNG.view.popup.BtnStart',{});
-var stopEvent = Ext.create('MNG.view.popup.BtnClose',{});
-var paymentEvent = Ext.create('MNG.view.popup.BtnPayment',{});
 var paymentOption = null;
 var btnAddCustomer = Ext.create('MNG.view.popup.BtnAddCustomer',{});
 var btnSearchCustomer = Ext.create('MNG.view.popup.BtnSearchCustomer',{});
+var btnTemplate = null;
 
 var utilForm = Ext.create('CMM.form.util',{});
 var gridSupport = Ext.create('BIZ.utilities.GridSupporter',{});
@@ -36,7 +34,8 @@ Ext.define('MNG.controller.retailController', {
 				click : this.btnPayment
 			},
 			'#paymentItemId [name=DISCOUNT]' : {
-				change: this.ChangeDiscountValue
+				change: this.ChangeDiscountValue,
+				focus: this.BlurDiscount
 			},
 			'#grid-menu-id' :{
 				itemdblclick: this.doubleClickSelectMenu
@@ -604,5 +603,22 @@ Ext.define('MNG.controller.retailController', {
 		var totalValue = parent.getTotalSumvalue();
 		var havePayValue = totalValue - value;
 		parent.setSumValueHaveToPay(havePayValue);
+	},
+	BlurDiscount( field, The, eOpts ){
+		var ScreenXY = Ext.getBody().getViewSize();
+		var toadoY = ScreenXY.height;
+		var toadoX = ScreenXY.width;
+		
+		var _havePayValue = Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].getValue();
+		var totalValue = formatSupporter.formatToMoney(_havePayValue);
+		
+		if(btnTemplate != null) btnTemplate.close();
+		btnTemplate = Ext.create('ECNT.view.popup.BtnSetChietKhau'
+					,{totalValue: _havePayValue
+					, displayValue: totalValue
+					, y: toadoY/2
+					, x: toadoX -550
+					, targetComponent: field});
+		btnTemplate.show();
 	}
 })
