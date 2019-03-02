@@ -11,12 +11,12 @@ Ext.define('MNG.view.popup.BtnAddCustomer', {
 	Height : 300,
 	width : 600,
 	y: 200,
-	//x: 10,
-	title : 'Cập nhật TT khách hàng',
+	title : 'Thêm mới khách hàng, thành viên',
 	maxHeight : 600,
-	closeAction : 'hide',
+	closeAction : 'close',
 	resizable : false,
 	srvdId : null,
+	componentTarget: null,
 	config : {
 		idOfGrid : ""
 	},
@@ -41,7 +41,6 @@ Ext.define('MNG.view.popup.BtnAddCustomer', {
 					items : [
 					         {
 					        	xtype : 'fieldset',
-					        	title: 'Thông tin cá nhân',
 					        	padding : '10 10 10 10',
 					        	flex: 1,
 								layout : {
@@ -106,8 +105,8 @@ Ext.define('MNG.view.popup.BtnAddCustomer', {
 				text : 'Lưu',
 				itemId : 'BtnSaveSrvc',
 				listeners : {
-					click : function() {
-						me.createCustomer();
+					click : function(field) {
+						me.createCustomer(field);
 					}
 				}
 			}, {
@@ -138,12 +137,12 @@ Ext.define('MNG.view.popup.BtnAddCustomer', {
 		Ext.ComponentQuery.query('#addCustomerId #EMAIL')[0].setValue('');
 		Ext.ComponentQuery.query('#addCustomerId #ADDR')[0].setValue('');
 	},
-	createCustomer:function(){
-		name = Ext.ComponentQuery.query('#addCustomerId #NAME')[0].getValue();
-		phone = Ext.ComponentQuery.query('#addCustomerId #PHONE')[0].getValue();
-		email = Ext.ComponentQuery.query('#addCustomerId #EMAIL')[0].getValue();
-		addr = Ext.ComponentQuery.query('#addCustomerId #ADDR')[0].getValue();
-		
+	createCustomer:function(field){
+		name = field.up('window').down('#NAME').getValue();
+		phone = field.up('window').down('#PHONE').getValue();
+		email = field.up('window').down('#EMAIL').getValue();
+		addr = field.up('window').down('#ADDR').getValue();
+		alert(name);
 		var params = {
 				NAME: name,
 				PHONE: phone,
@@ -164,11 +163,15 @@ Ext.define('MNG.view.popup.BtnAddCustomer', {
     		params: _params,
     		success: function(response){
     			var text = Ext.JSON.decode(response.responseText);
-    			console.info(text);
     			if( text.success == true){
     				parent.hasPayed = true;
     				Ext.MessageBox.hide();
     				parent.hide();
+    				data = text.data;
+    				if(componentTarget){
+    					componentTarget.down('[name=CUS_CD]').setValue(data.CUS_CD+'');
+    					componentTarget.down('[name=NAME]').setRawValue(_params.NAME);
+    				}
     			}
     			else supportEvent.showMessageError('Có lỗi xảy ra !');
     		},

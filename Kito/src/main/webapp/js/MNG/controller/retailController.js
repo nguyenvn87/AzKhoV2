@@ -1,7 +1,7 @@
 var formatSupporter = Ext.create('BIZ.utilities.formatSupporter',{});
 var supportEvent = Ext.create('BIZ.utilities.supportEvent',{});
 var paymentOption = null;
-var btnAddCustomer = Ext.create('MNG.view.popup.BtnAddCustomer',{});
+var btnAddCustomer = null; //Ext.create('MNG.view.popup.BtnAddCustomer',{});
 var btnSearchCustomer = Ext.create('MNG.view.popup.BtnSearchCustomer',{});
 var btnTemplate = null;
 
@@ -348,6 +348,18 @@ Ext.define('MNG.controller.retailController', {
 		btnSearchCustomer.show();
 	},
 	btnAddCustomer:function(){
+		var ScreenXY = Ext.getBody().getViewSize();
+		var toadoY = ScreenXY.height;
+		var toadoX = ScreenXY.width;
+		
+		componentTarget = Ext.ComponentQuery.query('#customerContainerId')[0];
+		if(btnAddCustomer) btnAddCustomer.close();
+		btnAddCustomer = Ext.create('MNG.view.popup.BtnAddCustomer'
+				,{y: toadoY/2
+				, x: toadoX -600
+				, componentTarget: componentTarget
+				}
+			);
 		btnAddCustomer.show();
 		btnAddCustomer.initNew();
 	},
