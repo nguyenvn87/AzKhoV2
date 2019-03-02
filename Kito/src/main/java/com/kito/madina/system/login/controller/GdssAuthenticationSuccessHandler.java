@@ -26,10 +26,6 @@ import com.kito.madina.test.service.UserService;
 import com.kito.madina.test.vo.RestaurantVO;
 import com.kito.madina.test.vo.UserVO;
 
-/**
- * @author Thaihv
- *
- */
 public class GdssAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
 	@Resource(name = "userService")

@@ -13,10 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import com.kito.madina.session.service.SessionService;
 
-/**
- * @author Thaihv
- *
- */
 public class GdssLogoutSuccessHandler implements LogoutSuccessHandler {
 
 	protected Log log = LogFactory.getLog(this.getClass());
