@@ -1,5 +1,11 @@
 package com.kito.madina.test.vo;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import com.kito.madina.cmmn.vo.DefaultVO;
 
 public class UserVO extends DefaultVO{
@@ -123,7 +129,13 @@ public class UserVO extends DefaultVO{
 	public void setPackageid(String packageid) {
 		this.packageid = packageid;
 	} 
-	
+	public List<GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		
+		authorities.add(new SimpleGrantedAuthority(this.authority));
+
+		return authorities;
+	}
 	
 	 
 }

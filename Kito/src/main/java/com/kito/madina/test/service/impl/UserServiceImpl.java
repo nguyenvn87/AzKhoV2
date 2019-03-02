@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import com.kito.madina.cmmn.json.JsonVO;
 import com.kito.madina.cmmn.util.PropertyUtil;
+import com.kito.madina.cmmn.util.SessionUtil;
 import com.kito.madina.test.dao.UserDAO;
 import com.kito.madina.test.service.UserService;
 import com.kito.madina.test.vo.UserVO;
@@ -96,5 +99,20 @@ public class UserServiceImpl implements UserService{
 		jvon.setMessage("");
 		jvon.setSuccess(true);
 		return jvon;
+	}
+	@Override
+	public boolean checkLogin(UserVO vo) {
+		UserVO uVo = this.getUserVoByUsername(vo.getUSERNAME());
+		if(uVo != null && uVo.getPASSWORD().equalsIgnoreCase(vo.getPASSWORD())) {
+			SessionUtil.setSessionAttribute("loginRestautant", uVo.getRESTAR_ID());
+			return true;
+		}
+		return false;
+	}
+	@Override
+	public UserVO getUserVoByUsername(String username) {
+		UserVO vo = new UserVO();
+		vo.setUSERNAME(username);
+		return userDao.getUserVo(vo);
 	}
 }

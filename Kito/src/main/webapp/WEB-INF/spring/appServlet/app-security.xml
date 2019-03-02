@@ -9,12 +9,32 @@
 
 
 	<sec:global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>
+	
+	<beans:bean id="restServicesEntryPoint" class="com.kito.madina.restapi.rest.RestAuthenticationEntryPoint" />
+    <beans:bean id="customAccessDeniedHandler" class="com.kito.madina.restapi.rest.CustomAccessDeniedHandler" />
+	<beans:bean id="jwtAuthenticationFilter" class="com.kito.madina.restapi.rest.JwtAuthenticationTokenFilter">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+    </beans:bean>
+    
+	<sec:http pattern="/rest/login" security="none"/>
+	<sec:http pattern="/rest/**" auto-config="false" use-expressions="true"
+		create-session="stateless" entry-point-ref="restServicesEntryPoint">
+		<sec:intercept-url pattern="/rest/**" access="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER','ROLE_SYSTEM','ROLE_USER')" method="GET"/>
+		<sec:intercept-url pattern="/rest/**" access="hasRole('ROLE_ADMIN')" method="DELETE"/>
+		<sec:intercept-url pattern="/rest/**" access="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER','ROLE_USER')" method="POST"/>
+		
+		<sec:custom-filter position="FORM_LOGIN_FILTER" ref="jwtAuthenticationFilter"/>
+		<sec:access-denied-handler ref="customAccessDeniedHandler"/>
+		<sec:csrf disabled="true" />
+	
+	</sec:http>
+	
 	<sec:http use-expressions="true">
-	<sec:headers>
-		<sec:frame-options policy="SAMEORIGIN"/>
-		<sec:hsts disabled="true"/>
-	</sec:headers>
-		<sec:intercept-url pattern="/index*.do" access="permitAll"/>
+		<sec:headers>
+			<sec:frame-options policy="SAMEORIGIN"/>
+			<sec:hsts disabled="true"/>
+		</sec:headers>
+		<sec:intercept-url pattern="/index*.do" access="permitAll" />
 		<sec:intercept-url pattern="/signup.do" access="permitAll"/>
 		<!-- <sec:intercept-url pattern="/system/user/register.json" access="permitAll"/>
 		<sec:intercept-url pattern="/system/user/forgot.json" access="permitAll"/>
@@ -47,7 +67,8 @@
 	
 	
 	
-    <sec:authentication-manager alias = "am"> 
+	
+    <sec:authentication-manager alias="authenticationManager"> 
 		<sec:authentication-provider> 
 		<sec:password-encoder hash="md5" /> 
 			<sec:jdbc-user-service data-source-ref="dataSource" 

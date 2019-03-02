@@ -20,4 +20,6 @@ public interface UserService {
 	public int deleteUserVo(UserVO username);
 	public List<UserVO> getListAllUser(UserVO vo);
 	public JsonVO validateUser(UserVO user);
+	public boolean checkLogin(UserVO vo);
+	public UserVO getUserVoByUsername(String username);
 }
