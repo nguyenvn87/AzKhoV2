@@ -142,7 +142,6 @@ Ext.define('MNG.view.popup.BtnAddCustomer', {
 		phone = field.up('window').down('#PHONE').getValue();
 		email = field.up('window').down('#EMAIL').getValue();
 		addr = field.up('window').down('#ADDR').getValue();
-		alert(name);
 		var params = {
 				NAME: name,
 				PHONE: phone,

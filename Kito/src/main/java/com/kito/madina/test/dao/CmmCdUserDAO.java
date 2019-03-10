@@ -32,9 +32,13 @@ public class CmmCdUserDAO extends SqlMapClientDaoSupport {
 	public CmmCdUserVO getCmmCdUserVO(String _Cd){
 		return (CmmCdUserVO) getSqlMapClientTemplate().queryForObject("User.Code.getListCmmCdUserVO", _Cd);
 	}
-	public int createCodeVO(CmmCdUserVO vo){
-		Object i = getSqlMapClientTemplate().insert("User.Code.createCmmCdUserVO", vo);
-		return 1;
+	public CmmCdUserVO createCodeVO(CmmCdUserVO vo){
+		try {
+			Object i = getSqlMapClientTemplate().insert("User.Code.createCmmCdUserVO", vo);
+		}catch(Exception e) {
+			return null;
+		}
+		return vo;
 	}
 	public int updateCodeVO(CmmCdUserVO vo){
 		Object i = getSqlMapClientTemplate().update("User.Code.updateCmmCdUserVO", vo);
@@ -43,6 +47,14 @@ public class CmmCdUserDAO extends SqlMapClientDaoSupport {
 	public int deleteCmmCdUserVO(int id) {
 		Object i = getSqlMapClientTemplate().delete("User.Code.deleteVo", id);
 		return 0;
+	}
+	public int deleteCmmCdUserVO(String id) {
+		Object i = getSqlMapClientTemplate().delete("User.Code.deleteVo", id);
+		return 0;
+	}
+	public List<CmmCdUserVO> getLatestCmmCdUserVOByGroup(CmmCdUserVO vo) {
+		// TODO Auto-generated method stub
+		return (List<CmmCdUserVO>) getSqlMapClientTemplate().queryForList("User.Code.getLatestCmmCdUserVOByGroup", vo);
 	}
 }
 

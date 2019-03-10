@@ -678,7 +678,8 @@ public class ReportController {
 			if(mVo.get("TYPE") != null){
 				try{
 					int _code = Integer.parseInt(mVo.get("TYPE").toString().trim());
-					CmmCdUserVO tmpVo = cmmCdUserService.getCmmCdUserVoByCD(listCode, _code);
+					//CmmCdUserVO tmpVo = cmmCdUserService.getCmmCdUserVoByCD(listCode, _code);
+					CmmCdUserVO tmpVo = cmmCdUserService.getCmmCdUserVoByCD(listCode, _code+"");
 					if(tmpVo != null)
 						groupName = tmpVo.getCD_NM();
 				}catch(Exception e){
@@ -818,8 +819,8 @@ public class ReportController {
 			Map<String, Object> mapVo = new HashMap<String, Object>();
 			
 			Double totalAmount = tmpMap.get("TOTAL") != null?Double.valueOf(tmpMap.get("TOTAL").toString()):0.0;
-			Double soBan = Double.parseDouble(tmpMap.get("AMOUNT").toString());
-			Double giaNhap = Double.parseDouble(tmpMap.get("PRICE_IMPORT").toString());
+			Double soBan = tmpMap.get("AMOUNT")!=null?Double.parseDouble(tmpMap.get("AMOUNT").toString()): 0;
+			Double giaNhap = tmpMap.get("PRICE_IMPORT") != null?Double.parseDouble(tmpMap.get("PRICE_IMPORT").toString()): 0;
 			Double tienvon = soBan * giaNhap;
 			Double loiNhuan = totalAmount - tienvon;
 			mapVo.put("ItemName", tmpMap.get("SRVC_NM"));

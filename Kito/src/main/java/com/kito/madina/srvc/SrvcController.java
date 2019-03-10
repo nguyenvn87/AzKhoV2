@@ -177,15 +177,15 @@ public class SrvcController {
 			list = srvcService.getPagingListSrvc(vo);
 		}
 
-		CmmCdUserVO cmmVo = new CmmCdUserVO();
-		cmmVo.setGROUP_CD(UtilConst.GROUP_HANG);
-		cmmVo.setRESTAR_ID(loginRestautant);
-		cmmVo.setUSE_YN("Y");
-		List<CmmCdUserVO> listGrp = cmmCdUserService.getListCmmCdUserVO(cmmVo);
+		// Group hang
+		List<CmmCdUserVO> listGrp = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_HANG);
 
-		CodeVO mVo = new CodeVO();
+		// Group don vi
+		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
+
+		/*CodeVO mVo = new CodeVO();
 		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
-		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);*/
 		HashMap<String, String> mapDonVi = new HashMap<String, String>();
 		
 		try {
@@ -193,7 +193,8 @@ public class SrvcController {
 				if (tmpVo.getTYPE() != null) {
 					boolean isNotHaveGroup = false;
 					for (CmmCdUserVO groupVo : listGrp) {
-						if (Integer.toString(groupVo.getCD()).equalsIgnoreCase(tmpVo.getTYPE().trim())) {
+						//if (Integer.toString(groupVo.getCD()).equalsIgnoreCase(tmpVo.getTYPE().trim())) {
+						if (groupVo.getCD().equalsIgnoreCase(tmpVo.getTYPE().trim())) {
 							tmpVo.setGROUP_NM(groupVo.getCD_NM());
 							tmpVo.setTYPE_NM(groupVo.getCD_NM());
 							isNotHaveGroup = true;
@@ -206,7 +207,8 @@ public class SrvcController {
 				
 				// Set unit name
 				if(tmpVo.getUNIT()!= null && !tmpVo.getUNIT().isEmpty()){
-					String unitNm = codeService.getUnitNameFromList(tmpVo.getUNIT(), listDonVi, mapDonVi);
+					//String unitNm = codeService.getUnitNameFromList(tmpVo.getUNIT(), listDonVi, mapDonVi);
+					String unitNm = cmmCdUserService.getUnitNameFromList(tmpVo.getUNIT(), listDonVi, mapDonVi);
 					tmpVo.setUNIT_NM(unitNm);
 			    }
 				
@@ -385,7 +387,8 @@ public class SrvcController {
 				if (tmpVo.getTYPE() != null) {
 					boolean isNotHaveGroup = false;
 					for (CmmCdUserVO groupVo : listGrp) {
-						if (Integer.toString(groupVo.getCD()).equalsIgnoreCase(tmpVo.getTYPE().trim())) {
+						//if (Integer.toString(groupVo.getCD()).equalsIgnoreCase(tmpVo.getTYPE().trim())) {
+						if (groupVo.getCD().equalsIgnoreCase(tmpVo.getTYPE().trim())) {
 							tmpVo.setTYPE_NM(groupVo.getCD_NM());
 							isNotHaveGroup = true;
 						}
@@ -455,7 +458,8 @@ public class SrvcController {
 			if (tmpMap.get("TYPE") != null) {
 				try {
 					int _code = Integer.parseInt(tmpMap.get("TYPE").toString().trim());
-					CmmCdUserVO tmpVo = cmmCdUserService.getCmmCdUserVoByCD(listCode, _code);
+					//CmmCdUserVO tmpVo = cmmCdUserService.getCmmCdUserVoByCD(listCode, _code);
+					CmmCdUserVO tmpVo = cmmCdUserService.getCmmCdUserVoByCD(listCode, _code+"");
 					if (tmpVo != null) {
 						groupName = tmpVo.getCD_NM();
 						tmpMap.put("TYPE_NM", groupName);

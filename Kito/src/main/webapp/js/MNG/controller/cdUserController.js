@@ -30,11 +30,21 @@ Ext.define('MNG.controller.cdUserController', {
 			this.request(param);
 		}
 	},
+	updateDeleteUser: function(record){
+		var gridTmp = Ext.ComponentQuery.query('#grid-srvc')[0];
+		if(gridTmp.getSelectionModel().hasSelection()){	
+			var row = gridTmp.getSelectionModel().getSelection()[0];
+			param={'CD': record.get('CD')};
+			param['STATUS'] =  'DELETE';
+			param['CD_NM'] =  record.get('CD_NM');
+			this.request(param);
+		}
+	},
 	openBtnUser:function(){
 		if(this.popup==null){
 			this.popup = Ext.create('MNG.view.popup.BtnAddCmdUser',{
 				idProvider: null
-				,title: 'Cập nhật nhóm'});
+				,title: 'Cập nhật thông tin'});
 		}
 		this.popup.config.code = -1;
 		this.popup.initNew();

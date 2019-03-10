@@ -47,6 +47,7 @@
 	<select id="User.Code.getListCmmCdUserVO" resultClass="CmmCdUserVO">
 		SELECT GROUP_CD
 			, CD
+			, CD_NO
 			, GROUP_NM
 			, CD_NM
 			, VALUE1
@@ -82,6 +83,8 @@
 			, DSCR
 			, LOCALE
 			, RESTAR_ID
+			, CD
+			, CD_NO
 		)
 		VALUES (
 			#GROUP_CD#
@@ -93,15 +96,17 @@
 			, #DSCR#
 			, #LOCALE#
 			, #RESTAR_ID#
+			, #CD#
+			, #CD_NO#
 		)
 	</insert>
 	<insert id="User.Code.updateCmmCdUserVO">
 		UPDATE cmm_cd_user
 		SET
-			GROUP_CD 	= #GROUP_CD#
-			,GROUP_NM 	= #GROUP_NM#
+			<!-- GROUP_CD 	= #GROUP_CD# -->
+			GROUP_NM 	= #GROUP_NM#
 			,CD_NM 		= #CD_NM#
-			,RESTAR_ID 	= #RESTAR_ID#
+			<!-- ,RESTAR_ID 	= #RESTAR_ID# -->
 			,USE_YN 	= #USE_YN#
 			,DSCR 		= #DSCR#
 		WHERE CD 	= #CD#
@@ -109,4 +114,21 @@
 	<delete id="User.Code.deleteVo">
     	DELETE FROM cmm_cd_user WHERE CD = #CD#
   	</delete>
+  	<select id="User.Code.getLatestCmmCdUserVOByGroup" resultClass="CmmCdUserVO">
+		SELECT GROUP_CD
+			, CD
+			, CD_NO
+			, GROUP_NM
+			, CD_NM
+			, VALUE1
+			, SYS_USE_YN
+			, USE_YN
+			, SORT_SN
+			, DSCR
+			, LOCALE
+			, RESTAR_ID
+		FROM cmm_cd_user
+		WHERE GROUP_CD=#GROUP_CD# and RESTAR_ID=#RESTAR_ID#
+		ORDER BY CD_NO
+	</select>
 </sqlMap>

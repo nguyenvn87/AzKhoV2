@@ -101,7 +101,8 @@ public class StoreController {
 				if(tmpVo.getTYPE() != null){
 					boolean isNotHaveGroup = false;
 					for(CmmCdUserVO groupVo : listGrp){
-						if(Integer.toString(groupVo.getCD()).equalsIgnoreCase(tmpVo.getTYPE().trim())){
+						//if(Integer.toString(groupVo.getCD()).equalsIgnoreCase(tmpVo.getTYPE().trim())){
+						if(groupVo.getCD().equalsIgnoreCase(tmpVo.getTYPE().trim())){
 							tmpVo.setTYPE_NM(groupVo.getCD_NM());
 							isNotHaveGroup = true;
 						}

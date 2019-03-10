@@ -4,7 +4,9 @@ import com.kito.madina.cmmn.vo.DefaultVO;
 public class CmmCdUserVO extends DefaultVO {
 
 	String GROUP_CD;
-	int CD;
+	//int CD;
+	String CD;
+	String CD_NO;
 	String GROUP_NM;
 	String CD_NM;
 	String VALUE1;
@@ -29,11 +31,11 @@ public class CmmCdUserVO extends DefaultVO {
 		GROUP_CD = gROUP_CD;
 	}
 
-	public int getCD() {
+	public String getCD() {
 		return CD;
 	}
 
-	public void setCD(int cD) {
+	public void setCD(String cD) {
 		CD = cD;
 	}
 
@@ -145,6 +147,14 @@ public class CmmCdUserVO extends DefaultVO {
 	 */
 	public void setRESTAR_ID(String rESTAR_ID) {
 		RESTAR_ID = rESTAR_ID;
+	}
+
+	public String getCD_NO() {
+		return CD_NO;
+	}
+
+	public void setCD_NO(String cD_NO) {
+		CD_NO = cD_NO;
 	}
 	
 	

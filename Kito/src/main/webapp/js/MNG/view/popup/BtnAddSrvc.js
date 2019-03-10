@@ -10,6 +10,7 @@ var useStore = Ext.create('Ext.data.Store',{
 								       {"value":0, "name":"Ngừng kinh doanh"}]
 								});
 var tmpComboStore = Ext.create('MNG.store.cdUserStore',{});
+var tmpDonViStore = Ext.create('MNG.store.cdUserStore',{});
 
 Ext.define('MNG.view.popup.BtnAddSrvc', {
 	extend : 'Ext.window.Window',
@@ -102,8 +103,9 @@ Ext.define('MNG.view.popup.BtnAddSrvc', {
 								       },{
 											xtype : 'simplecombobox',
 											flex : 1,
-											itemId:'UNIT',
-											name:'UNIT',
+											hidden: true,
+											//itemId:'UNIT',
+											//name:'UNIT',
 											fieldLabel : 'Đơn vị (*)',
 											emptyText: 'Chọn đơn vị',
 											datatype: 'combo',
@@ -111,6 +113,35 @@ Ext.define('MNG.view.popup.BtnAddSrvc', {
 											initFlag: false,
 											autoload: false
 								       },{
+                                           xtype: 'container',
+                                           layout: {
+					                             type: 'hbox',
+					                             align: 'center',
+                                           },
+                                           padding: '0 0 5 0',
+				                            items:[{													
+													xtype : 'combo',
+													flex : 1,
+													editable: false,
+													itemId:'UNIT',
+													name:'UNIT',
+													fieldLabel : 'Đơn vị',
+													emptyText: 'Chọn đơn vị',
+													store: tmpDonViStore,
+													displayField: 'CD_NM',
+												    valueField: 'CD',
+												    value: null 
+												 },{
+				                                    xtype: 'button',
+										            width: 25,
+										            height: 25,
+										            action: 'unit',
+										            tooltip : 'Thêm Đơn vị mới',
+										            cls: 'addmore'
+				                                }
+				                             ]
+				                       },
+								       {
                                             xtype: 'container',
                                             layout: {
 					                             type: 'hbox',
@@ -120,6 +151,7 @@ Ext.define('MNG.view.popup.BtnAddSrvc', {
 				                            items:[{													
 													xtype : 'combo',
 													flex : 1,
+													editable: false,
 													itemId:'TYPE',
 													name:'TYPE',
 													fieldLabel : 'Nhóm hàng',
@@ -224,6 +256,7 @@ Ext.define('MNG.view.popup.BtnAddSrvc', {
 				xtype : 'button',
 				cls : 'button',
 				action : 'saveSrvc',
+				iconCls : 'icon-true',
 				text : 'Lưu',
 				itemId : 'BtnSaveSrvc'
 			}, {
@@ -231,9 +264,10 @@ Ext.define('MNG.view.popup.BtnAddSrvc', {
 				cls : 'button',
 				height : 25,
 				text : 'Đóng',
+				iconCls : 'icon-delete',
 				listeners : {
 					click : function() {
-						this.up('.window').hide();
+						this.up('.window').close();
 					}
 				}
 			} ]
@@ -246,6 +280,10 @@ Ext.define('MNG.view.popup.BtnAddSrvc', {
 						GROUP_CD: 'GRHAG',
 					};
 			tmpComboStore.load();
+			tmpDonViStore.getProxy().extraParams = {
+				GROUP_CD: 'DONVI',
+			};
+			tmpDonViStore.load();
 		}
 	},
 	initNew:function(){

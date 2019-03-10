@@ -128,7 +128,7 @@
                                 iconCls : 'icon-admin',
 								itemId : 'btnPaymentDebit',
 								scale: 'medium',
-                                text: 'Quản trị',
+                                text: 'Quản Lý',
                                 handler:function(){
                                 	window.location.href=contextPath+"/mainStatistic.do"; 
                                 }

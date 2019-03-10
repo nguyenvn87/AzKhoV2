@@ -46,8 +46,21 @@ public class CmmCdUserServiceImpl implements CmmCdUserService {
 	public CmmCdUserVO getCmmCdUserVO(String _Cd){
 		return codeDao.getCmmCdUserVO(_Cd);
 	}
-	public int createCodeVO(CmmCdUserVO vo){
-		vo.setUSE_YN(UtilConst.USE_YN_Y);
+
+	/*
+	 * public int createCodeVO(CmmCdUserVO vo){ vo.setUSE_YN(UtilConst.USE_YN_Y);
+	 * return codeDao.createCodeVO(vo); }
+	 */
+	public CmmCdUserVO createCodeVO(CmmCdUserVO vo){
+		CmmCdUserVO lastVO = this.getLatestCmmCdUserVOByGroup(vo.getGROUP_CD());
+		String newCDI = "100";
+		if(lastVO != null && lastVO.getCD_NO()!= null && !lastVO.getCD_NO().isEmpty()) {
+			int newCD = Integer.parseInt(lastVO.getCD_NO())+1;
+			 newCDI = newCD+"";
+		}
+		vo.setCD(newCDI);
+		vo.setCD_NO(newCDI);
+		vo.setUSE_YN("Y");
 		return codeDao.createCodeVO(vo);
 	}
 	public int updateCodeVO(CmmCdUserVO vo){
@@ -58,21 +71,73 @@ public class CmmCdUserServiceImpl implements CmmCdUserService {
 		vo.setRESTAR_ID(restarId);
 		return codeDao.updateCodeVO(vo);
 	}
-	public CmmCdUserVO getCmmCdUserVoByCD(List<CmmCdUserVO> _list, int _code){
+
+	/*
+	 * public CmmCdUserVO getCmmCdUserVoByCD(List<CmmCdUserVO> _list, int _code){
+	 * CmmCdUserVO vo = new CmmCdUserVO();
+	 * 
+	 * if(_list != null && _list.size() > 0){ for (CmmCdUserVO cVo : _list) {
+	 * if(cVo.getCD() == _code){ return cVo; } } } return vo; }
+	 */
+	public int deleteCmmCdUserVO(int Id){
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		return codeDao.deleteCmmCdUserVO(Id);
+	}
+	public int deleteCmmCdUserVO(String Id){
+		return codeDao.deleteCmmCdUserVO(Id);
+	}
+	public CmmCdUserVO getCmmCdUserVoByCD(List<CmmCdUserVO> _list, String _code){
 		CmmCdUserVO vo = new CmmCdUserVO();
 		
 		if(_list != null && _list.size() > 0){
 			for (CmmCdUserVO cVo : _list) {
-				if(cVo.getCD() == _code){
+				//if(cVo.getCD() == _code){
 					return cVo;
-				}
+				//}
 			}
 		}
 		return vo;
 	}
-	public int deleteCmmCdUserVO(int Id){
-		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
-		return codeDao.deleteCmmCdUserVO(Id);
+	public List<CmmCdUserVO> getListCmmCdUserByGroupCD(String groupCD){
+		String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		CmmCdUserVO vo = new CmmCdUserVO();
+		vo.setRESTAR_ID(loginRestautant);
+		vo.setGROUP_CD(groupCD);
+		vo.setUSE_YN("Y");
+		return codeDao.getListCmmCdUserVO(vo);
+	}
+	public String getUnitNameFromList(String codeCD, List<CmmCdUserVO> listDonVi, HashMap<String, String> mapDonVi){
+		String nameStr = "";
+		try{
+			if(codeCD!= null && !codeCD.isEmpty()){
+				if(mapDonVi.get(codeCD)!= null){}
+				else{
+			    	for(CmmCdUserVO coMap : listDonVi){
+			    		if(codeCD.toString().trim().equalsIgnoreCase(coMap.getCD()+"")){
+			    			mapDonVi.put(codeCD.toString(), coMap.getCD_NM());
+			    			break;
+			    		}
+			    	}
+				}
+		    }
+			nameStr = mapDonVi.get(codeCD)!=null?mapDonVi.get(codeCD):"";
+		}catch(Exception e){
+			
+		}
+		return nameStr;
+	}
+	public CmmCdUserVO getLatestCmmCdUserVOByGroup(String groupCD) {
+		String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		CmmCdUserVO vo = new CmmCdUserVO();
+		vo.setRESTAR_ID(loginRestautant);
+		vo.setGROUP_CD(groupCD);
+		vo.setUSE_YN("Y");
+		CmmCdUserVO voOut = null;
+		List<CmmCdUserVO> list = codeDao.getLatestCmmCdUserVOByGroup(vo);
+		if(list != null && list.size() > 0) {
+			voOut = list.get(list.size()-1);
+		}
+		return voOut;
 	}
 }
 

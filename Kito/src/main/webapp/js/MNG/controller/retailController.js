@@ -356,7 +356,7 @@ Ext.define('MNG.controller.retailController', {
 		if(btnAddCustomer) btnAddCustomer.close();
 		btnAddCustomer = Ext.create('MNG.view.popup.BtnAddCustomer'
 				,{y: toadoY/2
-				, x: toadoX -600
+				, x: toadoX -620
 				, componentTarget: componentTarget
 				}
 			);

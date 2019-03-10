@@ -178,6 +178,10 @@ public class SampleController {
 		CreateDefaultCmmCd(UtilConst.GROUP_HANG, _restaurantId, rVO.getRESTAR_TYPE());
 		CreateDefaultCmmCd(UtilConst.GROUP_AREA, _restaurantId, rVO.getRESTAR_TYPE());
 		
+		// START ADD NEW 2019/03/10
+		CreateDefaultCmmCd(UtilConst.GROUP_UNIT, _restaurantId, null);
+		// END ADD NEW 2019/03/10
+		
 		// Create product
 		srvcService.createDefaultSrvc(UtilConst.GROUP_SRVC, _restaurantId, rVO.getRESTAR_TYPE());
 		

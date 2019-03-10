@@ -7,14 +7,15 @@
 Ext.define('MNG.view.popup.BtnAddCmdUserCommon', {
 	extend : 'Ext.window.Window',
 	Height : 500,
-	width : 500,
-	y: 55,
+	width : 400,
+	y: 100,
 	maxHeight : 600,
 	closeAction : 'destroy',
 	resizable : false,
 	groupCD: '',
 	groupNM: '',
 	targetStore: null,
+	targetComponent: null,
 	config:{
 		name: 'Tên',
 		value: '',
@@ -65,6 +66,7 @@ Ext.define('MNG.view.popup.BtnAddCmdUserCommon', {
 			buttons : [ {
 				xtype : 'button',
 				cls : 'button',
+				iconCls : 'icon-true',
 				action : 'save',
 				text : 'Lưu',
 				listeners : {
@@ -75,6 +77,7 @@ Ext.define('MNG.view.popup.BtnAddCmdUserCommon', {
 			}, {
 				xtype : 'button',
 				cls : 'button',
+				iconCls : 'icon-delete',
 				text : 'Đóng',
 				listeners : {
 					click : function() {
@@ -89,6 +92,9 @@ Ext.define('MNG.view.popup.BtnAddCmdUserCommon', {
 		var param = {};
 		var value = Ext.ComponentQuery.query('#btnMainContainerId [name=CD_NM]')[0].getValue();
 		param={'CD': -1};
+		if(me.groupCD == 'GRHAG'){
+			value = value.toUpperCase();
+		}
 		param['CD_NM'] =  value;
 		param['GROUP_CD'] = me.groupCD;
 		param['GROUP_NM'] = me.groupNM;
@@ -100,7 +106,12 @@ Ext.define('MNG.view.popup.BtnAddCmdUserCommon', {
     			var text = Ext.JSON.decode(response.responseText);
     			if( text.success == true){
     				if(me.targetStore!=null)
-    				me.targetStore.load();
+    					me.targetStore.load();
+    				if(me.targetComponent != null && text.data != null){
+    					data = text.data;
+    					me.targetComponent.setValue(data.CD);
+    					me.targetComponent.setRawValue(data.CD_NM);
+    				}
     				me.close();
     			}
     		},

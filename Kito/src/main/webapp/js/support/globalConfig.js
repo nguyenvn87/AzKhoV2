@@ -9,6 +9,7 @@ var GROUP_HANG = "GRHAG";
 var GROUP_SRVC = "HGHOA";  
 var GROUP_AREA = "KHUVC";
 var GROUP_ROOM = "GRROM";
+var GROUP_DONVI = "DONVI";
 
 var PaymentTypeGroup = {
 		CASH :  'CASH', // Tien mat

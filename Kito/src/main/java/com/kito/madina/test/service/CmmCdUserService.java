@@ -13,28 +13,13 @@ public interface CmmCdUserService {
 	public String getGroupName(String CD_code, String GroupCD, List<HashMap<String, String>> listCode);
 	public List<CmmCdUserVO> getListCmmCdUserVO(CmmCdUserVO vo);
 	public CmmCdUserVO getCmmCdUserVO(String _Cd);
-	public int createCodeVO(CmmCdUserVO vo);
+	public CmmCdUserVO createCodeVO(CmmCdUserVO vo);
 	public int updateCodeVO(CmmCdUserVO vo);
-	public CmmCdUserVO getCmmCdUserVoByCD(List<CmmCdUserVO> _list, int _code);
+	//public CmmCdUserVO getCmmCdUserVoByCD(List<CmmCdUserVO> _list, int _code);
 	public int deleteCmmCdUserVO(int Id);
-	//public List getAdmZoneComboList(Map<String, String> params);
-	//public List getUsersComboList(Map<String, String> params);
-	//public List getPartsComboList(Map<String, String> params);
-	
-	//public List<Object> getCodePagingList(CodeVO vo);
-	//public int getCodeListCount(CodeVO vo);
-	//public CodeVO getCodeVO(CodeVO vo);//codeDtlInfo
-	//public int updateCodeVO(CodeVO vo);//codeUpdate
-	//public int deleteCodeVO(CodeVO vo);//codeDelete
-	//public int createCodeVO(CodeVO vo);//codeInsert
-	
-	//public List getHistoryList(CodeVO vo);
-	//public CodeVO getHistoryVO(CodeVO vo);
-	
-	//public List<HashMap<String,String>> getGroupNmList();
-	//public List getNotaryComboList();
-	//public List getAgencyComboList(String CDCode);
-	
-	//use for change right processes - check if an combine code is existed
-	//public CodeVO getCombineCodeVO(CodeVO vo);
+	public int deleteCmmCdUserVO(String Id);
+	public CmmCdUserVO getCmmCdUserVoByCD(List<CmmCdUserVO> _list, String _code);
+	public String getUnitNameFromList(String codeCD, List<CmmCdUserVO> listDonVi, HashMap<String, String> mapDonVi);
+	public List<CmmCdUserVO> getListCmmCdUserByGroupCD(String groupCD);
+	public CmmCdUserVO getLatestCmmCdUserVOByGroup(String groupCD);
 }

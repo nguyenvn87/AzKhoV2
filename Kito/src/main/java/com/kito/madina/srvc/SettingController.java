@@ -58,21 +58,25 @@ public class SettingController {
 	@RequestMapping(value = "/setting/createCDUser.json", method = RequestMethod.POST)
 	public ModelAndView createCDUser(HttpServletRequest req, CmmCdUserVO vo) {
 		
-				String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
-				vo.setRESTAR_ID(restarId);
-				System.out.println("getListCDUser");
-				if(vo.getCD() > 0){
-					if(vo.getSTATUS() != null && vo.getSTATUS().equalsIgnoreCase("DELETE"))
-						cmmCdUserService.deleteCmmCdUserVO(vo.getCD());
-					else cmmCdUserService.updateCodeVO(vo);
-				}
-				else{
-					cmmCdUserService.createCodeVO(vo);
-				}
-				
-				JsonVO jvon = new JsonVO();
-				jvon.setSuccess(true);
-				return new ModelAndView("jsonView", jvon);
+		JsonVO jvon = new JsonVO();
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		vo.setRESTAR_ID(restarId);
+		System.out.println("getListCDUser");
+		//if(vo.getCD() > 0){
+		if(vo.getCD() != null && !vo.getCD().isEmpty() && !vo.getCD().equalsIgnoreCase("-1")){
+			if(vo.getSTATUS() != null && vo.getSTATUS().equalsIgnoreCase("DELETE")) {
+						//cmmCdUserService.deleteCmmCdUserVO(vo.getCD());
+						vo.setUSE_YN("N");
+						cmmCdUserService.updateCodeVO(vo);
+			}
+			else cmmCdUserService.updateCodeVO(vo);
+			}
+			else{
+				CmmCdUserVO newVo = cmmCdUserService.createCodeVO(vo);
+				jvon.setData(newVo);
+			}
+		jvon.setSuccess(true);
+		return new ModelAndView("jsonView", jvon);
 	}
 	@RequestMapping("/setting/renderBarcode.json")
 	public void photo1(HttpServletResponse response, String barcodeNumber, String summaryInfo, int height, int with, int fontsize) throws IOException {

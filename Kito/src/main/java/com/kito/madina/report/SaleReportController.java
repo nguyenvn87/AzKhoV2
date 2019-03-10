@@ -530,16 +530,15 @@ public class SaleReportController {
 		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
 		ExcelVO evo = null;
 		String fileName = req.getParameter("FILENAME");
-
+		String groupNameDefault = PropertyUtil.getStringUTF8("srvc.name.other"); 
+		
 		SrvcVO sVo = new SrvcVO();
 		sVo.setRESTAR_ID(restarId);
 		sVo.setIS_USED(1);
 		sVo.setSort("TYPE_NM");
-		// Get list unit
-		CodeVO mVo = new CodeVO();
-		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
-		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		
 		HashMap<String, String> mapDonVi = new HashMap<String, String>();
+		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
 		
 		List<HashMap<String, Object>> list = srvcService.listImportReport(sVo);
 		int count = 0;
@@ -553,11 +552,15 @@ public class SaleReportController {
 				double fPrice = Double.parseDouble(map.get("PRICE_IMPORT").toString());
 				map.put("PRICE_IMPORT", fPrice);
 			}
+			if(map.get("TYPE_NM")==null || map.get("TYPE_NM").toString().isEmpty()) {
+				map.put("TYPE_NM", groupNameDefault);
+			}
 			map.put("STT", count);
 	
 			// Set unit name
 			if(map.get("UNIT")!= null && !map.get("UNIT").toString().isEmpty()){
-				String unitNm = codeService.getUnitNameFromList(map.get("UNIT").toString().trim(), listDonVi, mapDonVi);
+				//String unitNm = codeService.getUnitNameFromList(map.get("UNIT").toString().trim(), listDonVi, mapDonVi);
+				String unitNm = cmmCdUserService.getUnitNameFromList(map.get("UNIT").toString().trim(), listDonVi, mapDonVi);
 				map.put("UNIT_NM", unitNm);
 		    }
 		}
@@ -633,10 +636,12 @@ public class SaleReportController {
 		uVo.setUSERNAME(loginUser);
 		uVo = userService.getUserVo(uVo);
 		
-		CodeVO mVo = new CodeVO();
-		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
-		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		String groupNameDefault = PropertyUtil.getStringUTF8("srvc.name.other"); 
+
 		HashMap<String, String> mapDonVi = new HashMap<String, String>();
+		
+		// Group don vi
+		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
 		
 
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -654,11 +659,14 @@ public class SaleReportController {
 			String price = vo.get("PRICE").toString();
 			float fPrice = Float.parseFloat(price);
 			vo.put("PRICE", CmmUtil.formatNumber2Money(fPrice));
-			vo.put("ItemType", vo.get("TYPE_NM"));
+			
+			String grouName = vo.get("TYPE_NM")!=null?vo.get("TYPE_NM").toString(): groupNameDefault;
+			vo.put("ItemType", grouName);
 			
 			// Set unit name
 			if(vo.get("UNIT") != null && !vo.get("UNIT").toString().isEmpty()){
-				String unitNm = codeService.getUnitNameFromList(vo.get("UNIT").toString(), listDonVi, mapDonVi);
+				//String unitNm = codeService.getUnitNameFromList(vo.get("UNIT").toString(), listDonVi, mapDonVi);
+				String unitNm = cmmCdUserService.getUnitNameFromList(vo.get("UNIT").toString(), listDonVi, mapDonVi);
 				vo.put("UNIT_NM",unitNm);
 		    }
 		}
@@ -965,7 +973,8 @@ public class SaleReportController {
 			int j = i+1;
 			HashMap<String, Object> tmpMap = new HashMap<String, Object>();
 			tmpMap.put("STT", j);
-			tmpMap.put("CHANGE_DATE", rVo.getCHANGE_DATE().split(" ")[0]);
+			//tmpMap.put("CHANGE_DATE", rVo.getCHANGE_DATE().split(" ")[0]);
+			tmpMap.put("CHANGE_DATE", rVo.getCHANGE_DATE()!=null?rVo.getCHANGE_DATE().split(" ")[0]:null);
 			tmpMap.put("BILL_CD", rVo.getBILL_CD());
 			tmpMap.put("CUS_NM", rVo.getCUS_NM());
 			tmpMap.put("DSCRT", rVo.getDSCRT());

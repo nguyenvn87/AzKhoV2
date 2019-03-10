@@ -35,6 +35,9 @@ Ext.define('MNG.controller.srvcController', {
 			'#btnSrvcContainerId [action=create]' : {
 				click : this.onClickCreateNhomHang
 			},
+			'#btnSrvcContainerId [action=unit]' : {
+				click : this.onClickCreateDonVi
+			}
 		});
 	},
 	deleteRecord: function(grid, rowIndex, colIndex){
@@ -184,10 +187,24 @@ Ext.define('MNG.controller.srvcController', {
 	onClickCreateNhomHang: function(){
 		var me = this;
 		var storeTmp = Ext.ComponentQuery.query('#btnSrvcContainerId [name=TYPE]')[0].getStore();
+		var cmptTmp = Ext.ComponentQuery.query('#btnSrvcContainerId [name=TYPE]')[0];
 		//var btnCreateType = Ext.ComponentQuery.query('#btnMenuContainerId')[0];
 		if(me.popupNhomHang) me.popupNhomHang.close();
 		me.popupNhomHang = Ext.create('MNG.view.popup.BtnAddCmdUserCommon'
-				,{title: 'Nhóm hàng, dịch vụ',groupCD: GROUP_HANG ,groupNM: 'Nhóm hàng', targetStore:storeTmp});
+				,{title: 'Nhóm hàng, dịch vụ',groupCD: GROUP_HANG ,groupNM: 'Nhóm hàng'
+					, targetStore:storeTmp
+					, targetComponent:cmptTmp});
+		me.popupNhomHang.show();
+	},
+	onClickCreateDonVi: function(){
+		var me = this;
+		var comptTmp = Ext.ComponentQuery.query('#btnSrvcContainerId [name=UNIT]')[0];
+		var storeTmp = Ext.ComponentQuery.query('#btnSrvcContainerId [name=UNIT]')[0].getStore();
+		if(me.popupNhomHang) me.popupNhomHang.close();
+		me.popupNhomHang = Ext.create('MNG.view.popup.BtnAddCmdUserCommon'
+				,{title: 'Đơn vị',groupCD: GROUP_DONVI ,groupNM: 'Đơn vị'
+					, targetStore:storeTmp
+					, targetComponent: comptTmp});
 		me.popupNhomHang.show();
 	},
 	generateCode:function(_num){

@@ -100,9 +100,11 @@ Ext.define('MNG.view.cdUserView', {
 											iconCls : 'icon-del',
 											tooltip : 'Xóa dòng này',
 											handler : function(grid, rowIndex, colIndex){
+												var record = grid.getStore().getAt(rowIndex);
 												grid.getSelectionModel().select(rowIndex);
  												var myController = ADM.app.getController('MNG.controller.cdUserController');
- 												myController.deleteUser();
+ 												//myController.deleteUser();
+ 												myController.updateDeleteUser(record);
 											}
 										} ]
 									}
@@ -114,6 +116,7 @@ Ext.define('MNG.view.cdUserView', {
  		                                },
  		                               {
  	                                	text: 'Xóa',
+ 	                                	hidden: true,
  	                                	iconCls: 'icon-search',
  	                                	itemId: 'delSrvcBtn'
  	 		                           }

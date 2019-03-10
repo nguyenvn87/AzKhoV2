@@ -106,7 +106,7 @@ Ext.define('MNG.view.srvcView', {
              						},
                                      {
                                          xtype: 'gridcolumn',
-                                         align:'center',
+                                         align:'left',
                                          sortable:false,
                                          dataIndex: 'UNIT_NM',
                                          width : 80,
@@ -189,7 +189,7 @@ Ext.define('MNG.view.srvcView', {
                                          xtype: 'gridcolumn',
                                          dataIndex: 'TYPE_NM',
                                          sortable:false,
-                                         text: 'Nhóm',
+                                         text: 'Nhóm hàng',
                                          width : 150,
                                      },
                                      {
@@ -261,7 +261,6 @@ Ext.define('MNG.view.srvcView', {
 											iconCls : 'icon-del',
 											tooltip : 'Xóa dòng này',
 											handler : function(grid, rowIndex, colIndex){
-												//me.deleteRecord(grid, rowIndex, colIndex);
 												var myController = MANAGER.app.getController('MNG.controller.srvcController');
 												myController.deleteRecord(grid, rowIndex, colIndex);
 											}
