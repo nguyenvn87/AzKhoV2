@@ -1,6 +1,7 @@
 package com.kito.madina.restapi.controller;
 
 import java.io.StringReader;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -249,23 +250,6 @@ public class SrvcRestController {
 	 	return new ResponseEntity<Object>("Not Found User", HttpStatus.NO_CONTENT); 
 	 }
 	 
-
-	/* ---------------- CREATE NEW USER ------------------------ */
-	/*
-	 * @RequestMapping(value = "/users", method = RequestMethod.POST) public
-	 * ResponseEntity<String> createUser(@RequestBody User user) { if
-	 * (userService.add(user)) { return new ResponseEntity<String>("Created!",
-	 * HttpStatus.CREATED); } else { return new
-	 * ResponseEntity<String>("User Existed!", HttpStatus.BAD_REQUEST); } }
-	 */
-
-	/* ---------------- DELETE USER ------------------------ */
-	/*
-	 * @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE) public
-	 * ResponseEntity<String> deleteUserById(@PathVariable int id) {
-	 * //userService.delete(id); return new ResponseEntity<String>("Deleted!",
-	 * HttpStatus.OK); }
-	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<String> login(HttpServletRequest request, UserVO user) {
 		String result = "";
@@ -290,5 +274,110 @@ public class SrvcRestController {
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		return new ResponseEntity<String>(result, httpStatus);
+	}
+	@RequestMapping(value = "/getPagingListDonHang", method = RequestMethod.GET)
+	public ModelAndView getPagingListDonHang(HttpServletRequest req, RoomTurnVO vo) {
+		
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		String statisType = req.getParameter("TYPE_STATIS");
+		String isDebit = req.getParameter("DEBIT");
+		String isDelivered = req.getParameter("IS_DELIVERED");
+		String isCanceled = req.getParameter("IS_CANCELED");
+		String isOrder = req.getParameter("IS_ORDER");
+		String havePayed = req.getParameter("HAS_PAYED");
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		if(isDebit != null && isDebit.equals("true")){
+			map.put("IS_DEBIT", 1);
+		}
+		if(isDelivered != null ){
+			if(isDelivered.equals("1"))
+				map.put("IS_DELIVERED", 1);
+			else if(isDelivered.equals("0"))
+				map.put("IS_DELIVERED", 0);
+		}
+		if(isCanceled != null){
+			if(isCanceled != null && isCanceled.equals("1"))
+				map.put("IS_CANCELED", 1);
+			else if(isCanceled.equals("0"))
+				map.put("IS_CANCELED", 0);
+		}
+		if(isOrder != null){
+			if(isOrder.equals("1"))
+				map.put("IS_ORDER", 1);
+			else if(isOrder.equals("0"))
+				map.put("IS_ORDER", 0);
+		}
+		if(havePayed != null){
+			if(havePayed.equals("1"))
+				map.put("HAS_PAYED", 1);
+			else if(havePayed.equals("0"))
+				map.put("HAS_PAYED", 0);
+		}
+		if(vo.getUSER_NAME()!= null && !vo.getUSER_NAME().isEmpty()){
+			map.put("USER_NAME", vo.getUSER_NAME());
+		}
+		java.util.Date dateCrr= new java.util.Date();
+		java.util.Date dateStr= new java.util.Date();
+		
+		dateStr.setHours(0);
+		dateStr.setMinutes(0);
+		dateStr.setSeconds(0);
+		
+		if(statisType != null && statisType.equalsIgnoreCase("DAY")){
+			Timestamp sDate = new Timestamp(dateStr.getTime());
+			Timestamp eDate = new Timestamp(dateCrr.getTime());
+			map.put("STARTDATE", sDate.toString());
+			map.put("ENDDATE", eDate.toString());
+		}
+		else if(statisType != null && statisType.equalsIgnoreCase("WEEK")){
+			int abc = dateStr.getDate();
+			if(abc > 1){
+				dateStr.setDate(abc - 1);
+			}
+			else{
+				dateStr.setDate(0);
+			}
+			Timestamp sDate = new Timestamp(dateStr.getTime());
+			Timestamp eDate = new Timestamp(dateCrr.getTime());
+			map.put("STARTDATE", sDate.toString());
+			map.put("ENDDATE", eDate.toString());
+		}
+		else if(statisType != null && statisType.equalsIgnoreCase("MONTH")){
+				dateStr.setDate(1);
+				Timestamp sDate = new Timestamp(dateStr.getTime());
+				Timestamp eDate = new Timestamp(dateCrr.getTime());
+				map.put("STARTDATE", sDate.toString());
+				map.put("ENDDATE", eDate.toString());
+			}
+		else if(statisType != null && statisType.equalsIgnoreCase("OTHER")){
+			String startDate = req.getParameter("STARTDATE");
+			String endDate = req.getParameter("ENDDATE");
+			System.out.println(startDate+ " / "+ endDate);
+			map.put("STARTDATE", startDate);
+			map.put("ENDDATE", endDate);
+		}
+		
+		map.put("RESTAR_ID", restarId);
+		int	limit 	=  vo.getLimit()!=null?Integer.parseInt(vo.getLimit()): 15; 
+		int	page 	=  vo.getPage()!=null?Integer.parseInt(vo.getPage()):1;
+		vo.setMIN((page - 1) * limit);
+		vo.setMAX(((page - 1) * limit)+limit);
+		map.put("MIN", vo.getMIN());
+		map.put("MAX", vo.getMAX());
+		List<RoomTurnVO> listTurnVo= roomTurnService.getListPagingTurnStatistic(map);
+		HashMap<String, Object> mapResult = roomTurnService.getTotalStatisticCount(map);
+		int totalCount = 0;
+		if(mapResult != null && mapResult.get("COUNT") != null){
+			totalCount = Integer.parseInt(mapResult.get("COUNT").toString());
+		}
+		JsonVO jvon = new JsonVO();
+		jvon.setSuccess(true);
+		jvon.addObject("SumObj", mapResult);
+		jvon.setData(listTurnVo);
+		jvon.setTotalCount(totalCount);
+		
+		return new ModelAndView("jsonView", jvon);
 	}
 }
