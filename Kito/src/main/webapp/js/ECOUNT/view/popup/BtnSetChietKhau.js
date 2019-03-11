@@ -222,7 +222,9 @@ Ext.define('ECNT.view.popup.BtnSetChietKhau', {
 	},
 	okChietKhau: function(me){
 		if(me.targetComponent!= null){
-			me.targetComponent.setValue(me.outputValue);
+			var objValue = me.down('[name=chietkhauvalue]').getValue();
+			//me.targetComponent.setValue(me.outputValue);
+			me.targetComponent.setValue(objValue);
 		}
 		var ScreenXY = Ext.getBody().getViewSize();
 		var toadoY = ScreenXY.height;

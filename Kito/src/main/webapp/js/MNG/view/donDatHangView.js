@@ -197,6 +197,7 @@ Ext
 																			xtype : 'gridcolumn',
 																			dataIndex : 'HAS_PAYED',
 																			sortable : true,
+																			align: 'center',
 																			text : 'Thanh toán',
 																			width : 100,
 																			renderer : function(
@@ -211,7 +212,7 @@ Ext
 																				if (data != ''
 																						&& data == '1')
 																					return '';
-																				return 'Chưa thanh toán';
+																				return 'Chưa';
 																			}
 
 																		},
@@ -261,8 +262,8 @@ Ext
 																			xtype : 'gridcolumn',
 																			dataIndex : 'USER_NAME',
 																			sortable : false,
-																			text : 'Người lập',
-																			width : 85
+																			text : 'Người bán',
+																			width : 100
 																		} ],
 																tbar : [
 																		{
@@ -293,8 +294,8 @@ Ext
 																			xtype : 'combo',
 																			itemId : 'FULLNAME',
 																			name : 'FULLNAME',
-																			fieldLabel : 'Người phụ trách',
-																			emptyText : 'Chọn nhân viên',
+																			fieldLabel : 'Người bán',
+																			emptyText : 'Chọn người bán',
 																			store : useStore,
 																			displayField : 'FULLNAME',
 																			valueField : 'USERNAME',
@@ -400,6 +401,7 @@ Ext
 							hasPayed : rec.get('HAS_PAYED'),
 							changeDate : rec.get('CHANGE_DATE'),
 							DISCOUNT : rec.get('DISCOUNT'),
+							USER_NAME : rec.get('USER_NAME'),
 						};
 						myController.showCustomerInfo(param);
 					}

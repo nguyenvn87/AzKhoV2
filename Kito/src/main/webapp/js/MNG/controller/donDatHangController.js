@@ -305,8 +305,7 @@ Ext.define('MNG.controller.donDatHangController', {
 		this.submitUpdateBill(params);
 	},
 	showCustomerInfo:function(param){
-		//this.billObj.IS_DELIVERED = -1;
-		//this.billObj.IS_DELIVERED = param.isdeliver;
+		
 		btnViewDetail.isChangeDate = false;
 		btnViewDetail.config = param;
     	btnViewDetail.config.ROOM_USED_ID = param.ROOM_USED_ID;
@@ -398,7 +397,7 @@ Ext.define('MNG.controller.donDatHangController', {
 	    		}
 			});
 	},
-	submitOrder:function(){
+	submitOrder:function(compt){
 		btnViewDetail.hide();
 		
 		var parent = this;
@@ -427,6 +426,7 @@ Ext.define('MNG.controller.donDatHangController', {
 		dscrt = Ext.ComponentQuery.query('#deliveryContainerInfo [name=DSCRT]')[0].getValue();
 		changeDate = Ext.ComponentQuery.query('#CHANGE_DATE11')[0].getValue();
 		discountValue = Ext.ComponentQuery.query('#paymentContainerInfo [name=DISCOUNT]')[0].getValue();
+		userName = compt.up('window').down('[name=USERNAME]').getValue();
 		
 		param['DATA'] = paramData;
 		param['ROOM_USE_ID'] = btnViewDetail.config.ROOM_USED_ID;
@@ -435,6 +435,7 @@ Ext.define('MNG.controller.donDatHangController', {
 		param['IS_DELIVERED'] = (isDelivered==true)?1:0;;
 		param['HAS_PAYED'] = (hasPayed==true)?1:0;
 		param['DISCOUNT'] = discountValue != null?discountValue:0;
+		param['USER_NAME'] = userName;
 		
 		if(btnViewDetail.isChangeDate == true){
 			var mydate = new Date(changeDate);
