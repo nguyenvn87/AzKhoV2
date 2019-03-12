@@ -28,7 +28,7 @@ Ext
 												padding : '0 10 0 10',
 												collapsible : true,
 												collapsed : false,
-												cls: 'addbtn',
+												//cls: 'addbtn',
 												layout : {
 													align : 'stretch',
 													type : 'vbox'
@@ -82,6 +82,7 @@ Ext
 																	{
 																		xtype : 'button',
 																		itemId : 'btnAddCustomer',
+																		cls: 'addmore',
 																		tooltip : 'Thêm khách hàng mới'
 																	} 
 																	]

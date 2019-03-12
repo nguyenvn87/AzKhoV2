@@ -98,6 +98,10 @@
     	<beans:property name="url" value="classpath:jasper/billA4Retail.jasper"></beans:property>
     	<beans:property name="reportDataKey" value="datasource"></beans:property>
     </beans:bean>
+    <beans:bean id="billTraHangId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+    	<beans:property name="url" value="classpath:jasper/billA4TraHang.jasper"></beans:property>
+    	<beans:property name="reportDataKey" value="datasource"></beans:property>
+    </beans:bean>
     <beans:bean id="danhsachkhachhangId" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
     	<beans:property name="url" value="classpath:jasper/DanhSachKhachHang.jasper"></beans:property>
     	<beans:property name="reportDataKey" value="datasource"></beans:property>

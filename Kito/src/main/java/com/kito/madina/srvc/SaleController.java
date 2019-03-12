@@ -110,6 +110,7 @@ public class SaleController {
 		rtVo.setPAYED_MONEY(payedMoneyf);
 		rtVo.setTOTAL_MONEY(totalMoneyf);
 		rtVo.setUSER_NAME(loginUser);
+		rtVo.setCREATE_USER(loginUser);
 		rtVo.setIS_DELIVERED(Integer.parseInt(isDiliver));
 		rtVo.setCUS_CD(iCusCD+"");
 		rtVo.setIS_DEBIT(isDebit);
@@ -213,7 +214,8 @@ public class SaleController {
 		
 		rtVo.setPAYED_MONEY(payedMoneyf);
 		rtVo.setTOTAL_MONEY(totalMoneyf);
-		rtVo.setUSER_NAME(loginUser);
+		//rtVo.setUSER_NAME(loginUser);
+		//rtVo.setCREATE_USER(loginUser);
 		rtVo.setIS_DELIVERED(Integer.parseInt(isDiliver));
 		if(cusCD != null) rtVo.setCUS_CD(iCusCD+"");
 		rtVo.setHAS_PAYED(iHasPay);
@@ -233,11 +235,14 @@ public class SaleController {
 			isDeliverOld = dbVo.getIS_DELIVERED();
 			dbVo.setIS_DELIVERED(Integer.parseInt(isDiliver));
 			if(cusCD != null && !cusCD.isEmpty())dbVo.setCUS_CD(iCusCD+"");
+			
 			dbVo.setHAS_PAYED(iHasPay);
 			dbVo.setPAYED_MONEY(payedMoneyf);
 			dbVo.setTOTAL_MONEY(totalMoneyf);
 			dbVo.setDISCOUNT(discountMoney);
 			dbVo.setCUS_NM(rtVo.getCUS_NM());
+			
+			if(rtVo.getUSER_NAME()!=null && !rtVo.getUSER_NAME().isEmpty()) dbVo.setUSER_NAME(rtVo.getUSER_NAME());
 			if(rtVo.getCHANGE_DATE() != null && !rtVo.getCHANGE_DATE().isEmpty())
 				dbVo.setCHANGE_DATE(rtVo.getCHANGE_DATE());
 			dbVo.setDSCRT(description);
@@ -473,6 +478,100 @@ public class SaleController {
 		jvon.setSuccess(true);
 		jvon.setData(list);
 		jvon.setTotalCount(count);
+		return new ModelAndView("jsonView", jvon);
+	}
+	/**
+	 * @author Nguyen
+	 * @Description Tra hang ve kho
+	 * @Date 2019/03/12
+	 * 
+	 * */
+	@RequestMapping("/sale/saveTraHangVeKho.json")
+	public ModelAndView saveTraHangVeKho(HttpServletRequest req, RoomTurnVO rtVo) {
+		
+		JsonVO jvon = new JsonVO();
+		String loginUser = SessionUtil.getSessionAttribute("loggedUserId").toString();
+		
+		String roomUseId = req.getParameter("ROOM_USE_ID");
+		String dataList = req.getParameter("DATA");
+		String timePay = req.getParameter("CHANGE_DATE");
+		String totalMoney = req.getParameter("TOTAL_MONEY");
+		String payMoney = req.getParameter("PAYED_MONEY");
+		String isDiliver = req.getParameter("IS_DELIVERED");
+		String isDebitStr = req.getParameter("IS_DEBIT");
+		String shipAddr = req.getParameter("SHIP_ADDR");
+		String methodList = req.getParameter("METHOD");
+		String discountMoney = req.getParameter("DISCOUNT");
+		String isReturn = req.getParameter("IS_RETURN");
+		
+		String cusCD = req.getParameter("CUS_CD");
+		int iCusCD = (cusCD != null && !cusCD.isEmpty()) ? Integer.parseInt(cusCD):0;
+		int isDebit = (isDebitStr != null && !isDebitStr.isEmpty()) ? Integer.parseInt(isDebitStr):0;
+		
+		double totalMoneyf = Double.valueOf(totalMoney);
+		double payedMoneyf = Double.valueOf(payMoney);
+		double discountValue = 0;
+		if(discountMoney != null && !discountMoney.isEmpty()) discountValue = Double.valueOf(discountMoney);
+		
+		boolean isValid = false;
+		roomUseId = CmmUtil.getGUID();
+		rtVo.setROOM_USED_ID(roomUseId);
+		rtVo.setCHANGE_DATE(timePay);
+		rtVo.setPAYED_MONEY(payedMoneyf);
+		rtVo.setTOTAL_MONEY(totalMoneyf);
+		rtVo.setUSER_NAME(loginUser);
+		rtVo.setCREATE_USER(loginUser);
+		rtVo.setIS_DELIVERED(Integer.parseInt(isDiliver));
+		rtVo.setCUS_CD(iCusCD+"");
+		rtVo.setIS_DEBIT(isDebit);
+		rtVo.setIS_ORDER(1);
+		rtVo.setSHIP_ADDR(shipAddr);
+		rtVo.setDISCOUNT(discountValue);
+		String billCD = roomTurnService.generateBillCode();
+		rtVo.setBILL_CD(billCD);
+		rtVo.setIS_RETURN(1);
+		roomTurnService.CreateRoomTurnVO(rtVo);
+		
+		// Save payment method
+		List<PaymentMethodVO> listMethod = null;
+		if(methodList != null && methodList.length() > 10){
+			String data = methodList.replaceAll("&quot;", "\"");
+			data = data.replaceAll("false", "N");
+			data = data.replaceAll("true", "Y");
+			JsonReader reader1 = new JsonReader(new StringReader(data));
+			reader1.setLenient(true);
+					
+			listMethod = CmmUtil.jsonToPayMethodList(reader1);
+		}
+		
+		if(dataList != null && dataList.length() > 10){
+						
+			String data = dataList.replaceAll("&quot;", "\"");
+			data = data.replaceAll("false", "N");
+			data = data.replaceAll("true", "Y");
+			JsonReader reader1 = new JsonReader(new StringReader(data));
+			reader1.setLenient(true);
+					
+			List<RoomSrvcVO> listServices = CmmUtil.jsonToRoomSrvcList(reader1);
+			System.out.println(listServices.size());
+			for(RoomSrvcVO vo : listServices){
+				vo.setROOM_USED_ID(roomUseId);
+				vo.setUSER_NAME(loginUser);
+				
+				double total = vo.getAMOUNT() * vo.getPRICE();
+				vo.setTOTAL_MONEY(total);				
+				roomSrvcService.createReturnBill(vo, rtVo);
+				jvon.setData(roomUseId);
+				jvon.setSuccess(true);
+				isValid = true;
+			}
+		}
+		if(isValid && listMethod!= null && listMethod.size() >0){
+			for(PaymentMethodVO pVo : listMethod){
+				pVo.setROOM_USED_ID(roomUseId);
+				phieuThuService.createPhieuThuPayment(rtVo, pVo);
+			}
+		}
 		return new ModelAndView("jsonView", jvon);
 	}
 }

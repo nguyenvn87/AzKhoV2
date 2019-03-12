@@ -263,9 +263,17 @@ public class SaleReportController {
 		}
 		map.put("datasource", ds);
 		map.put("format", "pdf");
+		
+		// Print bill
 		String strPrintParam = "billRetailPrintId";
-		if (isA4) {
-			strPrintParam = "billA4PrintRetailId";
+		if(tmpRtVo.getIS_RETURN() == 1) {
+			strPrintParam = "billTraHangId";
+		}
+		else {
+			strPrintParam = "billRetailPrintId";
+			if (isA4) {
+				strPrintParam = "billA4PrintRetailId";
+			}
 		}
 		return new ModelAndView(strPrintParam, map);
 	}
@@ -337,8 +345,10 @@ public class SaleReportController {
 			map.put("IS_DELIVERED", 1);
 		if (isDelivered != null && isDelivered.equalsIgnoreCase("0"))
 			map.put("IS_DELIVERED", 0);
+		
 		if (isDebit != null && isDebit.equals("true")) map.put("IS_DEBIT", 1);
-
+		if(userName != null && !userName.isEmpty()) map.put("USER_NAME", userName);
+		
 		map.put("RESTAR_ID", restarId);
 
 		// Style for date
@@ -400,7 +410,13 @@ public class SaleReportController {
 		mapRpt.put("paramTotal", totalMoney);
 		
 		if(userName != null && !userName.isEmpty()){
-			mapRpt.put("paramUser", "NV: "+userName);
+			UserVO uVo = new UserVO();
+			uVo.setRESTAR_ID(restarId);
+			uVo.setUSERNAME(userName);
+			uVo = userService.getUserVo(uVo);
+			String userNameStr = uVo!=null?uVo.getFULLNAME():userName;
+			String salerName = PropertyUtil.getStringUTF8("info.bill.customer.saler");
+			mapRpt.put("paramUser", salerName + ": "+userNameStr);
 		}
 		mapRpt.put("format", "pdf");
 		return new ModelAndView("profitPrintIdRetail", mapRpt);
@@ -465,6 +481,7 @@ public class SaleReportController {
 		if (mapResult != null && mapResult.get("COUNT") != null) {
 			totalCount = Integer.parseInt(mapResult.get("COUNT").toString());
 		}
+		
 		JsonVO jvon = new JsonVO();
 		jvon.setSuccess(true);
 		jvon.addObject("SumObj", mapResult);

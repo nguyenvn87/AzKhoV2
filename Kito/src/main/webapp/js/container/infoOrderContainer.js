@@ -15,7 +15,7 @@ Ext.define('BS.infoOrderContainer', {
 	},
 	itemId : 'orderMainContainer',
 	// cls: 'x-box-payment',
-	// padding : '2 2 2 2',
+	 padding : '5 10 2 10',
 	initComponent : function() {
 		var me = this;
 
@@ -24,8 +24,10 @@ Ext.define('BS.infoOrderContainer', {
 					{
 						xtype : 'fieldset',
 						columnWidth : 0.5,
-						collapsible : true,
+						collapsible : false,
 						collapsed: false,
+						border: false,
+						padding: '0 5 0 0',
 						defaultType : 'textfield',
 						defaults : {
 							anchor : '100%'
@@ -108,13 +110,13 @@ Ext.define('BS.infoOrderContainer', {
 							cls : 'inline-button',
 							padding : '10 10 10 10',
 						},
-						padding : '5 5 5 5',
+						//padding : '5 5 5 5',
 						items : [ {
 							xtype : 'button',
-							iconCls : 'icon-true',
+							iconCls : 'icon-delete',
 							name : 'noprint',
-							width : 80,
-							text : 'Lưu'
+							width : 100,
+							text : 'Hủy trả'
 						},{
 							xtype : 'button',
 							iconCls : 'icon-true',

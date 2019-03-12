@@ -69,6 +69,9 @@ Ext.define('MNG.model.roomTurnModel', {
 					},{
 						name : 'IS_ORDER',
 						type : 'string'
+					},{
+						name : 'IS_RETURN',
+						type : 'string'
 					}, {
 						name : 'CUS_NM',
 						type : 'string' 

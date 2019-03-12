@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kito.madina.cmmn.util.SessionUtil;
+import com.kito.madina.logger.LogUtil;
 import com.kito.madina.test.dao.RoomSrvcDAO;
 import com.kito.madina.test.service.RoomSrvcService;
 import com.kito.madina.test.service.SrvcService;
@@ -65,6 +66,7 @@ public class RoomSrvcServiceImpl implements RoomSrvcService{
 			sVo.setAMOUNT_STORE(sVo.getAMOUNT_STORE() - fValue);
 			//srvcService.updateSrvcVO(sVo);
 			srvcService.popOutStore(sVo, fValue);
+			//srvcService.writeLogChangeStore("Out : "+fValue);
 		}
 		return i;
 	}
@@ -131,5 +133,28 @@ public class RoomSrvcServiceImpl implements RoomSrvcService{
 		String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
 		map.put("RESTAR_ID", loginRestautant);
 		return roomSrvcDAO.getCountChiTietBanHangTheoNgay(map);
+	}
+	@Override
+	public int createReturnBill(RoomSrvcVO vo, RoomTurnVO turnBuyVo) {
+		
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		java.util.Date dateCrr= new java.util.Date();
+		Timestamp eDate = new Timestamp(dateCrr.getTime());
+		vo.setCHANGETIME(eDate.toString());
+		int i = roomSrvcDAO.CreateRoomSrvcVO(vo);
+		
+		// Update store
+		SrvcVO sVo = new SrvcVO();
+		sVo.setSRVC_ID(vo.getSRVC_ID());
+		sVo.setRESTAR_ID(restarId);
+		sVo.setIS_USED(1);
+		sVo = srvcService.getSrvcVO(sVo);
+		if(turnBuyVo.getIS_RETURN() == 1 && sVo != null && vo.getAMOUNT() > 0){
+			float fValue =  vo.getAMOUNT();
+			sVo.setAMOUNT_STORE(sVo.getAMOUNT_STORE() + fValue);
+			//srvcService.popOutStore(sVo, fValue);
+			srvcService.pushInStore(sVo, fValue);
+		}
+		return i;
 	}
 }

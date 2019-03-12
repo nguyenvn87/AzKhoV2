@@ -55,6 +55,7 @@ import com.kito.madina.test.vo.RoomVO;
 import com.kito.madina.test.vo.SrvcVO;
 import com.kito.madina.test.vo.StoreSrvcVO;
 import com.kito.madina.test.vo.UserVO;
+import com.google.common.util.concurrent.ExecutionError;
 import com.kito.madina.cmmn.excel.ExcelVO;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -408,7 +409,23 @@ public class ReportController {
 		vo.setMAX(((page - 1) * limit)+limit);
 		map.put("MIN", vo.getMIN());
 		map.put("MAX", vo.getMAX());
+		
 		List<RoomTurnVO> listTurnVo= roomTurnService.getListPagingTurnStatistic(map);
+		for(RoomTurnVO voTmp: listTurnVo) {
+			String userName = voTmp.getUSER_NAME();
+			UserVO uVo = new UserVO();
+			uVo.setUSERNAME(userName);
+			if(voTmp.getIS_RETURN()==1) {
+				voTmp.setTOTAL_MONEY((-1)*voTmp.getTOTAL_MONEY());
+			}
+			try {
+				vo.setRESTAR_ID(restarId);
+				uVo = userService.getUserVo(uVo);
+				voTmp.setSALER(uVo.getFULLNAME());
+			}catch(Exception e) {
+				
+			}
+		}
 		HashMap<String, Object> mapResult = roomTurnService.getTotalStatisticCount(map);
 		int totalCount = 0;
 		if(mapResult != null && mapResult.get("COUNT") != null){

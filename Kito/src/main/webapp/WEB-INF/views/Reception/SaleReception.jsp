@@ -17,7 +17,12 @@
 						    items: [
 						        {
 						            title: 'Thanh toán',
+						            //hidden: true,
 						            items: [paymentContainer1]
+						        },
+						        {
+						            title: 'Thanh toán trả hàng',
+						            items: [orderContainer]
 						        }
 						    ],
 						});
@@ -453,86 +458,7 @@
 				                         displayInfo: true
 				                     }
 				                 ]
-	                        },{
-                        			xtype : 'container',
-                        			hidden: true,
-                        			cls: 'input-special-cls',
-                        			padding : '0 0 10 0',
-                        			layout: {
-			                            type:'hbox',
-			                            align:'stretch'
-			                        },
-			                        items:[
-											{
-												xtype : 'container',
-												flex: 1,
-												layout : {
-													align : 'stretch',
-													type : 'hbox'
-												},
-												items:[{													
-													xtype : 'component',
-													width : 40,
-													autoEl: {
-												        tag: 'img',
-												        src: contextPath+'/images/icon/minus48.png'
-												    },
-												    listeners: {
-												         el: {
-												             click: function() {
-												            	 var cpmObj = Ext.ComponentQuery.query('#menu_amount_id')[0];
-												            	 _value = parseInt(cpmObj.getValue());
-												            	 if(_value >= 1){
-												            		 cpmObj.setValue(_value - 1);
-												            	 }
-												              },
-												              scope: this
-												             }
-												     }
-												},{
-					                        		xtype : 'numberfield',
-										    	    itemId : 'menu_amount_id',
-										    	    height: 40,
-										    	    minValue: 0,
-										    	    maxValue: 9000000,
-										    	    flex: 1,
-										    	    value: 1,
-										    	    
-										    	    enableKeyEvents: true,
-													listeners:{
-														'keyup': function(field, event){
-															var myController = MANAGER.app.getController('MNG.controller.retailController');
-															myController.FilterMenu(field, event);	
-														} 
-													}
-					                        	},{													
-													xtype : 'component',
-													width : 40,
-													autoEl: {
-												        tag: 'img',
-												        src: contextPath+'/images/icon/plus48.png'
-												    },
-												    listeners: {
-												         el: {
-												             click: function() {
-												            	 var cpmObj = Ext.ComponentQuery.query('#menu_amount_id')[0];
-												            	 _value = parseInt(cpmObj.getValue())  + 1;
-												            	 cpmObj.setValue(_value);
-												              },
-												              scope: this
-												             }
-												     }
-												}]
-											},
-			                               
-				                        	{
-				                        		xtype : 'button',
-				                        		text: 'OK',
-				                        		width: 80,
-				                        		itemId : 'idSrvcSelect',
-				                        	}
-			                               ]
-                        	  },
+	                        },
                         	  customContainer,
                         	  paymentContainer
                         	  ]

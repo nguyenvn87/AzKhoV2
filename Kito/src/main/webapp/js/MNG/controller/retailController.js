@@ -43,12 +43,12 @@ Ext.define('MNG.controller.retailController', {
 			'#grid-menu-id' :{
 				itemclick: this.ClickSelectMenu
 			},
-			'#idSrvcSelect':{
-				click : this.selectMenuItem
-			},
-			'#grid-room-turn':{
-				itemdblclick: this.doubleClickTurnSrvc
-			},
+			//'#idSrvcSelect':{
+				//click : this.selectMenuItem
+			//},
+			//'#grid-room-turn':{
+				//itemdblclick: this.doubleClickTurnSrvc
+			//},
 			'#btnUpdateService':{
 				click: this.btnUpdateService
 			},
@@ -84,6 +84,9 @@ Ext.define('MNG.controller.retailController', {
 			},
 			'#btnSavePaymentOption':{
 				click: this.btnSavePaymentOption
+			},
+			'#orderMainContainer button[name=submit]':{
+				click: this.btnTraHangVeKho
 			}
 			
 		});
@@ -196,48 +199,6 @@ Ext.define('MNG.controller.retailController', {
 			});
 		}
 		parent.setPaymentInfo();
-	},
-	selectMenuItem : function(){
-		parent = this;
-		var gridTarget = Ext.ComponentQuery.query('#grid-room-turn')[0];
-		var gridTmp = Ext.ComponentQuery.query('#grid-menu-id')[0];
-		
-		if(gridTmp.getSelectionModel().hasSelection()){	
-			var amountValue = Ext.ComponentQuery.query('#menu_amount_id')[0];
-			var row = gridTmp.getSelectionModel().getSelection()[0];
-			var menuId = row.get('SRVC_ID');
-			var isExist = false;
-			gridTarget.getStore().each(function(record) {
-				if(menuId != null && menuId == record.get('SRVC_ID')){
-					isExist = true;
-				}
-			});
-			var tmpStoreResource = gridTarget.getStore();
-			var reqResoucesData = null;
-			if(!isExist){
-				tmpStoreResource.add({
-					PRICE: row.get('PRICE'),
-					AMOUNT: amountValue.getValue(),
-					TOTAL_MONEY: row.get('PRICE')*amountValue.getValue(),
-					SRVC_ID: row.get('SRVC_ID'),
-					SRVC_NM: row.get('SRVC_NM'),
-					MENU_NM: row.get('SRVC_NM'),
-				});
-			}
-			Ext.ComponentQuery.query('#menu_amount_id')[0].setValue(1);
-			parent.setPaymentInfo();
-		}
-	},
-	doubleClickTurnSrvc:function(){
-		if(popChService==null){
-			popChService = Ext.create('MNG.view.popup.BtnChangeService',{});
-		}
-		var gridTmp = Ext.ComponentQuery.query('#grid-room-turn')[0];
-		var row = gridTmp.getSelectionModel().getSelection()[0];
-		var menuId = row.get('SRVC_ID');
-		popChService.serviceId = menuId;
-		popChService.show();
-		gridSupport.selectGridPopup('#idContainerRoomSrvc','#grid-room-turn','#chgSrvcContainer');
 	},
 	btnUpdateService:function(){
 		
@@ -411,8 +372,10 @@ Ext.define('MNG.controller.retailController', {
 	    
 	    // Calculate total score
 		param['ACCUMULT'] = parent.caculateScore(tmpStoreResource);
-	    if(itemsLength > 0)
-		parent.submitRequest(param, isPrint);
+	    if(itemsLength > 0){
+	    	var url_request = contextPath + '/sale/saveSaleOrderList.json';
+	    	parent.submitRequest(param, isPrint, url_request);
+	    }
 	},
 	btnPaymentSubmit:function(){
 		var parent = this;
@@ -448,9 +411,9 @@ Ext.define('MNG.controller.retailController', {
 		Ext.ComponentQuery.query('#customerContainerId [name=CUS_CD]')[0].setValue(_cusCD);
 		btnSearchCustomer.hide();
 	},
-	submitRequest:function(param, isPrint){
+	submitRequest:function(param, isPrint, url_request){
 		parent = this;
-		url_request = contextPath + '/sale/saveSaleOrderList.json';
+		//url_request = contextPath + '/sale/saveSaleOrderList.json';
 		data = formatSupporter.formatToMoney(param['TOTAL_MONEY']);
 		
 		// Customer infomation
@@ -632,5 +595,62 @@ Ext.define('MNG.controller.retailController', {
 					, x: toadoX -550
 					, targetComponent: field});
 		btnTemplate.show();
+	},
+	/**
+	 * @author Nguyen
+	 * @description Tra hang ve kho 
+	 * 
+	 * */
+	btnTraHangVeKho:function(){
+		
+		var parent = this;
+		var param = {};
+		var timeEnd  = Ext.ComponentQuery.query('#paymentItemId [name=CHANGETIME]')[0].getValue();
+		// Get list srvc
+		var tmpStoreResource = Ext.ComponentQuery.query('#grid-room-turn')[0].getStore();
+		var itemsLength = tmpStoreResource.data.items.length;
+		paramData = Ext.encode(Ext.Array.pluck(tmpStoreResource.data.items,'data'));
+		
+		if(paymentOption!= null){
+			payData = Ext.encode(Ext.Array.pluck(paymentOption.paymethodStore.data.items,'data'));
+			param['METHOD'] = payData;
+		}
+		
+		param['DATA'] = paramData;
+		param['ROOM_ID'] = parent.roomId;
+		param['ROOM_USE_ID'] = parent.roomUseId;
+		
+		var discountValue = Ext.ComponentQuery.query('#paymentItemId [name=DISCOUNT]')[0].getValue();
+		var total = Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].getValue();
+		var paymoney = Ext.ComponentQuery.query('#paymentItemId [name=PAYED]')[0].getValue();
+		var isDeliver = Ext.ComponentQuery.query('#paymentItemId [name=IS_DELIVERED]')[0].getValue();
+		var isPayed = Ext.ComponentQuery.query('#paymentItemId [name=HAS_PAYED]')[0].getValue();
+		var cusCD = Ext.ComponentQuery.query('#customerContainerId [name=CUS_CD]')[0].getValue();
+		var cusAddr = Ext.ComponentQuery.query('#customerContainerId [name=ADDR]')[0].getValue();
+		var cusNM = Ext.ComponentQuery.query('#customerContainerId [name=NAME]')[0].getRawValue();
+		
+		// Payment params
+		param['CHANGE_DATE'] = timeEnd;
+		param['PAYED_MONEY'] = paymoney;
+		param['TOTAL_MONEY'] = total;
+		param['DISCOUNT'] 	 = discountValue!=null?discountValue:0;
+	    param['IS_DEBIT'] 	 = 1;
+	    param['HAS_PAYED'] 	 = (isPayed == true)?'1':'0';
+	    param['DSCRT'] 		 = '';
+	    
+	    // Bill info
+	    param['IS_DELIVERED'] = (isDeliver == true)?'1':'0';
+	    param['IS_ORDER'] = 1;
+	    param['BILL_CD'] = 'BILL_CD',
+	    param['CUS_CD'] = cusCD;
+	    param['CUS_NM'] = cusNM;
+	    param['DSCRT'] = cusAddr;
+	    param['PAY_METHOD'] = parent.payment.type;
+	    param['ID_BANK'] = parent.payment.bankId;
+	    
+	    if(itemsLength > 0){
+			var url_request = contextPath + '/sale/saveTraHangVeKho.json';
+	    	parent.submitRequest(param, true, url_request);
+		}
 	}
 })

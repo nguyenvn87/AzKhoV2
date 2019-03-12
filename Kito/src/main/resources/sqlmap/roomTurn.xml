@@ -33,6 +33,7 @@
 			, PAY_METHOD
 			, DISCOUNT
 			, CREATE_USER
+			, IS_RETURN
 	    FROM room_turn
 	    <dynamic prepend="WHERE">
 		   	<isNotEmpty property="ROOM_ID" prepend="AND">
@@ -83,6 +84,7 @@
 			, PAY_METHOD
 			, DISCOUNT
 			, CREATE_USER
+			, IS_RETURN
 	    FROM room_turn
 	    <dynamic prepend="WHERE">
 		   	<isNotEmpty property="ROOM_ID" prepend="AND">
@@ -131,6 +133,7 @@
 			, PAY_METHOD
 			, DISCOUNT
 			, CREATE_USER
+			, IS_RETURN
 	    	) 
 	    VALUES (
 	    	  #ROOM_ID# 
@@ -159,6 +162,7 @@
 			, #PAY_METHOD#
 			, #DISCOUNT#
 			, #CREATE_USER#
+			, #IS_RETURN#
 			)
   </insert>
   <update id="updateRoomTurnVO">
@@ -286,6 +290,7 @@
 		T.IS_ORDER,
 		T.IS_CANCELED,
 		T.PAY_METHOD,
+		T.IS_RETURN,
 		@row := @row + 1 AS rn1
 	FROM room_turn T,(SELECT @row := 0) K
 	WHERE T.RESTAR_ID = #RESTAR_ID#
@@ -315,6 +320,7 @@
 			 , T.IS_CANCELED
 			 , T.PAY_METHOD
 			 , T.DISCOUNT
+			 , T.IS_RETURN
 			 , R.room_no
 			 ,@row := @row + 1 AS rn1     
 		FROM room_turn T
