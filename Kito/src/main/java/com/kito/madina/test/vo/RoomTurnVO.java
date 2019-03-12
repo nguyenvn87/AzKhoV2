@@ -40,6 +40,8 @@ public class RoomTurnVO extends DefaultVO{
 	private String PAY_METHOD;
 	private int IS_SAMPLE;
 	private double DISCOUNT;
+	private String CREATE_USER;
+	private String SALER;
 	
 	public int getIS_CANCELED() {
 		return IS_CANCELED;
@@ -340,6 +342,18 @@ public class RoomTurnVO extends DefaultVO{
 	}
 	public void setDISCOUNT(double dISCOUNT) {
 		DISCOUNT = dISCOUNT;
+	}
+	public String getCREATE_USER() {
+		return CREATE_USER;
+	}
+	public void setCREATE_USER(String cREATE_USER) {
+		CREATE_USER = cREATE_USER;
+	}
+	public String getSALER() {
+		return SALER;
+	}
+	public void setSALER(String sALER) {
+		SALER = sALER;
 	} 
 	
 	

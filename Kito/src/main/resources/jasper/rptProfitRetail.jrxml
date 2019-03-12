@@ -97,9 +97,11 @@
 					<textFieldExpression><![CDATA[$P{paramDate}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="386" y="80" width="164" height="20" isRemoveLineWhenBlank="true" uuid="79a3ae36-aeef-4df2-942f-8755f567e1d5"/>
+					<reportElement x="349" y="80" width="201" height="20" isRemoveLineWhenBlank="true" uuid="79a3ae36-aeef-4df2-942f-8755f567e1d5"/>
 					<box rightPadding="5"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$P{paramUser}]]></textFieldExpression>
 				</textField>
 			</frame>

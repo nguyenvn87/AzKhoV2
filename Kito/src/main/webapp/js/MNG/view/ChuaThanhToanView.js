@@ -214,6 +214,7 @@ Ext
 																		{
 																			xtype : 'gridcolumn',
 																			dataIndex : 'HAS_PAYED',
+																			align: 'center',
 																			sortable : true,
 																			text : 'Thanh toán',
 																			width : 100,
@@ -229,7 +230,7 @@ Ext
 																				if (data != ''
 																						&& data == '1')
 																					return ''
-																				return 'Chưa thanh toán';
+																				return 'Chưa';
 																			}
 
 																		},
@@ -258,7 +259,7 @@ Ext
 																			sortable : true,
 																			hidden : true,
 																			text : 'Loại đơn',
-																			width : 80,
+																			width : 120,
 																			renderer : function(
 																					value,
 																					p,
@@ -277,10 +278,10 @@ Ext
 																		},
 																		{
 																			xtype : 'gridcolumn',
-																			dataIndex : 'USER_NAME',
+																			dataIndex : 'SALER',
 																			sortable : false,
-																			text : 'Người lập',
-																			width : 85
+																			text : 'Người bán',
+																			width : 120
 																		} ],
 																tbar : [
 																		{

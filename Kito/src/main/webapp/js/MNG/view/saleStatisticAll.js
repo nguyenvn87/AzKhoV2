@@ -268,7 +268,7 @@ Ext
 																		},
 																		{
 																			xtype : 'gridcolumn',
-																			dataIndex : 'USER_NAME',
+																			dataIndex : 'SALER',
 																			sortable : false,
 																			text : 'Người bán',
 																			width : 120

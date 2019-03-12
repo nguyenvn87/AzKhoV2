@@ -4,6 +4,8 @@ var srvcRoomStore = Ext.create('MNG.store.roomSrvcStore', {});
 srvcListStore.getProxy().url = contextPath + '/getSearchListMenu.json';
 var customContainer = Ext.create('BS.infoCustomerContainer', {});
 var formatSupporter = Ext.create('BIZ.utilities.formatSupporter',{});
+var useStore = Ext.create('MNG.store.userStore', {});
+useStore.load();
 Ext
 		.define(
 				'MNG.view.popup.BtnXuLyDatHang',
@@ -49,7 +51,7 @@ Ext
 																		xtype : 'combo',
 																		cls : 'input-search-cls',
 																		height : 30,
-																		width : 618,
+																		width : 628,
 																		store : srvcListStore,
 																		displayField : 'title',
 																		valueField : 'SRVC_ID',
@@ -151,16 +153,11 @@ Ext
 																					align: 'right',
 																					dataIndex : 'TOTAL_MONEY',
 																					renderer : function(value, p, r, rowIndex) {
-																						//var items = srvcRoomStore.data.items;
-																						//var totalMoney = 0;
 																						
 																						var data = r.data['TOTAL_MONEY'];
 																						money = parseFloat(r.get('AMOUNT')) * parseFloat(r.get('PRICE'));
 																						data = formatSupporter.formatToMoney(money);
 																						
-																						//for(var index = 0 ; index < items.length ; index++){
-																						//	totalMoney += (items[index].data.PRICE * items[index].data.AMOUNT);
-																						//}
 																						var totalMoney = me.getSumMoney();
 																						var remainMoney = totalMoney - me.getDiscountValue();
 																						Ext.ComponentQuery.query('#TOTAL_MONEY')[0].setValue(remainMoney);
@@ -204,7 +201,7 @@ Ext
 															xtype : 'container',
 															margin : '5 5 5 5',
 															height : 454,
-															width : 311,
+															width : 300,
 															items : [
 															         {
 																		xtype : 'fieldset',
@@ -317,13 +314,18 @@ Ext
 																	customContainer,
 																	{
 																		xtype : 'fieldset',
-																		height : 105,
+																		height : 80,
 																		itemId : 'deliveryContainerInfo',
-																		title : 'Giao hàng',
+																		//title : 'Giao hàng',
+																		layout : {
+																			type : 'vbox',
+																			align : 'stretch'
+																		},
 																		items : [
 																				{
 																					xtype : 'textareafield',
 																					anchor : '100%',
+																					hidden: true,
 																					height : 40,
 																					name : 'DSCRT',
 																					itemId: 'DSCRT',
@@ -339,6 +341,18 @@ Ext
 																					labelWidth : 110,
 																					fieldLabel : 'Đã xuất kho',
 																					boxLabel : ''
+																				},{
+																					xtype : 'combo',
+																					name : 'USERNAME',
+																					//flex: 1,
+																					fieldLabel : 'Người bán',
+																					labelWidth: 80,
+																					emptyText : 'Chọn người bán',
+																					store : useStore,
+																					displayField : 'FULLNAME',
+																					valueField : 'USERNAME',
+																					value : '',
+																					autoload : false
 																				} ]
 																	},
 																	{
@@ -510,7 +524,7 @@ Ext
 								.setValue(me.config.hasPayed);
 						Ext.ComponentQuery.query('#customerContainerId [name=CUS_CD]')[0].setValue(me.config.cusCd);
 						Ext.ComponentQuery.query('#paymentContainerInfo [name=DISCOUNT]')[0].setValue(me.config.DISCOUNT);
-						
+						me.down('[name=USERNAME]').setValue(me.config.USER_NAME);
 						var mydate = new Date(me.config.changeDate);
 						txtDate = formatSupporter.getVNDay(mydate);
 						Ext.ComponentQuery.query('#CHANGE_DATE11')[0].setValue(txtDate);
