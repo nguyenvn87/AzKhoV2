@@ -184,7 +184,7 @@ Ext.define('BS.infoPaymentContainer', {
                     items: [
                         {
                             xtype: 'button',
-                            height: 31,
+                            height: 25,
                             margin: '0 5 0 0',
                             width: 123,
                             iconCls : 'icon-true',
@@ -195,7 +195,7 @@ Ext.define('BS.infoPaymentContainer', {
                             xtype: 'button',
                             flex: 1,
                             iconCls : 'icon-true',
-                            height: 31,
+                            height: 25,
                             width: 306,
                             text: 'Lưu & In',
                             itemId : 'btnPaymentId'

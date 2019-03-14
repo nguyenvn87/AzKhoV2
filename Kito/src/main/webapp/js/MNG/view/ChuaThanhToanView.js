@@ -326,13 +326,13 @@ Ext
 																		{
 																			text : 'PDF',
 																			iconCls : 'icon-pdf',
-																			height : 35,
+																			height : 25,
 																			itemId : 'btnStatisPrint',
 																		},
 																		{
 																			text : 'Excel',
 																			iconCls : 'icon-excel',
-																			height : 35,
+																			height : 25,
 																			itemId : 'btnExportExcelPrint',
 																		} ],
 																dockedItems : [ {

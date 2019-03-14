@@ -87,6 +87,12 @@ Ext.define('MNG.controller.retailController', {
 			},
 			'#orderMainContainer button[name=submit]':{
 				click: this.btnTraHangVeKho
+			},
+			'#orderMainContainer button[action=cancel]':{
+				click: this.btnCancelTraHang
+			},
+			'#btnTraHang':{
+				click: this.btnKichHoatTraHang
 			}
 			
 		});
@@ -652,5 +658,32 @@ Ext.define('MNG.controller.retailController', {
 			var url_request = contextPath + '/sale/saveTraHangVeKho.json';
 	    	parent.submitRequest(param, true, url_request);
 		}
+	},
+	btnKichHoatTraHang: function(){
+		var parent = this;
+		parent.reloadListItem();
+		
+		var mainPanelPayment = Ext.ComponentQuery.query('#mainPanelPayment')[0];
+		if(mainPanelPayment.items.length == 0){
+			itemPayment = Ext.create('BS.infoPaymentContainer', {});
+			mainPanelPayment.insert(itemPayment);	
+			itemNew = Ext.create('BS.infoOrderContainer', {});
+			mainPanelPayment.insert(itemNew);
+		}
+		if(mainPanelPayment.items.length == 1){
+			itemNew = Ext.create('BS.infoOrderContainer', {});
+			mainPanelPayment.insert(itemNew);
+		}
+		mainPanelPayment.setActiveTab(1);
+	},
+	btnCancelTraHang: function(){
+		var parent = this;
+		parent.reloadListItem();
+		var mainPanelPayment = Ext.ComponentQuery.query('#mainPanelPayment')[0];
+		mainPanelPayment.removeAll();
+		itemNew = Ext.create('BS.infoPaymentContainer', {});
+		mainPanelPayment.insert(itemNew);
+		mainPanelPayment.doLayout();
+		mainPanelPayment.setActiveTab(0);
 	}
 })

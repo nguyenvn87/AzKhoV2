@@ -14,8 +14,9 @@ Ext.define('BS.infoOrderContainer', {
 		type : 'vbox'
 	},
 	itemId : 'orderMainContainer',
-	// cls: 'x-box-payment',
-	 padding : '5 10 2 10',
+	iconCls: 'icon-return',
+	title: 'Thanh toán trả hàng',
+	padding : '5 5 5 5',
 	initComponent : function() {
 		var me = this;
 
@@ -27,7 +28,7 @@ Ext.define('BS.infoOrderContainer', {
 						collapsible : false,
 						collapsed: false,
 						border: false,
-						padding: '0 5 0 0',
+						padding: '0 5 0 5',
 						defaultType : 'textfield',
 						defaults : {
 							anchor : '100%'
@@ -39,15 +40,14 @@ Ext.define('BS.infoOrderContainer', {
 									name : 'CHANGETIME',
 									format : 'd-m-Y H:i:s',
 									altFormats : 'Ymd',
-									fieldLabel : 'Ngày đặt',
+									fieldLabel : 'Ngày',
 									value : new Date(),
 									submitFormat : 'Y-m-d H:i:s',
 									emptyText : 'Ngày',
 									editable : false
 								},
-
 								{
-									xtype : 'numericfield',
+                                    xtype : 'numericfield',
 									anchor : '100%',
 									useThousandSeparator: true,
 									decimalPrecision: 0,
@@ -56,28 +56,33 @@ Ext.define('BS.infoOrderContainer', {
 									allowNegative: false,
 									currencySymbol:'',
 									thousandSeparator: ',',
+									name : 'DISCOUNT',
 									value : 0,
+									cls : 'input-pay-money-cls',
+									fieldLabel : "Chiết khấu",
+                                    labelWidth: 100
+                                },
+                                {
+                                    xtype : 'numericfield',
+									anchor : '100%',
+									useThousandSeparator: true,
+									decimalPrecision: 0,
+									hideTrigger:true,
+									alwaysDisplayDecimals: false,
+									allowNegative: false,
+									currencySymbol:'',
+									thousandSeparator: ',',
 									name : 'TOTAL_MONEY',
+									value : 0,
 									cls : 'input-total-money-cls',
 									fieldLabel : "Tổng tiền",
-									readOnly : true
-								},
-								{
-									xtype : 'numberfield',
-									cls : 'input-needpay-money-cls',
-									fieldLabel : "Giảm giá",
-									hidden: true,
-									value : 0,
-									listeners : {
-										change : function(object) {
-											Ext.getCmp("NEEDPAYED").setValue(
-													Ext.getCmp("TOTAL").value
-															- object.value);
-										}
-									}
-								}, {
-									xtype : 'numericfield',
-									anchor : '100%',
+									readOnly : true,
+                                    labelWidth: 100
+                                },
+                                {
+                                    xtype: 'numericfield',
+                                    fieldLabel: 'Tiền trả khách',
+                                    anchor : '100%',
 									useThousandSeparator: true,
 									decimalPrecision: 0,
 									hideTrigger:true,
@@ -85,19 +90,11 @@ Ext.define('BS.infoOrderContainer', {
 									allowNegative: false,
 									currencySymbol:'',
 									thousandSeparator: ',',
-									name : 'NEEDPAYED',
-									hidden: true,
-									fieldLabel : "Tiền cần trả",
-									cls : 'input-pay-money-cls',
-									readOnly : true,
-									value : 0
-								},{
-									xtype : 'checkbox',
-									fieldLabel : 'Ghi nợ',
-									name : 'IS_DEBIT',
-									checked : true,
-									inputValue : '1'
-								}
+                                    name: 'PAYED',
+                                    value : 0,
+									cls : 'input-total-money-cls',
+                                    labelWidth: 100
+                                }
 
 						]
 					}, {
@@ -107,20 +104,21 @@ Ext.define('BS.infoOrderContainer', {
 							type : 'hbox'
 						},
 						defaults : {
-							cls : 'inline-button',
-							padding : '10 10 10 10',
+							//cls : 'inline-button'
 						},
-						//padding : '5 5 5 5',
 						items : [ {
 							xtype : 'button',
 							iconCls : 'icon-delete',
-							name : 'noprint',
-							width : 100,
+							action : 'cancel',
+							margin: '0 5 0 0',
+							height: 25,
+							width: 100,
 							text : 'Hủy trả'
 						},{
 							xtype : 'button',
 							iconCls : 'icon-true',
 							name : 'submit',
+							height: 25,
 							text : 'Lưu & In hóa đơn',
 							flex : 1
 						} ]

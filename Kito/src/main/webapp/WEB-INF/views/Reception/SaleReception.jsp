@@ -15,13 +15,7 @@
     var paymentPanel =  Ext.create('Ext.tab.Panel', {
     						cls: 'tab-conent-cls',
     						itemId: 'mainPanelPayment',
-						    items: [
-						        //{
-						            //title: 'Thanh toán',
-						            //items: [paymentContainer1]
-						        	paymentContainer1
-						        //}
-						    ],
+						    items: [paymentContainer1]
 						});
     
         Ext.require('*');
@@ -126,14 +120,15 @@
 	                            	{
 	                					xtype : 'component',
 	                					tooltip : 'Chỉnh sửa',
+	                					hidden: true,
 	                					html : '<div><a href="#" class="myButton">Trả hàng</a></div>'
 	                				},
 	                				{
 	                                    xtype:'button',
-	                                    //hidden: true,
-	                                    iconCls : 'icon-admin',
+	                                    iconCls: 'icon-return',
 	    								itemId : 'btnTraHang',
-	    								scale: 'medium',
+	    								height: 30,
+	    								//scale: 'medium',
 	                                    text: 'Trả hàng',
 	                                }
 		                            ]
