@@ -173,6 +173,16 @@ public class CustomerController {
 						
 					}
 				}
+				// START NGUYENNV ADD NEW 190314
+				/*else if(dbVo.getIS_RETURN() == 1) {
+					listSrvc = roomSrvcService.getListRoomSrvcVOByID(dbVo.getROOM_USED_ID());
+					for(RoomSrvcVO rSVo: listSrvc){
+						SrvcVO sVo = new SrvcVO();
+						sVo.setSRVC_ID(rSVo.getSRVC_ID());
+						srvcService.popOutStore(sVo, rSVo.getAMOUNT());
+					}
+				}*/
+				// END NGUYENNV ADD NEW 190314
 				if(roomUseId != null && roomUseId.length() > 10){
 					if(listSrvc != null && listSrvc.size() > 0){
 						roomTurnService.createRoomTurnHistoryVO(dbVo);

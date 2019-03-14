@@ -16,6 +16,8 @@ Ext.define('BS.infoPaymentContainer', {
         'Ext.custom.common.NumberField'
     ],
     itemId : 'paymentItemId',
+    iconCls : 'icon-payment',
+    title: 'Thanh toán',
     layout: {
         type: 'vbox',
         align: 'stretch',

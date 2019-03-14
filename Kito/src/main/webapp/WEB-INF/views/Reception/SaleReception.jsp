@@ -12,18 +12,15 @@
     var customContainer = Ext.create('BS.infoCustomerContainer', {});
     var orderContainer = Ext.create('BS.infoOrderContainer', {});
     
-    var paymentContainer =  Ext.create('Ext.tab.Panel', {
+    var paymentPanel =  Ext.create('Ext.tab.Panel', {
     						cls: 'tab-conent-cls',
+    						itemId: 'mainPanelPayment',
 						    items: [
-						        {
-						            title: 'Thanh toán',
-						            //hidden: true,
-						            items: [paymentContainer1]
-						        },
-						        {
-						            title: 'Thanh toán trả hàng',
-						            items: [orderContainer]
-						        }
+						        //{
+						            //title: 'Thanh toán',
+						            //items: [paymentContainer1]
+						        	paymentContainer1
+						        //}
 						    ],
 						});
     
@@ -64,7 +61,7 @@
                         title: 'Chi tiết đơn hàng',
                         cls: 'toolbar-content',
                         itemId:'idContainerRoomSrvc',
-                        margin: '0 5 5 5',
+                        //margin: '0 5 5 5',
                         layout: {
                             type:'hbox',
                             align:'stretch'
@@ -75,9 +72,9 @@
                             enableOverflow: true,
                             dock: 'bottom',
                             defaults:{
-                                margin:'0 5 0 0',
+                                //margin:'0 5 0 0',
                                 pressed: false,
-                                height: 40,
+                                height: 30,
                                 allowDepress: true
                             },
                             items: [
@@ -92,29 +89,8 @@
                                     text: 'Xem tồn kho',
                                     itemId : 'btnXemTonKho',
                                     iconCls : 'icon-print'
-                                },
-                                {
-	                            	xtype:'container',
-	                            	
-	                            	flex: 1,
-	                            	layout: {
-	                                        type: 'hbox',
-	                                        pack:'end'
-	                                    },
-	                            	items:[{
-	                            	    	   xtype:'button',
-				                               text: 'Hủy',
-				                               hidden: true,
-				                               //height: 40,
-				                               iconCls : 'icon-delete',
-				                               itemId : 'btnCancel'
-	                            	       },{
-			                            	    xtype:'button',
-			                            	    hidden: true,
-						                        text: 'Tạo dữ liệu mẫu',
-						                        itemId : 'btnCreateTemplate'
-		                            	  }]
-	                            }]
+                                }
+                                ]
                         },{
                             xtype: 'toolbar',
                             cls: 'toolbar-content',
@@ -133,6 +109,7 @@
                                 iconCls : 'icon-admin',
 								itemId : 'btnPaymentDebit',
 								scale: 'medium',
+								tooltip : 'Chỉnh sửa',
                                 text: 'Quản Lý',
                                 handler:function(){
                                 	window.location.href=contextPath+"/mainStatistic.do"; 
@@ -145,12 +122,21 @@
 	                                 type: 'hbox',
 	                                 pack:'end'
 	                            },
-	                            items:[{
-	                            	    xtype:'button',
-				                        text: 'Tạo dữ liệu mẫu',
-				                        hidden: true,
-				                        itemId : 'btnCreateTemplate'
-	                            	  }]
+	                            items:[
+	                            	{
+	                					xtype : 'component',
+	                					tooltip : 'Chỉnh sửa',
+	                					html : '<div><a href="#" class="myButton">Trả hàng</a></div>'
+	                				},
+	                				{
+	                                    xtype:'button',
+	                                    //hidden: true,
+	                                    iconCls : 'icon-admin',
+	    								itemId : 'btnTraHang',
+	    								scale: 'medium',
+	                                    text: 'Trả hàng',
+	                                }
+		                            ]
 	                            }
                             ]
                         }],
@@ -460,7 +446,7 @@
 				                 ]
 	                        },
                         	  customContainer,
-                        	  paymentContainer
+                        	  paymentPanel
                         	  ]
                        }]
                       

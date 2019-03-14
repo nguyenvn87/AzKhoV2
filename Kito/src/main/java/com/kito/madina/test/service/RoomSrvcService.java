@@ -25,4 +25,5 @@ public interface RoomSrvcService {
 	public List<RoomSrvcVO> getListRoomSrvcHistoryVOByID(String roomUsedId);
 	public List<HashMap<String, Object>> getChiTietThongKeBanHangTheoNgay(HashMap<String, String> map);
 	public HashMap<String, Object> getCountChiTietBanHangTheoNgay(HashMap<String, String> map);
+	public int createReturnBill(RoomSrvcVO vo, RoomTurnVO turnBuyVo);
 }

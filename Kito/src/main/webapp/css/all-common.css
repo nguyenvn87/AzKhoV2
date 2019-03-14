@@ -41,8 +41,11 @@
 .icon-print {
   background-image:url('../images/icon/icoPrint.gif') !important;
 }
-.icon-payment {
+.icon-payment1 {
   background-image:url('../images/icon/money-icon.png') !important;
+}
+.icon-payment {
+  background-image:url('../images/icon/icon-payment.png') !important;
 }
 .icon-menu {
   background-image:url('../images/icon/details.png') !important;
@@ -83,6 +86,9 @@
 }
 .icon-true{
   	background-image:url('../images/icon/true.png') !important;
+}
+.icon-return{
+  	background-image:url('../images/icon/icon-return.png') !important;
 }
 .icon-lock{
   	background-image:url('../images/icon/icon-lock.png') !important;
