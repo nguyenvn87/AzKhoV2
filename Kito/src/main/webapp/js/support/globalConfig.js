@@ -1,3 +1,4 @@
+var PAGE_SIZE = 10;
 var RestaurantGroup = {
 		KARAOKE : 'QH100', // Quan kara
 		KARCAFE : 'QH102', // Quan cafe

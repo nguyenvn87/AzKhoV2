@@ -211,7 +211,7 @@ Ext
 																				if (data != ''
 																						&& data == '1')
 																					return ''
-																				return 'Chưa thanh toán';
+																				return 'Chưa';
 																			}
 
 																		},
@@ -259,10 +259,10 @@ Ext
 																		},
 																		{
 																			xtype : 'gridcolumn',
-																			dataIndex : 'USER_NAME',
+																			dataIndex : 'SALER',
 																			sortable : false,
-																			text : 'Người lập',
-																			width : 90
+																			text : 'Người bán',
+																			width : 110
 																		} ],
 																tbar : [
 																		{
@@ -396,7 +396,9 @@ Ext
 							totalMoney : rec.get('TOTAL_MONEY'),
 							payedMoney : rec.get('PAYED_MONEY'),
 							hasPayed : rec.get('HAS_PAYED'),
-							changeDate : rec.get('CHANGE_DATE')
+							changeDate : rec.get('CHANGE_DATE'),
+							USER_NAME : rec.get('USER_NAME'),
+							DSCRT : rec.get('DSCRT')
 						};
 						console.log('param',param);
 						myController.showCustomerInfo(param);

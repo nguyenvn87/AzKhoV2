@@ -43,6 +43,7 @@ Ext.define('ECNT.view.popup.BtnHinhThucTT', {
                         },
                         {
                             xtype: 'button',
+                            iconCls : 'icon-true',
                             text: 'OK',
                             handler: function(){
                             	me.getPaymentMethod(me);
@@ -50,6 +51,7 @@ Ext.define('ECNT.view.popup.BtnHinhThucTT', {
                         },
                         {
                             xtype: 'button',
+                            iconCls : 'icon-delete',
                             text: 'Thoát',
                             handler: function(){
                             	me.close();

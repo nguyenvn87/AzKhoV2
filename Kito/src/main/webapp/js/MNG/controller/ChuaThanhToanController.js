@@ -239,7 +239,7 @@ Ext.define('MNG.controller.ChuaThanhToanController', {
 		statisStore.getProxy().url = contextPath + '/report/getPagingStatistic.json';
 		statisStore.getProxy().extraParams = _params;
 		statisStore.currentPage = 1;
-		statisStore.pageSize=15;
+		statisStore.pageSize=PAGE_SIZE;
 		statisStore.load({
 			 callback: function (records, operation, success) {
 		        var data = Ext.JSON.decode(operation.response.responseText);

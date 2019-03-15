@@ -6,12 +6,12 @@
 <script type="text/javascript">
 var formatSupporter = Ext.create('BIZ.utilities.formatSupporter',{});
 var paramsRequest = {
-			TYPE_STATIS: null,
+			TYPE_STATIS: 'OTHER',
 			STARTDATE: null,
 			ENDDATE: null,
 			IS_CANCELED: 0,
 			//DEBIT: 'true',
-			HAS_PAYED: 0,
+			//HAS_PAYED: null,
 			USERNAME: ''
 		};
 Ext.application({

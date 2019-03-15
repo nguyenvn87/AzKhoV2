@@ -9,7 +9,7 @@ var tmpComboStore = Ext.create('MNG.store.cdUserStore',{});
 Ext.define('MNG.view.popup.BtnAddCustomer', {
 	extend : 'Ext.window.Window',
 	Height : 300,
-	width : 600,
+	width : 500,
 	y: 200,
 	title : 'Thêm mới khách hàng, thành viên',
 	maxHeight : 600,

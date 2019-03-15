@@ -42,7 +42,7 @@ Ext.define('ECNT.view.popup.BtnSetChietKhau', {
 					},
 					items : [ {
 						xtype : 'container',
-						padding: '10 10 10 10',
+						//padding: '10 10 10 10',
 						cls : 'my-btn',
 						layout : {
 							align : 'stretch',
@@ -60,16 +60,16 @@ Ext.define('ECNT.view.popup.BtnSetChietKhau', {
 				                        type: 'vbox',
 				                        align: 'stretch',
 				                        pack: 'center',
-				                        padding: '10 20 0 0'
+				                        //padding: '10 20 0 0'
 				                    },
 				                    items: [
 				                        {
 				                            xtype: 'displayfield',
 				                            flex: 1,
-				                            fieldLabel: 'TỔNG TRÊN HÓA ĐƠN',
+				                            fieldLabel: 'TỔNG TIỀN',
 				                            name: 'sum',
 				                            cls: 'sum-text-cls',
-				                            labelAlign: 'right',
+				                            labelAlign: 'center',
 				                            labelWidth: 150,
 				                            padding: 5,
 				                            value: me.displayValue
@@ -78,6 +78,7 @@ Ext.define('ECNT.view.popup.BtnSetChietKhau', {
 			                },
 			                {
 			                	xtype : 'container',
+			                	padding: '10 10 10 10',
 			                	layout : {
 									align : 'stretch',
 									type : 'hbox'

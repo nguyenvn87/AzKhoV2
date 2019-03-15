@@ -125,10 +125,10 @@
 	                				},
 	                				{
 	                                    xtype:'button',
+	                                    //hidden: true,
 	                                    iconCls: 'icon-return',
 	    								itemId : 'btnTraHang',
 	    								height: 30,
-	    								//scale: 'medium',
 	                                    text: 'Trả hàng',
 	                                }
 		                            ]

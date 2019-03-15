@@ -386,7 +386,7 @@ Ext
 						rec = store.getAt(rowIndex);
 						var isDeliver = rec.get('IS_DELIVERED');
 						var dscrt = rec.get('DSCRT');
-						console.info(rec);
+						//console.info(rec);
 						var param = {
 							name : rec.get('CUS_NM'),
 							cusCd : rec.get('CUS_CD'),
@@ -402,6 +402,7 @@ Ext
 							changeDate : rec.get('CHANGE_DATE'),
 							DISCOUNT : rec.get('DISCOUNT'),
 							USER_NAME : rec.get('USER_NAME'),
+							DSCRT : rec.get('DSCRT')
 						};
 						myController.showCustomerInfo(param);
 					}

@@ -263,7 +263,7 @@ Ext.define('MNG.controller.saleStatisticController', {
 		statisStore.getProxy().url = contextPath + '/report/getPagingStatistic.json';
 		statisStore.getProxy().extraParams = _params;
 		statisStore.currentPage = 1;
-		statisStore.pageSize=15;
+		statisStore.pageSize=PAGE_SIZE;
 		statisStore.load({
 			 callback: function (records, operation, success) {
 		        var data = Ext.JSON.decode(operation.response.responseText);
@@ -280,7 +280,6 @@ Ext.define('MNG.controller.saleStatisticController', {
 		});
 	},
 	deleteItemRecord:function(grid, rowIndex, colIndex){
-		console.info('grid');
 		store = grid.getStore();
 		var rec = store.getAt(rowIndex);
 		console.info(rec);
