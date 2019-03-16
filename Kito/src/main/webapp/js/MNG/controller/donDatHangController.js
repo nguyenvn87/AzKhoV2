@@ -108,9 +108,7 @@ Ext.define('MNG.controller.donDatHangController', {
 	},
 	btnStatisDaily: function(){
 		var today = new Date();
-		//this.startDate = formatSupporter.getTimeStempDateFormat(today);
 		arrTime = formatSupporter.getEnglishDate('TODAY');
-		//this.this.paramsRequest.TYPE_STATIS = 'OTHER';
 		this.paramsRequest.STARTDATE = arrTime[0];
 		this.paramsRequest.ENDDATE = arrTime[1];
 		console.info(this.paramsRequest);
@@ -120,8 +118,8 @@ Ext.define('MNG.controller.donDatHangController', {
 	},
 	btnStatisAllTime:function(){
 		var today = new Date();
-		this.startDate = null;//formatSupporter.getTimeStempDateFormat(today);
-		this.endDate = null;//
+		this.startDate = null;
+		this.endDate = null;
 		this.paramsRequest.TYPE_STATIS = null;
 		this.paramsRequest.STARTDATE = this.startDate;
 		this.paramsRequest.ENDDATE = this.startDate;
@@ -139,9 +137,7 @@ Ext.define('MNG.controller.donDatHangController', {
 	},
 	btnStatisMonthly:function(){
 		var today = new Date();
-		//this.startDate = formatSupporter.getTimeStempDateFormat(today);
 		arrTime = formatSupporter.getEnglishDate('MONTH');
-		//this.paramsRequest.TYPE_STATIS = 'MONTH';
 		this.paramsRequest.STARTDATE = arrTime[0];
 		this.paramsRequest.ENDDATE = arrTime[1];
 		
@@ -246,7 +242,7 @@ Ext.define('MNG.controller.donDatHangController', {
 		statisStore.getProxy().url = contextPath + '/report/getPagingStatistic.json';
 		statisStore.getProxy().extraParams = _params;
 		statisStore.currentPage = 1;
-		statisStore.pageSize=15;
+		statisStore.pageSize=PAGE_SIZE;
 		statisStore.load({
 			 callback: function (records, operation, success) {
 		        var data = Ext.JSON.decode(operation.response.responseText);
@@ -329,8 +325,7 @@ Ext.define('MNG.controller.donDatHangController', {
 		});
 	},
 	submitUpdateBill:function(params){
-		console.info('params');
-		console.info(params);
+		
 		var submitFinishUrl = contextPath + '/customer/updateBillCustomer.json';
 		supportEvent.showLoadingOnprogress('Đang cập nhật', '');
 		Ext.Ajax.request( {
@@ -423,10 +418,10 @@ Ext.define('MNG.controller.donDatHangController', {
 		valuePayed = Ext.ComponentQuery.query('#paymentContainerInfo [name=PAYED_MONEY]')[0].getValue();
 		hasPayed = Ext.ComponentQuery.query('#paymentContainerInfo [name=HAS_PAYED]')[0].getValue();
 		isDelivered = Ext.ComponentQuery.query('#deliveryContainerInfo [name=IS_DELILVER]')[0].getValue();
-		dscrt = Ext.ComponentQuery.query('#deliveryContainerInfo [name=DSCRT]')[0].getValue();
 		changeDate = Ext.ComponentQuery.query('#CHANGE_DATE11')[0].getValue();
 		discountValue = Ext.ComponentQuery.query('#paymentContainerInfo [name=DISCOUNT]')[0].getValue();
 		userName = compt.up('window').down('[name=USERNAME]').getValue();
+		dscrt = compt.up('window').down('[name=DSCRT]').getValue();
 		
 		param['DATA'] = paramData;
 		param['ROOM_USE_ID'] = btnViewDetail.config.ROOM_USED_ID;
@@ -465,7 +460,9 @@ Ext.define('MNG.controller.donDatHangController', {
 		    		btnViewDetail.hide();
 	    			var statisStore = Ext.ComponentQuery.query("#grid-srvc-statistic")[0].getStore();
 	    			statisStore.load();
+	    			//supportEvent.hiddeMessageBox();
 		    		supportEvent.showMessageSuccess('Cập nhật thành công');
+	    			//supportEvent.notiSuccess('Thông báo','Cập nhật thành công !');
 		    	},
 		    	failure: function(response){
 		    		Ext.MessageBox.alert('Status', 'Có lỗi xảy ra !');

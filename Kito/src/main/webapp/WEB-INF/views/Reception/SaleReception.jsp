@@ -4,13 +4,13 @@
 <html>
 	<head><title>Phần mềm quản lý bán hàng trực tuyến-AzKho</title></head>
     <script type="text/javascript">
+    var loggedUserId = '${loggedUserId}';
     var tmpButton =  Ext.create('LAFORM.containerCommon');
     var roomStore = Ext.create('MNG.store.roomStore',{});
     var roomComboStore = Ext.create('MNG.store.roomStore',{});
     var menuStore = Ext.create('MNG.store.menuStore', {});
     var paymentContainer1 = Ext.create('BS.infoPaymentContainer', {});
     var customContainer = Ext.create('BS.infoCustomerContainer', {});
-    var orderContainer = Ext.create('BS.infoOrderContainer', {});
     
     var paymentPanel =  Ext.create('Ext.tab.Panel', {
     						cls: 'tab-conent-cls',
@@ -310,7 +310,6 @@
                         collapsible: true,
                         split:true,
                         flex: 0.5,
-                        //minWidth : 450,
                         layout: {
                             type:'vbox',
                             padding:'2 5 5 5',
@@ -446,7 +445,9 @@
                        }]
                       
                 });
-				
+                
+                Ext.ComponentQuery.query('#grid-menu-id')[0];
+                 
 				// Load menu
 				var Grid = Ext.ComponentQuery.query('#grid-menu-id')[0];
 				var storeTmp = Grid.getStore();
@@ -461,10 +462,12 @@
 					// Init data
 					if(records.length < 1){
 						var myController = MANAGER.app.getController('MNG.controller.retailController');
-						//myController.setInitDataDefault();
 					}
 				});
 				formatSupporter.checkingTrialAccount();
+				
+				itemUser = Ext.ComponentQuery.query('#customerContainerId [name=USERNAME]')[0];
+                if(itemUser && loggedUserId != null) itemUser.setValue(loggedUserId);
             }
         });
         

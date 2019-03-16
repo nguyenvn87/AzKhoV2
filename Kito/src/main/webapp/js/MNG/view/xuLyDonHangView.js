@@ -115,10 +115,11 @@ Ext
 																					p,
 																					r) {
 																				data = r.data['TOTAL_MONEY'];
-																				if (data != '')
-																					data = formatSupporter
-																							.formatToMoney(data);
-																				return data;
+																				if (data != ''){
+																					data = formatSupporter.formatToMoney(data);
+																					if(r.data['IS_RETURN']=='1') data = '-'+data;
+																				}
+																				return '<span style="color: red">'+data+'</span>';
 																			}
 																		},
 																		{
@@ -133,10 +134,13 @@ Ext
 																					p,
 																					r) {
 																				data = r.data['PAYED_MONEY'];
-																				if (data != '')
-																					data = formatSupporter
-																							.formatToMoney(data);
-																				return data;
+																				if (data != ''){
+																					data = formatSupporter.formatToMoney(data);
+																					if(r.data['IS_RETURN']=='1'){
+																						data = '-'+data;
+																					}
+																				}
+																				return '<span style="color: green">'+data+'</span>';
 																			}
 																		},
 																		{

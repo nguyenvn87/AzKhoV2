@@ -2,10 +2,10 @@ var srvcListStore = Ext.create('MNG.store.srvcStore', {});
 var customerComboStore = Ext.create('MNG.store.customerStore');
 var srvcRoomStore = Ext.create('MNG.store.roomSrvcStore', {});
 srvcListStore.getProxy().url = contextPath + '/getSearchListMenu.json';
-var customContainer = Ext.create('BS.infoCustomerContainer', {});
+var customContainer = Ext.create('BS.infoCustomerContainer', {isShowNote: false});
 var formatSupporter = Ext.create('BIZ.utilities.formatSupporter',{});
-var useStore = Ext.create('MNG.store.userStore', {});
-useStore.load();
+/*var useStore = Ext.create('MNG.store.userStore', {});
+useStore.load();*/
 Ext
 		.define(
 				'MNG.view.popup.BtnXuLyDatHang',
@@ -314,7 +314,7 @@ Ext
 																	customContainer,
 																	{
 																		xtype : 'fieldset',
-																		height : 80,
+																		height : 40,
 																		itemId : 'deliveryContainerInfo',
 																		//title : 'Giao hàng',
 																		layout : {
@@ -322,7 +322,7 @@ Ext
 																			align : 'stretch'
 																		},
 																		items : [
-																				{
+																				/*{
 																					xtype : 'textareafield',
 																					anchor : '100%',
 																					hidden: true,
@@ -331,7 +331,7 @@ Ext
 																					itemId: 'DSCRT',
 																					labelWidth : 70,
 																					fieldLabel : 'Ghi chú'
-																				},
+																				},*/
 																				{
 																					xtype : 'checkboxfield',
 																					anchor : '100%',
@@ -341,10 +341,9 @@ Ext
 																					labelWidth : 110,
 																					fieldLabel : 'Đã xuất kho',
 																					boxLabel : ''
-																				},{
+																				}/*,{
 																					xtype : 'combo',
 																					name : 'USERNAME',
-																					//flex: 1,
 																					fieldLabel : 'Người bán',
 																					labelWidth: 80,
 																					emptyText : 'Chọn người bán',
@@ -353,7 +352,7 @@ Ext
 																					valueField : 'USERNAME',
 																					value : '',
 																					autoload : false
-																				} ]
+																				} */]
 																	},
 																	{
 																		xtype : 'container',
@@ -525,6 +524,9 @@ Ext
 						Ext.ComponentQuery.query('#customerContainerId [name=CUS_CD]')[0].setValue(me.config.cusCd);
 						Ext.ComponentQuery.query('#paymentContainerInfo [name=DISCOUNT]')[0].setValue(me.config.DISCOUNT);
 						me.down('[name=USERNAME]').setValue(me.config.USER_NAME);
+						me.down('[name=ADDR]').setValue(me.config.DSCRT);
+						me.down('[name=DSCRT]').setValue(me.config.DSCRT);
+						
 						var mydate = new Date(me.config.changeDate);
 						txtDate = formatSupporter.getVNDay(mydate);
 						Ext.ComponentQuery.query('#CHANGE_DATE11')[0].setValue(txtDate);

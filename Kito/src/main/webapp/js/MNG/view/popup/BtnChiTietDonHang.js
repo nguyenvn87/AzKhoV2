@@ -2,8 +2,9 @@ var srvcListStore = Ext.create('MNG.store.srvcStore', {});
 var customerComboStore = Ext.create('MNG.store.customerStore');
 var srvcRoomStore = Ext.create('MNG.store.roomSrvcStore', {});
 srvcListStore.getProxy().url = contextPath + '/getSearchListMenu.json';
-var customContainer = Ext.create('BS.infoCustomerContainer', {});
-
+var customContainer = Ext.create('BS.infoCustomerContainer', {isShowNote: false});
+var useStore = Ext.create('MNG.store.userStore', {});
+useStore.load();
 Ext
 		.define(
 				'MNG.view.popup.BtnChiTietDonHang',
@@ -39,12 +40,15 @@ Ext
 															xtype : 'container',
 															flex : 1,
 															margins : '5 5 5 5',
+															layout : {
+																type : 'vbox',
+																align : 'stretch'
+															},
 															items : [
 																	{
 																		xtype : 'combo',
 																		cls : 'input-search-cls',
 																		height : 30,
-																		width : 560,
 																		store : srvcListStore,
 																		displayField : 'title',
 																		valueField : 'SRVC_ID',
@@ -70,7 +74,7 @@ Ext
 																		xtype : 'gridpanel',
 																		itemId : 'gridListProductID',
 																		store : srvcRoomStore,
-																		height : 439,
+																		height : 450,
 																		plugins : [ Ext
 																				.create(
 																						'Ext.grid.plugin.CellEditing',
@@ -193,7 +197,7 @@ Ext
 															xtype : 'container',
 															margin : '5 5 5 5',
 															height : 454,
-															width : 311,
+															width : 300,
 															items : [
 																	{
 																		xtype : 'fieldset',
@@ -221,9 +225,10 @@ Ext
 																					xtype : 'checkboxfield',
 																					anchor : '100%',
 																					fieldLabel : 'Đã thanh toán',
+																					cls: 'hight-light-label',
 																					name: 'HAS_PAYED',
 																					itemId: 'HAS_PAYED',
-																					labelWidth : 70,
+																					labelWidth : 110,
 																					boxLabel : '',
 																					listeners: {
 													                                	change: function (checkbox, newVal, oldVal) {
@@ -241,28 +246,45 @@ Ext
 																	customContainer,
 																	{
 																		xtype : 'fieldset',
-																		height : 105,
+																		height : 40,
 																		itemId : 'deliveryContainerInfo',
-																		title : 'Giao hàng',
+																		//title : 'Giao hàng',
+																		layout : {
+																			type : 'vbox',
+																			align : 'stretch'
+																		},
 																		items : [
-																				{
+																				/*{
 																					xtype : 'textareafield',
 																					anchor : '100%',
 																					height : 40,
+																					hidden: true,
 																					name : 'DSCRT',
 																					itemId: 'DSCRT',
 																					labelWidth : 70,
 																					fieldLabel : 'Ghi chú'
-																				},
+																				},*/
 																				{
 																					xtype : 'checkboxfield',
 																					anchor : '100%',
+																					cls: 'hight-light-label',
 																					name : 'IS_DELILVER',
 																					itemId: 'IS_DELILVER',
-																					labelWidth : 70,
+																					labelWidth : 110,
 																					fieldLabel : 'Đã xuất kho',
 																					boxLabel : ''
-																				} ]
+																				}/*,{
+																					xtype : 'combo',
+																					name : 'USERNAME',
+																					fieldLabel : 'Người bán',
+																					labelWidth: 80,
+																					emptyText : 'Chọn người bán',
+																					store : useStore,
+																					displayField : 'FULLNAME',
+																					valueField : 'USERNAME',
+																					value : '',
+																					autoload : false
+																				} */]
 																	},
 																	{
 																		xtype : 'container',
@@ -283,10 +305,10 @@ Ext
 																					},
 																					items : [ {
 																						xtype : 'button',
-																						width : 76,
+																						width : 85,
 																						itemId : 'BtnCancelBill',
 																						iconCls : 'icon-delete',
-																						text : 'Hủy đơn'
+																						text : 'Xóa đơn'
 																					} ]
 																				},
 																				{
@@ -308,6 +330,7 @@ Ext
 																				},
 																				{
 																					xtype : 'container',
+																					//hidden: true,
 																					flex : 1,
 																					layout : {
 																						type : 'hbox',
@@ -316,7 +339,10 @@ Ext
 																					items : [ {
 																						xtype : 'button',
 																						width : 75,
-																						text : 'Cancel'
+																						text : 'Thoát',
+																						handler: function(){
+																							me.hide();
+																						}
 																					} ]
 																				} ]
 																	} ]
@@ -422,6 +448,8 @@ Ext
 						Ext.ComponentQuery
 								.query('#paymentContainerInfo #HAS_PAYED')[0]
 								.setValue(me.config.hasPayed);
-
+						me.down('[name=USERNAME]').setValue(me.config.USER_NAME);
+						me.down('[name=ADDR]').setValue(me.config.DSCRT);
+						me.down('[name=DSCRT]').setValue(me.config.DSCRT);
 					}
 				});

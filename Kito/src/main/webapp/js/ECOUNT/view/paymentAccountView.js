@@ -55,7 +55,14 @@ Ext.define('ECNT.view.paymentAccountView', {
                                          align:'left',
                                          dataIndex: 'ID_BANK',
                                          text: "Số tài khoản",
-                                         width: 150
+                                         width: 150,
+                                         renderer : function(value,p,r) {
+												data = r.data['ID_BANK'];
+												if (data == 'CASH'){
+													return 'Tiền mặt'
+												}
+												return data;
+											}
                                      },
                                      {
                                          xtype: 'gridcolumn',
@@ -63,7 +70,7 @@ Ext.define('ECNT.view.paymentAccountView', {
                                          align:'left',
                                          dataIndex: 'BANK_NM',
                                          width: 150,
-                                         text: 'Tên ngân hàng'
+                                         text: 'Tên tài khoản'
                                      },
                                      {
                                          xtype: 'gridcolumn',

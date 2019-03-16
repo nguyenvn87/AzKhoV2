@@ -4,7 +4,7 @@
   Ext.define('MNG.store.userStore', {
 	extend : 'Ext.data.Store',
 	model : 'MNG.model.userModel',
-	auLoad: false,
+	auLoad: true,
 	proxy: {
 		type: 'ajax',											
 		url: contextPath +'/getListUser.json',		

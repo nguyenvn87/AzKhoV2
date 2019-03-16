@@ -57,9 +57,6 @@ Ext.define('MNG.controller.quanLyDonHangController', {
 			'#btnSaveDebitPayment':{
 				click: this.btnSaveDebitPayment
 			},
-			'#btnStatisAllDebit':{
-				click: this.btnStatisAllDebit
-			},
 			'#BtnSaveBill':{
 				click: this.updateBillInfo
 			},
@@ -235,7 +232,7 @@ Ext.define('MNG.controller.quanLyDonHangController', {
 		statisStore.getProxy().url = contextPath + '/report/getPagingStatistic.json';
 		statisStore.getProxy().extraParams = _params;
 		statisStore.currentPage = 1;
-		statisStore.pageSize=15;
+		statisStore.pageSize=PAGE_SIZE;
 		statisStore.load({
 			 callback: function (records, operation, success) {
 		        var data = Ext.JSON.decode(operation.response.responseText);
@@ -250,9 +247,6 @@ Ext.define('MNG.controller.quanLyDonHangController', {
 		        Ext.ComponentQuery.query('#statis-debit-id')[0].setText(value3);
 		     }
 		});
-	},
-	btnStatisAllDebit:function(){
-		alert('1234');
 	},
 	getCustomerInfo:function(customerId){
 		customerId = 2;
@@ -310,11 +304,11 @@ Ext.define('MNG.controller.quanLyDonHangController', {
     	btnViewDetail.renderValue();
     	btnViewDetail.reloadListProduct(param.ROOM_USED_ID);
 	},
-	BtnCancelBill:function(){
+	BtnCancelBill:function(me){
 		var parent = this;
 		var params = {
 				IS_DELIVERED: (Ext.ComponentQuery.query('#deliveryContainerInfo [name=IS_DELILVER]')[0].getValue()==true)?1:0,
-				DSCRT: Ext.ComponentQuery.query('#deliveryContainerInfo [name=DSCRT]')[0].getValue(),
+				DSCRT: me.up('window').down('[name=DSCRT]').getValue(),
 				HAS_PAYED: (Ext.ComponentQuery.query('#paymentContainerInfo [name=HAS_PAYED]')[0].getValue()==true)?1:0,
 				ROOM_USED_ID: btnViewDetail.config.ROOM_USED_ID,
 				IS_CANCELED: 1,
@@ -395,7 +389,7 @@ Ext.define('MNG.controller.quanLyDonHangController', {
 	    		}
 			});
 	},
-	submitOrder:function(){
+	submitOrder:function(compt){
 		
 		var parent = this;
 		var param = {};
@@ -420,7 +414,9 @@ Ext.define('MNG.controller.quanLyDonHangController', {
 		valuePayed = Ext.ComponentQuery.query('#paymentContainerInfo [name=PAYED_MONEY]')[0].getValue();
 		hasPayed = Ext.ComponentQuery.query('#paymentContainerInfo [name=HAS_PAYED]')[0].getValue();
 		isDelivered = Ext.ComponentQuery.query('#deliveryContainerInfo [name=IS_DELILVER]')[0].getValue();
-		dscrt = Ext.ComponentQuery.query('#deliveryContainerInfo [name=DSCRT]')[0].getValue();
+		//dscrt = Ext.ComponentQuery.query('#deliveryContainerInfo [name=DSCRT]')[0].getValue();
+		userName = compt.up('window').down('[name=USERNAME]').getValue();
+		dscrt = compt.up('window').down('[name=DSCRT]').getValue();
 		
 		param['DATA'] = paramData;
 		param['ROOM_USE_ID'] = btnViewDetail.config.ROOM_USED_ID;
@@ -431,6 +427,7 @@ Ext.define('MNG.controller.quanLyDonHangController', {
 		param['CUS_CD'] = cusCD;
 		param['DSCRT'] = dscrt;
 		param['CUS_NM'] = cusNM;
+		param['USER_NAME'] = userName;
 		
 		parent.btnSavingRequest(param);
 	},
