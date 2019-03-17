@@ -17,7 +17,7 @@ public interface RoomTurnService {
 	public List<HashMap<String, Object>> getListMonthlyProfit(HashMap<String, Object> map);
 	public List<HashMap<String, Object>> getListDailyProfit(HashMap<String, Object> map);
 	public int deleteRoomTurnByRoomUsedId(String RoomUsedId);
-	public String generateBillCode();
+	public String generateBillCode(String preCode);
 	public String generateNewBillCode();
 	public int createRoomTurnHistoryVO(RoomTurnVO vo);
 	public List<RoomTurnVO> getDeletedBillHistory(HashMap<String, Object> map);

@@ -255,7 +255,7 @@ public class SampleController {
 		tmpRoomTurn.setCUS_NM(PropertyUtil.getStringUTF8("info.bill.customer.name"));
 		tmpRoomTurn.setTIME_STS(date.getHours()+":"+date.getMinutes());
 		tmpRoomTurn.setTIME_END((date.getHours()+2)+":"+date.getMinutes());
-		String billCD = roomTurnService.generateBillCode();
+		String billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_HOADON);
 		tmpRoomTurn.setBILL_CD(billCD);
 		tmpRoomTurn.setUSER_NAME(loggedUserId);
 		RoomVO rVo = getRandomRoom(restaurantId);

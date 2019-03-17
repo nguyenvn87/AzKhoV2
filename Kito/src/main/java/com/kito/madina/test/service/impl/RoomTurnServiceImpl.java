@@ -92,8 +92,8 @@ public class RoomTurnServiceImpl implements RoomTurnService{
 		return strCodeBill;
 	}
 	@Override
-	public String generateBillCode(){
-		String strCodeBill = "HD";
+	public String generateBillCode(String strCodeBill){
+		//String strCodeBill = "HD";
 		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
 		try{
 			HashMap<String, Object> map = new HashMap<String, Object>();

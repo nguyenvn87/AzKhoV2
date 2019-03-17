@@ -19,6 +19,7 @@ import com.kito.madina.cmmn.util.CmmUtil;
 import com.kito.madina.cmmn.util.SessionUtil;
 import com.kito.madina.cmmn.util.UtilConst;
 import com.kito.madina.ecount.service.PaymentMethodService;
+import com.kito.madina.ecount.service.PhieuChiService;
 import com.kito.madina.ecount.service.PhieuThuService;
 import com.kito.madina.ecount.vo.PaymentMethodVO;
 import com.kito.madina.test.service.CodeService;
@@ -75,6 +76,10 @@ public class SaleController {
 	@Resource(name = "phieuThuService")
 	private PhieuThuService phieuThuService;
 	
+	@Resource(name = "phieuChiService")
+	private PhieuChiService phieuChiService;
+	
+	
 	@RequestMapping("/sale/saveSaleOrderList.json")
 	public ModelAndView saveSaleServices111(HttpServletRequest req, RoomTurnVO rtVo) {
 		
@@ -93,15 +98,21 @@ public class SaleController {
 		String aCCUMULT = req.getParameter("ACCUMULT");
 		String methodList = req.getParameter("METHOD");
 		String discountMoney = req.getParameter("DISCOUNT");
+		String userName = req.getParameter("USER_NAME");
+		String isReturn = req.getParameter("IS_RETURN");
 		
 		String cusCD = req.getParameter("CUS_CD");
 		int iCusCD = (cusCD != null && !cusCD.isEmpty()) ? Integer.parseInt(cusCD):0;
 		int isDebit = (isDebitStr != null && !isDebitStr.isEmpty()) ? Integer.parseInt(isDebitStr):0;
+		int iDebit = (isDiliver != null && !isDiliver.isEmpty()) ? Integer.parseInt(isDiliver):0;
+		int iReturn = (isReturn != null && !isReturn.isEmpty()) ? Integer.parseInt(isReturn):0;
 		
 		double totalMoneyf = Double.valueOf(totalMoney);
 		double payedMoneyf = Double.valueOf(payMoney);
 		double discountValue = 0;
 		if(discountMoney != null && !discountMoney.isEmpty()) discountValue = Double.valueOf(discountMoney);
+		if(userName != null && !userName.isEmpty()) rtVo.setUSER_NAME(userName);
+		else rtVo.setUSER_NAME(loginUser);
 		
 		boolean isValid = false;
 		roomUseId = CmmUtil.getGUID();
@@ -109,15 +120,17 @@ public class SaleController {
 		rtVo.setCHANGE_DATE(timePay);
 		rtVo.setPAYED_MONEY(payedMoneyf);
 		rtVo.setTOTAL_MONEY(totalMoneyf);
-		rtVo.setUSER_NAME(loginUser);
 		rtVo.setCREATE_USER(loginUser);
-		rtVo.setIS_DELIVERED(Integer.parseInt(isDiliver));
+		rtVo.setIS_DELIVERED(iDebit);
 		rtVo.setCUS_CD(iCusCD+"");
 		rtVo.setIS_DEBIT(isDebit);
 		rtVo.setIS_ORDER(1);
 		rtVo.setSHIP_ADDR(shipAddr);
 		rtVo.setDISCOUNT(discountValue);
-		String billCD = roomTurnService.generateBillCode();
+		rtVo.setIS_RETURN(iReturn);
+		
+		String billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_HOADON);
+		if(rtVo.getIS_RETURN()==1) billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_TRAHANG);
 		rtVo.setBILL_CD(billCD);
 		roomTurnService.CreateRoomTurnVO(rtVo);
 		
@@ -149,8 +162,13 @@ public class SaleController {
 				
 				double total = vo.getAMOUNT() * vo.getPRICE();
 				vo.setTOTAL_MONEY(total);
-				
-				roomSrvcService.createAnOrder(vo, rtVo);
+				// START ADD NEW 2019/03/16
+				if(rtVo.getIS_RETURN()==1) {
+					roomSrvcService.createReturnBill(vo, rtVo);
+				}
+				else
+				// END ADD NEW 2019/03/16
+					roomSrvcService.createAnOrder(vo, rtVo);
 				jvon.setData(roomUseId);
 				jvon.setSuccess(true);
 				isValid = true;
@@ -178,7 +196,13 @@ public class SaleController {
 		if(isValid && listMethod!= null && listMethod.size() >0){
 			for(PaymentMethodVO pVo : listMethod){
 				pVo.setROOM_USED_ID(roomUseId);
-				phieuThuService.createPhieuThuPayment(rtVo, pVo);
+				// START ADD NEW 2019/03/16
+				if(rtVo.getIS_RETURN()==1) {
+					phieuChiService.createPhieuChiPayment(rtVo, pVo);
+				}
+				else
+				// END ADD NEW 2019/03/16
+					phieuThuService.createPhieuThuPayment(rtVo, pVo);
 			}
 		}
 		return new ModelAndView("jsonView", jvon);
@@ -224,7 +248,7 @@ public class SaleController {
 		if(roomUseId == null || roomUseId.isEmpty()){
 			roomUseId = CmmUtil.getGUID();
 			rtVo.setROOM_USED_ID(roomUseId);
-			String billCD = roomTurnService.generateBillCode();
+			String billCD = roomTurnService.generateBillCode("HD");
 			rtVo.setBILL_CD(billCD);
 			roomTurnService.CreateRoomTurnVO(rtVo);
 		}else {
@@ -241,6 +265,7 @@ public class SaleController {
 			dbVo.setTOTAL_MONEY(totalMoneyf);
 			dbVo.setDISCOUNT(discountMoney);
 			dbVo.setCUS_NM(rtVo.getCUS_NM());
+			if(rtVo.getUSER_NAME()!=null && !rtVo.getUSER_NAME().isEmpty()) dbVo.setUSER_NAME(rtVo.getUSER_NAME());
 			
 			if(rtVo.getUSER_NAME()!=null && !rtVo.getUSER_NAME().isEmpty()) dbVo.setUSER_NAME(rtVo.getUSER_NAME());
 			if(rtVo.getCHANGE_DATE() != null && !rtVo.getCHANGE_DATE().isEmpty())
@@ -507,6 +532,7 @@ public class SaleController {
 		String cusCD = req.getParameter("CUS_CD");
 		int iCusCD = (cusCD != null && !cusCD.isEmpty()) ? Integer.parseInt(cusCD):0;
 		int isDebit = (isDebitStr != null && !isDebitStr.isEmpty()) ? Integer.parseInt(isDebitStr):0;
+		int iDiliver = (isDiliver != null && !isDiliver.isEmpty()) ? Integer.parseInt(isDiliver):0;
 		
 		double totalMoneyf = Double.valueOf(totalMoney);
 		double payedMoneyf = Double.valueOf(payMoney);
@@ -521,13 +547,13 @@ public class SaleController {
 		rtVo.setTOTAL_MONEY(totalMoneyf);
 		rtVo.setUSER_NAME(loginUser);
 		rtVo.setCREATE_USER(loginUser);
-		rtVo.setIS_DELIVERED(Integer.parseInt(isDiliver));
+		rtVo.setIS_DELIVERED(iDiliver);
 		rtVo.setCUS_CD(iCusCD+"");
 		rtVo.setIS_DEBIT(isDebit);
 		rtVo.setIS_ORDER(1);
 		rtVo.setSHIP_ADDR(shipAddr);
 		rtVo.setDISCOUNT(discountValue);
-		String billCD = roomTurnService.generateBillCode();
+		String billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_TRAHANG);
 		rtVo.setBILL_CD(billCD);
 		rtVo.setIS_RETURN(1);
 		roomTurnService.CreateRoomTurnVO(rtVo);
@@ -569,7 +595,7 @@ public class SaleController {
 		if(isValid && listMethod!= null && listMethod.size() >0){
 			for(PaymentMethodVO pVo : listMethod){
 				pVo.setROOM_USED_ID(roomUseId);
-				phieuThuService.createPhieuThuPayment(rtVo, pVo);
+				phieuChiService.createPhieuChiPayment(rtVo, pVo);
 			}
 		}
 		return new ModelAndView("jsonView", jvon);

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.kito.madina.cmmn.util.CmmUtil;
 import com.kito.madina.cmmn.util.SessionUtil;
 import com.kito.madina.cmmn.util.UtilConst;
+import com.kito.madina.logger.LogUtil;
 import com.kito.madina.test.dao.SrvcDAO;
 import com.kito.madina.test.dao.UserDAO;
 import com.kito.madina.test.service.CodeService;
@@ -160,6 +161,7 @@ public class SrvcServiceImpl implements SrvcService{
 			}
 			// END ADD NEW 2018/11/22
 			this.updateStatusStore(storeVo);
+			//this.writeLogChangeStore("IN: TenHang: "+vo.getSRVC_NM()+"(MaHang: "+vo.getSRVC_CD()+")"+ "| SL:" + value);
 		}
 		return true;
 	}
@@ -182,6 +184,7 @@ public class SrvcServiceImpl implements SrvcService{
 				storeVo.setPRICE_IMPORT(price);
 			}
 			this.updateStatusStore(storeVo);
+			//this.writeLogChangeStore("OUT: TenHang: "+storeVo.getSRVC_NM()+"(MaHang: "+storeVo.getSRVC_CD()+")"+ "| SL:" + value);
 		}
 		return true;
 	}
@@ -251,5 +254,19 @@ public class SrvcServiceImpl implements SrvcService{
 	@Override
 	public HashMap<String, Object> getValueInStore(SrvcVO vo){
 		return srvcDao.getValueInStore(vo);
+	}
+	@Override
+	public void writeLogChangeStore(String content) {
+		//try{
+			
+			//String realPath = request.getServletContext().getRealPath("/");
+		    //System.out.println(realPath);
+		    
+		//	String defaultLogFile = "C:/Users/Nguyen/Documents/msglog.txt";
+		//	LogUtil.writeLog(defaultLogFile, content);
+		//}
+		//catch(Exception e) {
+		//	System.out.println("Khong tim thay file log !");
+		//}
 	}
 }
