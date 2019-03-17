@@ -176,6 +176,16 @@
 	background-image:url('../images/icon/user.png') !important;
 	border-style: hidden;
 }
+.scaner-on{
+	background-color: #f1f4f7;
+	background-image:url('../images/icon/scanner_on.png') !important;
+	border-style: hidden;
+}
+.scaner-off{
+	background-color: #f1f4f7;
+	background-image:url('../images/icon/scanner_off.png') !important;
+	border-style: hidden;
+}
 .addmore{
 	background-color: #f1f4f7;
 	background-image:url('../images/icon/add.png') !important;

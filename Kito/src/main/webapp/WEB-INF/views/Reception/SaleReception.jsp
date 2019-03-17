@@ -117,15 +117,9 @@
 	                                 pack:'end'
 	                            },
 	                            items:[
-	                            	{
-	                					xtype : 'component',
-	                					tooltip : 'Chỉnh sửa',
-	                					hidden: true,
-	                					html : '<div><a href="#" class="myButton">Trả hàng</a></div>'
-	                				},
 	                				{
 	                                    xtype:'button',
-	                                    //hidden: true,
+	                                    hidden: true,
 	                                    iconCls: 'icon-return',
 	    								itemId : 'btnTraHang',
 	    								height: 30,
@@ -339,6 +333,13 @@
 												},
 									    	    emptyText : 'Tìm kiếm...'
 				                        	},
+				                        	{
+												xtype : 'button',
+												width: 20,
+												cls: 'scaner-off',
+												action: 'scanner',
+												tooltip : 'Sử dụng máy quét mã vạch'
+											} ,
 				                        	{
 				                        		xtype : 'button',
 				                        		hidden: true,

@@ -21,6 +21,8 @@ Ext.define('MNG.controller.retailController', {
 	hasPayed: false,
 	totalMoneyValue: 0,
 	payedMoney: 0,
+	barcodeNumber: "",
+	scannerOn: false, 
 	payment:{
 		type: PaymentTypeGroup.CASH,
 		bankId: ''
@@ -36,6 +38,9 @@ Ext.define('MNG.controller.retailController', {
 			'#paymentItemId [name=DISCOUNT]' : {
 				change: this.ChangeDiscountValue,
 				focus: this.BlurDiscount
+			},
+			'#orderMainContainer [name=DISCOUNT]' : {
+				change: this.ChangeDiscountValue
 			},
 			'#grid-menu-id' :{
 				itemdblclick: this.doubleClickSelectMenu
@@ -61,9 +66,9 @@ Ext.define('MNG.controller.retailController', {
 			'#btnFindCustomer':{
 				click: this.btnFindCustomer
 			},
-			'#btnAddCustomer':{
+			/*'#btnAddCustomer':{
 				click: this.btnAddCustomer
-			},
+			},*/
 			'#btnPaymentId':{
 				click: this.btnPaymentSubmit
 			},
@@ -93,7 +98,11 @@ Ext.define('MNG.controller.retailController', {
 			},
 			'#btnTraHang':{
 				click: this.btnKichHoatTraHang
-			}
+			},
+			'button[action=scanner]':{
+				click: this.btnOnOffScanner,
+				afterrender: this.activeBarcodeScanner
+			},
 			
 		});
 	},
@@ -356,6 +365,7 @@ Ext.define('MNG.controller.retailController', {
 		var cusCD = Ext.ComponentQuery.query('#customerContainerId [name=CUS_CD]')[0].getValue();
 		var cusAddr = Ext.ComponentQuery.query('#customerContainerId [name=ADDR]')[0].getValue();
 		var cusNM = Ext.ComponentQuery.query('#customerContainerId [name=NAME]')[0].getRawValue();
+		var userName = Ext.ComponentQuery.query('#customerContainerId [name=USERNAME]')[0].getValue();
 		
 		// Payment params
 		param['CHANGE_DATE'] = timeEnd;
@@ -375,12 +385,13 @@ Ext.define('MNG.controller.retailController', {
 	    param['DSCRT'] = cusAddr;
 	    param['PAY_METHOD'] = parent.payment.type;
 	    param['ID_BANK'] = parent.payment.bankId;
+	    param['USER_NAME'] = userName;
 	    
 	    // Calculate total score
 		param['ACCUMULT'] = parent.caculateScore(tmpStoreResource);
 	    if(itemsLength > 0){
 	    	var url_request = contextPath + '/sale/saveSaleOrderList.json';
-	    	parent.submitRequest(param, isPrint, url_request);
+	    	parent.submitRequest(param, isPrint, 0);
 	    }
 	},
 	btnPaymentSubmit:function(){
@@ -417,9 +428,11 @@ Ext.define('MNG.controller.retailController', {
 		Ext.ComponentQuery.query('#customerContainerId [name=CUS_CD]')[0].setValue(_cusCD);
 		btnSearchCustomer.hide();
 	},
-	submitRequest:function(param, isPrint, url_request){
+	submitRequest:function(param, isPrint, isCancel){
 		parent = this;
-		//url_request = contextPath + '/sale/saveSaleOrderList.json';
+		var url_request = contextPath + '/sale/saveSaleOrderList.json';
+		//if(isCancel == 1) url_request = contextPath + '/sale/saveTraHangVeKho.json';
+		
 		data = formatSupporter.formatToMoney(param['TOTAL_MONEY']);
 		
 		// Customer infomation
@@ -436,7 +449,7 @@ Ext.define('MNG.controller.retailController', {
 			  text: '<span style="color:#d40e0e;font-weight: bold;">'
 			  		+ data + 'đ</span>' 
 			  		+ '<br> Khách hàng: <span style="color:#1a9bd0;font-weight: bold;">'+ customerNM+'</span>'
-			  		+ customerScoreInfo
+			  		//+ customerScoreInfo
 			  		//+ '<br> Giao dịch: <span style="color:#1a9bd0;font-weight: bold;">'+ paymentOption.paymentOption.text+'</span>'
 			  		+ '<br> Ghi chú: <span style="color:#1a9bd0">'+ param['DSCRT']+'</span>',
 			  type: "warning",
@@ -471,6 +484,10 @@ Ext.define('MNG.controller.retailController', {
 			    		Ext.ComponentQuery.query('#paymentItemId [name=IS_DELIVERED]')[0].setValue('0');
 			    		Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].setValue(0);
 			    		Ext.ComponentQuery.query('#paymentItemId [name=DISCOUNT]')[0].setValue(0);
+			    		Ext.ComponentQuery.query('#paymentItemId [name=PAYED]')[0].setValue(0);
+			    		if(isCancel==1){
+			    			parent.btnCancelTraHang();
+			    		}
 			    	},
 			    	failure: function(response){
 			    		supportEvent.hiddeMessageBox();
@@ -483,7 +500,8 @@ Ext.define('MNG.controller.retailController', {
 		
 		Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].setValue(valueTotal);
 		
-		Ext.ComponentQuery.query('#orderMainContainer [name=TOTAL_MONEY]')[0].setValue(valueTotal);
+		trahangContainer = Ext.ComponentQuery.query('#orderMainContainer')[0];
+		if(trahangContainer) trahangContainer.down('[name=TOTAL_MONEY]').setValue(valueTotal);
 	},
 	getTotalSumvalue: function(){
 		
@@ -495,13 +513,15 @@ Ext.define('MNG.controller.retailController', {
 		parent = this;
 		var valueTotal = parent.getTotalSumvalue();
 		var value = Ext.util.Format.number(valueTotal, '0,')
-		
 		Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].setValue(valueTotal);
-		Ext.ComponentQuery.query('#orderMainContainer [name=TOTAL_MONEY]')[0].setValue(valueTotal);
+		trahangContainer = Ext.ComponentQuery.query('#orderMainContainer')[0];
+		if(trahangContainer) trahangContainer.down('[name=TOTAL_MONEY]').setValue(valueTotal);
 	},
 	setSumValueHaveToPay: function(valueTotal){
 		
 		Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].setValue(valueTotal);
+		trahangContainer = Ext.ComponentQuery.query('#orderMainContainer')[0];
+		if(trahangContainer) trahangContainer.down('[name=TOTAL_MONEY]').setValue(valueTotal);
 	},
 	caculateScore: function(_store){
 		var _value = 0;
@@ -514,6 +534,9 @@ Ext.define('MNG.controller.retailController', {
 		return _value;
 	},
 	selectPaymentOption: function(){
+		var ScreenXY = Ext.getBody().getViewSize();
+		var toadoY = ScreenXY.height;
+		var toadoX = ScreenXY.width;
 		
 		paymentOption = Ext.ComponentQuery.query('#addPaymentPopup')[0];
 		var _havePayValue = Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].getValue();
@@ -521,8 +544,11 @@ Ext.define('MNG.controller.retailController', {
 		var _customerPayValue = Ext.ComponentQuery.query('#paymentItemId [name=PAYED]')[0].getValue();
 		if(paymentOption != null) paymentOption.close();
 		var totalValue = formatSupporter.formatToMoney(_havePayValue);
-		paymentOption = Ext.create('ECNT.view.popup.BtnHinhThucTT',{totalValue: totalValue
+		paymentOption = Ext.create('ECNT.view.popup.BtnHinhThucTT'
+							,{totalValue: totalValue
 							, customerPayValue: _customerPayValue
+							, y: toadoY - 310
+							, x: toadoX - 540
 							, targetComponent: targetComponent});
 		paymentOption.show();
 	},
@@ -607,7 +633,7 @@ Ext.define('MNG.controller.retailController', {
 	 * @description Tra hang ve kho 
 	 * 
 	 * */
-	btnTraHangVeKho:function(){
+	btnTraHangVeKho:function(field){
 		
 		var parent = this;
 		var param = {};
@@ -626,14 +652,13 @@ Ext.define('MNG.controller.retailController', {
 		param['ROOM_ID'] = parent.roomId;
 		param['ROOM_USE_ID'] = parent.roomUseId;
 		
-		var discountValue = Ext.ComponentQuery.query('#paymentItemId [name=DISCOUNT]')[0].getValue();
-		var total = Ext.ComponentQuery.query('#paymentItemId [name=TOTAL_MONEY]')[0].getValue();
-		var paymoney = Ext.ComponentQuery.query('#paymentItemId [name=PAYED]')[0].getValue();
-		var isDeliver = Ext.ComponentQuery.query('#paymentItemId [name=IS_DELIVERED]')[0].getValue();
-		var isPayed = Ext.ComponentQuery.query('#paymentItemId [name=HAS_PAYED]')[0].getValue();
+		var discountValue = field.up('#orderMainContainer').down('[name=DISCOUNT]').getValue();
+		var total = field.up('#orderMainContainer').down('[name=TOTAL_MONEY]').getValue();
+		var paymoney = field.up('#orderMainContainer').down('[name=PAYED]').getValue();
 		var cusCD = Ext.ComponentQuery.query('#customerContainerId [name=CUS_CD]')[0].getValue();
 		var cusAddr = Ext.ComponentQuery.query('#customerContainerId [name=ADDR]')[0].getValue();
 		var cusNM = Ext.ComponentQuery.query('#customerContainerId [name=NAME]')[0].getRawValue();
+		var userName = Ext.ComponentQuery.query('#customerContainerId [name=USERNAME]')[0].getValue();
 		
 		// Payment params
 		param['CHANGE_DATE'] = timeEnd;
@@ -641,11 +666,9 @@ Ext.define('MNG.controller.retailController', {
 		param['TOTAL_MONEY'] = total;
 		param['DISCOUNT'] 	 = discountValue!=null?discountValue:0;
 	    param['IS_DEBIT'] 	 = 1;
-	    param['HAS_PAYED'] 	 = (isPayed == true)?'1':'0';
 	    param['DSCRT'] 		 = '';
 	    
 	    // Bill info
-	    param['IS_DELIVERED'] = (isDeliver == true)?'1':'0';
 	    param['IS_ORDER'] = 1;
 	    param['BILL_CD'] = 'BILL_CD',
 	    param['CUS_CD'] = cusCD;
@@ -653,10 +676,14 @@ Ext.define('MNG.controller.retailController', {
 	    param['DSCRT'] = cusAddr;
 	    param['PAY_METHOD'] = parent.payment.type;
 	    param['ID_BANK'] = parent.payment.bankId;
+	    param['USER_NAME'] = userName;
+	    param['IS_RETURN'] = 1;
 	    
 	    if(itemsLength > 0){
-			var url_request = contextPath + '/sale/saveTraHangVeKho.json';
-	    	parent.submitRequest(param, true, url_request);
+			//var url_request = contextPath + '/sale/saveTraHangVeKho.json';
+			//var url_request = contextPath + '/rest/saveSaleOrderList';
+			
+	    	parent.submitRequest(param, true, 1);
 		}
 	},
 	btnKichHoatTraHang: function(){
@@ -685,5 +712,43 @@ Ext.define('MNG.controller.retailController', {
 		mainPanelPayment.insert(itemNew);
 		mainPanelPayment.doLayout();
 		mainPanelPayment.setActiveTab(0);
+	},
+	btnOnOffScanner: function(field){
+		var parent = this;
+		if(parent.scannerOn){ 
+			field.removeCls('scaner-on');
+			field.addCls('scaner-off');
+		}
+		else {
+			field.removeCls('scaner-off');
+			field.addCls('scaner-on');
+		}
+		parent.scannerOn = !parent.scannerOn;
+	},
+	activeBarcodeScanner:function(){
+		var parent = this;
+		elementDoc = Ext.getDoc();
+		elementDoc.addListener('keydown', function(e, t) {
+			if(e.keyCode == e.S && e.shiftKey){
+				parent.barcodeNumber = '';
+				Ext.ComponentQuery.query('#SRVC_NM')[0].setValue('');
+			}else{
+				Str = '';
+				if(e.keyCode == 16) Str = 'S';
+				else Str = String.fromCharCode(e.keyCode).toUpperCase();
+				if(parent.scannerOn){
+					parent.barcodeNumber = parent.barcodeNumber + Str;
+				}
+			}
+			});
+		elementDoc.addListener('keyup', function(e, t) {
+			if(parent.barcodeNumber.length > 0 && e.keyCode == e.ENTER){
+				if(parent.scannerOn){
+					Ext.ComponentQuery.query('#SRVC_NM')[0].setValue(parent.barcodeNumber);
+					parent.barcodeNumber = '';
+				}
+			}
+		});
+		
 	}
 })
