@@ -42,6 +42,8 @@ public class UtilConst {
 	
 	public static String ECOUNT_CODE_PREFIX_THU = "TH";
 	public static String ECOUNT_CODE_PREFIX_CHI = "CH";
+	public static String ECOUNT_PREFIX_HOADON 	= "HD";
+	public static String ECOUNT_PREFIX_TRAHANG 	= "TH";
 	
 	public static String ECOUNT_CODE_AUTO = "AUTO";
 	

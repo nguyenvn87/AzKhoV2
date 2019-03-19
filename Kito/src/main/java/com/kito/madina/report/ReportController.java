@@ -415,9 +415,6 @@ public class ReportController {
 			String userName = voTmp.getUSER_NAME();
 			UserVO uVo = new UserVO();
 			uVo.setUSERNAME(userName);
-			if(voTmp.getIS_RETURN()==1) {
-				voTmp.setTOTAL_MONEY((-1)*voTmp.getTOTAL_MONEY());
-			}
 			try {
 				vo.setRESTAR_ID(restarId);
 				uVo = userService.getUserVo(uVo);

@@ -72,7 +72,6 @@ public class CustomerRestController {
 				int	page 	=  vo.getPage() != null?Integer.parseInt(vo.getPage()): 1;
 				vo.setMIN((page -1)*limit);
 				vo.setMAX(((page-1)*limit) + limit);
-				System.out.println("getListCDUser");
 				
 				List<CustomerVO> list = customerService.getSearchListAllCustomer(vo);
 				HashMap<String, Object> map = customerService.getListCountSearchCustomer(vo);
@@ -85,5 +84,27 @@ public class CustomerRestController {
 				jvon.setTotalCount(totalCount);
 				jvon.setSuccess(true);
 				return new ModelAndView("jsonView", jvon);
+	}
+	@RequestMapping(value = "/createCustomer.json", method = RequestMethod.POST)
+	public ModelAndView createCDUser(HttpServletRequest req, CustomerVO vo) {
+		
+		String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		String loginUser = SessionUtil.getSessionAttribute("loggedUserId").toString();
+		JsonVO jvon = new JsonVO();
+		vo.setRESTAR_ID(loginRestautant);
+		vo.setCHANGE_USER(loginUser);
+		
+		try {
+			if(vo.getCUS_CD() > 0) customerService.updateCustomerVO(vo);
+			else{
+				int cusCD = customerService.createCustomerVO(vo);
+				vo.setCUS_CD(cusCD);
+				jvon.setData(vo);
+			}
+			jvon.setSuccess(true);
+		}catch(Exception e) {
+			jvon.setSuccess(false);
+		}
+		return new ModelAndView("jsonView", jvon);
 	}
 }

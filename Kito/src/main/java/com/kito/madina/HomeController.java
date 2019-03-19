@@ -234,7 +234,7 @@ public class HomeController {
 		if(objRes != null){
 			loginRestautant = objRes.toString();
 		}
-		
+		model.addAttribute("loggedUserId", loginUser);
 		if(loginUser != null && !loginUser.isEmpty()){
 			
 			RestaurantVO rVo = restaurantService.getRestaurantVOByID(loginRestautant) ;

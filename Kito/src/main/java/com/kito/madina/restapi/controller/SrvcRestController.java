@@ -129,8 +129,8 @@ public class SrvcRestController {
 	}
 	/* ---------------- Save bill info ------------------------ */
 	@RequestMapping(value="/saveSaleOrderList", method = RequestMethod.POST)
-	public JsonVO saveSaleServices111(HttpServletRequest req, RoomTurnVO rtVo, @RequestParam(value="DATA", required = false) List<RoomSrvcVO> listData) {
-		
+	//public JsonVO saveSaleServices111(HttpServletRequest req, @RequestParam("DATA") List<RoomSrvcVO> listData) {
+	public JsonVO saveSaleServices111(HttpServletRequest req) {	
 		JsonVO jvon = new JsonVO();
 		String loginUser = SessionUtil.getSessionAttribute("loggedUserId").toString();
 		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
@@ -146,10 +146,13 @@ public class SrvcRestController {
 		String aCCUMULT = req.getParameter("ACCUMULT");
 		String methodList = req.getParameter("METHOD");
 		String discountMoney = req.getParameter("DISCOUNT");
+		String isReturn = req.getParameter("IS_RETURN");
 		
 		String cusCD = req.getParameter("CUS_CD");
 		int iCusCD = (cusCD != null && !cusCD.isEmpty()) ? Integer.parseInt(cusCD):0;
 		int isDebit = (isDebitStr != null && !isDebitStr.isEmpty()) ? Integer.parseInt(isDebitStr):0;
+		int iReturn = (isReturn != null && !isReturn.isEmpty() && isReturn.equalsIgnoreCase("1")) ? 1:0;
+		int iDiliver = (isDiliver != null && !isDiliver.isEmpty()) ? Integer.parseInt(isDiliver):0;
 		
 		double totalMoneyf = Double.valueOf(totalMoney);
 		double payedMoneyf = Double.valueOf(payMoney);
@@ -158,19 +161,25 @@ public class SrvcRestController {
 		
 		boolean isValid = false;
 		roomUseId = CmmUtil.getGUID();
+		RoomTurnVO rtVo = new RoomTurnVO();
+		
 		rtVo.setROOM_USED_ID(roomUseId);
 		rtVo.setCHANGE_DATE(timePay);
 		rtVo.setPAYED_MONEY(payedMoneyf);
 		rtVo.setTOTAL_MONEY(totalMoneyf);
 		rtVo.setUSER_NAME(loginUser);
-		rtVo.setIS_DELIVERED(Integer.parseInt(isDiliver));
+		rtVo.setIS_DELIVERED(iDiliver);
 		rtVo.setCUS_CD(iCusCD+"");
 		rtVo.setIS_DEBIT(isDebit);
 		rtVo.setIS_ORDER(1);
 		rtVo.setSHIP_ADDR(shipAddr);
 		rtVo.setDISCOUNT(discountValue);
-		String billCD = roomTurnService.generateBillCode();
+		rtVo.setIS_RETURN(iReturn);
+		
+		String billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_HOADON);
+		if(rtVo.getIS_RETURN()==1) billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_TRAHANG);
 		rtVo.setBILL_CD(billCD);
+		
 		roomTurnService.CreateRoomTurnVO(rtVo);
 		
 		// Save payment method
@@ -202,29 +211,13 @@ public class SrvcRestController {
 				double total = vo.getAMOUNT() * vo.getPRICE();
 				vo.setTOTAL_MONEY(total);
 				
-				roomSrvcService.createAnOrder(vo, rtVo);
+				if(rtVo.getIS_RETURN()==1) {
+					roomSrvcService.createReturnBill(vo, rtVo);
+				}
+				else roomSrvcService.createAnOrder(vo, rtVo);
 				jvon.setData(roomUseId);
 				jvon.setSuccess(true);
 				isValid = true;
-			}
-			
-			// Update customer's score
-			if(iCusCD != 0){
-				try{
-					CustomerVO cVO = new CustomerVO();
-					cVO.setCUS_CD(iCusCD);
-					cVO.setRESTAR_ID(restarId);
-					cVO = customerService.getCustomerVOByVo(cVO);
-					
-					if(cVO != null){
-						String _value = (aCCUMULT!=null)?aCCUMULT:"0";
-						cVO.setACCUMULT(_value);
-						customerService.updateCustomerVO(cVO);
-					}
-				}
-				catch(Exception e){
-					System.out.print("Error when update score");
-				}
 			}
 		}
 		if(isValid && listMethod!= null && listMethod.size() >0){

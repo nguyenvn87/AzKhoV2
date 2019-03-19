@@ -248,7 +248,7 @@ public class SaleController {
 		if(roomUseId == null || roomUseId.isEmpty()){
 			roomUseId = CmmUtil.getGUID();
 			rtVo.setROOM_USED_ID(roomUseId);
-			String billCD = roomTurnService.generateBillCode("HD");
+			String billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_HOADON);
 			rtVo.setBILL_CD(billCD);
 			roomTurnService.CreateRoomTurnVO(rtVo);
 		}else {

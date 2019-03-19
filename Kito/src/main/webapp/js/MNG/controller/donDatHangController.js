@@ -313,7 +313,6 @@ Ext.define('MNG.controller.donDatHangController', {
 		var parent = this;
 		var params = {
 				IS_DELIVERED: (Ext.ComponentQuery.query('#deliveryContainerInfo [name=IS_DELILVER]')[0].getValue()==true)?1:0,
-				DSCRT: Ext.ComponentQuery.query('#deliveryContainerInfo [name=DSCRT]')[0].getValue(),
 				HAS_PAYED: (Ext.ComponentQuery.query('#paymentContainerInfo [name=HAS_PAYED]')[0].getValue()==true)?1:0,
 				ROOM_USED_ID: btnViewDetail.config.ROOM_USED_ID,
 				IS_CANCELED: 1,

@@ -980,7 +980,7 @@ public class SaleReportController {
 		if (endDateParam != null && !endDateParam.isEmpty()) map.put("ENDDATE", endDateParam);
 		if (hasPayed != null && hasPayed.equalsIgnoreCase("1")) map.put("HAS_PAYED", 1);
 		if (hasPayed != null && hasPayed.equalsIgnoreCase("0")) map.put("HAS_PAYED", 0);
-		
+		if (userName != null && !userName.isEmpty()) map.put("USER_NAME", userName);
 		map.put("RESTAR_ID", restarId);
 			
 		List<RoomTurnVO> listTurnVo = roomTurnService.getListTurnStatistic(map);
