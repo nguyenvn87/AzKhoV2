@@ -75,5 +75,8 @@ Ext.define('MNG.model.srvcModel', {
 					,{
 						name : 'HIS_NOTE',
 						type : 'string' }
+					,{
+						name : 'IS_SERVICE',
+						type : 'string' }
 					]
 		});

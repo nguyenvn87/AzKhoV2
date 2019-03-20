@@ -82,7 +82,16 @@ Ext.define('MNG.view.popup.BtnAddCustomer', {
 											emptyText : 'Nhập địa chỉ'
 										},
 										{
+		                                    xtype: 'checkboxfield',
+		                                    fieldLabel: '',
+		                                    boxLabel: 'Khách thân thiết',
+		                                    name: 'IS_FAVORITE',
+		                                    checked : false,
+		                                    inputValue : '1'
+		                                },
+										{
 											xtype : 'numberfield',
+											hidden: true,
 											fieldLabel: 'Điểm',
 											name:'SCORE',
 											height: 30,
@@ -142,11 +151,14 @@ Ext.define('MNG.view.popup.BtnAddCustomer', {
 		phone = field.up('window').down('#PHONE').getValue();
 		email = field.up('window').down('#EMAIL').getValue();
 		addr = field.up('window').down('#ADDR').getValue();
+		isFavorite = field.up('window').down('[name=IS_FAVORITE]').getValue();
+		
 		var params = {
 				NAME: name,
 				PHONE: phone,
 				EMAIL: email,
-				ADDR: addr
+				ADDR: addr,
+				IS_FAVORITE: isFavorite==true?1:0
 		};
 		this.submitRequest(params);
 	},

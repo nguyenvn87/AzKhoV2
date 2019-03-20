@@ -19,6 +19,7 @@
 				, IS_DEFAULT
 				, PRICE
 				, DISCOUNT
+				, IS_SERVICE
 	    FROM srvc
 	    <dynamic prepend="WHERE">
 		   	<isNotEmpty property="RESTAR_ID" prepend="AND">
@@ -62,6 +63,7 @@
 				, M.ACCUMULT
 				, M.AMOUNT_STORE
 				, M.REASON
+				, M.IS_SERVICE
 				, R.CD_NM as TYPE_NM
 	    FROM srvc M
 	    LEFT JOIN cmm_cd  R
@@ -113,6 +115,7 @@
 				, M.ACCUMULT
 				, M.AMOUNT_STORE
 				, M.PRICE_IMPORT
+				, M.IS_SERVICE
 	    FROM srvc M
 		<dynamic prepend="WHERE">
 		   	<isNotEmpty property="RESTAR_ID" prepend="AND">
@@ -123,6 +126,12 @@
 			</isEqual>
 			<isEqual compareValue="0" property="IS_USED" prepend="AND">
 				<![CDATA[ M.IS_USED = 0 ]]>
+			</isEqual>
+			<isEqual compareValue="1" property="IS_SERVICE" prepend="AND">
+				<![CDATA[ M.IS_SERVICE = 1 ]]>
+			</isEqual>
+			<isEqual compareValue="0" property="IS_SERVICE" prepend="AND">
+				<![CDATA[ M.IS_SERVICE = 0 ]]>
 			</isEqual>
 		</dynamic>
 		<!-- ORDER BY M.SRVC_CD  -->
@@ -148,6 +157,7 @@
 				, ACCUMULT
 				, AMOUNT_STORE
 				, PRICE_IMPORT
+				, IS_SERVICE
 	    	) 
 	    VALUES (
 	    		#SRVC_ID#
@@ -168,6 +178,7 @@
 				, #ACCUMULT#
 				, #AMOUNT_STORE#
 				, #PRICE_IMPORT#
+				, #IS_SERVICE#
 			)
   </insert>
   <insert id="UpdateSrvcVO">
@@ -220,6 +231,9 @@
 		   	</isNotEmpty>
 		   	<isNotEmpty property="PRICE_IMPORT" prepend=",">
 		   		PRICE_IMPORT = #PRICE_IMPORT#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="IS_SERVICE" prepend=",">
+		   		IS_SERVICE = #IS_SERVICE#
 		   	</isNotEmpty>
 		</dynamic>
 	    WHERE SRVC_ID = #SRVC_ID#

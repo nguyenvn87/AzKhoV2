@@ -48,7 +48,9 @@ public class PhieuThuServiceImpl implements PhieuThuService{
 			phieuThuVO.setCUSTOMMER(rVO.getCUS_NM());
 			phieuThuVO.setNGUOINOP(PropertyUtil.getStringUTF8("other.customer.name"));
 			phieuThuVO.setNGUOINOP_ADDR(rVO.getDSCRT());
-			phieuThuVO.setDESCRIPTION(rVO.getCUS_NM()+" ("+rVO.getDSCRT()+")");
+			
+			String description =  (rVO.getDSCRT()!=null && !rVO.getDSCRT().isEmpty())?"("+rVO.getDSCRT()+")":"";
+			phieuThuVO.setDESCRIPTION(rVO.getCUS_NM()+" "+description);
 			phieuThuVO.setVALUE(String.valueOf(pVo.getVALUE()));
 			phieuThuVO.setBANK_NM(pVo.getBANK_NM());
 			phieuThuVO.setBILL_DATE(rVO.getCHANGE_DATE());

@@ -88,7 +88,17 @@ Ext.define('MNG.view.popup.BtnCustomer', {
 											emptyText : 'Nhập địa chỉ'
 										},
 										{
+		                                    xtype: 'checkboxfield',
+		                                    fieldLabel: 'Khách thân thiết',
+		                                    //boxLabel: 'Khách thân thiết',
+		                                    //textAlign: 'left',
+		                                    name: 'IS_FAVORITE',
+		                                    checked : false,
+		                                    inputValue : 0
+		                                },
+										{
 											xtype : 'numberfield',
+											hidden: true,
 											fieldLabel: 'Điểm',
 											itemId : 'ACCUMULT',
 											name:'ACCUMULT',
@@ -136,5 +146,6 @@ Ext.define('MNG.view.popup.BtnCustomer', {
 		Ext.ComponentQuery.query('#addCustomerId #EMAIL')[0].setValue(me.config.cusEmail);
 		Ext.ComponentQuery.query('#addCustomerId #ADDR')[0].setValue(me.config.cusAddr);
 		Ext.ComponentQuery.query('#addCustomerId #ACCUMULT')[0].setValue(me.config.accumult);
+		Ext.ComponentQuery.query('#addCustomerId [name=IS_FAVORITE]')[0].setValue(me.config.isFavorite);
 	}
 });

@@ -19,6 +19,7 @@ public class CustomerVO extends DefaultVO{
 	private int MIN;
 	private int MAX;
 	private int rn1;
+	private int IS_FAVORITE;
 	
 	public int getCUS_CD() {
 		return CUS_CD;
@@ -109,6 +110,12 @@ public class CustomerVO extends DefaultVO{
 	}
 	public void setGROUP_NM(String gROUP_NM) {
 		GROUP_NM = gROUP_NM;
+	}
+	public int getIS_FAVORITE() {
+		return IS_FAVORITE;
+	}
+	public void setIS_FAVORITE(int iS_FAVORITE) {
+		IS_FAVORITE = iS_FAVORITE;
 	}
 	
 }

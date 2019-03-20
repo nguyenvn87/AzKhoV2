@@ -119,7 +119,7 @@
 	                            items:[
 	                				{
 	                                    xtype:'button',
-	                                    hidden: true,
+	                                    //hidden: true,
 	                                    iconCls: 'icon-return',
 	    								itemId : 'btnTraHang',
 	    								height: 30,

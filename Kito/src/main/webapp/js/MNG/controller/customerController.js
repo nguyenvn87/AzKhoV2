@@ -121,14 +121,15 @@ Ext.define('MNG.controller.customerController', {
 		email = Ext.ComponentQuery.query('#addCustomerId #EMAIL')[0].getValue();
 		addr = Ext.ComponentQuery.query('#addCustomerId #ADDR')[0].getValue();
 		score = Ext.ComponentQuery.query('#addCustomerId #ACCUMULT')[0].getValue();
-		
+		isFavorite = Ext.ComponentQuery.query('#addCustomerId [name=IS_FAVORITE]')[0].getValue();
 		var params = {
 				CUS_CD: btnAddCustomer.config.cusID,
 				NAME: name,
 				PHONE: phone,
 				EMAIL: email,
 				ADDR: addr,
-				ACCUMULT: 0
+				ACCUMULT: 0,
+				IS_FAVORITE: isFavorite==true?1:0
 		};
 		parent.submitRequestCustomer(params);
 	},

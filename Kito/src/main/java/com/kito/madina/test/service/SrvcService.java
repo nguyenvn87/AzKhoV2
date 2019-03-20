@@ -27,4 +27,5 @@ public interface SrvcService {
 	public List<SrvcVO> getListSrvcHistoryBySrvcId(String srvdId, String restarId);
 	public boolean checkExistInHistoryStore(String srvcID, List<SrvcVO> store);
 	public HashMap<String, Object> getValueInStore(SrvcVO vo);
+	public void writeLogChangeStore(String str);
 }

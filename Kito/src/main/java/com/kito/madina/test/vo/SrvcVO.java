@@ -31,6 +31,7 @@ public class SrvcVO extends DefaultVO{
 	private String HIS_NOTE ;
 	private String HIS_ID ;
 	private String  PRICE_IMPORT;
+	private int   IS_SERVICE;
 	
 	public String getSRVC_ID() {
 		return SRVC_ID;
@@ -217,6 +218,12 @@ public class SrvcVO extends DefaultVO{
 	}
 	public void setPRICE_IMPORT(String pRICE_IMPORT) {
 		PRICE_IMPORT = pRICE_IMPORT;
+	}
+	public int getIS_SERVICE() {
+		return IS_SERVICE;
+	}
+	public void setIS_SERVICE(int iS_SERVICE) {
+		IS_SERVICE = iS_SERVICE;
 	} 
 	
 	

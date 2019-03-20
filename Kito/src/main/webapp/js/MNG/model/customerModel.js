@@ -36,7 +36,11 @@ Ext.define('MNG.model.customerModel', {
 					},{
 						name : 'TOTAL_MONEY',
 						type : 'string'
+					},{
+						name : 'IS_FAVORITE',
+						type : 'string'
 					}
+					
 					]
 		});
 

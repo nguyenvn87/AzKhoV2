@@ -6,17 +6,23 @@
         
 <sqlMap namespace="customer">
 	<typeAlias  alias="CustomerVO"	type="com.kito.madina.test.vo.CustomerVO"/>
-	<select id="getCustomerAll" resultClass="CustomerVO">
-	    SELECT CUS_CD 
-			, NAME 
-			, ADDR 
-			, PHONE 
-			, EMAIL 
-			, SCORE 
-			, RESTAR_ID
-	    FROM customer
-	    WHERE RESTAR_ID = #RESTAR_ID#
-	</select>
+	<sql id="getCustomerAll">	
+		SELECT M.CUS_CD 
+				, M.NAME 
+				, M.ADDR 
+				, M.PHONE 
+				, M.EMAIL 
+				, M.SCORE 
+				, M.CHANGE_USER
+				, M.ACCUMULT
+				, M.IS_FAVORITE
+	    FROM customer M
+		WHERE M.RESTAR_ID = #RESTAR_ID# 
+			<isEqual property="IS_FAVORITE" prepend="AND" compareValue="1">
+			   		M.IS_FAVORITE =  1
+			 </isEqual>
+		ORDER BY M.NAME
+	</sql>
 	<insert id="CreateCustomerVO">
 	    INSERT INTO customer 
 	    	(
@@ -29,6 +35,7 @@
 				, RESTAR_ID
 				, CHANGE_USER
 				, ACCUMULT
+				, IS_FAVORITE
 	    	) 
 	    VALUES (
 	    		#CUS_CD# 
@@ -40,6 +47,7 @@
 				, #RESTAR_ID#
 				, #CHANGE_USER#
 				, #ACCUMULT#
+				, #IS_FAVORITE#
 			)
 	<selectKey resultClass="int" keyProperty="CUS_CD" >
         SELECT @@IDENTITY AS CUS_CD
@@ -69,6 +77,9 @@
 				<isNotEmpty prepend=",">
 					ACCUMULT = #ACCUMULT#
 				</isNotEmpty>
+				<isNotEmpty prepend=",">
+					IS_FAVORITE = #IS_FAVORITE#
+				</isNotEmpty>
 		</dynamic>
 	    WHERE CUS_CD = #CUS_CD# and RESTAR_ID = #RESTAR_ID#
   </update>
@@ -84,6 +95,7 @@
 				, SCORE 
 				, RESTAR_ID
 				, CHANGE_USER
+				, IS_FAVORITE
 	    FROM customer
 	    WHERE CUS_CD = #CUS_CD# and RESTAR_ID = #RESTAR_ID#
 	</select>
@@ -96,6 +108,7 @@
 				, R.SCORE 
 				, R.RESTAR_ID
 				, R.CHANGE_USER
+				, R.IS_FAVORITE
 	    FROM customer R
 	   <dynamic prepend="WHERE">
 	   <isNotEqual property="CUS_CD" compareValue="-1" prepend="AND">
@@ -117,16 +130,28 @@
 	    ORDER BY R.NAME
 	</select>
 	<sql id="sqlGetPagingCustomer">	
-		select DISTINCT CUS_CD, NAME, ADDR, PHONE, SCORE, CHANGE_USER, EMAIL, ACCUMULT
+		select DISTINCT CUS_CD, NAME, ADDR, PHONE, SCORE, CHANGE_USER, EMAIL, ACCUMULT, IS_FAVORITE
+		from (<include refid="getCustomerAll"/>) B
+		<dynamic prepend="WHERE"> 
+				<isNotEmpty property="NAME" prepend="AND">
+			   		B.NAME like  #NAME# OR B.PHONE like  #NAME#
+			   	</isNotEmpty>
+		</dynamic>
+ </sql>
+	<sql id="sqlGetPagingCustomer1">	
+		select DISTINCT CUS_CD, NAME, ADDR, PHONE, SCORE, CHANGE_USER, EMAIL, ACCUMULT, IS_FAVORITE
 		from(
 			select * from customer S1
-			<dynamic prepend="WHERE">
+			 <dynamic prepend="WHERE">
 			   	<isNotEmpty property="NAME" prepend="AND">
 			   		S1.NAME like  #NAME#
 			   	</isNotEmpty>
 			   	<isNotEmpty property="RESTAR_ID" prepend="AND">
 			   		S1.RESTAR_ID =  #RESTAR_ID#
 			   	</isNotEmpty>
+			   	<isEqual property="IS_FAVORITE" prepend="AND" compareValue="1">
+			   		S1.IS_FAVORITE =  1
+			   	</isEqual>
 		   	</dynamic> 
 			UNION
 			select * from customer S2 
@@ -137,7 +162,10 @@
 			   	<isNotEmpty property="RESTAR_ID" prepend="AND">
 			   		S2.RESTAR_ID =  #RESTAR_ID#
 			   	</isNotEmpty>
-		   	</dynamic> 
+			   	<isEqual property="IS_FAVORITE" prepend="AND" compareValue="1">
+			   		S2.IS_FAVORITE =  1
+			   	</isEqual>
+		   	</dynamic>
 		) B
  </sql>
  <select id="selectSearchCustomerList" resultClass="CustomerVO" parameterClass="CustomerVO">	

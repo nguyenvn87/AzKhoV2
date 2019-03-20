@@ -1,6 +1,11 @@
-var customerStore = Ext.create('MNG.store.customerStore');
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@include file="/WEB-INF/views/include.jsp" %>
 
-Ext.define('MNG.view.customerView', {
+
+<script type="text/javascript">
+var customerStore = Ext.create('MNG.store.customerStore');
+Ext.define('MNG.view.favoriteCustomerView', {
     extend: 'Ext.panel.Panel',
     cls: '',
     isHideAddNew: false,
@@ -270,7 +275,8 @@ Ext.define('MNG.view.customerView', {
 		var storeTmp = Grid.getStore();
 		storeTmp.getProxy().extraParams={
 				NAME: _value,
-				limit: 10
+				limit: 10,
+				IS_FAVORITE: 1
 		};
 		storeTmp.getProxy().url = contextPath + '/customer/getLisPagingCustomers.json';
 		storeTmp.currentPage = 1;
@@ -303,3 +309,25 @@ Ext.define('MNG.view.customerView', {
 		myController.viewChartAnalysis(rec);
 	}
 });
+
+Ext.application({
+	name : 'MANAGER',
+	appFolder : contextPath + '/MNG',
+	controllers : [ 'MNG.controller.customerController' ],
+	launch : function() {
+		Ext.create('MNG.view.favoriteCustomerView', {
+			renderTo : 'land_contents'
+		});
+		var Grid = Ext.ComponentQuery.query('#grid-customer-item')[0];
+		var storeTmp = Grid.getStore();
+		storeTmp.currentPage = 1;
+		storeTmp.pageSize=13;
+		storeTmp.getProxy().extraParams = {
+						IS_USED: 1,
+						IS_FAVORITE: 1
+					};
+		storeTmp.load();
+	}
+});
+</script>
+<div id="land_contents"></div>

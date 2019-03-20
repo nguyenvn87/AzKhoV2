@@ -191,16 +191,13 @@
 		from(
 			select S1.* 
 			FROM srvc S1
-			<!-- <dynamic prepend="WHERE">
-			    	<isNotEmpty property="SRVC_NM" prepend="AND">
-			   		S1.srvc_nm like  #SRVC_NM# OR S1.srvc_cd like  #SRVC_NM#
-			   	</isNotEmpty> 
-			   	<isNotEmpty property="RESTAR_ID" prepend="AND">
-			   		S1.RESTAR_ID =  #RESTAR_ID#
-			   	</isNotEmpty>
-			   	and S1.IS_USED = 1
-		   	</dynamic>  -->
 		   	WHERE S1.RESTAR_ID =  #RESTAR_ID# and S1.IS_USED = 1
+		   	<isEqual property="IS_SERVICE" compareValue="1" prepend="AND">
+		   		S1.IS_SERVICE = 1
+		   	</isEqual>
+		   	<isEqual property="IS_SERVICE" compareValue="0" prepend="AND">
+		   		S1.IS_SERVICE = 0
+		   	</isEqual>
 		) B
  </sql>
 <select id="selectSearchMenuList" resultClass="SrvcVO" parameterClass="SrvcVO">	
