@@ -51,15 +51,15 @@
 	<group name="Group1">
 		<groupExpression><![CDATA[$F{GROUP_NM}]]></groupExpression>
 		<groupHeader>
-			<band height="20">
+			<band>
 				<textField isBlankWhenNull="true">
-					<reportElement x="0" y="-1" width="554" height="21" isRemoveLineWhenBlank="true" forecolor="#453939" uuid="10184e0b-4e66-4691-840b-442638940bbf">
+					<reportElement x="0" y="-1" width="554" height="1" isRemoveLineWhenBlank="true" forecolor="#453939" uuid="10184e0b-4e66-4691-840b-442638940bbf">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box leftPadding="5">
-						<leftPen lineWidth="0.0" lineStyle="Double" lineColor="rgba(120, 108, 108, 0.25882354)"/>
-						<bottomPen lineWidth="1.0" lineColor="rgba(133, 122, 122, 0.28627452)"/>
-						<rightPen lineWidth="0.0" lineStyle="Double" lineColor="rgba(120, 108, 108, 0.25882354)"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="font-extension" size="13" isBold="true" pdfFontName="C:/Windows/Fonts/timesbd.TTF" pdfEncoding="" isPdfEmbedded="true"/>
@@ -114,10 +114,13 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0" lineColor="#1F0B0B"/>
+					<rightPen lineWidth="1.0"/>
 				</box>
 				<staticText>
-					<reportElement x="0" y="0" width="30" height="23" uuid="8307074a-7e4b-4bd5-b166-df9d2bf02711">
+					<reportElement x="0" y="0" width="40" height="23" uuid="8307074a-7e4b-4bd5-b166-df9d2bf02711">
 						<property name="local_mesure_unitheight" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -133,6 +136,9 @@
 				</staticText>
 				<staticText>
 					<reportElement x="204" y="0" width="73" height="23" uuid="a4370fba-2496-4b4f-8c9b-6f5b77af327d"/>
+					<box>
+						<leftPen lineWidth="1.0" lineColor="#666666"/>
+					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
@@ -140,13 +146,19 @@
 				</staticText>
 				<staticText>
 					<reportElement x="277" y="0" width="87" height="23" uuid="5c6963c8-5442-4120-9c05-6c040f995d19"/>
+					<box>
+						<leftPen lineWidth="1.0" lineColor="#666666"/>
+					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[Email]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="30" y="0" width="174" height="23" uuid="08c2b1a3-f700-4538-8cd5-7334ad0af030"/>
+					<reportElement x="40" y="0" width="164" height="23" uuid="08c2b1a3-f700-4538-8cd5-7334ad0af030"/>
+					<box>
+						<leftPen lineWidth="1.0" lineColor="#666666"/>
+					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
@@ -154,6 +166,9 @@
 				</staticText>
 				<staticText>
 					<reportElement x="364" y="0" width="190" height="23" uuid="f5d5ce95-f585-4054-8b2a-aa6ca02df5e5"/>
+					<box>
+						<leftPen lineWidth="1.0" lineColor="#666666"/>
+					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="13" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
@@ -173,9 +188,9 @@
 				</reportElement>
 				<box>
 					<topPen lineColor="rgba(0, 0, 0, 0.5019608)"/>
-					<leftPen lineColor="rgba(0, 0, 0, 0.5019608)"/>
+					<leftPen lineWidth="1.0" lineColor="rgba(0, 0, 0, 0.5019608)"/>
 					<bottomPen lineWidth="0.1" lineColor="rgba(82, 75, 75, 0.5019608)"/>
-					<rightPen lineColor="rgba(0, 0, 0, 0.5019608)"/>
+					<rightPen lineWidth="1.0" lineColor="rgba(0, 0, 0, 0.5019608)"/>
 				</box>
 				<textField isBlankWhenNull="true">
 					<reportElement x="204" y="0" width="73" height="22" uuid="a22bdd13-43ff-47d9-86d3-f9c6186f9b46">
@@ -210,7 +225,7 @@
 					<textFieldExpression><![CDATA[$F{ADDR}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="0" y="0" width="30" height="22" forecolor="#000000" backcolor="#FFFFFF" uuid="bc2fcbd8-f3b2-49af-a549-7ef49284cc83"/>
+					<reportElement mode="Transparent" x="0" y="0" width="40" height="22" forecolor="#000000" backcolor="#FFFFFF" uuid="bc2fcbd8-f3b2-49af-a549-7ef49284cc83"/>
 					<box>
 						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="#8A8383"/>
 					</box>
@@ -220,7 +235,7 @@
 					<textFieldExpression><![CDATA[$V{Group1_COUNT}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="30" y="1" width="174" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5dea6186-7269-4b7b-9912-61b86e8ba851"/>
+					<reportElement mode="Transparent" x="40" y="1" width="164" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5dea6186-7269-4b7b-9912-61b86e8ba851"/>
 					<box leftPadding="4">
 						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="#8A8383"/>
 					</box>

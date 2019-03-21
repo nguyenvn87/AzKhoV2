@@ -114,6 +114,7 @@ Ext
 																					width : 100,
 																					dataIndex : 'PRICE',
 																					align: 'right',
+																					format: '0,000',
 																					//editable : true,
 																					text : 'Giá'
 																					/*editor : {
@@ -125,6 +126,7 @@ Ext
 																					xtype : 'numbercolumn',
 																					width : 70,
 																					text : 'SL',
+																					format: '0,000',
 																					align: 'right',
 																					//editable : true,
 																					dataIndex : 'AMOUNT'

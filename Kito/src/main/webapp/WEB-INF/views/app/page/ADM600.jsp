@@ -185,7 +185,7 @@ Ext.define('MNG.view.favoriteCustomerView', {
 										iconCls : 'icon-del',
 										tooltip : 'Xóa dòng này',
 										handler : function(grid, rowIndex, colIndex){
-											var myController = MANAGER.app.getController('MNG.controller.customerController');
+											var myController = MANAGER.app.getController('MNG.controller.customerFavoriteController');
 											var rec = grid.getStore().getAt(rowIndex);
 											myController.deleteRecordCustomer(rec);
 										}
@@ -293,19 +293,19 @@ Ext.define('MNG.view.favoriteCustomerView', {
 					    cusAddr: rec.get('ADDR'),
 					    isFavorite: rec.get('IS_FAVORITE')
 					 };
-		var myController = MANAGER.app.getController('MNG.controller.customerController');
+		var myController = MANAGER.app.getController('MNG.controller.customerFavoriteController');
 		myController.showAddCustomer(params);
 	},
 	viewHistoryBillInfo:function(rec){
-		var myController = MANAGER.app.getController('MNG.controller.customerController');
+		var myController = MANAGER.app.getController('MNG.controller.customerFavoriteController');
 		myController.viewHistoryByBill(rec);
 	},
 	viewHistoryByProduct:function(rec){
-		var myController = MANAGER.app.getController('MNG.controller.customerController');
+		var myController = MANAGER.app.getController('MNG.controller.customerFavoriteController');
 		myController.viewHistoryByProduct(rec);
 	},
 	viewChartAnalysis:function(rec){
-		var myController = MANAGER.app.getController('MNG.controller.customerController');
+		var myController = MANAGER.app.getController('MNG.controller.customerFavoriteController');
 		myController.viewChartAnalysis(rec);
 	}
 });
@@ -313,7 +313,7 @@ Ext.define('MNG.view.favoriteCustomerView', {
 Ext.application({
 	name : 'MANAGER',
 	appFolder : contextPath + '/MNG',
-	controllers : [ 'MNG.controller.customerController' ],
+	controllers : [ 'MNG.controller.customerFavoriteController' ],
 	launch : function() {
 		Ext.create('MNG.view.favoriteCustomerView', {
 			renderTo : 'land_contents'

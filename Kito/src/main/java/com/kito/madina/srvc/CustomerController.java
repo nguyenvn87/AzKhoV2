@@ -304,15 +304,18 @@ public class CustomerController {
 	public ModelAndView danhsachkhachhang(HttpServletRequest req, Map<String, Object> model) throws JRException, IOException {
 		String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
 		
+		String isFavorite = req.getParameter("IS_FAVORITE");
+		int iFavorite = (isFavorite!=null && isFavorite.equalsIgnoreCase("1"))?1:0;
+		
 		CustomerVO vo = new CustomerVO();
 		vo.setRESTAR_ID(loginRestautant);
 		vo.setCUS_CD(-1);
+		vo.setIS_FAVORITE(iFavorite);
 		List<CustomerVO> list = customerService.getListCustomerVO(vo);
 		
-		int i=0;
-		for(CustomerVO cVo: list){
-			cVo.setGROUP_NM("Group 1");
-		}
+		//for(CustomerVO cVo: list){
+		//	cVo.setGROUP_NM("Nhom Khach");
+		//}
 		
 		Map<String, Object> mapRpt = new HashMap<String, Object>();
 		JRDataSource ds = new JRBeanCollectionDataSource(list);
@@ -330,6 +333,8 @@ public class CustomerController {
 	public ModelAndView khachhangexcel(HttpServletRequest req, Map<String, Object> model) throws JRException, IOException {
 		String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
 		String fileName = req.getParameter("FILENAME")!= null?req.getParameter("FILENAME"):"Danh_Sach_Khach_Hang";
+		String isFavorite = req.getParameter("IS_FAVORITE");
+		
 
 		List<HashMap<String, Object>> listCustomer = new ArrayList<HashMap<String,Object>>();
 		ExcelVO evo = null;
@@ -337,6 +342,7 @@ public class CustomerController {
 		CustomerVO vo = new CustomerVO();
 		vo.setRESTAR_ID(loginRestautant);
 		vo.setCUS_CD(-1);
+		if(isFavorite != null && isFavorite.equalsIgnoreCase("1")) vo.setIS_FAVORITE(1);
 		List<CustomerVO> list = customerService.getListCustomerVO(vo);
 		
 		// Convert to HashMap List

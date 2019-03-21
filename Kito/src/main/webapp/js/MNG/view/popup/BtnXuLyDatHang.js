@@ -115,6 +115,7 @@ Ext
 																				{
 																					xtype : 'numbercolumn',
 																					width : 100,
+																					format: '0,000',
 																					dataIndex : 'PRICE',
 																					align: 'right',
 																					editable : true,

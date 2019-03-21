@@ -126,6 +126,9 @@
 	   	<isNotEmpty property="EMAIL" prepend="AND">
 	   		R.EMAIL = #EMAIL#
 	   	</isNotEmpty>
+	   	<isEqual property="IS_FAVORITE" prepend="AND" compareValue="1">
+			R.IS_FAVORITE =  1
+		</isEqual>
 	   </dynamic>
 	    ORDER BY R.NAME
 	</select>
