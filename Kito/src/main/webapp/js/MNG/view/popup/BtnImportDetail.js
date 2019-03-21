@@ -75,7 +75,7 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 											                getInnerTpl: function() {
 											                    return '<a class="search-item">' 
 											                         + '<h3>{SRVC_NM}<br /><span>{PRICE_IMPORT}</span></h3>'
-											                         + '{UNIT_NM} / {DSCRT}' 
+											                         + '{UNIT_NM}  {DSCRT}' 
 											                         + '</a>';
 											                }
 											            },
@@ -139,36 +139,38 @@ Ext.define('MNG.view.popup.BtnImportDetail', {
 														align : 'right',
 														width : 85,
 														editable: true,
+														format: '0,000',
 														dataIndex : 'IMPRT_PRICE',
 														text : 'Giá',
 														sortable : true,
 														editor: {
 												            xtype: 'numberfield',
 												            allowBlank: false
-												        },
-												        renderer: function(value, metadata, record){
+												        }
+												        /*renderer: function(value, metadata, record){
 															var valuePrice = parseFloat(value);
 															data = formatSupporter.formatToMoney(valuePrice);
 															
 															return data;
-														}
+														}*/
 													}, {
 														xtype : 'numbercolumn',
 														align : 'right',
 														width : 70,
 														editable: true,
 														dataIndex : 'AMOUNT',
+														format: '0,000',
 														text : 'SL',
 														sortable : true,
 														editor: {
 												            xtype: 'numberfield',
 												            allowBlank: false
-												        },
-												        renderer: function(value, metadata, record){
+												        }
+												        /*renderer: function(value, metadata, record){
 															
 															data = formatSupporter.formatToMoney(value);
 															return data;
-														}
+														}*/
 												    }, {
 														xtype : 'gridcolumn',
 														align : 'center',
