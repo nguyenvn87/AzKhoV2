@@ -61,9 +61,9 @@
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box leftPadding="5">
-						<leftPen lineWidth="0.0" lineStyle="Double" lineColor="rgba(120, 108, 108, 0.25882354)"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 						<bottomPen lineWidth="1.0" lineColor="rgba(133, 122, 122, 0.28627452)"/>
-						<rightPen lineWidth="0.0" lineStyle="Double" lineColor="rgba(120, 108, 108, 0.25882354)"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="font-extension" size="13" isBold="true" pdfFontName="C:/Windows/Fonts/timesbd.TTF" pdfEncoding="" isPdfEmbedded="true"/>
@@ -81,12 +81,15 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<staticText>
-					<reportElement x="80" y="30" width="400" height="30" forecolor="#1A1414" uuid="1f24cf8c-4a8c-47c0-9715-403c5806de6f">
+					<reportElement x="147" y="30" width="281" height="30" forecolor="#1A1414" uuid="1f24cf8c-4a8c-47c0-9715-403c5806de6f">
 						<property name="local_mesure_unitwidth" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="local_mesure_unitheight" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
+					<box>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="20" isBold="false" isItalic="false" pdfFontName="C:/Windows/Fonts/timesbd.TTF" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
@@ -105,7 +108,9 @@
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0" lineColor="#1F0B0B"/>
+					<rightPen lineWidth="1.0"/>
 				</box>
 				<staticText>
 					<reportElement x="0" y="0" width="30" height="23" uuid="8307074a-7e4b-4bd5-b166-df9d2bf02711">
@@ -184,9 +189,9 @@
 				</reportElement>
 				<box>
 					<topPen lineColor="rgba(0, 0, 0, 0.5019608)"/>
-					<leftPen lineColor="rgba(0, 0, 0, 0.5019608)"/>
+					<leftPen lineWidth="1.0" lineColor="rgba(0, 0, 0, 0.5019608)"/>
 					<bottomPen lineWidth="0.1" lineColor="rgba(82, 75, 75, 0.5019608)"/>
-					<rightPen lineColor="rgba(0, 0, 0, 0.5019608)"/>
+					<rightPen lineWidth="1.0" lineColor="rgba(0, 0, 0, 0.5019608)"/>
 				</box>
 				<textField isBlankWhenNull="true">
 					<reportElement x="258" y="0" width="68" height="22" uuid="a22bdd13-43ff-47d9-86d3-f9c6186f9b46">

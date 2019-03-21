@@ -548,11 +548,15 @@ public class SaleReportController {
 		ExcelVO evo = null;
 		String fileName = req.getParameter("FILENAME");
 		String groupNameDefault = PropertyUtil.getStringUTF8("srvc.name.other"); 
+		String isService = req.getParameter("IS_SERVICE");
+		
+		int iService = (isService!=null&&isService.equalsIgnoreCase("1"))?1:0;
 		
 		SrvcVO sVo = new SrvcVO();
 		sVo.setRESTAR_ID(restarId);
 		sVo.setIS_USED(1);
 		sVo.setSort("TYPE_NM");
+		sVo.setIS_SERVICE(iService);
 		
 		HashMap<String, String> mapDonVi = new HashMap<String, String>();
 		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
@@ -649,6 +653,10 @@ public class SaleReportController {
 		String loginUser = SessionUtil.getSessionAttribute("loggedUserId").toString();
 		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
 
+		String isService = req.getParameter("IS_SERVICE");
+		int iService = 0;
+		if(isService != null && isService.equalsIgnoreCase("1")) iService = 1;
+		
 		UserVO uVo = new UserVO();
 		uVo.setUSERNAME(loginUser);
 		uVo = userService.getUserVo(uVo);
@@ -665,6 +673,7 @@ public class SaleReportController {
 		SrvcVO sVo = new SrvcVO();
 		sVo.setRESTAR_ID(restarId);
 		sVo.setIS_USED(1);
+		sVo.setIS_SERVICE(iService);
 		sVo.setSort("TYPE_NM");
 		
 		List<HashMap<String, Object>> listSrvc = srvcService.listImportReport(sVo);

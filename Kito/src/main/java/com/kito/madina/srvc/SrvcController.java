@@ -557,6 +557,7 @@ public class SrvcController {
 
 		vo.setRESTAR_ID(loginRestautant);
 		vo.setIS_USED(-1);
+		vo.setIS_SERVICE(-1);
 		HashMap<String, Object> mapResult = srvcService.getSrvcListCount(vo);
 
 		jvon.setData(mapResult);

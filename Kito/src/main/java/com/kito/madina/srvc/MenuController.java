@@ -139,6 +139,7 @@ public class MenuController {
 		vo.setMAX(((page - 1) * limit)+limit);
 		vo.setRESTAR_ID(loginRestautant);
 		vo.setSRVC_NM(valueSearch);
+		vo.setIS_SERVICE(-1);
 		List<SrvcVO> list = menuService.getSearchListAllMenu(vo);
 		
 		CodeVO mVo = new CodeVO();

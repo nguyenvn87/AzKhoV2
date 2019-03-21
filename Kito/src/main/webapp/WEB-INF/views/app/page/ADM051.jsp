@@ -168,7 +168,7 @@ Ext.define('MNG.view.srvcServiceView', {
 											handler : function(grid, rowIndex, colIndex){
 												var record = grid.getStore().getAt(rowIndex);
 												grid.getSelectionModel().select(rowIndex);
-												var myController = MANAGER.app.getController('MNG.controller.srvcController');
+												var myController = MANAGER.app.getController('MNG.controller.srvcServiceController');
 												myController.editRowByRecord(record);
 											}
 										} ]
@@ -199,14 +199,14 @@ Ext.define('MNG.view.srvcServiceView', {
 											iconCls : 'icon-del',
 											tooltip : 'Xóa dòng này',
 											handler : function(grid, rowIndex, colIndex){
-												var myController = MANAGER.app.getController('MNG.controller.srvcController');
+												var myController = MANAGER.app.getController('MNG.controller.srvcServiceController');
 												myController.deleteRecord(grid, rowIndex, colIndex);
 											}
 										} ]
 									}
                                  ],
                                  tbar: [{
-                                	 	text: 'Thêm mới SP',
+                                	 	text: 'Thêm dịch vụ mới',
                                 	 	iconCls: 'icon-addnew',
                                 	 	itemId: 'addSrvcBtn',
                                 	 	hidden: me.isHideAddNew
@@ -270,7 +270,7 @@ Ext.define('MNG.view.srvcServiceView', {
 		storeTmp.filter('SRVC_NM', value);
 		
 		if(event.getCharCode() == 13){
-			var myController = MANAGER.app.getController('MNG.controller.srvcController');
+			var myController = MANAGER.app.getController('MNG.controller.srvcServiceController');
 			myController.clickSrvcSearch();	
 		}
 	}
@@ -279,7 +279,7 @@ Ext.define('MNG.view.srvcServiceView', {
 Ext.application({
 	name : 'MANAGER',
 	appFolder : contextPath + '/MNG',
-	controllers : [ 'MNG.controller.srvcController' ],
+	controllers : [ 'MNG.controller.srvcServiceController' ],
 	launch : function() {
 		Ext.create('MNG.view.srvcServiceView', {
 			renderTo : 'land_contents'
