@@ -257,11 +257,11 @@ Ext.define('MNG.controller.srvcController', {
 		var location = contextPath + "/saleReport/baogiabanhang.do";// + param;
 		utilForm.btn_template_popup(location,"Báo Giá",850,800,true);
 	},
-	btnPrintBarcode : function(grid, rowIndex, colIndex){
+	btnPrintBarcode : function(grid, rowIndex, colIndex, type, isList){
 		var rec = grid.getStore().getAt(rowIndex);
 		var srvc_id = rec.get('SRVC_ID');
-		var type = "pdf";
-		var location = contextPath + "/report/barcode.do?SRVC_ID="+srvc_id+"&type="+type;
+		//var type = "pdf";
+		var location = contextPath + "/report/barcode.do?SRVC_ID="+srvc_id+"&type="+type+"&list="+isList;
 		if(type == "pdf"){
 			utilForm.btn_template_popup(location,"Mã vạch",850,800,true);
 		}else{

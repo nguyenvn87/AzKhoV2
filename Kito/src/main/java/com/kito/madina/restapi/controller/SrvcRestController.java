@@ -2,7 +2,6 @@ package com.kito.madina.restapi.controller;
 
 import java.io.StringReader;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,14 +9,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,7 +34,6 @@ import com.kito.madina.test.service.RoomTurnService;
 import com.kito.madina.test.service.SrvcService;
 import com.kito.madina.test.service.UserService;
 import com.kito.madina.test.vo.CodeVO;
-import com.kito.madina.test.vo.CustomerVO;
 import com.kito.madina.test.vo.RoomSrvcVO;
 import com.kito.madina.test.vo.RoomTurnVO;
 import com.kito.madina.test.vo.SrvcVO;
@@ -128,6 +123,7 @@ public class SrvcRestController {
 		return jvon;
 	}
 	/* ---------------- Save bill info ------------------------ */
+	//@CrossOrigin(origins = "http://192.168.100.157:8080")
 	@RequestMapping(value="/saveSaleOrderList", method = RequestMethod.POST)
 	//public JsonVO saveSaleServices111(HttpServletRequest req, @RequestParam("DATA") List<RoomSrvcVO> listData) {
 	public JsonVO saveSaleServices111(HttpServletRequest req) {	
@@ -135,96 +131,102 @@ public class SrvcRestController {
 		String loginUser = SessionUtil.getSessionAttribute("loggedUserId").toString();
 		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
 		
-		String roomUseId = req.getParameter("ROOM_USE_ID");
-		String dataList = req.getParameter("DATA");
-		String timePay = req.getParameter("CHANGE_DATE");
-		String totalMoney = req.getParameter("TOTAL_MONEY");
-		String payMoney = req.getParameter("PAYED_MONEY");
-		String isDiliver = req.getParameter("IS_DELIVERED");
-		String isDebitStr = req.getParameter("IS_DEBIT");
-		String shipAddr = req.getParameter("SHIP_ADDR");
-		String aCCUMULT = req.getParameter("ACCUMULT");
-		String methodList = req.getParameter("METHOD");
-		String discountMoney = req.getParameter("DISCOUNT");
-		String isReturn = req.getParameter("IS_RETURN");
-		
-		String cusCD = req.getParameter("CUS_CD");
-		int iCusCD = (cusCD != null && !cusCD.isEmpty()) ? Integer.parseInt(cusCD):0;
-		int isDebit = (isDebitStr != null && !isDebitStr.isEmpty()) ? Integer.parseInt(isDebitStr):0;
-		int iReturn = (isReturn != null && !isReturn.isEmpty() && isReturn.equalsIgnoreCase("1")) ? 1:0;
-		int iDiliver = (isDiliver != null && !isDiliver.isEmpty()) ? Integer.parseInt(isDiliver):0;
-		
-		double totalMoneyf = Double.valueOf(totalMoney);
-		double payedMoneyf = Double.valueOf(payMoney);
-		double discountValue = 0;
-		if(discountMoney != null && !discountMoney.isEmpty()) discountValue = Double.valueOf(discountMoney);
-		
-		boolean isValid = false;
-		roomUseId = CmmUtil.getGUID();
-		RoomTurnVO rtVo = new RoomTurnVO();
-		
-		rtVo.setROOM_USED_ID(roomUseId);
-		rtVo.setCHANGE_DATE(timePay);
-		rtVo.setPAYED_MONEY(payedMoneyf);
-		rtVo.setTOTAL_MONEY(totalMoneyf);
-		rtVo.setUSER_NAME(loginUser);
-		rtVo.setIS_DELIVERED(iDiliver);
-		rtVo.setCUS_CD(iCusCD+"");
-		rtVo.setIS_DEBIT(isDebit);
-		rtVo.setIS_ORDER(1);
-		rtVo.setSHIP_ADDR(shipAddr);
-		rtVo.setDISCOUNT(discountValue);
-		rtVo.setIS_RETURN(iReturn);
-		
-		String billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_HOADON);
-		if(rtVo.getIS_RETURN()==1) billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_TRAHANG);
-		rtVo.setBILL_CD(billCD);
-		
-		roomTurnService.CreateRoomTurnVO(rtVo);
-		
-		// Save payment method
-		List<PaymentMethodVO> listMethod = null;
-		if(methodList != null && methodList.length() > 10){
-			String data = methodList.replaceAll("&quot;", "\"");
-			data = data.replaceAll("false", "N");
-			data = data.replaceAll("true", "Y");
-			JsonReader reader1 = new JsonReader(new StringReader(data));
-			reader1.setLenient(true);
-					
-			listMethod = CmmUtil.jsonToPayMethodList(reader1);
-		}
-		
-		if(dataList != null && dataList.length() > 10){
+		try {
+			String roomUseId = req.getParameter("ROOM_USE_ID");
+			String dataList = req.getParameter("DATA");
+			String timePay = req.getParameter("CHANGE_DATE");
+			String totalMoney = req.getParameter("TOTAL_MONEY");
+			String payMoney = req.getParameter("PAYED_MONEY");
+			String isDiliver = req.getParameter("IS_DELIVERED");
+			String isDebitStr = req.getParameter("IS_DEBIT");
+			String shipAddr = req.getParameter("SHIP_ADDR");
+			String aCCUMULT = req.getParameter("ACCUMULT");
+			String methodList = req.getParameter("METHOD");
+			String discountMoney = req.getParameter("DISCOUNT");
+			String isReturn = req.getParameter("IS_RETURN");
+			
+			String cusCD = req.getParameter("CUS_CD");
+			int iCusCD = (cusCD != null && !cusCD.isEmpty()) ? Integer.parseInt(cusCD):0;
+			int isDebit = (isDebitStr != null && !isDebitStr.isEmpty()) ? Integer.parseInt(isDebitStr):0;
+			int iReturn = (isReturn != null && !isReturn.isEmpty() && isReturn.equalsIgnoreCase("1")) ? 1:0;
+			int iDiliver = (isDiliver != null && !isDiliver.isEmpty()) ? Integer.parseInt(isDiliver):0;
+			
+			double totalMoneyf = Double.valueOf(totalMoney);
+			double payedMoneyf = Double.valueOf(payMoney);
+			double discountValue = 0;
+			if(discountMoney != null && !discountMoney.isEmpty()) discountValue = Double.valueOf(discountMoney);
+			
+			boolean isValid = false;
+			roomUseId = CmmUtil.getGUID();
+			RoomTurnVO rtVo = new RoomTurnVO();
+			
+			rtVo.setROOM_USED_ID(roomUseId);
+			rtVo.setCHANGE_DATE(timePay);
+			rtVo.setPAYED_MONEY(payedMoneyf);
+			rtVo.setTOTAL_MONEY(totalMoneyf);
+			rtVo.setUSER_NAME(loginUser);
+			rtVo.setIS_DELIVERED(iDiliver);
+			rtVo.setCUS_CD(iCusCD+"");
+			rtVo.setIS_DEBIT(isDebit);
+			rtVo.setIS_ORDER(1);
+			rtVo.setSHIP_ADDR(shipAddr);
+			rtVo.setDISCOUNT(discountValue);
+			rtVo.setIS_RETURN(iReturn);
+			
+			String billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_HOADON);
+			if(rtVo.getIS_RETURN()==1) billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_TRAHANG);
+			rtVo.setBILL_CD(billCD);
+			
+			roomTurnService.CreateRoomTurnVO(rtVo);
+			
+			// Save payment method
+			List<PaymentMethodVO> listMethod = null;
+			if(methodList != null && methodList.length() > 10){
+				String data = methodList.replaceAll("&quot;", "\"");
+				data = data.replaceAll("false", "N");
+				data = data.replaceAll("true", "Y");
+				JsonReader reader1 = new JsonReader(new StringReader(data));
+				reader1.setLenient(true);
 						
-			String data = dataList.replaceAll("&quot;", "\"");
-			data = data.replaceAll("false", "N");
-			data = data.replaceAll("true", "Y");
-			JsonReader reader1 = new JsonReader(new StringReader(data));
-			reader1.setLenient(true);
+				listMethod = CmmUtil.jsonToPayMethodList(reader1);
+			}
+			
+			if(dataList != null && dataList.length() > 10){
+							
+				String data = dataList.replaceAll("&quot;", "\"");
+				data = data.replaceAll("false", "N");
+				data = data.replaceAll("true", "Y");
+				JsonReader reader1 = new JsonReader(new StringReader(data));
+				reader1.setLenient(true);
+						
+				List<RoomSrvcVO> listServices = CmmUtil.jsonToRoomSrvcList(reader1);
+				System.out.println(listServices.size());
+				for(RoomSrvcVO vo : listServices){
+					vo.setROOM_USED_ID(roomUseId);
+					vo.setUSER_NAME(loginUser);
 					
-			List<RoomSrvcVO> listServices = CmmUtil.jsonToRoomSrvcList(reader1);
-			System.out.println(listServices.size());
-			for(RoomSrvcVO vo : listServices){
-				vo.setROOM_USED_ID(roomUseId);
-				vo.setUSER_NAME(loginUser);
-				
-				double total = vo.getAMOUNT() * vo.getPRICE();
-				vo.setTOTAL_MONEY(total);
-				
-				if(rtVo.getIS_RETURN()==1) {
-					roomSrvcService.createReturnBill(vo, rtVo);
+					double total = vo.getAMOUNT() * vo.getPRICE();
+					vo.setTOTAL_MONEY(total);
+					
+					if(rtVo.getIS_RETURN()==1) {
+						roomSrvcService.createReturnBill(vo, rtVo);
+					}
+					else roomSrvcService.createAnOrder(vo, rtVo);
+					jvon.setData(roomUseId);
+					jvon.setSuccess(true);
+					isValid = true;
 				}
-				else roomSrvcService.createAnOrder(vo, rtVo);
-				jvon.setData(roomUseId);
-				jvon.setSuccess(true);
-				isValid = true;
 			}
-		}
-		if(isValid && listMethod!= null && listMethod.size() >0){
-			for(PaymentMethodVO pVo : listMethod){
-				pVo.setROOM_USED_ID(roomUseId);
-				phieuThuService.createPhieuThuPayment(rtVo, pVo);
+			if(isValid && listMethod!= null && listMethod.size() >0){
+				for(PaymentMethodVO pVo : listMethod){
+					pVo.setROOM_USED_ID(roomUseId);
+					phieuThuService.createPhieuThuPayment(rtVo, pVo);
+				}
 			}
+			jvon.setSuccess(true);
+		}catch(Exception e) {
+			jvon.setSuccess(false);
+			jvon.setMessage("Error !");
 		}
 		return jvon;
 	}

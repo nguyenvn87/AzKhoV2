@@ -108,7 +108,7 @@ Ext
 															anchor : '100%',
 															hidden: me.isShowNote,
 															emptyText : 'Ghi chú khách hàng',
-															height : 40,
+															height : 80,
 															name : 'DSCRT',
 															labelWidth : 70,
 															fieldLabel : 'Ghi chú'

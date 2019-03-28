@@ -119,7 +119,7 @@
 	                            items:[
 	                				{
 	                                    xtype:'button',
-	                                    //hidden: true,
+	                                    hidden: true,
 	                                    iconCls: 'icon-return',
 	    								itemId : 'btnTraHang',
 	    								height: 30,
@@ -335,7 +335,7 @@
 				                        	},
 				                        	{
 												xtype : 'button',
-												width: 20,
+												width: 30,
 												cls: 'scaner-off',
 												action: 'scanner',
 												tooltip : 'Sử dụng máy quét mã vạch'

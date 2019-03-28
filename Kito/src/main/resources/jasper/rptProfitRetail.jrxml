@@ -116,7 +116,10 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0" lineColor="#1F0B0B"/>
+					<rightPen lineWidth="1.0"/>
 				</box>
 				<staticText>
 					<reportElement x="0" y="0" width="25" height="23" uuid="8307074a-7e4b-4bd5-b166-df9d2bf02711">
@@ -127,6 +130,7 @@
 						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.0"/>
 						<bottomPen lineWidth="0.1"/>
+						<rightPen lineWidth="1.0"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
@@ -141,6 +145,7 @@
 						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.0"/>
 						<bottomPen lineWidth="0.1"/>
+						<rightPen lineWidth="1.0"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="10" isBold="true" isItalic="true" pdfFontName="C:/Windows/Fonts/timesbd.TTF" pdfEncoding="" isPdfEmbedded="true"/>
@@ -156,6 +161,7 @@
 						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.0"/>
 						<bottomPen lineWidth="0.1"/>
+						<rightPen lineWidth="1.0"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="10" isBold="true" isItalic="true" pdfFontName="C:/Windows/Fonts/timesbd.TTF" pdfEncoding="" isPdfEmbedded="true"/>
@@ -166,6 +172,9 @@
 					<reportElement x="140" y="0" width="70" height="23" uuid="a4370fba-2496-4b4f-8c9b-6f5b77af327d">
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					</reportElement>
+					<box>
+						<rightPen lineWidth="1.0"/>
+					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="10" isBold="true" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
@@ -180,6 +189,9 @@
 				</staticText>
 				<staticText>
 					<reportElement x="210" y="0" width="71" height="23" uuid="ab521131-eb64-4c5b-9854-e63257037b8b"/>
+					<box>
+						<rightPen lineWidth="1.0"/>
+					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="10" isBold="true" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
@@ -194,6 +206,7 @@
 						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.0"/>
 						<bottomPen lineWidth="0.1"/>
+						<rightPen lineWidth="1.0"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="10" isBold="true" isItalic="true" pdfFontName="C:/Windows/Fonts/timesbd.TTF" pdfEncoding="" isPdfEmbedded="true"/>
@@ -214,9 +227,9 @@
 				</reportElement>
 				<box>
 					<topPen lineColor="rgba(0, 0, 0, 0.5019608)"/>
-					<leftPen lineColor="rgba(0, 0, 0, 0.5019608)"/>
+					<leftPen lineWidth="1.0" lineColor="#000000"/>
 					<bottomPen lineWidth="0.1" lineColor="rgba(82, 75, 75, 0.5019608)"/>
-					<rightPen lineColor="rgba(0, 0, 0, 0.5019608)"/>
+					<rightPen lineWidth="1.0" lineColor="#000000"/>
 				</box>
 				<textField isBlankWhenNull="true">
 					<reportElement x="0" y="0" width="25" height="18" isRemoveLineWhenBlank="true" uuid="8d77cf8c-2c30-4048-9f87-8d66405f49ff">
@@ -238,7 +251,7 @@
 					<box leftPadding="5">
 						<leftPen lineWidth="0.0"/>
 						<bottomPen lineWidth="0.0"/>
-						<rightPen lineWidth="0.0" lineStyle="Dotted" lineColor="rgba(54, 50, 50, 0.5019608)"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="font-extension" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
@@ -250,7 +263,7 @@
 					<box leftPadding="5">
 						<leftPen lineWidth="0.0"/>
 						<bottomPen lineWidth="0.0"/>
-						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="rgba(138, 131, 131, 0.1254902)"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="font-extension" size="9" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
@@ -262,7 +275,7 @@
 					<box>
 						<leftPen lineWidth="0.0"/>
 						<bottomPen lineWidth="0.0"/>
-						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="rgba(138, 131, 131, 0.1254902)"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
@@ -274,7 +287,7 @@
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					</reportElement>
 					<box rightPadding="5">
-						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="#8A8383"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="font-extension" size="10"/>
@@ -286,7 +299,7 @@
 					<box leftPadding="5">
 						<leftPen lineWidth="0.0"/>
 						<bottomPen lineWidth="0.0"/>
-						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="rgba(138, 131, 131, 0.1254902)"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="font-extension" size="9" isBold="false" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
@@ -301,7 +314,7 @@
 					<box leftPadding="5" rightPadding="6">
 						<leftPen lineWidth="0.0"/>
 						<bottomPen lineWidth="0.0"/>
-						<rightPen lineWidth="0.1" lineStyle="Dotted" lineColor="rgba(138, 131, 131, 0.1254902)"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="font-extension" size="10"/>
@@ -318,15 +331,17 @@
 		<band height="25" splitType="Stretch">
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<frame>
-				<reportElement x="1" y="1" width="549" height="20" uuid="6f18337e-ba66-46c0-a387-6128400bc135"/>
+				<reportElement x="0" y="0" width="550" height="20" uuid="6f18337e-ba66-46c0-a387-6128400bc135"/>
 				<box>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="rgba(105, 98, 98, 0.7058824)"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0"/>
 				</box>
 				<textField pattern="#,##0">
-					<reportElement x="209" y="0" width="71" height="20" uuid="2565059e-9719-4c42-9b4f-67c6c92d5b5b"/>
+					<reportElement x="210" y="0" width="71" height="20" uuid="2565059e-9719-4c42-9b4f-67c6c92d5b5b"/>
 					<box rightPadding="5">
 						<leftPen lineWidth="0.0"/>
-						<rightPen lineWidth="0.0" lineStyle="Dotted" lineColor="#8A8383"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="font-extension" size="10" isBold="true"/>
@@ -334,21 +349,23 @@
 					<textFieldExpression><![CDATA[$V{Variable_2}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="79" y="0" width="60" height="20" uuid="e3751607-13af-495b-ad4e-a37bc547ecdf"/>
+					<reportElement x="79" y="0" width="61" height="20" uuid="e3751607-13af-495b-ad4e-a37bc547ecdf"/>
 					<box>
 						<topPen lineColor="#8A8383"/>
 						<leftPen lineColor="#8A8383"/>
 						<bottomPen lineColor="#8A8383"/>
-						<rightPen lineWidth="0.0" lineStyle="Dotted" lineColor="#8A8383"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="font-extension" size="12" isBold="true" pdfFontName="" pdfEncoding="" isPdfEmbedded="true"/>
 					</textElement>
-					<text><![CDATA[Tổng:]]></text>
+					<text><![CDATA[Tổng]]></text>
 				</staticText>
 				<textField pattern="#,##0">
-					<reportElement x="139" y="0" width="70" height="20" uuid="3cdf3e44-de4f-4352-b13e-6ae00d7ef61f"/>
-					<box rightPadding="5"/>
+					<reportElement x="140" y="0" width="70" height="20" uuid="3cdf3e44-de4f-4352-b13e-6ae00d7ef61f"/>
+					<box rightPadding="5">
+						<rightPen lineWidth="1.0"/>
+					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="font-extension" isBold="true"/>
 					</textElement>

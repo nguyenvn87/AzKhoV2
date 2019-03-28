@@ -719,7 +719,10 @@ Ext.define('MNG.controller.retailController', {
 		mainPanelPayment.setActiveTab(0);
 		
 	},
-	btnOnOffScanner: function(field){
+	btnOnOffScanner: function(field, event){
+		
+		if(event.type != 'click') return;
+		
 		var parent = this;
 		if(parent.scannerOn){ 
 			field.removeCls('scaner-on');
@@ -730,6 +733,7 @@ Ext.define('MNG.controller.retailController', {
 			field.addCls('scaner-on');
 		}
 		parent.scannerOn = !parent.scannerOn;
+		//parent.getProductToBillByCode('SP000008');
 	},
 	activeBarcodeScanner:function(){
 		var parent = this;
@@ -751,6 +755,7 @@ Ext.define('MNG.controller.retailController', {
 			if(parent.barcodeNumber.length > 0 && e.keyCode == e.ENTER){
 				if(parent.scannerOn){
 					Ext.ComponentQuery.query('#SRVC_NM')[0].setValue(parent.barcodeNumber);
+					parent.getProductToBillByCode(parent.barcodeNumber);
 					parent.barcodeNumber = '';
 				}
 			}
@@ -758,38 +763,45 @@ Ext.define('MNG.controller.retailController', {
 		
 	},
 	AddProductToBillByCode: function(recordResult){
-		
 		var gridTmp = Ext.ComponentQuery.query('#grid-room-turn')[0];
 		var isExist = false;
 		tmpStore = gridTmp.getStore();
-		tmpStore.getStore().each(function(record) {		
-			if(recordResult.get('SRVC_CD') != null && recordResult.get('SRVC_CD') == record.get('SRVC_CD')){
+		tmpStore.each(function(record) {		
+			if(recordResult.get('SRVC_CD') != null && recordResult.get('SRVC_CD') == record.get('MENU_ID')){
 				isExist = true;
 			}
 		});
 		
 		if(isExist==false)
 			tmpStore.add({
-				MENU_ID: menuId,
-				PRICE: menuPrice,
-				MENU_NM: menuNm,
-				SRVC_NM: menuNm,
+				MENU_ID: recordResult.get('SRVC_CD'),
+				PRICE: recordResult.get('PRICE'),
+				MENU_NM: recordResult.get('SRVC_NM'),
+				SRVC_NM: recordResult.get('SRVC_NM'),
 				AMOUNT: 1,
-				UNIT: unit,
-				UNIT_NM: unitNm,
-				TOTAL_MONEY: menuPrice,
-				SRVC_ID: srvcId,
-				ACCUMULT :record.get('ACCUMULT')
+				UNIT: recordResult.get('UNIT'),
+				UNIT_NM: recordResult.get('UNIT_NM'),
+				TOTAL_MONEY: 100000,
+				SRVC_ID: recordResult.get('SRVC_ID'),
+				ACCUMULT : 0
 			});
 		else{
 			// Update store
+			tmpStore.each(function(record) {		
+				if(recordResult.get('SRVC_CD') != null && recordResult.get('SRVC_CD') == record.get('MENU_ID')){
+					let newValue = record.get('AMOUNT');
+					newValue = newValue + 1;
+					record.set('AMOUNT',newValue);
+				}
+			});
 		}
 	},
 	getProductToBillByCode: function(srvcCd){
 		var parent = this;
 		var menuStore = Ext.ComponentQuery.query('#grid-menu-id')[0];
 		menuStore.getStore().each(function(record) {		
-			if(srvcCd != null && srvcCd == record.get('SRVC_CD')){
+			if(srvcCd != null && srvcCd.trim() == record.get('SRVC_CD').trim()){
+				
 				parent.AddProductToBillByCode(record);
 				return 1;
 			}

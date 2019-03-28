@@ -117,8 +117,8 @@ Ext.define('MNG.view.srvcView', {
                                          dataIndex: 'AMOUNT_STORE',
                                          align : 'right',
                                          sortable:false,
-                                         text: 'SL Tồn',
-                                         width: 80,
+                                         text: 'Tồn',
+                                         width: 65,
                                          renderer :function(value, p , r){
                            					var data = r.data['AMOUNT_STORE'];
                            					return '<span style="color: red">'+data+'</span>';
@@ -147,6 +147,39 @@ Ext.define('MNG.view.srvcView', {
                                          text: 'Sử dụng',
                                          flex: 0.5
                                      },
+                                     {
+	                                   	 text: 'Mã vạch',
+	                                   	 columns: [{
+	 										menuDisabled : true,
+	 										sortable : false,
+	 										xtype : 'actioncolumn',
+	 										align : 'center',
+	 										width : 40,
+	 										items : [ {
+	 											iconCls : 'icon-pdf',
+	 											tooltip : 'In mã vạch',
+	 											handler : function(grid, rowIndex, colIndex){
+	 												var myController = MANAGER.app.getController('MNG.controller.srvcController');
+	 												myController.btnPrintBarcode(grid, rowIndex, colIndex, 'pdf', 'true');
+	 											}
+	 										} ]
+	 									},
+	                                     {
+											menuDisabled : true,
+											sortable : false,
+											xtype : 'actioncolumn',
+											align : 'center',
+											width : 40,
+											items : [ {
+												iconCls : 'icon-word',
+												tooltip : 'Tải file word',
+												handler : function(grid, rowIndex, colIndex){
+													var myController = MANAGER.app.getController('MNG.controller.srvcController');
+													myController.btnPrintBarcode(grid, rowIndex, colIndex, 'docx', 'true');
+												}
+											} ]
+										}] 
+                                    },
                                      {
 										menuDisabled : true,
 										sortable : false,
@@ -195,10 +228,10 @@ Ext.define('MNG.view.srvcView', {
                                      {
 										menuDisabled : true,
 										sortable : false,
-										text : 'Chỉnh sửa',
+										text : 'Sửa',
 										xtype : 'actioncolumn',
 										align : 'center',
-										width : 90,
+										width : 60,
 										items : [ {
 											iconCls : 'icon-edit',
 											tooltip : 'Chỉnh sửa dòng này',

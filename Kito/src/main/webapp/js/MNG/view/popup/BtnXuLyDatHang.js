@@ -312,7 +312,7 @@ Ext
 													                                }
 																				} ]
 																	},
-																	customContainer,
+																	
 																	{
 																		xtype : 'fieldset',
 																		height : 40,
@@ -323,16 +323,6 @@ Ext
 																			align : 'stretch'
 																		},
 																		items : [
-																				/*{
-																					xtype : 'textareafield',
-																					anchor : '100%',
-																					hidden: true,
-																					height : 40,
-																					name : 'DSCRT',
-																					itemId: 'DSCRT',
-																					labelWidth : 70,
-																					fieldLabel : 'Ghi chú'
-																				},*/
 																				{
 																					xtype : 'checkboxfield',
 																					anchor : '100%',
@@ -342,19 +332,9 @@ Ext
 																					labelWidth : 110,
 																					fieldLabel : 'Đã xuất kho',
 																					boxLabel : ''
-																				}/*,{
-																					xtype : 'combo',
-																					name : 'USERNAME',
-																					fieldLabel : 'Người bán',
-																					labelWidth: 80,
-																					emptyText : 'Chọn người bán',
-																					store : useStore,
-																					displayField : 'FULLNAME',
-																					valueField : 'USERNAME',
-																					value : '',
-																					autoload : false
-																				} */]
+																				}]
 																	},
+																	customContainer,
 																	{
 																		xtype : 'container',
 																		height : 40,

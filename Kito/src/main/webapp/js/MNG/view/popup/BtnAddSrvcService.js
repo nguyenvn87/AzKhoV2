@@ -15,7 +15,7 @@ var tmpDonViStore = Ext.create('MNG.store.cdUserStore',{});
 Ext.define('MNG.view.popup.BtnAddSrvcService', {
 	extend : 'Ext.window.Window',
 	requires:['Ext.custom.common.NumberField'],
-	Height : 300,
+	Height : 400,
 	width : 600,
 	y: 10,
 	//x: 10,
@@ -33,7 +33,7 @@ Ext.define('MNG.view.popup.BtnAddSrvcService', {
 		Ext.applyIf(me, {
 			items : [ {
 				xtype : 'container',
-				cls : 'jdvn-main',
+				//cls : 'jdvn-main',
 				id : 'btnSrvcContainerId',
 				layout : {
 					align : 'stretch',
@@ -48,8 +48,9 @@ Ext.define('MNG.view.popup.BtnAddSrvcService', {
 					items : [
 					         {
 					        	xtype : 'fieldset',
-					        	title: 'Thông tin dịch vụ',
-					        	collapsible: true,
+					        	//title: 'Thông tin dịch vụ',
+					        	//collapsible: true,
+					        	border: false,
 					        	padding : '10 10 10 10',
 					        	flex: 1,
 								layout : {
@@ -170,11 +171,11 @@ Ext.define('MNG.view.popup.BtnAddSrvcService', {
 				                             ]
 				                       },
 								       {
-										xtype : 'textfield',
+										xtype : 'textarea',
 										itemId : 'DSCRT',
 										name : 'DSCRT',
-										height: 50,
-										emptyText : 'Mô tả sản phẩm',
+										height: 100,
+										emptyText : 'Mô tả',
 										flex : 1,
 										fieldLabel : 'Mô tả',
 									}
@@ -185,6 +186,7 @@ Ext.define('MNG.view.popup.BtnAddSrvcService', {
 								title: 'Thiết lập thêm',
 								collapsible: true,
 								collapsed: true,
+								hidden: true,
 								flex: 1,
 								layout : {
 									align : 'stretch',
