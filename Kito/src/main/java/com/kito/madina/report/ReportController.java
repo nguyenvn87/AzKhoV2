@@ -328,11 +328,16 @@ public class ReportController {
 		String isCanceled = req.getParameter("IS_CANCELED");
 		String isOrder = req.getParameter("IS_ORDER");
 		String havePayed = req.getParameter("HAS_PAYED");
+		String isReturn = req.getParameter("IS_RETURN");
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
 		if(isDebit != null && isDebit.equals("true")){
 			map.put("IS_DEBIT", 1);
+		}
+		if(isReturn != null){
+			if(isReturn != null && isReturn.equals("1")) map.put("IS_RETURN", 1);
+			else if(isReturn.equals("0")) map.put("IS_RETURN", 0);
 		}
 		if(isDelivered != null ){
 			if(isDelivered.equals("1"))

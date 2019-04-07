@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kito.madina.cmmn.util.SessionUtil;
+import com.kito.madina.cmmn.util.UtilConst;
 import com.kito.madina.test.dao.RoomTurnDAO;
 import com.kito.madina.test.service.RoomTurnService;
 import com.kito.madina.test.vo.RoomTurnVO;
@@ -98,7 +99,7 @@ public class RoomTurnServiceImpl implements RoomTurnService{
 		try{
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("RESTAR_ID", restarId);
-			RoomTurnVO rVo = getLastRoomTurnByIndex(1);
+			RoomTurnVO rVo = getLastRoomTurnByIndex(1, strCodeBill);
 			if(rVo != null && rVo.getBILL_CD().length() > 6){
 				String billCode = rVo.getBILL_CD();
 				if(billCode.length() > 6){
@@ -145,11 +146,12 @@ public class RoomTurnServiceImpl implements RoomTurnService{
 		return obj;
 	}
 	@Override
-	public RoomTurnVO getLastRoomTurnByIndex(int index){
+	public RoomTurnVO getLastRoomTurnByIndex(int index, String billType){
 		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("RESTAR_ID", restarId);
 		map.put("rn1", index);
+		map.put("IS_RETURN", billType==UtilConst.ECOUNT_PREFIX_HOADON?0:1);
 		RoomTurnVO obj = roomTurnDAO.getLastRoomTurnByIndex(map);
 		return obj;
 	}

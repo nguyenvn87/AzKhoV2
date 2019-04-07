@@ -2,7 +2,6 @@ package com.kito.madina.test.service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.kito.madina.test.vo.RoomSrvcVO;
 import com.kito.madina.test.vo.RoomTurnVO;
@@ -26,4 +25,5 @@ public interface RoomSrvcService {
 	public List<HashMap<String, Object>> getChiTietThongKeBanHangTheoNgay(HashMap<String, String> map);
 	public HashMap<String, Object> getCountChiTietBanHangTheoNgay(HashMap<String, String> map);
 	public int createReturnBill(RoomSrvcVO vo, RoomTurnVO turnBuyVo);
+	
 }

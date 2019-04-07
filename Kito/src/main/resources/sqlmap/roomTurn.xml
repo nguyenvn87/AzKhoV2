@@ -293,7 +293,13 @@
 		T.IS_RETURN,
 		@row := @row + 1 AS rn1
 	FROM room_turn T,(SELECT @row := 0) K
-	WHERE T.RESTAR_ID = #RESTAR_ID#
+	WHERE T.RESTAR_ID = #RESTAR_ID# 
+		<isEqual compareValue="1" property="IS_RETURN" prepend="AND">
+						T.IS_RETURN = 1
+		</isEqual>
+		<isEqual compareValue="0" property="IS_RETURN" prepend="AND">
+						T.IS_RETURN = 0
+		</isEqual>
 	ORDER BY T.BILL_CD DESC 	
   </sql>
    <sql id="getAllListTurnStatistic1111">	
@@ -354,6 +360,12 @@
 			</isEqual>
 			<isEqual compareValue="1" property="IS_ORDER" prepend="AND">
 						T.IS_ORDER = 1
+			</isEqual>
+			<isEqual compareValue="1" property="IS_RETURN" prepend="AND">
+						T.IS_RETURN = 1
+			</isEqual>
+			<isEqual compareValue="0" property="IS_RETURN" prepend="AND">
+						T.IS_RETURN = 0
 			</isEqual>
 			<isNotEmpty property="CUS_CD" prepend="AND">
 					<![CDATA[ T.CUS_CD = #CUS_CD# ]]>

@@ -131,7 +131,7 @@ public class SrvcRestController {
 		String loginUser = SessionUtil.getSessionAttribute("loggedUserId").toString();
 		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
 		
-		try {
+		//try {
 			String roomUseId = req.getParameter("ROOM_USE_ID");
 			String dataList = req.getParameter("DATA");
 			String timePay = req.getParameter("CHANGE_DATE");
@@ -176,6 +176,7 @@ public class SrvcRestController {
 			String billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_HOADON);
 			if(rtVo.getIS_RETURN()==1) billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_TRAHANG);
 			rtVo.setBILL_CD(billCD);
+			if(rtVo.getCREATE_USER()==null || rtVo.getCREATE_USER().isEmpty()) rtVo.setCREATE_USER(loginUser);
 			
 			roomTurnService.CreateRoomTurnVO(rtVo);
 			
@@ -224,10 +225,10 @@ public class SrvcRestController {
 				}
 			}
 			jvon.setSuccess(true);
-		}catch(Exception e) {
-			jvon.setSuccess(false);
-			jvon.setMessage("Error !");
-		}
+		//}catch(Exception e) {
+		//	jvon.setSuccess(false);
+		//	jvon.setMessage("Error !");
+		//}
 		return jvon;
 	}
 

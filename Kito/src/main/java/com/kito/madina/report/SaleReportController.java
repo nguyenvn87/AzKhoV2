@@ -292,6 +292,7 @@ public class SaleReportController {
 		String isCanceled = req.getParameter("IS_CANCELED");
 		String isDelivered = req.getParameter("IS_DELIVERED");
 		String isDebit = req.getParameter("DEBIT");
+		String isReturn = req.getParameter("IS_RETURN");
 
 		String statisType = req.getParameter("LIID");
 		String startDateParam = req.getParameter("STARTDATE");
@@ -345,6 +346,8 @@ public class SaleReportController {
 			map.put("IS_DELIVERED", 1);
 		if (isDelivered != null && isDelivered.equalsIgnoreCase("0"))
 			map.put("IS_DELIVERED", 0);
+		if (isReturn != null && isReturn.equalsIgnoreCase("1")) map.put("IS_RETURN", 1);
+		if (isReturn != null && isReturn.equalsIgnoreCase("0")) map.put("IS_RETURN", 0);
 		
 		if (isDebit != null && isDebit.equals("true")) map.put("IS_DEBIT", 1);
 		if(userName != null && !userName.isEmpty()) map.put("USER_NAME", userName);

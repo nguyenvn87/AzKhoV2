@@ -1,10 +1,8 @@
 package com.kito.madina.test.service.impl;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kito.madina.cmmn.util.SessionUtil;
-import com.kito.madina.logger.LogUtil;
 import com.kito.madina.test.dao.RoomSrvcDAO;
 import com.kito.madina.test.service.RoomSrvcService;
 import com.kito.madina.test.service.SrvcService;
@@ -157,4 +154,5 @@ public class RoomSrvcServiceImpl implements RoomSrvcService{
 		}
 		return i;
 	}
+	
 }

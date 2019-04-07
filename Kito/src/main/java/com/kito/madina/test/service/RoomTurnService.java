@@ -23,5 +23,5 @@ public interface RoomTurnService {
 	public List<RoomTurnVO> getDeletedBillHistory(HashMap<String, Object> map);
 	public HashMap<String, Object> getDeletedBillHistoryCount(HashMap<String, Object> map);
 	public RoomTurnVO getRoomTurnHistoryVOByObject(RoomTurnVO rtVo);
-	public RoomTurnVO getLastRoomTurnByIndex(int index);
+	public RoomTurnVO getLastRoomTurnByIndex(int index, String typeBill);
 }

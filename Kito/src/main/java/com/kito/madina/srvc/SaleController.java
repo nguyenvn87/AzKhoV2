@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -80,6 +81,7 @@ public class SaleController {
 	private PhieuChiService phieuChiService;
 	
 	
+	@Transactional(rollbackFor = Exception.class)
 	@RequestMapping("/sale/saveSaleOrderList.json")
 	public ModelAndView saveSaleServices111(HttpServletRequest req, RoomTurnVO rtVo) {
 		
@@ -166,9 +168,10 @@ public class SaleController {
 				if(rtVo.getIS_RETURN()==1) {
 					roomSrvcService.createReturnBill(vo, rtVo);
 				}
-				else
+				else {
 				// END ADD NEW 2019/03/16
 					roomSrvcService.createAnOrder(vo, rtVo);
+				}
 				jvon.setData(roomUseId);
 				jvon.setSuccess(true);
 				isValid = true;
