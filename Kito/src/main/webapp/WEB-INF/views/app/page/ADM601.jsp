@@ -6,21 +6,19 @@
 <script type="text/javascript">
 var formatSupporter = Ext.create('BIZ.utilities.formatSupporter',{});
 var paramsRequest = {
-			TYPE_STATIS: null,
+			TYPE_STATIS: 'OTHER',
 			STARTDATE: null,
 			ENDDATE: null,
 			IS_CANCELED: 0,
-			IS_ORDER: 1,
-			IS_DELIVERED: 0,
-			IS_RETURN: 0,
-			USERNAME: ''
+			USERNAME: '',
+			IS_RETURN: 1
 		};
 Ext.application({
 	name : 'MANAGER',
 	appFolder : contextPath + '/MNG',
-	controllers : [ 'MNG.controller.donDatHangController' ],
+	controllers : [ 'MNG.controller.quanLyTraHangController' ],
 	launch : function() {
-		Ext.create('MNG.view.donDatHangView', {
+		Ext.create('MNG.view.xuLyDonHangView', {
 			renderTo : 'land_contents',
 			listeners:{
 				afterrender:function(){

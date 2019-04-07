@@ -8,7 +8,7 @@ var customerStore = Ext.create('MNG.store.customerStore');
 Ext.define('MNG.view.favoriteCustomerView', {
     extend: 'Ext.panel.Panel',
     cls: '',
-    isHideAddNew: false,
+    isHideAddNew: true,
     layout: {
         align: 'stretch',
         type: 'vbox'

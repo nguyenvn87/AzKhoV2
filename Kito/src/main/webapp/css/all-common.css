@@ -126,6 +126,9 @@
 .icon-bill{
 	background-image:url('../images/icon/icon-bill.png') !important;
 }
+.icon-down {
+    background-image: url(../images/icon/icodown.png) !important;
+}
 .x-grid-row-summary .x-grid-cell-inner {
   font-weight: bold;
   color: red;

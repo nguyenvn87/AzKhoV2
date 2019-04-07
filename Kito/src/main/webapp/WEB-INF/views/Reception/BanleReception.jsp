@@ -74,13 +74,13 @@
                             items: [
                             	{
                                     xtype:'button',
-                                    text: 'Báo cáo doanh số theo đơn',
+                                    text: 'Báo cáo ngày',
                                     itemId : 'btnDailyReport',
                                     iconCls : 'icon-print'
                                 },
                                 {
                                     xtype:'button',
-                                    text: 'Báo cáo doanh số theo mặt hàng',
+                                    text: 'Xem tồn kho',
                                     itemId : 'btnXemTonKho',
                                     iconCls : 'icon-print'
                                 }
