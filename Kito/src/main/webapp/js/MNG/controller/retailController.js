@@ -107,9 +107,19 @@ Ext.define('MNG.controller.retailController', {
 			
 		});
 	},
-	btnXemTonKho:function(){
+	btnXemTonKho111:function(){
 		var location = contextPath + "/saleReport/baocaotonkho.do"; //+ param;
 		utilForm.btn_template_popup(location,"Tồn kho",900,1024,true);
+	},
+	btnXemTonKho:function(){
+		
+		var arrDate = formatSupporter.getEnglishDate('TODAY');
+		var param = "?SALE=1";  
+		if(arrDate[0] != null)param = param + "&STARTDATE="+arrDate[0];
+		if(arrDate[1] != null)param = param + "&ENDDATE="+arrDate[1];
+		
+		var location = contextPath + "/report/ThongKeChiTiet.do" + param;
+		utilForm.btn_template_popup(location,"Thống Kê Bán Hàng",600,1024,true);
 	},
 	testClick: function(){
 		var location = contextPath + "/report/testreport.do"; //+ param;

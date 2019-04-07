@@ -4,10 +4,10 @@ var formatSupporter = Ext.create('BIZ.utilities.formatSupporter',{});
 var supportEvent = Ext.create('BIZ.utilities.supportEvent',{});
 var totalValue = 0;
 var BtnUpdatePayment = Ext.create('MNG.view.popup.BtnUpdatePayment',{});
-var btnViewDetail = Ext.create('MNG.view.popup.BtnXuLyDatHang',{});
-Ext.define('MNG.controller.donDatHangController', {
+var btnViewDetail = Ext.create('MNG.view.popup.BtnChiTietDonHang',{});
+Ext.define('MNG.controller.quanLyTraHangController', {
 	extend : 'Ext.app.Controller',
-	views : ['MNG.view.donDatHangView'],
+	views : ['MNG.view.xuLyDonHangView'],
 	roomUseId: null,
 	popup: null,
 	popLookupTime: null,
@@ -20,11 +20,8 @@ Ext.define('MNG.controller.donDatHangController', {
 			STARTDATE: null,
 			ENDDATE: null,
 			IS_CANCELED: 0,
-			IS_ORDER: 1,
-			IS_DELIVERED: 0,
-			IS_RETURN: 0,
-			USERNAME: ''
-	},
+			IS_RETURN: 1
+			},
 	billObj:{
 		IS_DELIVERED: -1
 	},
@@ -48,9 +45,6 @@ Ext.define('MNG.controller.donDatHangController', {
 			},
 			'#btnStatisPrint':{
 				click : this.btnStatisPrint 
-			},
-			'#btnExportExcelPrint':{
-				click : this.btnExportExcelPrint 
 			},
 			'#btnExportPrint':{
 				click: this.btnExportPrint 
@@ -106,7 +100,9 @@ Ext.define('MNG.controller.donDatHangController', {
 	},
 	btnStatisDaily: function(){
 		var today = new Date();
+		//this.startDate = formatSupporter.getTimeStempDateFormat(today);
 		arrTime = formatSupporter.getEnglishDate('TODAY');
+		//this.this.paramsRequest.TYPE_STATIS = 'OTHER';
 		this.paramsRequest.STARTDATE = arrTime[0];
 		this.paramsRequest.ENDDATE = arrTime[1];
 		console.info(this.paramsRequest);
@@ -116,8 +112,8 @@ Ext.define('MNG.controller.donDatHangController', {
 	},
 	btnStatisAllTime:function(){
 		var today = new Date();
-		this.startDate = null;
-		this.endDate = null;
+		this.startDate = null;//formatSupporter.getTimeStempDateFormat(today);
+		this.endDate = null;//
 		this.paramsRequest.TYPE_STATIS = null;
 		this.paramsRequest.STARTDATE = this.startDate;
 		this.paramsRequest.ENDDATE = this.startDate;
@@ -135,7 +131,9 @@ Ext.define('MNG.controller.donDatHangController', {
 	},
 	btnStatisMonthly:function(){
 		var today = new Date();
+		//this.startDate = formatSupporter.getTimeStempDateFormat(today);
 		arrTime = formatSupporter.getEnglishDate('MONTH');
+		//this.paramsRequest.TYPE_STATIS = 'MONTH';
 		this.paramsRequest.STARTDATE = arrTime[0];
 		this.paramsRequest.ENDDATE = arrTime[1];
 		
@@ -164,11 +162,6 @@ Ext.define('MNG.controller.donDatHangController', {
 				param = param + "&USER_NAME=" + this.paramsRequest.USER_NAME;
 		if(this.paramsRequest.IS_CANCELED != null)
 				param = param + "&IS_CANCELED="+this.paramsRequest.IS_CANCELED; 
-		if(this.paramsRequest.IS_CANCELED != null)
-				param = param + "&IS_ORDER="+this.paramsRequest.IS_ORDER;
-		if(this.paramsRequest.IS_DELIVERED != null)
-				param = param + "&IS_DELIVERED="+this.paramsRequest.IS_DELIVERED; 
-		
 		var location = contextPath + "/saleReport/calculateProfit.do" + param;
 		utilForm.btn_template_popup(location,"Doanh thu",800,1024,true);
 	},
@@ -295,19 +288,28 @@ Ext.define('MNG.controller.donDatHangController', {
 		};
 		this.submitUpdateBill(params);
 	},
+	showCustomerInfo1:function(param){
+		//this.billObj.IS_DELIVERED = -1;
+		//this.billObj.IS_DELIVERED = param.isdeliver;
+		console.info(param);
+    	btnViewDetail.config = param;
+    	btnViewDetail.show();
+    	//btnViewDetail.renderValue();
+	},
 	showCustomerInfo:function(param){
-		
-		btnViewDetail.isChangeDate = false;
+		//this.billObj.IS_DELIVERED = -1;
+		//this.billObj.IS_DELIVERED = param.isdeliver;
 		btnViewDetail.config = param;
     	btnViewDetail.config.ROOM_USED_ID = param.ROOM_USED_ID;
     	btnViewDetail.show();
     	btnViewDetail.renderValue();
     	btnViewDetail.reloadListProduct(param.ROOM_USED_ID);
 	},
-	BtnCancelBill:function(){
+	BtnCancelBill:function(me){
 		var parent = this;
 		var params = {
 				IS_DELIVERED: (Ext.ComponentQuery.query('#deliveryContainerInfo [name=IS_DELILVER]')[0].getValue()==true)?1:0,
+				DSCRT: me.up('window').down('[name=DSCRT]').getValue(),
 				HAS_PAYED: (Ext.ComponentQuery.query('#paymentContainerInfo [name=HAS_PAYED]')[0].getValue()==true)?1:0,
 				ROOM_USED_ID: btnViewDetail.config.ROOM_USED_ID,
 				IS_CANCELED: 1,
@@ -319,7 +321,8 @@ Ext.define('MNG.controller.donDatHangController', {
 		});
 	},
 	submitUpdateBill:function(params){
-		
+		console.info('params');
+		console.info(params);
 		var submitFinishUrl = contextPath + '/customer/updateBillCustomer.json';
 		supportEvent.showLoadingOnprogress('Đang cập nhật', '');
 		Ext.Ajax.request( {
@@ -352,6 +355,7 @@ Ext.define('MNG.controller.donDatHangController', {
 				SRVC_ID: rec.get('SRVC_ID')
 		};
 		this.submitDeleteRequestBill(_params);
+		//this.submitUpdateBill(_params);
 	},
 	isDupplicateRecord:function(menuId, _srvcRoomStore){
 		var isExist = false;
@@ -387,7 +391,6 @@ Ext.define('MNG.controller.donDatHangController', {
 			});
 	},
 	submitOrder:function(compt){
-		btnViewDetail.hide();
 		
 		var parent = this;
 		var param = {};
@@ -412,8 +415,7 @@ Ext.define('MNG.controller.donDatHangController', {
 		valuePayed = Ext.ComponentQuery.query('#paymentContainerInfo [name=PAYED_MONEY]')[0].getValue();
 		hasPayed = Ext.ComponentQuery.query('#paymentContainerInfo [name=HAS_PAYED]')[0].getValue();
 		isDelivered = Ext.ComponentQuery.query('#deliveryContainerInfo [name=IS_DELILVER]')[0].getValue();
-		changeDate = Ext.ComponentQuery.query('#CHANGE_DATE11')[0].getValue();
-		discountValue = Ext.ComponentQuery.query('#paymentContainerInfo [name=DISCOUNT]')[0].getValue();
+		//dscrt = Ext.ComponentQuery.query('#deliveryContainerInfo [name=DSCRT]')[0].getValue();
 		userName = compt.up('window').down('[name=USERNAME]').getValue();
 		dscrt = compt.up('window').down('[name=DSCRT]').getValue();
 		
@@ -423,27 +425,15 @@ Ext.define('MNG.controller.donDatHangController', {
 		param['PAYED_MONEY'] = valuePayed;
 		param['IS_DELIVERED'] = (isDelivered==true)?1:0;;
 		param['HAS_PAYED'] = (hasPayed==true)?1:0;
-		param['DISCOUNT'] = discountValue != null?discountValue:0;
+		param['CUS_CD'] = cusCD;
+		param['DSCRT'] = dscrt;
+		param['CUS_NM'] = cusNM;
 		param['USER_NAME'] = userName;
 		
-		if(btnViewDetail.isChangeDate == true){
-			var mydate = new Date(changeDate);
-			param['CHANGE_DATE'] = formatSupporter.getTimeStempDateFormat(mydate)+' 05:10:10';
-		}else{
-			param['CHANGE_DATE'] = '';
-		}
-		
-		if(cusCD != null && cusCD != undefined && cusCD.length > 0){
-			param['CUS_CD'] = cusCD;
-		}
-		param['CUS_NM'] = cusNM;	
-		param['DSCRT'] = dscrt;
-		
-		if(param['ROOM_USE_ID'] != null && param['ROOM_USE_ID'].trim().length > 1)
-			parent.btnSavingRequest(param);
+		parent.btnSavingRequest(param);
 	},
 	btnSavingRequest:function(paramsData){
-		supportEvent.showLoadingOnprogress('Đang xử lý, vui lòng đợi giây lát !', '');
+				
 		url_request = contextPath + '/sale/saveEditSaleOrderList.json';
 		Ext.Ajax.request( {
 		    	url: url_request,
@@ -454,32 +444,11 @@ Ext.define('MNG.controller.donDatHangController', {
 		    		btnViewDetail.hide();
 	    			var statisStore = Ext.ComponentQuery.query("#grid-srvc-statistic")[0].getStore();
 	    			statisStore.load();
-	    			//supportEvent.hiddeMessageBox();
 		    		supportEvent.showMessageSuccess('Cập nhật thành công');
-	    			//supportEvent.notiSuccess('Thông báo','Cập nhật thành công !');
 		    	},
 		    	failure: function(response){
 		    		Ext.MessageBox.alert('Status', 'Có lỗi xảy ra !');
 		    	}
 		 });	
 	},
-	btnExportExcelPrint: function(){
-		var me = this;
-		var param = "?FILENAME="+ "Danh_Sach_Don"; 
-		if(me.paramsRequest.STARTDATE != null)
-				param = param + "&STARTDATE=" + me.paramsRequest.STARTDATE;
-		if(me.paramsRequest.ENDDATE != null)
-				param = param + "&ENDDATE=" + me.paramsRequest.ENDDATE;
-		if(me.paramsRequest.USER_NAME != null)
-				param = param + "&USER_NAME=" + me.paramsRequest.USER_NAME;
-		if(me.paramsRequest.IS_CANCELED != null)
-				param = param + "&IS_CANCELED="+me.paramsRequest.IS_CANCELED; 
-		if(me.paramsRequest.IS_CANCELED != null)
-				param = param + "&IS_ORDER="+me.paramsRequest.IS_ORDER;
-		if(me.paramsRequest.IS_DELIVERED != null)
-				param = param + "&IS_DELIVERED="+me.paramsRequest.IS_DELIVERED; 
-		
-		var _url = contextPath + '/saleReport/excel/DanhSachDonHang.do'+param;
-		supportEvent.downloadFile(_url);
-	}
 })

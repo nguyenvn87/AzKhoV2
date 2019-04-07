@@ -19,7 +19,7 @@ Ext.define('MNG.view.popup.BtnChonDonTra', {
     	} ]
     }),
     autoShow: true,
-    height: 499,
+    height: 550,
     width: 789,
     title: 'Chọn đơn cần trả',
 
@@ -62,7 +62,10 @@ Ext.define('MNG.view.popup.BtnChonDonTra', {
                     items: [
                         {
                             xtype: 'button',
-                            text: 'Trả nhanh'
+                            text: 'Trả nhanh',
+                            handler: function(){
+                            	me.close();
+                            }
                         }
                     ]
                 }
@@ -70,7 +73,7 @@ Ext.define('MNG.view.popup.BtnChonDonTra', {
             items: [
                 {
                     xtype: 'panel',
-                    height: 413,
+                    height: 490,
                     autoScroll: true,
                     title: '',
                     items: [
@@ -102,13 +105,13 @@ Ext.define('MNG.view.popup.BtnChonDonTra', {
 									xtype : 'gridcolumn',
 									sortable : true,
 									align : 'left',
-									width : 95,
+									width : 90,
 									dataIndex : 'BILL_CD',
 									text : 'Hóa đơn số'
 								},
 								{
 									xtype : 'numbercolumn',
-									width : 120,
+									width : 110,
 									format: '0,000',
 									sortable : false,
 									align : 'right',
@@ -132,20 +135,30 @@ Ext.define('MNG.view.popup.BtnChonDonTra', {
 									width : 120
 								},
 								{
+									menuDisabled : true,
+									sortable : false,
+									xtype : 'actioncolumn',
+									align : 'center',
+									text : 'Chọn',
+									width : 60,
+									items : [ {
+										iconCls : 'icon-down',
+										tooltip : 'Chọn đơn này',
+										handler : function(grid, rowIndex, colIndex) {
+											store = grid.getStore();
+											var rec = store.getAt(rowIndex);
+											me.loadDonTraHang(rec);
+										}
+									} ]
+								},
+								{
 									xtype : 'gridcolumn',
 									dataIndex : 'DSCRT',
 									sortable : false,
 									text : 'Ghi chú',
 									flex : 0.5
-								},
-                                {
-                                    xtype: 'actioncolumn',
-                                    items: [
-                                        {
-
-                                        }
-                                    ]
-                                }
+								}
+								
                             ],
                             dockedItems : [ {
 								xtype : 'pagingtoolbar',
@@ -186,5 +199,42 @@ Ext.define('MNG.view.popup.BtnChonDonTra', {
 		storeTmp.load({
 			 callback: function (records, operation, success) {}
 		});
+	},
+	loadDonTraHang: function(record){
+		let parent = this;
+		Ext.MessageBox.confirm('Vui lòng xác nhận', 'Bạn muốn chọn đơn này ?', function(btn){
+			if(btn == 'yes'){
+				parent.getRequestMethod(record);
+			}else{
+			}
+		});
+	},
+	getRequestMethod: function(record){
+		me = this;
+		supportEvent.showLoadingOnprogress('Đang lấy dữ liệu','');
+		Ext.Ajax.request( {
+			url: contextPath + '/manager/getListRoomTurn.json',
+			method:'GET',
+			params: {
+				  ROOM_USED_ID: record.data.ROOM_USED_ID
+			},
+			success: function(response){
+				supportEvent.hiddeMessageBox();
+				  var text = Ext.JSON.decode(response.responseText);
+				  data = text.data;
+				  console.info('data', data);
+				  me.fillDataOnForm(data);
+			},
+			failure: function(response){
+				  supportEvent.showMessageError('Có lỗi xảy ra !');			
+			}
+		});
+	},
+	fillDataOnForm: function(data){
+		let parent = this;
+		var GridTurn = Ext.ComponentQuery.query('#grid-room-turn')[0];
+		var storeTmp = GridTurn.getStore();
+		storeTmp.add(data);
+		parent.close();
 	}
 });
