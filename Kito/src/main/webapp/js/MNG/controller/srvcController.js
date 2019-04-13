@@ -154,9 +154,9 @@ Ext.define('MNG.controller.srvcController', {
     				storeTmp.load();
     			}
     			else{
-    				if(text.message != null && text.message.trim() == 'EXIST')
-    					supportEvent.showMessageError('Đã tồn tại mã hàng này');
-    				else supportEvent.showMessageError(text.message);
+    				//if(text.message != null && text.message.trim() == 'EXIST')
+    				supportEvent.showMessageError('Có lỗi xảy ra hoặc đã tồn tại mã hàng này');
+    				//else supportEvent.showMessageError(text.message);
     			}
     		},
     		failure: function(response){

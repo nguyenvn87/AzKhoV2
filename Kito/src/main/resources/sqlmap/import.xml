@@ -75,7 +75,7 @@
 	    WHERE IMPRT_CD = #IMPRT_CD# and RESTAR_ID = #RESTAR_ID#
   </insert>
   <delete id="DeleteImportVo">
-  	DELETE FROM import WHERE IMPRT_CD = #IMPRT_CD#
+  	DELETE FROM import WHERE IMPRT_CD = #IMPRT_CD# and RESTAR_ID = #RESTAR_ID#
   </delete>
   <sql id="sqlGetListImport">
 	  		SELECT im.*

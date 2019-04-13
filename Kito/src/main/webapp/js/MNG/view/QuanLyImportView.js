@@ -163,7 +163,7 @@ Ext.define('MNG.view.QuanLyImportView', {
  		                                },
  		                               {
  	                                	text: 'Xóa',
- 	                                	//hidden: true,
+ 	                                	hidden: true,
  	                                	iconCls: 'icon-search',
  	                                	itemId: 'delMenuBtn'
  	 		                           }
