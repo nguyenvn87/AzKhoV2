@@ -18,7 +18,7 @@ Ext.application({
 	appFolder : contextPath + '/MNG',
 	controllers : [ 'MNG.controller.quanLyTraHangController' ],
 	launch : function() {
-		Ext.create('MNG.view.xuLyDonHangView', {
+		Ext.create('MNG.view.quanLyTraHangView', {
 			renderTo : 'land_contents',
 			listeners:{
 				afterrender:function(){

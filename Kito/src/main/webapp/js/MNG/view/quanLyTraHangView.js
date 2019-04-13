@@ -4,12 +4,12 @@ var statisticStore = Ext.create('MNG.store.roomTurnStore', {
 		direction : 'desc'
 	} ]
 });
-
 var useStore = Ext.create('MNG.store.userStore', {});
 useStore.load();
+
 Ext
 		.define(
-				'MNG.view.saleStatisticAll',
+				'MNG.view.quanLyTraHangView',
 				{
 					extend : 'Ext.panel.Panel',
 					cls : '',
@@ -106,7 +106,7 @@ Ext
 																		},
 																		{
 																			xtype : 'gridcolumn',
-																			width : 120,
+																			width : 95,
 																			sortable : false,
 																			align : 'right',
 																			text : "Tổng tiền",
@@ -116,8 +116,7 @@ Ext
 																					r) {
 																				data = r.data['TOTAL_MONEY'];
 																				if (data != ''){
-																					data = formatSupporter
-																							.formatToMoney(data);
+																					data = formatSupporter.formatToMoney(data);
 																				}
 																				return '<span style="color: red">'+data+'</span>';
 																			}
@@ -135,8 +134,7 @@ Ext
 																					r) {
 																				data = r.data['PAYED_MONEY'];
 																				if (data != ''){
-																					data = formatSupporter
-																							.formatToMoney(data);
+																					data = formatSupporter.formatToMoney(data);
 																				}
 																				return '<span style="color: green">'+data+'</span>';
 																			}
@@ -176,38 +174,29 @@ Ext
 																		{
 																			menuDisabled : true,
 																			sortable : false,
-																			text : '',
+																			text : 'Chỉnh sửa',
 																			xtype : 'actioncolumn',
 																			align : 'center',
-																			width : 50,
-																			items : [ 
-																			   { 
-																				iconCls : 'icon-pdf',
-																				tooltip : 'In hóa đơn PDF',
-																				handler : me.exportPdfFile
-																			   }
-																			   ]
-																		},
-																		{
-																			menuDisabled : true,
-																			sortable : false,
-																			text : '',
-																			xtype : 'actioncolumn',
-																			align : 'center',
-																			width : 50,
-																			items : [ 
-																			   { 
-																				iconCls : 'icon-excel',
-																				tooltip : 'Xuất excel',
-																				handler : me.exportExcelFile
-																			   } 
-																			   ]
+																			width : 100,
+																			items : [ {
+																				iconCls : 'icon-edit',
+																				tooltip : 'Sửa',
+																				handler : function(
+																						grid,
+																						rowIndex,
+																						colIndex) {
+																					me
+																							.showDetail(
+																									grid,
+																									rowIndex,
+																									colIndex);
+																				}
+																			} ]
 																		},
 																		{
 																			xtype : 'gridcolumn',
 																			dataIndex : 'HAS_PAYED',
 																			sortable : true,
-																			align: 'center',
 																			text : 'Thanh toán',
 																			width : 100,
 																			renderer : function(
@@ -240,7 +229,7 @@ Ext
 																				debit = r.data['IS_DELIVERED'];
 																				if (debit == '1'
 																						|| debit == 1) {
-																					return '';
+																					return 'Đã xuất';
 																				}
 																				return 'Chưa xuất';
 																			}
@@ -273,7 +262,7 @@ Ext
 																			dataIndex : 'SALER',
 																			sortable : false,
 																			text : 'Người bán',
-																			width : 120
+																			width : 110
 																		} ],
 																tbar : [
 																		{
@@ -302,38 +291,29 @@ Ext
 																			itemId : 'FULLNAME',
 																			name : 'FULLNAME',
 																			fieldLabel : 'Người bán',
-																			labelWidth: 80,
 																			emptyText : 'Chọn người bán',
 																			store : useStore,
 																			displayField : 'FULLNAME',
 																			valueField : 'USERNAME',
 																			value : '',
-																			autoload : false
-																		},{
-																            xtype: 'radiogroup',
-																            hidden: true,
-																            itemId : 'typeOfBill',
-																            fieldLabel: '',
-																            layout : {
-																					type : 'hbox',
-																					flex : 1
-																				},
-																            items: [
-																                {boxLabel: 'Đã xuất kho', name: 'loaidon', inputValue: 1},
-																                {boxLabel: 'Tất cả đơn', name: 'loaidon', inputValue: 0, checked: true}
-																            ]
-																        } ],
+																			autoload : false,
+																			listener: {
+																				onChange: function(){
+																					alert(1);
+																				}
+																			}
+																		} ],
 																bbar : [
 																		{
 																			text : 'PDF',
 																			iconCls : 'icon-pdf',
-																			height : 22,
+																			height : 35,
 																			itemId : 'btnStatisPrint',
 																		},
 																		{
 																			text : 'Excel',
 																			iconCls : 'icon-excel',
-																			height : 22,
+																			height : 35,
 																			itemId : 'btnExcelPrint',
 																		} ],
 																dockedItems : [ {
@@ -394,17 +374,33 @@ Ext
 											} ]
 										});
 						me.callParent(arguments);
-	},
-	exportPdfFile: function(grid,rowIndex,colIndex){
-		grid.getSelectionModel().select(rowIndex);
-		var myController = MANAGER.app
-								.getController('MNG.controller.saleStatisticController');
-		myController.showPopupPdf(grid.getStore().getAt(rowIndex));
-	},
-	exportExcelFile: function(grid,rowIndex,colIndex){
-		grid.getSelectionModel().select(rowIndex);
-		var myController = MANAGER.app
-								.getController('MNG.controller.saleStatisticController');
-		myController.getExcelFillBill(grid.getStore().getAt(rowIndex));
-	}
-});
+					},
+					showDetail : function(grid, rowIndex, colIndex) {
+						var myController = MANAGER.app
+								.getController('MNG.controller.quanLyTraHangController');
+						myController.getCustomerInfo(2);
+						store = grid.getStore();
+						rec = store.getAt(rowIndex);
+						var isDeliver = rec.get('IS_DELIVERED');
+						var dscrt = rec.get('DSCRT');
+						console.info(rec);
+						var param = {
+							name : rec.get('CUS_NM'),
+							cusCd : rec.get('CUS_CD'),
+							phone : '',
+							addr : '',
+							addrship : dscrt,
+							score : 600,
+							isdeliver : parseInt(isDeliver),
+							ROOM_USED_ID : rec.get('ROOM_USED_ID'),
+							totalMoney : rec.get('TOTAL_MONEY'),
+							payedMoney : rec.get('PAYED_MONEY'),
+							hasPayed : rec.get('HAS_PAYED'),
+							changeDate : rec.get('CHANGE_DATE'),
+							USER_NAME : rec.get('USER_NAME'),
+							DSCRT : rec.get('DSCRT')
+						};
+						console.log('param',param);
+						myController.showCustomerInfo(param);
+					}
+				});

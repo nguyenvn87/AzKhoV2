@@ -242,9 +242,9 @@
 						<ul class="plan">
 							<li class="plan-name">STARTER</li>
 							<li class="plan-price">150.000<sub>/th</sub></li>
-							<li>1 cửa hàng</li>
-							<li>1 chi nhánh</li>
 							<li>3 người dùng</li>
+							<li>Báo cáo cơ bản</li>
+							<li>Không có log</li>
 							<li>Hỗ trợ miễn phí</li>
 							<li>Cập nhật miễn phí</li>
 							<li class="plan-action"><a href="signup.do?ID=QH100"
@@ -256,9 +256,9 @@
 						<ul class="plan featured">
 							<li class="plan-name">PROFESSIONAL</li>
 							<li class="plan-price">220.000<sub>/th</sub></li>
-							<li>1 cửa hàng</li>
-							<li>1 chi nhánh</li>
 							<li>Không giới hạn</li>
+							<li>Báo cáo đầy đủ</li>
+							<li>Có log</li>
 							<li>Hỗ trợ miễn phí</li>
 							<li>Cập nhật miễn phí</li>
 							<li class="plan-action"><a href="signup.do?ID=QH100"
@@ -270,9 +270,9 @@
 						<ul class="plan">
 							<li class="plan-name">ENTERPRISE</li>
 							<li class="plan-price">800.000<sub>/th</sub></li>
-							<li>1 cửa hàng</li>
-							<li>3 chi nhánh</li>
 							<li>Không giới hạn</li>
+							<li>Báo cáo đầy đủ</li>
+							<li>Có log</li>
 							<li>Hỗ trợ miễn phí</li>
 							<li>Được nâng cấp theo yêu cầu</li>
 							<li class="plan-action"><a href="signup.do?ID=QH100"

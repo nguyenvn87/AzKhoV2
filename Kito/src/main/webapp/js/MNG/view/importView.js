@@ -196,6 +196,23 @@ Ext.define('MNG.view.importView', {
                                          dataIndex: 'PROV_NM',
                                          text: 'Đơn vị cung cấp'
                                      },
+                                     {
+											menuDisabled : true,
+											sortable : false,
+											text : 'Chỉnh sửa',
+											xtype : 'actioncolumn',
+											align : 'center',
+											width : 100,
+											items : [ {
+												iconCls : 'icon-edit',
+												tooltip : 'Sửa dòng này',
+												handler : function(grid,rowIndex,colIndex) {
+													var record = grid.getStore().getAt(rowIndex);
+													grid.getSelectionModel().select(rowIndex);
+													me.showDetail(grid,rowIndex,colIndex);
+												}
+											} ]
+									},
                                      {                                     
                                          xtype: 'gridcolumn',
                                          sortable:true,
@@ -242,12 +259,10 @@ Ext.define('MNG.view.importView', {
              					bbar: [{
 	                                	 	text: 'PDF',
 	                                	 	iconCls: 'icon-pdf'
-	                                	 	//itemId: 'btnStatisPrint'
  		                                },
  		                                {
 	                                	 	text: 'Excel',
 	                                	 	iconCls: 'icon-excel'
-	                                	 	//itemId: 'btnExcelPrint'
  		                                }
              						],
                                  dockedItems: [
@@ -293,5 +308,11 @@ Ext.define('MNG.view.importView', {
 		var myController = MANAGER.app
 								.getController('MNG.controller.importController');
 		myController.getExcelFillBill(grid.getStore().getAt(rowIndex));
+    },
+    showDetail: function(grid, rowIndex, colIndex){
+    	store = grid.getStore();
+		rec = store.getAt(rowIndex);
+    	var myController = MANAGER.app.getController('MNG.controller.importController');
+    	myController.showBtnImport(rec.raw);
     }
 });

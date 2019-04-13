@@ -154,13 +154,15 @@ Ext.define('MNG.controller.srvcController', {
     				storeTmp.load();
     			}
     			else{
-    				alert(text.message);
+    				if(text.message != null && text.message.trim() == 'EXIST')
+    					supportEvent.showMessageError('Đã tồn tại mã hàng này');
+    				else supportEvent.showMessageError(text.message);
     			}
     		},
     		failure: function(response){
     			var text = Ext.JSON.decode(response.responseText);
-    			console.log( text);   
-    			alert('Save failure' );
+    			//console.log( text);   
+    			supportEvent.showMessageError('Có lỗi xảy ra');
     		}
     	});
 	},
