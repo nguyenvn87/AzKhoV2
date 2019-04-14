@@ -131,5 +131,11 @@ Ext.define('MNG.controller.QuanLyImportController', {
     			alert('Save failure' );
     		}
     	});
-	}
+	},
+	showBtnImport: function(data){
+		me = this;
+		if(me.popStore) me.popStore.close();
+		me.popStore = Ext.create('MNG.view.popup.BtnImportDetail', data);
+		me.popStore.show();
+	},
 })

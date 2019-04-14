@@ -4,7 +4,7 @@ var formatSupporter = Ext.create('BIZ.utilities.formatSupporter',{});
 var supportEvent = Ext.create('BIZ.utilities.supportEvent',{});
 var totalValue = 0;
 var BtnUpdatePayment = Ext.create('MNG.view.popup.BtnUpdatePayment',{});
-var btnViewDetail = Ext.create('MNG.view.popup.BtnChiTietDonHang',{});
+var btnViewDetail = Ext.create('MNG.view.popup.BtnChiTietTraHang',{});
 Ext.define('MNG.controller.quanLyTraHangController', {
 	extend : 'Ext.app.Controller',
 	views : ['MNG.view.xuLyDonHangView'],

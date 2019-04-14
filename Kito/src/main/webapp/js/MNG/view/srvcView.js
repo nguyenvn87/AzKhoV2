@@ -160,7 +160,7 @@ Ext.define('MNG.view.srvcView', {
 	 											tooltip : 'In mã vạch',
 	 											handler : function(grid, rowIndex, colIndex){
 	 												var myController = MANAGER.app.getController('MNG.controller.srvcController');
-	 												myController.btnPrintBarcode(grid, rowIndex, colIndex, 'pdf', 'true');
+	 												myController.btnPrintBarcode(grid, rowIndex, colIndex, 'pdf', '');
 	 											}
 	 										} ]
 	 									},
@@ -175,7 +175,7 @@ Ext.define('MNG.view.srvcView', {
 												tooltip : 'Tải file word',
 												handler : function(grid, rowIndex, colIndex){
 													var myController = MANAGER.app.getController('MNG.controller.srvcController');
-													myController.btnPrintBarcode(grid, rowIndex, colIndex, 'docx', 'true');
+													myController.btnPrintBarcode(grid, rowIndex, colIndex, 'docx', '');
 												}
 											} ]
 										}] 

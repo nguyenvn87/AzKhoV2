@@ -87,10 +87,17 @@ Ext.define('MNG.controller.importController', {
 	},
 	doubleClickStore:function(object,record){
 		me = this;
-		if(me.popStore) me.popStore.close();
-		me.popStore = Ext.create('MNG.view.popup.BtnImportDetail',record.raw);
-		me.popStore.show();
+		//if(me.popStore) me.popStore.close();
+		//me.popStore = Ext.create('MNG.view.popup.BtnImportDetail',record.raw);
+		//me.popStore.show();
 		//gridSupport.selectGridPopup('#container-store-srvc','#grid-store-srvc','#btnStoreContainerId');
+		me.showBtnImport(record.raw);
+	},
+	showBtnImport: function(data){
+		me = this;
+		if(me.popStore) me.popStore.close();
+		me.popStore = Ext.create('MNG.view.popup.BtnImportDetail', data);
+		me.popStore.show();
 	},
 	BtnSaveStore:function(){
 		this.request();
@@ -171,8 +178,6 @@ Ext.define('MNG.controller.importController', {
     			var text = Ext.JSON.decode(response.responseText);
     			btnAddProvider.hide();
     			if( text.success == true){
-    				console.log('1111111111111111111');
-    				
     				var providerStore = Ext.ComponentQuery.query('#PROV_CD_Item')[0].getStore();
     				providerStore.load();
     			}

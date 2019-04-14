@@ -217,25 +217,6 @@ Ext
 																		},
 																		{
 																			xtype : 'gridcolumn',
-																			dataIndex : 'IS_DELIVERED',
-																			sortable : true,
-																			text : 'Xuất kho',
-																			width : 90,
-																			renderer : function(
-																					value,
-																					p,
-																					r) {
-																				data = r.data['IS_DELIVERED'];
-																				debit = r.data['IS_DELIVERED'];
-																				if (debit == '1'
-																						|| debit == 1) {
-																					return 'Đã xuất';
-																				}
-																				return 'Chưa xuất';
-																			}
-																		},
-																		{
-																			xtype : 'gridcolumn',
 																			dataIndex : 'IS_ORDER',
 																			sortable : true,
 																			hidden : true,

@@ -142,7 +142,13 @@
 					</isNotEmpty>
 					<isNotEmpty property="IS_DELIVERED" prepend="AND">
 						<![CDATA[ T.IS_DELIVERED = #IS_DELIVERED# ]]>
-					</isNotEmpty>	
+					</isNotEmpty>
+					<isEqual property="IS_RETURN" compareValue="1" prepend="AND">
+						<![CDATA[ T.IS_RETURN = 1 ]]>
+					</isEqual>	
+					<isEqual property="IS_RETURN" compareValue="0" prepend="AND">
+						<![CDATA[ T.IS_RETURN = 0 ]]>
+					</isEqual>	
 					<isNotEmpty property="CUS_CD" prepend="AND">
 						<![CDATA[ T.CUS_CD = #CUS_CD# ]]>
 					</isNotEmpty>	
@@ -212,6 +218,7 @@
 						<![CDATA[ T.IS_DELIVERED = #IS_DELIVERED# ]]>
 					</isNotEmpty>	
 						and T.IS_CANCELED = 0 
+						and T.IS_RETURN = 0 
 				</dynamic> 
 			)  T group by SRVC_ID, CREATE_DATE
 			order by CREATE_DATE desc
