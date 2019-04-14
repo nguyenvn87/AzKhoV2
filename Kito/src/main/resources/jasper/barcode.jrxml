@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="barcode" pageWidth="220" pageHeight="72" columnWidth="220" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8b917e5a-bec8-4a07-84fb-7724e32394eb">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="barcode" pageWidth="210" pageHeight="70" columnWidth="210" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8b917e5a-bec8-4a07-84fb-7724e32394eb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="2.102963396888355"/>
 	<property name="ireport.x" value="0"/>
@@ -14,49 +14,63 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="68" splitType="Stretch">
+		<band height="57" splitType="Stretch">
 			<textField pattern="#,##0">
-				<reportElement x="116" y="2" width="103" height="13" uuid="707763f7-dc1b-434f-8b06-83f3f0d773b9"/>
+				<reportElement x="106" y="0" width="103" height="12" uuid="707763f7-dc1b-434f-8b06-83f3f0d773b9"/>
 				<box leftPadding="5"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font fontName="Times New Roman" size="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{GiaBan}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement positionType="Float" x="3" y="41" width="110" height="20" uuid="b0839685-0f55-412c-8d68-33beda0af03f"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="1" y="39" width="103" height="18" isPrintWhenDetailOverflows="true" uuid="b0839685-0f55-412c-8d68-33beda0af03f"/>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FieldGhiChu}]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="117" y="15" width="102" height="26" uuid="2da2d900-9e19-4253-bcac-609416dc6ec8"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barWidth="2" barHeight="40">
+				<reportElement x="107" y="12" width="102" height="14" uuid="2da2d900-9e19-4253-bcac-609416dc6ec8"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="2" barHeight="40">
 					<jr:codeExpression><![CDATA[$F{FieldBarcode}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
-			<textField>
-				<reportElement positionType="Float" x="117" y="41" width="103" height="20" uuid="8eba92d7-e346-46b2-b1ea-ffb1100a2dff"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="106" y="39" width="103" height="18" isPrintWhenDetailOverflows="true" uuid="8eba92d7-e346-46b2-b1ea-ffb1100a2dff"/>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FieldGhiChu}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0">
-				<reportElement x="4" y="2" width="109" height="13" uuid="63ec3bcc-0752-4389-8a39-aebaac33bf74"/>
+				<reportElement x="1" y="0" width="103" height="12" uuid="63ec3bcc-0752-4389-8a39-aebaac33bf74"/>
 				<box leftPadding="5"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font fontName="Times New Roman" size="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{GiaBan}]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="4" y="14" width="109" height="27" uuid="b525f1ec-0a13-46ed-a062-79b50942628c"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barWidth="2" barHeight="40">
+				<reportElement x="2" y="12" width="102" height="14" uuid="b525f1ec-0a13-46ed-a062-79b50942628c"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="2" barHeight="40">
 					<jr:codeExpression><![CDATA[$F{FieldBarcode}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
+			<textField>
+				<reportElement x="1" y="27" width="103" height="12" uuid="7f901a5f-f296-4ae1-bcaa-662cb365311b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="106" y="27" width="103" height="12" uuid="5d08dfb7-58fd-4cdc-ac46-e7166dd35fec"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

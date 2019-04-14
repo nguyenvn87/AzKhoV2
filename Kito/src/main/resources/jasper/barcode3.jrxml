@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="barcode" pageWidth="295" pageHeight="69" columnWidth="295" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8b917e5a-bec8-4a07-84fb-7724e32394eb">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="ireport.zoom" value="2.102963396888355"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="GiaBan" class="java.lang.Double"/>
+	<field name="FieldGhiChu" class="java.lang.String"/>
+	<field name="FieldBarcode" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="54" splitType="Stretch">
+			<textField pattern="#,##0">
+				<reportElement x="99" y="0" width="94" height="12" uuid="707763f7-dc1b-434f-8b06-83f3f0d773b9"/>
+				<box leftPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{GiaBan}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="1" y="35" width="95" height="18" isPrintWhenDetailOverflows="true" uuid="b0839685-0f55-412c-8d68-33beda0af03f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldGhiChu}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="2" y="0" width="94" height="12" uuid="63ec3bcc-0752-4389-8a39-aebaac33bf74"/>
+				<box leftPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{GiaBan}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="1" y="12" width="95" height="13" uuid="b525f1ec-0a13-46ed-a062-79b50942628c"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="5" barHeight="95">
+					<jr:codeExpression><![CDATA[$F{FieldBarcode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="1" y="25" width="95" height="10" uuid="7f901a5f-f296-4ae1-bcaa-662cb365311b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="25" width="95" height="10" uuid="5d08dfb7-58fd-4cdc-ac46-e7166dd35fec"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="198" y="0" width="94" height="12" uuid="d22cc4c6-d12f-4c13-b147-30d0a137535c"/>
+				<box leftPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{GiaBan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="198" y="25" width="95" height="10" uuid="b14d8132-3ac1-4fc0-b059-de707b92bffc"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="100" y="35" width="95" height="18" isPrintWhenDetailOverflows="true" uuid="ad17ff40-c217-4922-9018-66ecd2e03d42"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldGhiChu}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="198" y="35" width="95" height="18" isPrintWhenDetailOverflows="true" uuid="9ddab7d6-fda2-473f-b456-2a5409c7f5a1"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldGhiChu}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="100" y="12" width="95" height="13" uuid="87cc52f2-7c23-4d92-a171-5f2b3a116431"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="5" barHeight="95">
+					<jr:codeExpression><![CDATA[$F{FieldBarcode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="198" y="12" width="95" height="13" uuid="8e4d71aa-b5ac-48bc-9262-b483db4d64e2"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="5" barHeight="95">
+					<jr:codeExpression><![CDATA[$F{FieldBarcode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>
