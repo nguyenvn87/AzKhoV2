@@ -138,6 +138,12 @@ public class SaleReportController {
 		rtVo.setROOM_USED_ID(roomUsedId);
 		RoomTurnVO tmpRtVo = roomTurnService.getRoomTurnVOByObject(rtVo);
 		
+		// Get unit
+		CodeVO mVo = new CodeVO();
+		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
+		HashMap<String, String> mapDonVi = new HashMap<String, String>();
+		
 		UserVO uVo = new UserVO();
 		uVo.setUSERNAME(tmpRtVo.getUSER_NAME());
 		uVo = userService.getUserVo(uVo);
@@ -167,10 +173,15 @@ public class SaleReportController {
 			String totalM = CmmUtil.formatNumber2Money(totalMoney);
 			Map<String, Object> mapVo = new HashMap<String, Object>();
 			String unitName = "";
-			if(vo.getUNIT_NM() != null){ 
-				unitName = vo.getUNIT_NM();
+			
+			if(vo.getUNIT()!= null && !vo.getUNIT().isEmpty()){
+				unitName = cmmCdUserService.getUnitNameFromList(vo.getUNIT(), listDonVi, mapDonVi);
+				vo.setUNIT_NM(unitName);
+		    }
+			if(vo.getUNIT() != null){ 
 				totalAmount = totalAmount + vo.getAMOUNT();
 			}
+			
 			mapVo.put("ItemName", vo.getMENU_NM());
 			mapVo.put("ItemPrice", CmmUtil.formatNumber2Money(vo.getPRICE()));
 			mapVo.put("ItemNo", stt);
@@ -347,7 +358,7 @@ public class SaleReportController {
 		if (isDelivered != null && isDelivered.equalsIgnoreCase("0"))
 			map.put("IS_DELIVERED", 0);
 		if (isReturn != null && isReturn.equalsIgnoreCase("1")) map.put("IS_RETURN", 1);
-		if (isReturn != null && isReturn.equalsIgnoreCase("0")) map.put("IS_RETURN", 0);
+		else map.put("IS_RETURN", 0);
 		
 		if (isDebit != null && isDebit.equals("true")) map.put("IS_DEBIT", 1);
 		if(userName != null && !userName.isEmpty()) map.put("USER_NAME", userName);
@@ -719,6 +730,7 @@ public class SaleReportController {
 		String userName = req.getParameter("USER_NAME");
 		String isDeliver = req.getParameter("IS_DELIVERED");
 		String cusCD = req.getParameter("CUS_CD");
+		String isReturn = req.getParameter("IS_RETURN");
 		
 		// Get Username
 		UserVO uVo = null;
@@ -744,12 +756,14 @@ public class SaleReportController {
 		if(userName != null && !userName.isEmpty())map.put("USER_NAME", userName);
 		if(isDeliver != null && isDeliver.equalsIgnoreCase("1"))map.put("IS_DELIVERED", "1");
 		if(cusCD != null && !cusCD.isEmpty())map.put("CUS_CD", cusCD);
-		
+		if(isReturn != null && !isReturn.isEmpty() && isReturn.equalsIgnoreCase("1")) map.put("IS_RETURN", 1);
+		else map.put("IS_RETURN", 0);
 		List<HashMap<String, Object>> listOut = roomSrvcService.getStatisticExportStore(map);
 		
-		CodeVO mVo = new CodeVO();
-		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
-		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		//CodeVO mVo = new CodeVO();
+		//mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		//List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
 		
 		Map<String, Object> mapRpt = new HashMap<String, Object>();
 		HashMap<String, String> mapDonVi = new HashMap<String, String>();
@@ -758,17 +772,17 @@ public class SaleReportController {
 			int j = i+1;
 			HashMap<String, Object> Vo = listOut.get(i);
 			HashMap<String, Object> mapVo = new HashMap<String, Object>();
-			
+			String unitNm = "";
 			if(Vo.get("UNIT")!= null){
-				if(mapDonVi.get(Vo.get("UNIT"))!= null){}
-				else{
-			    	for(CodeVO coMap : listDonVi){
-			    		if(Vo.get("UNIT").toString().trim().equalsIgnoreCase(coMap.getCD()+"")){
-			    			mapDonVi.put(Vo.get("UNIT").toString(), coMap.getCD_NM());
-			    			break;
-			    		}
-			    	}
-				}
+				/*
+				 * if(mapDonVi.get(Vo.get("UNIT"))!= null){} else{ for(CodeVO coMap :
+				 * listDonVi){
+				 * if(Vo.get("UNIT").toString().trim().equalsIgnoreCase(coMap.getCD()+"")){
+				 * mapDonVi.put(Vo.get("UNIT").toString(), coMap.getCD_NM()); break; } } }
+				 */
+				unitNm = cmmCdUserService.getUnitNameFromList(Vo.get("UNIT").toString(), listDonVi, mapDonVi);
+				mapVo.put("ItemUnit", unitNm);
+				//tmpVo.setUNIT_NM(unitNm);
 		    }
 			
 			if(Vo.get("AMOUNT") != null){
@@ -787,7 +801,7 @@ public class SaleReportController {
 			mapVo.put("ItemNote", Vo.get(""));
 			mapVo.put("ItemNo", ""+j);
 			mapVo.put("ItemType", "1");
-			mapVo.put("ItemUnit", mapDonVi.get(Vo.get("UNIT")));
+			//mapVo.put("ItemUnit", mapDonVi.get(Vo.get("UNIT")));
 			if(uVo != null && !uVo.getFULLNAME().isEmpty()) mapVo.put("itemUserName", uVo.getFULLNAME());
 			
 			al.add(mapVo);
@@ -979,6 +993,7 @@ public class SaleReportController {
 		String hasPayed = req.getParameter("HAS_PAYED");
 		String startDateParam = req.getParameter("STARTDATE");
 		String endDateParam = req.getParameter("ENDDATE");
+		String isReturn = req.getParameter("IS_RETURN");
 			
 		HashMap<String, Object> map = new HashMap<String, Object>();
 			
@@ -993,6 +1008,9 @@ public class SaleReportController {
 		if (hasPayed != null && hasPayed.equalsIgnoreCase("1")) map.put("HAS_PAYED", 1);
 		if (hasPayed != null && hasPayed.equalsIgnoreCase("0")) map.put("HAS_PAYED", 0);
 		if (userName != null && !userName.isEmpty()) map.put("USER_NAME", userName);
+		if(isReturn != null && !isReturn.isEmpty() && isReturn.equalsIgnoreCase("1")) map.put("IS_RETURN", 1);
+		else map.put("IS_RETURN", 0);
+		
 		map.put("RESTAR_ID", restarId);
 			
 		List<RoomTurnVO> listTurnVo = roomTurnService.getListTurnStatistic(map);

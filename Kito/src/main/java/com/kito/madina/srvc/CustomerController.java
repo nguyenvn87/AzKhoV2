@@ -174,6 +174,7 @@ public class CustomerController {
 					}
 				}
 				// START NGUYENNV ADD NEW 190314
+				// Xoa hang ra khoi kho
 				else if(dbVo.getIS_RETURN() == 1) {
 					listSrvc = roomSrvcService.getListRoomSrvcVOByID(dbVo.getROOM_USED_ID());
 					for(RoomSrvcVO rSVo: listSrvc){

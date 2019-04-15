@@ -161,7 +161,7 @@ public class SrvcServiceImpl implements SrvcService{
 			}
 			// END ADD NEW 2018/11/22
 			this.updateStatusStore(storeVo);
-			//this.writeLogChangeStore("IN: TenHang: "+vo.getSRVC_NM()+"(MaHang: "+vo.getSRVC_CD()+")"+ "| SL:" + value);
+			this.writeLogChangeStore("IN: TenHang: "+vo.getSRVC_NM()+"(MaHang: "+vo.getSRVC_CD()+")"+ "| SL:" + value);
 		}
 		return true;
 	}
@@ -184,7 +184,7 @@ public class SrvcServiceImpl implements SrvcService{
 				storeVo.setPRICE_IMPORT(price);
 			}
 			this.updateStatusStore(storeVo);
-			//this.writeLogChangeStore("OUT: TenHang: "+storeVo.getSRVC_NM()+"(MaHang: "+storeVo.getSRVC_CD()+")"+ "| SL:" + value);
+			this.writeLogChangeStore("OUT: TenHang: "+storeVo.getSRVC_NM()+"(MaHang: "+storeVo.getSRVC_CD()+")"+ "| SL:" + value);
 		}
 		return true;
 	}
@@ -257,6 +257,7 @@ public class SrvcServiceImpl implements SrvcService{
 	}
 	@Override
 	public void writeLogChangeStore(String content) {
+		
 		//try{
 			
 			//String realPath = request.getServletContext().getRealPath("/");

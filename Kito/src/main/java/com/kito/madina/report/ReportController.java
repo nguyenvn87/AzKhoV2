@@ -335,10 +335,9 @@ public class ReportController {
 		if(isDebit != null && isDebit.equals("true")){
 			map.put("IS_DEBIT", 1);
 		}
-		if(isReturn != null){
-			if(isReturn != null && isReturn.equals("1")) map.put("IS_RETURN", 1);
-			else if(isReturn.equals("0")) map.put("IS_RETURN", 0);
-		}
+		if(isReturn != null && isReturn.equals("1")) map.put("IS_RETURN", 1);
+		else map.put("IS_RETURN", 0);
+		
 		if(isDelivered != null ){
 			if(isDelivered.equals("1"))
 				map.put("IS_DELIVERED", 1);
@@ -1465,9 +1464,14 @@ public class ReportController {
 		if(srvcID!= null && !srvcID.isEmpty()){
 			map.put("SRVC_ID", srvcID);
 		}
+		//CodeVO mVo = new CodeVO();
+		//mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		//List<CodeVO> listCode = codeService.getListCodeVO(mVo);
+		
 		CodeVO mVo = new CodeVO();
 		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
-		List<CodeVO> listCode = codeService.getListCodeVO(mVo);
+		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
+		HashMap<String, String> mapDonVi = new HashMap<String, String>();
 		
 		List<HashMap<String, Object>> listOut = null;
 		if(isSale)
@@ -1480,13 +1484,14 @@ public class ReportController {
 			int j = i+1;
 			HashMap<String, Object> Vo = listOut.get(i);
 			HashMap<String, Object> mapVo = new HashMap<String, Object>();
-			if(Vo.get("UNIT")!= null){
-		    	for(CodeVO coMap : listCode){
-		    		if(Vo.get("UNIT").toString().trim().equalsIgnoreCase(coMap.getCD()+"")){
-		    			mapVo.put("ItemUnit", coMap.getCD_NM());
-		    			break;
-		    		}
-		    	}
+			/*
+			 * if(Vo.get("UNIT")!= null){ for(CodeVO coMap : listCode){
+			 * if(Vo.get("UNIT").toString().trim().equalsIgnoreCase(coMap.getCD()+"")){
+			 * mapVo.put("ItemUnit", coMap.getCD_NM()); break; } } }
+			 */
+			if(Vo.get("UNIT")!= null && !Vo.get("UNIT").toString().isEmpty()){
+				String unitNm = cmmCdUserService.getUnitNameFromList(Vo.get("UNIT").toString(), listDonVi, mapDonVi);
+				mapVo.put("ItemUnit", unitNm);
 		    }
 			mapVo.put("ItemName", Vo.get("SRVC_NM"));
 			mapVo.put("ItemCode", Vo.get("SRVC_CD"));
@@ -1523,7 +1528,7 @@ public class ReportController {
 		if(tmpVO.getPRICE()!= null && !tmpVO.getPRICE().isEmpty()) 
 			value =	Double.parseDouble(tmpVO.getPRICE());
 		int rowTotal = 1;
-		if(list!=null&&!list.isEmpty())  rowTotal = 9;
+		if(list!=null&&!list.isEmpty())  rowTotal = 1;
 		for(int i=0; i < rowTotal; i++) {
 			Map<String, Object> tmpMap = new HashMap<String, Object>(); 
 			tmpMap.put("FieldBarcode",tmpVO.getSRVC_CD());
@@ -1537,12 +1542,14 @@ public class ReportController {
 		String viewName = "rptBarcode";
 		if(type != null && type.equalsIgnoreCase("pdf")) {
 			mapRpt.put( "format", "pdf");
-			if(list!=null&&!list.isEmpty()) viewName = "rptBarcodeList";
+			if(list!=null&&!list.isEmpty() && list.equalsIgnoreCase("3")) viewName = "rptBarcode3";
+			else if(list!=null&&!list.isEmpty()) viewName = "rptBarcodeList";
 			else viewName = "rptBarcode";
 		}
 		else {
 			mapRpt.put( "format", "docx");
-			if(list!=null&&!list.isEmpty()) viewName = "rptBarcodeListDoc";
+			if(list!=null&&!list.isEmpty() && list.equalsIgnoreCase("3")) viewName = "rptBarcode3Doc";
+			else if(list!=null&&!list.isEmpty()) viewName = "rptBarcodeListDoc";
 			else viewName = "rptBarcodeDoc";
 		}
 		mapRpt.put("filename", tmpVO.getSRVC_CD());

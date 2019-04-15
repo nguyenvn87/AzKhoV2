@@ -8,11 +8,15 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kito.madina.cmmn.util.SessionUtil;
+import com.kito.madina.cmmn.util.UtilConst;
 import com.kito.madina.test.dao.RoomSrvcDAO;
+import com.kito.madina.test.service.CmmCdUserService;
 import com.kito.madina.test.service.RoomSrvcService;
 import com.kito.madina.test.service.SrvcService;
+import com.kito.madina.test.vo.CmmCdUserVO;
 import com.kito.madina.test.vo.RoomSrvcVO;
 import com.kito.madina.test.vo.RoomTurnVO;
 import com.kito.madina.test.vo.SrvcVO;
@@ -27,11 +31,15 @@ public class RoomSrvcServiceImpl implements RoomSrvcService{
 	@Resource(name = "srvcService")
 	private SrvcService srvcService;
 	
+	@Resource(name = "cmmCdUserService")
+	private CmmCdUserService cmmCdUserService;
+	
 	@Override
 	public RoomSrvcVO getRoomSrvcVOByObject(RoomSrvcVO vo) {
 		RoomSrvcVO restaurantVO = roomSrvcDAO.getRoomSrvcVOByObject(vo);
 		return restaurantVO;
 	}
+	@Transactional
 	@Override
 	public int CreateRoomSrvcVO(RoomSrvcVO vo) {
 		
@@ -40,9 +48,10 @@ public class RoomSrvcServiceImpl implements RoomSrvcService{
 		Timestamp eDate = new Timestamp(dateCrr.getTime());
 		vo.setCHANGETIME(eDate.toString());
 		int i = roomSrvcDAO.CreateRoomSrvcVO(vo);
-
+		
 		return i;
 	}
+	@Transactional
 	@Override
 	public int createAnOrder(RoomSrvcVO vo, RoomTurnVO turnBuyVo) {
 		
@@ -55,15 +64,13 @@ public class RoomSrvcServiceImpl implements RoomSrvcService{
 		// Update store
 		SrvcVO sVo = new SrvcVO();
 		sVo.setSRVC_ID(vo.getSRVC_ID());
-		sVo.setRESTAR_ID(restarId);
 		sVo.setIS_USED(1);
 		sVo = srvcService.getSrvcVO(sVo);
 		if(turnBuyVo.getIS_DELIVERED() == 1 && sVo != null && vo.getAMOUNT() >= 0){
 			float fValue =  vo.getAMOUNT();
 			sVo.setAMOUNT_STORE(sVo.getAMOUNT_STORE() - fValue);
-			//srvcService.updateSrvcVO(sVo);
 			srvcService.popOutStore(sVo, fValue);
-			//srvcService.writeLogChangeStore("Out : "+fValue);
+			srvcService.writeLogChangeStore("Out : "+fValue);
 		}
 		return i;
 	}
@@ -76,7 +83,17 @@ public class RoomSrvcServiceImpl implements RoomSrvcService{
 	}
 	@Override  
 	public List<RoomSrvcVO> getListRoomSrvcVOByID(String roomId){
+		
+		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
+		HashMap<String, String> mapDonVi = new HashMap<String, String>();
 		List<RoomSrvcVO> list = roomSrvcDAO.getListRoomSrvcVOByID(roomId);
+		
+		for(RoomSrvcVO vo : list) {
+			if(vo.getUNIT()!= null && !vo.getUNIT().isEmpty()){
+				String unitNm = cmmCdUserService.getUnitNameFromList(vo.getUNIT(), listDonVi, mapDonVi);
+				vo.setUNIT_NM(unitNm);
+		    }
+		}
 		return list;
 	}
 	@Override  

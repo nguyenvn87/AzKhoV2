@@ -142,9 +142,10 @@ public class MenuController {
 		vo.setIS_SERVICE(-1);
 		List<SrvcVO> list = menuService.getSearchListAllMenu(vo);
 		
-		CodeVO mVo = new CodeVO();
-		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
-		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		//CodeVO mVo = new CodeVO();
+		//mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
+		//List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
 		HashMap<String, String> mapDonVi = new HashMap<String, String>();
 		
 		HashMap<String, Object> mapResult = menuService.getListCountSearchMenu(vo);
@@ -152,7 +153,8 @@ public class MenuController {
 		for (SrvcVO tmpVo : list) {
 			// Set unit name
 			if(tmpVo.getUNIT()!= null && !tmpVo.getUNIT().isEmpty()){
-				String unitNm = codeService.getUnitNameFromList(tmpVo.getUNIT(), listDonVi, mapDonVi);
+				//String unitNm = codeService.getUnitNameFromList(tmpVo.getUNIT(), listDonVi, mapDonVi);
+				String unitNm = cmmCdUserService.getUnitNameFromList(tmpVo.getUNIT(), listDonVi, mapDonVi);
 				tmpVo.setUNIT_NM(unitNm);
 		    }
 		}

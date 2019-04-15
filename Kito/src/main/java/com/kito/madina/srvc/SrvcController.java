@@ -479,6 +479,7 @@ public class SrvcController {
 		String endDate = req.getParameter("ENDDATE");
 		String userNm = req.getParameter("USER_NAME");
 		String isDeliver = req.getParameter("IS_DELIVERED");
+		String isReturn = req.getParameter("IS_RETURN");
 		String cusCD = req.getParameter("CUS_CD");
 		
 		UserVO uVo = null;
@@ -509,12 +510,15 @@ public class SrvcController {
 		
 		// Get list srvc
 		mapType.put("RESTAR_ID", loginRestautant);
+		if(isReturn!=null && isReturn.equalsIgnoreCase("1")) mapType.put("IS_RETURN", 1);
+		else mapType.put("IS_RETURN", 0);
 		List<HashMap<String, Object>> listOut = roomSrvcService.getPagingSaledSrvc(mapType);
 
 		// Get common code
-		CodeVO mVo = new CodeVO();
-		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
-		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		//CodeVO mVo = new CodeVO();
+		//mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
+		//List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
 		HashMap<String, String> mapDonVi = new HashMap<String, String>();
 		for (int i = 0; i < listOut.size(); i++) {
 			HashMap<String, Object> tmpMap = listOut.get(i);
@@ -529,17 +533,16 @@ public class SrvcController {
 			// Unit name
 			if(uVo != null && !uVo.getFULLNAME().isEmpty()) tmpMap.put("USER_NAME", uVo.getFULLNAME());
 			if(tmpMap.get("UNIT")!= null){
-				if(mapDonVi.get(tmpMap.get("UNIT"))!= null){}
-				else{
-			    	for(CodeVO coMap : listDonVi){
-			    		if(tmpMap.get("UNIT").toString().trim().equalsIgnoreCase(coMap.getCD()+"")){
-			    			mapDonVi.put(tmpMap.get("UNIT").toString(), coMap.getCD_NM());
-			    			break;
-			    		}
-			    	}
-				}
+				/*
+				 * if(mapDonVi.get(tmpMap.get("UNIT"))!= null){} else{ for(CodeVO coMap :
+				 * listDonVi){
+				 * if(tmpMap.get("UNIT").toString().trim().equalsIgnoreCase(coMap.getCD()+"")){
+				 * mapDonVi.put(tmpMap.get("UNIT").toString(), coMap.getCD_NM()); break; } } }
+				 */
+				String unitNm = cmmCdUserService.getUnitNameFromList(tmpMap.get("UNIT").toString().trim(), listDonVi, mapDonVi);
+				tmpMap.put("UNIT_NM", unitNm);
 		    }
-			tmpMap.put("UNIT_NM", mapDonVi.get(tmpMap.get("UNIT")));
+			//tmpMap.put("UNIT_NM", mapDonVi.get(tmpMap.get("UNIT")));
 		}
 		HashMap<String, Object> resultMap = roomSrvcService.getCountSaledSrvc(mapType);
 		jvon.setData(listOut);

@@ -33,6 +33,7 @@ import com.kito.madina.test.service.RoomSrvcService;
 import com.kito.madina.test.service.RoomTurnService;
 import com.kito.madina.test.service.SrvcService;
 import com.kito.madina.test.service.UserService;
+import com.kito.madina.test.vo.CmmCdUserVO;
 import com.kito.madina.test.vo.CodeVO;
 import com.kito.madina.test.vo.RoomSrvcVO;
 import com.kito.madina.test.vo.RoomTurnVO;
@@ -97,9 +98,7 @@ public class SrvcRestController {
 		vo.setSRVC_NM(valueSearch);
 		List<SrvcVO> list = menuService.getSearchListAllMenu(vo);
 		
-		CodeVO mVo = new CodeVO();
-		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
-		List<CodeVO> listDonVi = codeService.getListCodeVO(mVo);
+		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
 		HashMap<String, String> mapDonVi = new HashMap<String, String>();
 		
 		HashMap<String, Object> mapResult = menuService.getListCountSearchMenu(vo);
@@ -107,7 +106,7 @@ public class SrvcRestController {
 		for (SrvcVO tmpVo : list) {
 			// Set unit name
 			if(tmpVo.getUNIT()!= null && !tmpVo.getUNIT().isEmpty()){
-				String unitNm = codeService.getUnitNameFromList(tmpVo.getUNIT(), listDonVi, mapDonVi);
+				String unitNm = cmmCdUserService.getUnitNameFromList(tmpVo.getUNIT(), listDonVi, mapDonVi);
 				tmpVo.setUNIT_NM(unitNm);
 		    }
 		}
@@ -125,13 +124,11 @@ public class SrvcRestController {
 	/* ---------------- Save bill info ------------------------ */
 	//@CrossOrigin(origins = "http://192.168.100.157:8080")
 	@RequestMapping(value="/saveSaleOrderList", method = RequestMethod.POST)
-	//public JsonVO saveSaleServices111(HttpServletRequest req, @RequestParam("DATA") List<RoomSrvcVO> listData) {
 	public JsonVO saveSaleServices111(HttpServletRequest req) {	
 		JsonVO jvon = new JsonVO();
 		String loginUser = SessionUtil.getSessionAttribute("loggedUserId").toString();
 		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
 		
-		//try {
 			String roomUseId = req.getParameter("ROOM_USE_ID");
 			String dataList = req.getParameter("DATA");
 			String timePay = req.getParameter("CHANGE_DATE");
@@ -146,6 +143,8 @@ public class SrvcRestController {
 			String isReturn = req.getParameter("IS_RETURN");
 			
 			String cusCD = req.getParameter("CUS_CD");
+			String cusNM = req.getParameter("CUS_NM");
+			
 			int iCusCD = (cusCD != null && !cusCD.isEmpty()) ? Integer.parseInt(cusCD):0;
 			int isDebit = (isDebitStr != null && !isDebitStr.isEmpty()) ? Integer.parseInt(isDebitStr):0;
 			int iReturn = (isReturn != null && !isReturn.isEmpty() && isReturn.equalsIgnoreCase("1")) ? 1:0;
@@ -172,6 +171,7 @@ public class SrvcRestController {
 			rtVo.setSHIP_ADDR(shipAddr);
 			rtVo.setDISCOUNT(discountValue);
 			rtVo.setIS_RETURN(iReturn);
+			rtVo.setCUS_NM(cusNM!=null?cusNM:"");
 			
 			String billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_HOADON);
 			if(rtVo.getIS_RETURN()==1) billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_TRAHANG);
@@ -225,10 +225,6 @@ public class SrvcRestController {
 				}
 			}
 			jvon.setSuccess(true);
-		//}catch(Exception e) {
-		//	jvon.setSuccess(false);
-		//	jvon.setMessage("Error !");
-		//}
 		return jvon;
 	}
 

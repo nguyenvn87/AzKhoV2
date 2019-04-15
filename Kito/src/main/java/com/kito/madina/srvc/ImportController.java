@@ -190,6 +190,9 @@ public class ImportController {
 				importService.updateImportDetail(detailVO);
 			else importService.addImportDetail(detailVO);
 		}
+		if(importDetailVOs.isEmpty()) {
+			importService.deleteImport(importVO);
+		}
 		
 		jvon.setData(true);
 		jvon.setSuccess(true);
@@ -234,19 +237,6 @@ public class ImportController {
 	 * Delete bill of import
 	 * 
 	 * */
-	/*@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/store/removeImport.json")
-	public ModelAndView removeImport(ImportVO vo) {
-		importService.deleteImport(vo);
-		ImportDetailVO tempVO = new ImportDetailVO();
-		tempVO.setIMPRT_CD(vo.getIMPRT_CD());
-		importService.deleteImportDetailByImportID(tempVO);
-		
-		JsonVO jvon = new JsonVO();
-		jvon.setData(true);
-		jvon.setSuccess(true);
-		return new ModelAndView("jsonView", jvon);
-	}*/
 	/*@PreAuthorize("hasAnyRole('ROLE_ADMIN')")*/
 	@RequestMapping(value = "/store/removeImport.json")
 	public ModelAndView removeImport(ImportVO vo) {
@@ -265,11 +255,13 @@ public class ImportController {
 					srvcService.popOutStore(sVo, amount);
 				}
 			}
+			vo.setRESTAR_ID(loginRestautant);
 			importService.deleteImport(vo);
 			
 			// Delete import detail
 			ImportDetailVO tempVO = new ImportDetailVO();
 			tempVO.setIMPRT_CD(vo.getIMPRT_CD());
+			tempVO.setRESTAR_ID(loginRestautant);
 			importService.deleteImportDetailByImportID(tempVO);
 		}catch(Exception e){
 			jvon.setMessage("Error !");
