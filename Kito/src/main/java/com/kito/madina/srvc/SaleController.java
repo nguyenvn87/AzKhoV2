@@ -1,6 +1,7 @@
 package com.kito.madina.srvc;
 
 import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import com.kito.madina.ecount.service.PaymentMethodService;
 import com.kito.madina.ecount.service.PhieuChiService;
 import com.kito.madina.ecount.service.PhieuThuService;
 import com.kito.madina.ecount.vo.PaymentMethodVO;
+import com.kito.madina.test.service.CmmCdUserService;
 import com.kito.madina.test.service.CodeService;
 import com.kito.madina.test.service.CustomerService;
 import com.kito.madina.test.service.MenuService;
@@ -32,6 +34,7 @@ import com.kito.madina.test.service.RoomSrvcService;
 import com.kito.madina.test.service.RoomTurnService;
 import com.kito.madina.test.service.SrvcService;
 import com.kito.madina.test.service.StoreSrvcService;
+import com.kito.madina.test.vo.CmmCdUserVO;
 import com.kito.madina.test.vo.CodeVO;
 import com.kito.madina.test.vo.CustomerVO;
 import com.kito.madina.test.vo.MenuVO;
@@ -80,11 +83,15 @@ public class SaleController {
 	@Resource(name = "phieuChiService")
 	private PhieuChiService phieuChiService;
 	
+	@Resource(name = "cmmCdUserService")
+	private CmmCdUserService cmmCdUserService;
 	
 	@Transactional(rollbackFor = Exception.class)
 	@RequestMapping("/sale/saveSaleOrderList.json")
 	public ModelAndView saveSaleServices111(HttpServletRequest req, RoomTurnVO rtVo) {
 		
+		String pathReal = req.getServletContext().getRealPath("/logs");
+		System.out.println("pathReal = "+pathReal);
 		JsonVO jvon = new JsonVO();
 		String loginUser = SessionUtil.getSessionAttribute("loggedUserId").toString();
 		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
@@ -134,6 +141,11 @@ public class SaleController {
 		String billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_HOADON);
 		if(rtVo.getIS_RETURN()==1) billCD = roomTurnService.generateBillCode(UtilConst.ECOUNT_PREFIX_TRAHANG);
 		rtVo.setBILL_CD(billCD);
+		
+		if(rtVo.getIS_RETURN()==1) {
+			rtVo.setTOTAL_MONEY(rtVo.getTOTAL_MONEY()*(-1));
+			rtVo.setPAYED_MONEY(rtVo.getPAYED_MONEY()*(-1));
+		}
 		roomTurnService.CreateRoomTurnVO(rtVo);
 		
 		// Save payment method
@@ -274,6 +286,10 @@ public class SaleController {
 			if(rtVo.getCHANGE_DATE() != null && !rtVo.getCHANGE_DATE().isEmpty())
 				dbVo.setCHANGE_DATE(rtVo.getCHANGE_DATE());
 			dbVo.setDSCRT(description);
+			if(dbVo.getIS_RETURN()==1) {
+				if(dbVo.getTOTAL_MONEY() > 0) dbVo.setTOTAL_MONEY(dbVo.getTOTAL_MONEY()*(-1));
+				if(dbVo.getPAYED_MONEY() > 0) dbVo.setPAYED_MONEY(dbVo.getPAYED_MONEY()*(-1));
+			}
 			roomTurnService.UpdateRoomTurnVO(dbVo);
 		}
 		
@@ -375,21 +391,17 @@ public class SaleController {
 		if(vo.getSRVC_ID() != null && !vo.getSRVC_ID().isEmpty()){
 			map.put("SRVC_ID", vo.getSRVC_ID());
 		}
-		CodeVO mVo = new CodeVO();
-		mVo.setGROUP_CD(UtilConst.GROUP_UNIT);
-		List<CodeVO> listCode = codeService.getListCodeVO(mVo);
+		
+		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
+		HashMap<String, String> mapDonVi = new HashMap<String, String>();
 		List<HashMap<String, Object>> list = roomSrvcService.getThongKeBanHang(map);
 		
 		for(int i=0; i< list.size(); i++){
 			int j = i+1;
 			HashMap<String, Object> Vo = list.get(i);
 			if(Vo.get("UNIT")!= null){
-		    	for(CodeVO coMap : listCode){
-		    		if(Vo.get("UNIT").toString().trim().equalsIgnoreCase(coMap.getCD()+"")){
-		    			Vo.put("UNIT_NM", coMap.getCD_NM());
-		    			break;
-		    		}
-		    	}
+				String unitNm = cmmCdUserService.getUnitNameFromList(Vo.get("UNIT").toString(), listDonVi, mapDonVi);
+				Vo.put("UNIT_NM", unitNm);
 		    }
 		}
 		
