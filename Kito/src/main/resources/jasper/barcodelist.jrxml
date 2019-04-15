@@ -16,20 +16,20 @@
 	<detail>
 		<band height="80" splitType="Stretch">
 			<componentElement>
-				<reportElement x="4" y="20" width="176" height="25" uuid="dadee133-54b0-4353-a60d-9144c3e36b59"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false">
+				<reportElement x="4" y="20" width="96" height="25" uuid="dadee133-54b0-4353-a60d-9144c3e36b59"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="2" barHeight="60">
 					<jr:codeExpression><![CDATA[$F{FieldBarcode}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
 			<textField pattern="#,##0">
-				<reportElement x="67" y="4" width="113" height="15" uuid="707763f7-dc1b-434f-8b06-83f3f0d773b9"/>
+				<reportElement x="40" y="4" width="60" height="15" uuid="707763f7-dc1b-434f-8b06-83f3f0d773b9"/>
 				<textElement textAlignment="Left" verticalAlignment="Bottom">
 					<font fontName="Times New Roman" size="10" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{GiaBan}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="4" y="59" width="176" height="20" uuid="58aef587-a65a-4817-bcda-860e29f9e707"/>
+				<reportElement x="4" y="58" width="96" height="20" uuid="58aef587-a65a-4817-bcda-860e29f9e707"/>
 				<box leftPadding="0" rightPadding="0"/>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" size="10"/>
@@ -37,7 +37,72 @@
 				<textFieldExpression><![CDATA[$F{FieldGhiChu}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="4" y="4" width="63" height="15" uuid="d8b6193d-b71e-47ef-8f13-beca313a9b07"/>
+				<reportElement x="4" y="4" width="36" height="15" uuid="d8b6193d-b71e-47ef-8f13-beca313a9b07"/>
+				<box leftPadding="5" rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Giá:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="4" y="46" width="96" height="12" uuid="3852a96e-b07a-4049-8dfb-1a2dcf1b1ea4"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="123" y="57" width="96" height="20" uuid="2a539bb4-b8a0-4344-bba9-eb815aa0a307"/>
+				<box leftPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldGhiChu}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="123" y="4" width="36" height="15" uuid="d55b2273-e0fb-4ba7-9df1-bef33fb217c4"/>
+				<box leftPadding="5" rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Giá:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="159" y="4" width="60" height="15" uuid="b138d34e-9cfe-4d14-9a4b-0cfd244089e8"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{GiaBan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="123" y="45" width="96" height="12" uuid="772b79a3-9df4-45f1-bc0c-e17cbbae8cef"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="123" y="20" width="96" height="25" uuid="5c631825-de4b-41e8-89fd-ecc4eb1d842d"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="2" barHeight="60">
+					<jr:codeExpression><![CDATA[$F{FieldBarcode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField pattern="#,##0">
+				<reportElement x="273" y="3" width="60" height="15" uuid="4dca62d7-1b4e-4657-86f2-0d26b2319ed1"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{GiaBan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="237" y="44" width="96" height="12" uuid="5473b05e-b762-412d-b327-a7d4474b947a"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="237" y="3" width="36" height="15" uuid="ec2f763b-cf6c-415e-9ce1-a247dfe12331"/>
 				<box leftPadding="5" rightPadding="5"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font fontName="Times New Roman" size="10"/>
@@ -45,13 +110,13 @@
 				<text><![CDATA[Giá:]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="198" y="21" width="173" height="25" uuid="b96f7294-a96b-401b-8cc4-c239c6f6e40a"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false">
+				<reportElement x="354" y="19" width="96" height="25" uuid="d72324a0-a6c0-4244-81c5-60fb85f6cdd5"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="2" barHeight="60">
 					<jr:codeExpression><![CDATA[$F{FieldBarcode}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
 			<textField>
-				<reportElement x="198" y="59" width="173" height="20" uuid="264dd4ed-cd3b-4a30-a7f0-8edd05b139bc"/>
+				<reportElement x="237" y="56" width="96" height="20" uuid="feadb2ce-d20e-4a71-b99a-e169007b039a"/>
 				<box leftPadding="0" rightPadding="0"/>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" size="10"/>
@@ -59,70 +124,77 @@
 				<textFieldExpression><![CDATA[$F{FieldGhiChu}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0">
-				<reportElement x="266" y="5" width="105" height="15" uuid="0eccf692-f631-4d1b-9143-2af16b43018c"/>
+				<reportElement x="390" y="3" width="60" height="15" uuid="3bce031f-230b-4b59-81fb-b30786167713"/>
 				<textElement textAlignment="Left" verticalAlignment="Bottom">
 					<font fontName="Times New Roman" size="10" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{GiaBan}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="198" y="5" width="68" height="15" uuid="b3ae7b2d-9c25-4907-8f82-dc1b7bd786be"/>
+				<reportElement x="354" y="3" width="36" height="15" uuid="f00508c7-d19b-4cfb-8dcf-b97cd87cb863"/>
 				<box leftPadding="5" rightPadding="5"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<text><![CDATA[Giá:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="4" y="47" width="176" height="12" uuid="3852a96e-b07a-4049-8dfb-1a2dcf1b1ea4"/>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="198" y="47" width="173" height="12" uuid="0b2b88d6-6aee-4a41-a0e0-0a7894731125"/>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="388" y="59" width="176" height="20" uuid="ec506ca7-6f76-40af-89c8-354bafbafb94"/>
-				<box leftPadding="0" rightPadding="0"/>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{FieldGhiChu}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="388" y="47" width="176" height="12" uuid="66c24b13-f3a9-4610-a814-d8e8297fc40d"/>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
-			</textField>
 			<componentElement>
-				<reportElement x="388" y="21" width="176" height="25" uuid="116445e9-bff9-4637-9c63-1d90c950474f"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false">
+				<reportElement x="237" y="21" width="96" height="25" uuid="9b1608d5-d5e2-4770-b9fa-87e742014836"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="2" barHeight="60">
 					<jr:codeExpression><![CDATA[$F{FieldBarcode}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
-			<textField pattern="#,##0">
-				<reportElement x="456" y="5" width="108" height="15" uuid="51e0b549-f9c9-4187-ae59-00d4927da13c"/>
-				<textElement textAlignment="Left" verticalAlignment="Bottom">
-					<font fontName="Times New Roman" size="10" isItalic="true"/>
+			<textField>
+				<reportElement x="354" y="56" width="96" height="20" uuid="e71fa92c-474c-4b7b-b089-4d7e1c835ae4"/>
+				<box leftPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{GiaBan}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{FieldGhiChu}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="354" y="44" width="96" height="12" uuid="a5f3ee4a-bcd2-492b-a53d-c8eedf51ebdb"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="388" y="5" width="68" height="15" uuid="76eea06f-95c5-455e-a6af-2cad2b0060e6"/>
+				<reportElement x="474" y="2" width="36" height="15" uuid="a1bb9ca9-aebc-45bd-bf70-9b3bff2f0ea1"/>
 				<box leftPadding="5" rightPadding="5"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<text><![CDATA[Giá:]]></text>
 			</staticText>
+			<componentElement>
+				<reportElement x="474" y="18" width="96" height="25" uuid="399cf8b0-5937-4147-8b22-9f3adccc437c"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="2" barHeight="60">
+					<jr:codeExpression><![CDATA[$F{FieldBarcode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField pattern="#,##0">
+				<reportElement x="510" y="2" width="60" height="15" uuid="c1d4a49f-74a6-410a-b2e1-d47b2f164bb0"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{GiaBan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="473" y="43" width="96" height="12" uuid="5fc450cb-a22e-48a9-bca4-62c1d2a6112c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldBarcode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="473" y="55" width="96" height="20" uuid="b4157f1b-d452-4659-8a28-a8ae872d1218"/>
+				<box leftPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FieldGhiChu}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

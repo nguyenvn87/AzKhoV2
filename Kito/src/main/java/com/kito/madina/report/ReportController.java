@@ -1528,7 +1528,8 @@ public class ReportController {
 		if(tmpVO.getPRICE()!= null && !tmpVO.getPRICE().isEmpty()) 
 			value =	Double.parseDouble(tmpVO.getPRICE());
 		int rowTotal = 1;
-		if(list!=null&&!list.isEmpty())  rowTotal = 1;
+		if(list!=null&&!list.isEmpty() && list.equalsIgnoreCase("4"))  rowTotal = 9;
+		else rowTotal = 1;
 		for(int i=0; i < rowTotal; i++) {
 			Map<String, Object> tmpMap = new HashMap<String, Object>(); 
 			tmpMap.put("FieldBarcode",tmpVO.getSRVC_CD());
@@ -1543,13 +1544,15 @@ public class ReportController {
 		if(type != null && type.equalsIgnoreCase("pdf")) {
 			mapRpt.put( "format", "pdf");
 			if(list!=null&&!list.isEmpty() && list.equalsIgnoreCase("3")) viewName = "rptBarcode3";
-			else if(list!=null&&!list.isEmpty()) viewName = "rptBarcodeList";
+			else if(list!=null&&!list.isEmpty() && list.equalsIgnoreCase("2")) viewName = "rptBarcode2";
+			else if(list!=null&&!list.isEmpty() && list.equalsIgnoreCase("4")) viewName = "rptBarcodeList";
 			else viewName = "rptBarcode";
 		}
 		else {
 			mapRpt.put( "format", "docx");
 			if(list!=null&&!list.isEmpty() && list.equalsIgnoreCase("3")) viewName = "rptBarcode3Doc";
-			else if(list!=null&&!list.isEmpty()) viewName = "rptBarcodeListDoc";
+			else if(list!=null&&!list.isEmpty() && list.equalsIgnoreCase("2")) viewName = "rptBarcode2Doc";
+			else if(list!=null&&!list.isEmpty() && list.equalsIgnoreCase("4")) viewName = "rptBarcodeListDoc";
 			else viewName = "rptBarcodeDoc";
 		}
 		mapRpt.put("filename", tmpVO.getSRVC_CD());

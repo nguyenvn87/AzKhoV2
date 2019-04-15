@@ -116,6 +116,9 @@
    <beans:bean id="rptBarcode" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
    		<beans:property name="url" value="classpath:jasper/barcode.jasper"></beans:property>
    </beans:bean>
+   <beans:bean id="rptBarcode2" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+   		<beans:property name="url" value="classpath:jasper/barcode2.jasper"></beans:property>
+   </beans:bean>
    <beans:bean id="rptBarcode3" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
    		<beans:property name="url" value="classpath:jasper/barcode3.jasper"></beans:property>
    </beans:bean>
@@ -127,6 +130,9 @@
    </beans:bean>
    <beans:bean id="rptBarcodeDoc" class="com.kito.madina.cmmn.util.jasper.CustomJasperReportsDocxFormatView">
    		<beans:property name="url" value="classpath:jasper/barcode.jasper"></beans:property>
+   </beans:bean>
+   <beans:bean id="rptBarcode2Doc" class="com.kito.madina.cmmn.util.jasper.CustomJasperReportsDocxFormatView">
+   		<beans:property name="url" value="classpath:jasper/barcode2.jasper"></beans:property>
    </beans:bean>
    <beans:bean id="rptBarcode3Doc" class="com.kito.madina.cmmn.util.jasper.CustomJasperReportsDocxFormatView">
    		<beans:property name="url" value="classpath:jasper/barcode3.jasper"></beans:property>

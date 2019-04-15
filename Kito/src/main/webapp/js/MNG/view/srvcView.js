@@ -148,37 +148,21 @@ Ext.define('MNG.view.srvcView', {
                                          flex: 0.5
                                      },
                                      {
-	                                   	 text: 'Mã vạch',
-	                                   	 columns: [{
-	 										menuDisabled : true,
-	 										sortable : false,
-	 										xtype : 'actioncolumn',
-	 										align : 'center',
-	 										width : 40,
-	 										items : [ {
-	 											iconCls : 'icon-pdf',
-	 											tooltip : 'In mã vạch',
-	 											handler : function(grid, rowIndex, colIndex){
-	 												var myController = MANAGER.app.getController('MNG.controller.srvcController');
-	 												myController.btnPrintBarcode(grid, rowIndex, colIndex, 'pdf', '');
-	 											}
-	 										} ]
-	 									},
-	                                     {
-											menuDisabled : true,
-											sortable : false,
-											xtype : 'actioncolumn',
-											align : 'center',
-											width : 40,
-											items : [ {
-												iconCls : 'icon-word',
-												tooltip : 'Tải file word',
-												handler : function(grid, rowIndex, colIndex){
-													var myController = MANAGER.app.getController('MNG.controller.srvcController');
-													myController.btnPrintBarcode(grid, rowIndex, colIndex, 'docx', '');
-												}
-											} ]
-										}] 
+	                                   	text: 'Mã vạch',
+	 									menuDisabled : true,
+	 									sortable : false,
+	 									xtype : 'actioncolumn',
+	 									align : 'center',
+	 									width : 80,
+	 									items : [ {
+	 										iconCls : 'icon-barcode',
+	 										tooltip : 'In mã vạch',
+	 										handler : function(grid, rowIndex, colIndex){
+	 											var srvc_id = grid.getStore().getAt(rowIndex).get('SRVC_ID');
+												let btnMaVach = Ext.create('MNG.view.popup.BtnInMaVach',{SRVC_ID:srvc_id});
+												btnMaVach.show();
+	 										}
+	 									} ]
                                     },
                                      {
 										menuDisabled : true,
