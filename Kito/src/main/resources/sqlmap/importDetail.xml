@@ -147,7 +147,7 @@
 		SELECT 
 			t.*
 	    FROM import_detail t
-	    WHERE t.ID_DETAIL = #ID_DETAIL#
+	    WHERE t.ID_DETAIL = #ID_DETAIL# and t.RESTAR_ID = #RESTAR_ID#
   </select>
   <delete id="deleteImportDetailVOByID" parameterClass="ImportDetailVO">
   		DELETE FROM import_detail WHERE ID_DETAIL = #ID_DETAIL# and IMPRT_CD = #IMPRT_CD# and RESTAR_ID=#RESTAR_ID#
