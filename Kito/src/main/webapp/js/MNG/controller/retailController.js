@@ -1,7 +1,7 @@
 var formatSupporter = Ext.create('BIZ.utilities.formatSupporter',{});
 var supportEvent = Ext.create('BIZ.utilities.supportEvent',{});
 var paymentOption = null;
-var btnAddCustomer = null; //Ext.create('MNG.view.popup.BtnAddCustomer',{});
+var btnAddCustomer = null; 
 var btnSearchCustomer = Ext.create('MNG.view.popup.BtnSearchCustomer',{});
 var btnTemplate = null;
 
@@ -44,17 +44,8 @@ Ext.define('MNG.controller.retailController', {
 				change: this.ChangeDiscountValue
 			},
 			'#grid-menu-id' :{
-				itemdblclick: this.doubleClickSelectMenu
-			},
-			'#grid-menu-id' :{
 				itemclick: this.ClickSelectMenu
 			},
-			//'#idSrvcSelect':{
-				//click : this.selectMenuItem
-			//},
-			//'#grid-room-turn':{
-				//itemdblclick: this.doubleClickTurnSrvc
-			//},
 			'#btnUpdateService':{
 				click: this.btnUpdateService
 			},
@@ -67,9 +58,6 @@ Ext.define('MNG.controller.retailController', {
 			'#btnFindCustomer':{
 				click: this.btnFindCustomer
 			},
-			/*'#btnAddCustomer':{
-				click: this.btnAddCustomer
-			},*/
 			'#btnPaymentId':{
 				click: this.btnPaymentSubmit
 			},
@@ -121,10 +109,6 @@ Ext.define('MNG.controller.retailController', {
 		var location = contextPath + "/report/ThongKeChiTiet.do" + param;
 		utilForm.btn_template_popup(location,"Thống Kê Bán Hàng",600,1024,true);
 	},
-	testClick: function(){
-		var location = contextPath + "/report/testreport.do"; //+ param;
-		utilForm.btn_template_popup(location,"Giấy chứng nhận",600,1024,true);
-	},
 	btnPayment:function(){
 		var parent = this;
 		if(parent.roomUseId == null) return;
@@ -145,12 +129,6 @@ Ext.define('MNG.controller.retailController', {
 		}
 		this.popMenu.show();
 	},
-	doubleClickMenu:function(){
-		if(this.popMenu==null){
-			this.popMenu = Ext.create('MNG.view.popup.BtnAddMenu',{});
-		}
-		this.popMenu.show();;
-	},
 	BtnSaveMenu:function(){
 		this.request();
 	},
@@ -164,11 +142,6 @@ Ext.define('MNG.controller.retailController', {
 	ClickSelectMenu:function(component, record, index, eOpts){
 		parent = this;		
 		parent.clickOnMenuItem(component, record, index, eOpts);
-	},
-	doubleClickSelectMenu:function(component, record, index, eOpts){
-		
-		parent = this;		
-		//parent.clickOnMenuItem(component, record, index, eOpts);
 	},
 	clickOnMenuItem:function(component, record, index, eOpts){
 		parent = this;		
@@ -248,11 +221,6 @@ Ext.define('MNG.controller.retailController', {
 		});
 		popChService.hide();
 	},
-	btnStoreStatic:function(){
-		var param = "?LIID="; 
-		var location = contextPath + "/report/calculateStore.do" + param;
-		utilForm.btn_template_popup(location,"Báo cáo tồn kho",400,800,true);
-	},
 	btnPrintDaily:function(){
 		var parent = this;
 		if(parent.roomUseId == null) return;
@@ -260,16 +228,6 @@ Ext.define('MNG.controller.retailController', {
 		
 		var location = contextPath + "/report/rptDaily.do" + param;
 		utilForm.btn_template_popup(location,"Phiếu xuất kho",850,800,true);
-	},
-	resetNotiStatus:function(){
-		var parent = this;
-		parent.timeON = 'X';
-    	parent.payedMoney = 'X';
-    	parent.roomNm = '';
-	},
-	showNotificationRoom:function(){
-		var parent = this;
-		value1 = formatSupporter.formatToMoney(parent.payedMoney);
 	},
 	deleteRecord:function(grid, rowIndex, colIndex){
 		me = this;
@@ -290,17 +248,19 @@ Ext.define('MNG.controller.retailController', {
 		
 	},
 	clickSrvcSearch:function(){
+		var parent = this;
 		var itemSearch = Ext.ComponentQuery.query('#SRVC_NM')[0];
 		value = itemSearch.getValue();
 		
-		var Grid = Ext.ComponentQuery.query('#grid-menu-id')[0];
+		/*var Grid = Ext.ComponentQuery.query('#grid-menu-id')[0];
 		var storeTmp = Grid.getStore();
 		storeTmp.getProxy().extraParams={
 				IS_USED: 1,
 				SRVC_NM: value
 		};
 		storeTmp.getProxy().url = contextPath + '/getSearchListMenu.json';
-		storeTmp.load();
+		storeTmp.load();*/
+		parent.searchServiceByValue(value);
 	},
 	FilterMenu:function(key, event){
 		me = this;
@@ -330,6 +290,12 @@ Ext.define('MNG.controller.retailController', {
 		storeTmp.getProxy().url = contextPath + '/getSearchListMenu.json';
 		storeTmp.currentPage=1;
 		storeTmp.load();
+		storeTmp.on('load',function (store, records, successful, eOpts ){
+			var localStorage = Ext.create('BIZ.utilities.localStorage', {});
+			// Init data
+			//localStorage.createLocalDabase(records);
+		});
+		
 	},
 	btnFindCustomer:function(){
 		btnSearchCustomer.show();
@@ -442,7 +408,6 @@ Ext.define('MNG.controller.retailController', {
 	submitRequest:function(param, isPrint, isCancel){
 		parent = this;
 		var url_request = contextPath + '/sale/saveSaleOrderList.json';
-		//if(isCancel == 1) url_request = contextPath + '/sale/saveTraHangVeKho.json';
 		
 		data = formatSupporter.formatToMoney(param['TOTAL_MONEY']);
 		
@@ -691,9 +656,6 @@ Ext.define('MNG.controller.retailController', {
 	    param['IS_RETURN'] = 1;
 	    
 	    if(itemsLength > 0){
-			//var url_request = contextPath + '/sale/saveTraHangVeKho.json';
-			//var url_request = contextPath + '/rest/saveSaleOrderList';
-			
 	    	parent.submitRequest(param, true, 1);
 		}
 	},
@@ -727,7 +689,6 @@ Ext.define('MNG.controller.retailController', {
 		mainPanelPayment.insert(itemNew);
 		mainPanelPayment.doLayout();
 		mainPanelPayment.setActiveTab(0);
-		
 	},
 	btnOnOffScanner: function(field, event){
 		
@@ -743,7 +704,6 @@ Ext.define('MNG.controller.retailController', {
 			field.addCls('scaner-on');
 		}
 		parent.scannerOn = !parent.scannerOn;
-		//parent.getProductToBillByCode('SP000008');
 	},
 	activeBarcodeScanner:function(){
 		var parent = this;

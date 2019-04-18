@@ -3,6 +3,8 @@ package com.kito.madina.test.service;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.kito.madina.test.vo.MenuVO;
 import com.kito.madina.test.vo.SrvcVO;
 
@@ -28,4 +30,6 @@ public interface SrvcService {
 	public boolean checkExistInHistoryStore(String srvcID, List<SrvcVO> store);
 	public HashMap<String, Object> getValueInStore(SrvcVO vo);
 	public void writeLogChangeStore(String str);
+	public List<SrvcVO> importSPListFromExcel(MultipartFile file);
+	public void saveList(List<SrvcVO> listSrvc);
 }

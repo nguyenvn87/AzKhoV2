@@ -17,7 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kito.madina.cmmn.json.JsonVO;
@@ -688,4 +690,27 @@ public class SrvcController {
 
 		return new ModelAndView("jsonView", jvon);
 	}
+	/***
+	 * Import product from excel
+	 * @param file
+	 * @return
+	 */
+	@RequestMapping(value = "/importfromexcel", method = RequestMethod.POST)
+	public ModelAndView importSPFromExcel(@RequestParam("fileUpload") MultipartFile file) {
+		
+		//String type = req.getParameter("type");
+		System.out.println("Import from excel file"
+				);
+		JsonVO jvon = new JsonVO();
+		List<SrvcVO> listSrvc = srvcService.importSPListFromExcel(file);
+		srvcService.saveList(listSrvc);
+		if(listSrvc !=null) {
+			jvon.setMessage("Success");
+			jvon.setSuccess(true);
+		}
+		else
+			jvon.setMessage("Failse");
+		return new ModelAndView("jsonView", jvon);
+	}
+	
 }

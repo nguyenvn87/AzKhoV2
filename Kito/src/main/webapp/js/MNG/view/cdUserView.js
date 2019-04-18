@@ -67,6 +67,15 @@ Ext.define('MNG.view.cdUserView', {
                                          xtype: 'gridcolumn',
                                          sortable:false,
                                          align:'left',
+                                         hidden: true,
+                                         dataIndex: 'CD',
+                                         text: "Mã",
+                                         width: 30
+                                     },
+                                     {
+                                         xtype: 'gridcolumn',
+                                         sortable:false,
+                                         align:'left',
                                          dataIndex: 'CD_NM',
                                          text: "Tên",
                                          flex: 1

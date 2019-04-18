@@ -291,11 +291,12 @@ Ext.define('MNG.view.srvcView', {
                                 	 	hidden: me.isHideAddNew
  		                                },
  		                               {
- 	                                	text: 'Xóa',
- 	                                	iconCls: 'icon-search',
- 	                                	hidden: true,
- 	                                	itemId: 'delSrvcBtn'
- 	 		                           },
+ 	 	 		                        	 text: 'Nhập từ excel',
+ 	 	 		                        	iconCls: 'icon-excel',
+ 	                                 	 	 listeners:{
+ 												click: me.checkFileFormat
+ 											 }
+ 	 		                               },
  	 		                           {
  	 		                        	xtype : 'textfield',
 										emptyText : 'Tìm kiếm',
@@ -312,7 +313,7 @@ Ext.define('MNG.view.srvcView', {
  	                                	height: 40,
  	                                	iconCls: 'icon-search',
  	                                	itemId: 'btnSearchSrvcBtn'
- 	 		                           }
+ 	 		                           },
              						],
              					bbar: [{
 	                                	 	text: 'PDF',
@@ -352,5 +353,9 @@ Ext.define('MNG.view.srvcView', {
 			var myController = MANAGER.app.getController('MNG.controller.srvcController');
 			myController.clickSrvcSearch();	
 		}
+	},
+	checkFileFormat: function(){
+		var formTmp = Ext.create('MNG.view.popup.BtnImportFileExcel',{});
+		formTmp.show();
 	}
 });

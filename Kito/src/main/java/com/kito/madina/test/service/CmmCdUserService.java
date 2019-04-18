@@ -15,11 +15,11 @@ public interface CmmCdUserService {
 	public CmmCdUserVO getCmmCdUserVO(String _Cd);
 	public CmmCdUserVO createCodeVO(CmmCdUserVO vo);
 	public int updateCodeVO(CmmCdUserVO vo);
-	//public CmmCdUserVO getCmmCdUserVoByCD(List<CmmCdUserVO> _list, int _code);
 	public int deleteCmmCdUserVO(int Id);
 	public int deleteCmmCdUserVO(String Id);
 	public CmmCdUserVO getCmmCdUserVoByCD(List<CmmCdUserVO> _list, String _code);
 	public String getUnitNameFromList(String codeCD, List<CmmCdUserVO> listDonVi, HashMap<String, String> mapDonVi);
 	public List<CmmCdUserVO> getListCmmCdUserByGroupCD(String groupCD);
 	public CmmCdUserVO getLatestCmmCdUserVOByGroup(String groupCD);
+	public String createCodeCDAndGetFromList(String codeNM, List<CmmCdUserVO> listDonVi, HashMap<String, String> mapDonVi, String groupCode);
 }

@@ -594,13 +594,12 @@ public class SaleReportController {
 	
 			// Set unit name
 			if(map.get("UNIT")!= null && !map.get("UNIT").toString().isEmpty()){
-				//String unitNm = codeService.getUnitNameFromList(map.get("UNIT").toString().trim(), listDonVi, mapDonVi);
 				String unitNm = cmmCdUserService.getUnitNameFromList(map.get("UNIT").toString().trim(), listDonVi, mapDonVi);
 				map.put("UNIT_NM", unitNm);
 		    }
 		}
 
-		String[] column_arr = {"STT", "SRVC_NM", "SRVC_CD","UNIT_NM","PRICE","PRICE_IMPORT","DSCRT", "TYPE_NM"};
+		String[] column_arr = {"STT", "SRVC_NM", "SRVC_CD","UNIT_NM","PRICE","PRICE_IMPORT","DSCRT","TYPE_NM"};
 		String[] column_header = new String[column_arr.length];
 		for (int i = 0; i < column_arr.length; i++) {
 			String str = PropertyUtil.getStringUTF8(column_arr[i]);

@@ -17,9 +17,6 @@ Ext.define('MNG.controller.srvcController', {
 			'#addSrvcBtn' : {
 				click : this.openBtnUser
 			},
-			'#delSrvcBtn' : {
-				click : this.deleteUser
-			},
 			'#grid-srvc':{
 				itemdblclick: this.doubleClickUser
 			},

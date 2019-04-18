@@ -130,10 +130,10 @@ public class BillLisExcelView extends AbstractExcelView  {
 	    	
 	    }
 	    
-	    String comment = (String) (model.get( "comment"));
-	    HSSFRow bottom = sheet.createRow(rowCount + 1);
-	    bottom.createCell(0).setCellValue("Ghi chú: " + comment);
-	    bottom.getCell(0).setCellStyle(style);
+	    //String comment = (String) (model.get( "comment"));
+	   // HSSFRow bottom = sheet.createRow(rowCount + 1);
+	   // bottom.createCell(0).setCellValue("Ghi chú: " + comment);
+	    //bottom.getCell(0).setCellStyle(style);
 	}
 
 }

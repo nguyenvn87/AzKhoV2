@@ -1,5 +1,6 @@
 package com.kito.madina.test.service.impl;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,16 +12,24 @@ import javax.annotation.Resource;
 import org.apache.taglibs.standard.tag.common.core.SetSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kito.madina.cmmn.util.CmmUtil;
 import com.kito.madina.cmmn.util.SessionUtil;
 import com.kito.madina.cmmn.util.UtilConst;
 import com.kito.madina.logger.LogUtil;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import java.util.Iterator;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import com.kito.madina.test.dao.SrvcDAO;
 import com.kito.madina.test.dao.UserDAO;
+import com.kito.madina.test.service.CmmCdUserService;
 import com.kito.madina.test.service.CodeService;
 import com.kito.madina.test.service.SrvcService;
 import com.kito.madina.test.service.UserService;
+import com.kito.madina.test.vo.CmmCdUserVO;
 import com.kito.madina.test.vo.CodeVO;
 import com.kito.madina.test.vo.MenuVO;
 import com.kito.madina.test.vo.SrvcVO;
@@ -35,6 +44,9 @@ public class SrvcServiceImpl implements SrvcService{
 	
 	@Resource(name = "codeService")
 	private CodeService codeService;
+	
+	@Resource(name = "cmmCdUserService")
+	private CmmCdUserService cmmCdUserService;
 	
 	@Override
 	public List<SrvcVO> getSrvcVOAll() {
@@ -269,5 +281,103 @@ public class SrvcServiceImpl implements SrvcService{
 		//catch(Exception e) {
 		//	System.out.println("Khong tim thay file log !");
 		//}
+	}
+	@Override
+	public void saveList(List<SrvcVO> listSrvc) {
+		String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		
+		List<CmmCdUserVO> listDonVi = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_UNIT);
+		List<CmmCdUserVO> listNhomHang = cmmCdUserService.getListCmmCdUserByGroupCD(UtilConst.GROUP_HANG);
+		HashMap<String, String> mapDonVi = new HashMap<String, String>();
+		HashMap<String, String> mapGroup = new HashMap<String, String>();
+		
+		for(SrvcVO vo : listSrvc) {
+			SrvcVO voCk = new SrvcVO();
+			if(vo.getSRVC_CD()!=null && !vo.getSRVC_CD().isEmpty()) {
+				voCk.setRESTAR_ID(loginRestautant);
+				voCk.setIS_USED(1);
+				voCk.setSRVC_CD(vo.getSRVC_CD());
+				SrvcVO voOld = srvcDao.getSrvcVO(voCk);
+				
+				
+				if(voOld != null && !voOld.getSRVC_ID().isEmpty()) {
+					// Update price, name, import price, description
+					voOld.setSRVC_NM(vo.getSRVC_NM());
+					if(vo.getPRICE()!= null && !vo.getPRICE().isEmpty())voOld.setPRICE(vo.getPRICE());
+					if(vo.getPRICE_IMPORT()!= null && !vo.getPRICE_IMPORT().isEmpty()) voOld.setPRICE_IMPORT(vo.getPRICE_IMPORT());
+					voOld.setDSCRT(vo.getDSCRT());
+					srvcDao.updateSrvcVO(voOld);
+				}
+				else if(!vo.getSRVC_CD().isEmpty() && !vo.getSRVC_NM().isEmpty()){
+					String tmpCodeName = cmmCdUserService.createCodeCDAndGetFromList(vo.getUNIT_NM(), listDonVi, mapDonVi, UtilConst.GROUP_UNIT);
+					String tmpCodeGroup = cmmCdUserService.createCodeCDAndGetFromList(vo.getGROUP_NM(), listNhomHang, mapGroup, UtilConst.GROUP_HANG);
+					String srvcID = CmmUtil.getGUID();
+					vo.setSRVC_ID(srvcID);
+					if(tmpCodeName != null && !tmpCodeName.isEmpty()) vo.setUNIT(tmpCodeName);
+					if(tmpCodeGroup != null && !tmpCodeGroup.isEmpty()) {
+						vo.setGROUP_CD(tmpCodeGroup);
+						vo.setGROUP_NM(vo.getGROUP_NM());
+					}
+					srvcDao.createSrvcVO(vo);
+				}
+			}
+		}
+	}
+	@Override
+	public List<SrvcVO> importSPListFromExcel(MultipartFile file){
+		try {
+			List<SrvcVO> sps = new ArrayList<SrvcVO>();
+			int i = 1;
+			// Creates a workbook object from the uploaded excelfile
+			InputStream  file2 = file.getInputStream();
+			HSSFWorkbook workbook = new HSSFWorkbook(file2);
+			// Creates a worksheet object representing the first sheet
+			HSSFSheet worksheet = workbook.getSheetAt(0);
+			// Reads the data in excel file until last row is encountered
+			while (i <= worksheet.getLastRowNum()) {
+				SrvcVO sVo = new SrvcVO();
+				// Creates an object representing a single row in excel
+				HSSFRow row = worksheet.getRow(i++);
+				Iterator <Cell> cellIterator = row.cellIterator();
+				while (cellIterator.hasNext()) {
+					Cell cell = cellIterator.next();
+					cell.setCellType(Cell.CELL_TYPE_STRING);
+				}
+				// Sets the Read data to the model class
+				if(i >2) {
+					String value1 = row.getCell(0).getStringCellValue();
+					String value2 = row.getCell(1).getStringCellValue();
+					String value3 = row.getCell(2).getStringCellValue();
+					String value4 = row.getCell(3).getStringCellValue();
+					String value5 = row.getCell(4).getStringCellValue();
+					String value6 = row.getCell(5).getStringCellValue();
+					
+					try {  
+						double value41 = Double.parseDouble((value5!=null&&!value5.isEmpty())?value5:"0");
+						double value51 = Double.parseDouble((value6!=null&&!value6.isEmpty())?value6:"0");
+						sVo.setPRICE(String.valueOf(value41));
+						sVo.setPRICE_IMPORT(String.valueOf(value51));
+					  } catch(NumberFormatException e){  
+					
+					  }  
+					String value7 = row.getCell(6).getStringCellValue();
+					String value8 = row.getCell(7).getStringCellValue();
+					sVo.setSRVC_NM(value2!=null?value2.trim():"");
+					sVo.setSRVC_CD(value3!=null?value3.trim():"");
+					sVo.setUNIT_NM(value4);
+					
+					sVo.setDSCRT(value7);
+					sVo.setGROUP_NM(value8);
+					if(sVo.getSRVC_CD()!=null && !sVo.getSRVC_CD().isEmpty())
+						sps.add(sVo);
+				}
+			}
+
+			file2.close();
+			return sps;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

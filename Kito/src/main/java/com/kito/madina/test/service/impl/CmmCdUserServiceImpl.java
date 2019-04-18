@@ -58,6 +58,8 @@ public class CmmCdUserServiceImpl implements CmmCdUserService {
 			int newCD = Integer.parseInt(lastVO.getCD_NO())+1;
 			 newCDI = newCD+"";
 		}
+		String restarId = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		vo.setRESTAR_ID(restarId);
 		vo.setCD(newCDI);
 		vo.setCD_NO(newCDI);
 		vo.setUSE_YN("Y");
@@ -121,6 +123,40 @@ public class CmmCdUserServiceImpl implements CmmCdUserService {
 				}
 		    }
 			nameStr = mapDonVi.get(codeCD)!=null?mapDonVi.get(codeCD):"";
+		}catch(Exception e){
+			
+		}
+		return nameStr;
+	}
+	@Override
+	public String createCodeCDAndGetFromList(String codeNM, List<CmmCdUserVO> listDonVi, HashMap<String, String> mapDonVi, String groupCode){
+		String nameStr = "";
+		try{
+			if(codeNM!= null && !codeNM.isEmpty()){
+				codeNM = codeNM.trim();
+				if(mapDonVi.get(codeNM)!= null){
+					
+				}
+				else{
+					boolean isHave = false;
+			    	for(CmmCdUserVO coMap : listDonVi){
+			    		if(codeNM.equalsIgnoreCase(coMap.getCD_NM().trim())){
+			    			mapDonVi.put(codeNM, coMap.getCD());
+			    			isHave = true;
+			    			break;
+			    		}
+			    	}
+			    	if(isHave == false) {
+			    		CmmCdUserVO vo = new CmmCdUserVO();
+			    		vo.setGROUP_CD(groupCode);
+			    		if(groupCode.equalsIgnoreCase(UtilConst.GROUP_HANG)) vo.setCD_NM(codeNM.toUpperCase());
+			    		else vo.setCD_NM(codeNM);
+			    		vo = this.createCodeVO(vo);
+			    		mapDonVi.put(codeNM, vo.getCD());
+			    	}
+				}
+		    }
+			nameStr = mapDonVi.get(codeNM)!=null?mapDonVi.get(codeNM):"";
 		}catch(Exception e){
 			
 		}

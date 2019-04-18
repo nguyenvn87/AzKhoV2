@@ -8,6 +8,7 @@ import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.kito.madina.cmmn.util.CmmUtil;
+import com.kito.madina.cmmn.util.SessionUtil;
 import com.kito.madina.test.vo.SrvcVO;
 
 import javax.annotation.Resource;
@@ -25,6 +26,11 @@ public class SrvcDAO extends SqlMapClientDaoSupport{
 		return queryForList;
 	 }
 	 public int createSrvcVO(SrvcVO vo){
+		 String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		 String loginUser = SessionUtil.getSessionAttribute("loggedUserId").toString();
+		 vo.setRESTAR_ID(loginRestautant);
+		 vo.setUSER_NAME(loginUser);
+		 vo.setIS_USED(1);
 		Object i = getSqlMapClientTemplate().insert("createSrvcVO", vo);
 		return 1;
 	 }
@@ -50,8 +56,13 @@ public class SrvcDAO extends SqlMapClientDaoSupport{
 	 }
 	public SrvcVO getSrvcVO(SrvcVO vo) {
 		// TODO Auto-generated method stub
-		SrvcVO map = (SrvcVO)getSqlMapClientTemplate().queryForObject("getSrvcVOBySrvcVo", vo);
+		String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
+		vo.setRESTAR_ID(loginRestautant);
+		if(!vo.getSRVC_CD().isEmpty() || !vo.getSRVC_ID().isEmpty()) {
+			SrvcVO map = (SrvcVO)getSqlMapClientTemplate().queryForObject("getSrvcVOBySrvcVo", vo);
 		 return map;
+		}
+		return null;
 	}
 	public int updateStatusStore(SrvcVO vo) {
 		Object i = getSqlMapClientTemplate().update("updateAmountInStore", vo);
