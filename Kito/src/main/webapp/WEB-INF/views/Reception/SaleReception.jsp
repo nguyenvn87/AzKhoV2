@@ -11,6 +11,7 @@
     var menuStore = Ext.create('MNG.store.menuStore', {});
     var paymentContainer1 = Ext.create('BS.infoPaymentContainer', {});
     var customContainer = Ext.create('BS.infoCustomerContainer', {});
+   
     
     var paymentPanel =  Ext.create('Ext.tab.Panel', {
     						cls: 'tab-conent-cls',
@@ -460,11 +461,15 @@
 				storeTmp.pageSize= 100;
 				storeTmp.load();
 				storeTmp.on('load',function (store, records, successful, eOpts ){
+					console.info('store',store);
+					var localStorage = Ext.create('BIZ.utilities.localStorage', {});
 					// Init data
+					//localStorage.createLocalDabase(records);
 					if(records.length < 1){
 						var myController = MANAGER.app.getController('MNG.controller.retailController');
 					}
 				});
+				
 				formatSupporter.checkingTrialAccount();
 				
 				itemUser = Ext.ComponentQuery.query('#customerContainerId [name=USERNAME]')[0];

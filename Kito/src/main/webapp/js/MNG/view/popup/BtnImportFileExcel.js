@@ -101,7 +101,9 @@ Ext.define('MNG.view.popup.BtnImportFileExcel', {
                                     xtype: 'button',
                                     width: 130,
                                     text: 'OK',
-                                    handler: me.submitFormData
+                                    handler: function(){
+                                    	me.submitFormData(this, me);
+                                    }
                                 }
                             ]
                         }
@@ -113,7 +115,8 @@ Ext.define('MNG.view.popup.BtnImportFileExcel', {
 
         me.callParent(arguments);
     },
-    submitFormData: function(field){
+    submitFormData: function(field, me){
+ 
     	var form = field.up('form');
     	fileTmp = form.down('[name=fileUpload]');
     	if(fileTmp.lastValue.endsWith('.xls')==false){ 
@@ -126,12 +129,20 @@ Ext.define('MNG.view.popup.BtnImportFileExcel', {
              url: contextPath+'/importfromexcel.json',
              headers: {'Content-Type':'multipart/form-data; charset=UTF-8'},
              success: function (form, action) {
+            	 field.up('window').close();
+            	 me.reloadData();
                      Ext.Msg.alert('Cập nhật thành công', action.result.message);
                  },
              failure: function (form, action) {
                      Ext.Msg.alert('Lỗi', action.result ? action.result.message : 'No response');
              }
          })
+    },
+    reloadData:function(){
+    	var Grid = Ext.ComponentQuery.query('#grid-srvc')[0];
+		var storeTmp = Grid.getStore();
+		storeTmp.currentPage = 1;
+		storeTmp.load();
     }
 
 });

@@ -315,8 +315,8 @@ public class SrvcServiceImpl implements SrvcService{
 					vo.setSRVC_ID(srvcID);
 					if(tmpCodeName != null && !tmpCodeName.isEmpty()) vo.setUNIT(tmpCodeName);
 					if(tmpCodeGroup != null && !tmpCodeGroup.isEmpty()) {
-						vo.setGROUP_CD(tmpCodeGroup);
-						vo.setGROUP_NM(vo.getGROUP_NM());
+						vo.setTYPE(tmpCodeGroup);
+						vo.setTYPE_NM(vo.getGROUP_NM());
 					}
 					srvcDao.createSrvcVO(vo);
 				}

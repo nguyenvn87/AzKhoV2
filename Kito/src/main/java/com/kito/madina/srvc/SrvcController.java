@@ -258,7 +258,8 @@ public class SrvcController {
 			SrvcVO ckVO = new SrvcVO();
 			ckVO.setRESTAR_ID(loginRestautant);
 			ckVO.setSRVC_CD(vo.getSRVC_CD().trim());
-			ckVO.setIS_USED(-1);
+			//ckVO.setIS_USED(-1);
+			ckVO.setIS_USED(1);
 			vo1 = srvcService.getSrvcVO(ckVO);
 		}
 		if (vo.getSRVC_ID() != null && !vo.getSRVC_ID().isEmpty()) {
