@@ -17,9 +17,7 @@ Ext.define('MNG.view.popup.BtnImportFileExcel', {
         'Ext.button.Button'
     ],
 
-    height: 400,
-    width: 400,
-    title: '',
+    title: 'Cập nhật danh mục hàng bằng excel',
 
     initComponent: function() {
         var me = this;
@@ -28,48 +26,20 @@ Ext.define('MNG.view.popup.BtnImportFileExcel', {
             items: [
                 {
                     xtype: 'form',
-                    height: 350,
                     bodyPadding: 10,
                     title: '',
                     items: [
                         {
                             xtype: 'fieldset',
-                            border: '1 0 0 0',
-                            height: 72,
-                            title: 'Cập nhật tồn kho ?',
-                            items: [
-                                {
-                                    xtype: 'radiogroup',
-                                    fieldLabel: '',
-                                    layout: {
-                                        type: 'vbox',
-                                        align: 'stretch'
-                                    },
-                                    items: [
-                                        {
-                                            xtype: 'radiofield',
-                                            name: 'group1',
-                                            boxLabel: 'Có (cập nhật tất cả)'
-                                        },
-                                        {
-                                            xtype: 'radiofield',
-                                            name: 'group1',
-                                            boxLabel: 'Không (chỉ cập nhật thông tin hàng hóa)'
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            xtype: 'fieldset',
                             border: '1 0 1 0',
-                            height: 87,
-                            title: 'Xử lý trùng mã hàng ?',
+                            flex: 1,
+                            title: 'Lưu ý khi nhập bằng file excel',
                             items: [
                                 {
                                     xtype: 'radiogroup',
                                     fieldLabel: '',
-                                    //name : 'type',
+                                    disabled: true,
+                                    name : 'type',
                                     layout: {
                                         type: 'vbox',
                                         align: 'stretch'
@@ -78,24 +48,36 @@ Ext.define('MNG.view.popup.BtnImportFileExcel', {
                                         {
                                             xtype: 'radiofield',
                                             name: 'group2',
-                                            inputValue : '0',
-                                            boxLabel: 'Báo lỗi và dừng lại'
+                                            boxLabel: 'Trùng mã sẽ báo lỗi và dừng lại'
                                         },
                                         {
                                             xtype: 'radiofield',
                                             name: 'group2',
-                                            inputValue : '0',
-                                            boxLabel: 'Thay thế tên hàng cũ bằng tên hàng mới'
+                                            boxLabel: 'Chỉ cập nhật mã hàng mới'
+                                        },
+                                        {
+                                            xtype: 'radiofield',
+                                            name: 'group2',
+                                            boxLabel: 'Không cập nhật tồn kho'
+                                        },
+                                        {
+                                            xtype: 'radiofield',
+                                            name: 'group2',
+                                            boxLabel: 'Không cập nhật tồn kho'
+                                        },
+                                        {
+                                            xtype: 'radiofield',
+                                            name: 'group2',
+                                            boxLabel: 'File không nặng quá 5M'
+                                        },
+                                        {
+                                            xtype: 'radiofield',
+                                            name: 'group2',
+                                            boxLabel: 'Mẫu file excel tải về và up lên phải cùng 1 định dạng'
                                         }
                                     ]
                                 }
                             ]
-                        },
-                        {
-                            xtype: 'container',
-                            hidden: true,
-                            cls: 'cls-note',
-                            height: 66
                         },
                         {
                             xtype: 'filefield',
@@ -141,8 +123,14 @@ Ext.define('MNG.view.popup.BtnImportFileExcel', {
     	form.getForm().submit({
     		 method: 'POST',
     		 waitMsg: 'Uploading your file...',
-             url: contextPath+'/importfromexcel',
+             url: contextPath+'/importfromexcel.json',
              headers: {'Content-Type':'multipart/form-data; charset=UTF-8'},
+             success: function (form, action) {
+                     Ext.Msg.alert('Cập nhật thành công', action.result.message);
+                 },
+             failure: function (form, action) {
+                     Ext.Msg.alert('Lỗi', action.result ? action.result.message : 'No response');
+             }
          })
     }
 

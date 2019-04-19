@@ -58,7 +58,7 @@ public class SrvcDAO extends SqlMapClientDaoSupport{
 		// TODO Auto-generated method stub
 		String loginRestautant = SessionUtil.getSessionAttribute("loginRestautant").toString();
 		vo.setRESTAR_ID(loginRestautant);
-		if(!vo.getSRVC_CD().isEmpty() || !vo.getSRVC_ID().isEmpty()) {
+		if((vo.getSRVC_CD() != null && !vo.getSRVC_CD().isEmpty()) || (vo.getSRVC_ID()!=null && !vo.getSRVC_ID().isEmpty())) {
 			SrvcVO map = (SrvcVO)getSqlMapClientTemplate().queryForObject("getSrvcVOBySrvcVo", vo);
 		 return map;
 		}

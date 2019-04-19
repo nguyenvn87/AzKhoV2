@@ -306,7 +306,7 @@ public class SrvcServiceImpl implements SrvcService{
 					if(vo.getPRICE()!= null && !vo.getPRICE().isEmpty())voOld.setPRICE(vo.getPRICE());
 					if(vo.getPRICE_IMPORT()!= null && !vo.getPRICE_IMPORT().isEmpty()) voOld.setPRICE_IMPORT(vo.getPRICE_IMPORT());
 					voOld.setDSCRT(vo.getDSCRT());
-					srvcDao.updateSrvcVO(voOld);
+					//srvcDao.updateSrvcVO(voOld);
 				}
 				else if(!vo.getSRVC_CD().isEmpty() && !vo.getSRVC_NM().isEmpty()){
 					String tmpCodeName = cmmCdUserService.createCodeCDAndGetFromList(vo.getUNIT_NM(), listDonVi, mapDonVi, UtilConst.GROUP_UNIT);
@@ -368,8 +368,9 @@ public class SrvcServiceImpl implements SrvcService{
 					
 					sVo.setDSCRT(value7);
 					sVo.setGROUP_NM(value8);
-					if(sVo.getSRVC_CD()!=null && !sVo.getSRVC_CD().isEmpty())
+					if(sVo.getSRVC_CD()!=null && !sVo.getSRVC_CD().isEmpty()) {
 						sps.add(sVo);
+					}
 				}
 			}
 

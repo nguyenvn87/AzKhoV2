@@ -695,7 +695,7 @@ public class SrvcController {
 	 * @param file
 	 * @return
 	 */
-	@RequestMapping(value = "/importfromexcel", method = RequestMethod.POST)
+	@RequestMapping(value = "/importfromexcel.json", method = RequestMethod.POST)
 	public ModelAndView importSPFromExcel(@RequestParam("fileUpload") MultipartFile file) {
 		
 		//String type = req.getParameter("type");

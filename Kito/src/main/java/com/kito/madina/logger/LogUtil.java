@@ -18,8 +18,15 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.ServletContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class LogUtil {
 
+	@Autowired
+	ServletContext context;
+	
 	public static final String patternRegex = "\\{\\d+\\}";
 	
 	public static String getGUID()	{
@@ -29,6 +36,8 @@ public class LogUtil {
 	 
 	 public boolean checkExistFile(String filePath) {
 		 
+		 String absolutePath = context.getRealPath("resources/log");
+		 System.out.println("absolutePath = "+absolutePath);
 		 File f = new File("/path/to/file"); 
 		  if(f.exists() && f.isFile()) {
 			  
